@@ -14,6 +14,10 @@
     addScript("app/controllers/TestController.js");
     addScript("app/services/TestService.js");
 
+    //InputScreen
+    addScript("app/controllers/InputController.js");
+    addScript("app/services/InputService.js");
+
     addScript("app/routes.js");
 
     function addScript(url) {
