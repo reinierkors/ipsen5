@@ -23,6 +23,7 @@ abstract class ConnectionManager {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
             connection = DriverManager.getConnection(url, username, password);
+            System.out.print("Connection with database established");
         } catch (ClassNotFoundException ex) {
             System.out.println(ex);
         }
