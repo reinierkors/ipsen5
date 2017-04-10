@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html ng-app="waterscan">
+
+<head>
+    <title>Waterscan</title>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Waterscan">
+
+    <link rel="stylesheet" href="assets/css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+
+    <!--Script that inits all libraries-->
+    <script type="text/javascript" src="assets/libraries/addLibraries.js"></script>
+    <script type="text/javascript" src="app/app.js"></script>
+</head>
+
+<body ng-controller="AppController">
+    <div class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="">Waterscan</a>
+                <button type="submit" ng-click="goToTest()"> go </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" ng-view="">
+
+    </div>
+
+</body>
+</html>
