@@ -3,6 +3,11 @@ angular.module('waterscan').controller('TestController', function ($scope, TestS
 
     TestService.getTest(function (data) {
         var testModel = angular.fromJson(data);
-        console.log(testModel)
+        console.log(testModel);
+        swal(
+            testModel.name,
+            testModel.gender,
+            'success'
+        )
     })
 });
