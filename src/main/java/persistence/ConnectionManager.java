@@ -13,8 +13,11 @@ import java.sql.SQLException;
  * @author Dylan de Wit
  * @version 1.0, 10-4-2017
  */
-public abstract class ConnectionManager {
+abstract class ConnectionManager {
     Connection connection;
+    private String username = "root";
+    private String password = "admin";
+    private String url = "jdbc:mariadb://localhost:5432/waterscan";
 
     ConnectionManager() throws SQLException {
         try {
@@ -23,25 +26,17 @@ public abstract class ConnectionManager {
             System.out.println(ex);
         }
 
-        String username = "root";
-        String password = "admin";
-        String url = "jdbc:mariadb://localhost:5432/waterscan";
+        connection =
+                DriverManager.getConnection(url, username, password);
 
-            connection =
-                    DriverManager.getConnection(url, username, password);
+        DatabaseMetaData dbmd = connection.getMetaData();
 
-            DatabaseMetaData dbmd = connection.getMetaData();
-
-            System.out.println("DBMS: " + dbmd.getDatabaseProductName());
-            System.out.println("Version: " + dbmd.getDatabaseProductVersion());
-            System.out.println("Driver: " + dbmd.getDriverName() + " "
-                    + dbmd.getDriverVersion());
-            System.out.println("Database: " + dbmd.getURL());
-            System.out.println("User: " + dbmd.getUserName());
-            System.out.println("\n\n");
-    }
-
-    public Connection getConnection() {
-        return connection;
+        System.out.println("DBMS: " + dbmd.getDatabaseProductName());
+        System.out.println("Version: " + dbmd.getDatabaseProductVersion());
+        System.out.println("Driver: " + dbmd.getDriverName() + " "
+                + dbmd.getDriverVersion());
+        System.out.println("Database: " + dbmd.getURL());
+        System.out.println("User: " + dbmd.getUserName());
+        System.out.println("\n\n");
     }
 }
