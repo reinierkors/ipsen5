@@ -17,26 +17,14 @@ abstract class ConnectionManager {
     Connection connection;
     private String username = "root";
     private String password = "admin";
-    private String url = "jdbc:mariadb://localhost:5432/waterscan";
+    private String url = "jdbc:mariadb://localhost:3306/waterscan";
 
     ConnectionManager() throws SQLException {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
+            connection = DriverManager.getConnection(url, username, password);
         } catch (ClassNotFoundException ex) {
             System.out.println(ex);
         }
-
-        connection =
-                DriverManager.getConnection(url, username, password);
-
-        DatabaseMetaData dbmd = connection.getMetaData();
-
-        System.out.println("DBMS: " + dbmd.getDatabaseProductName());
-        System.out.println("Version: " + dbmd.getDatabaseProductVersion());
-        System.out.println("Driver: " + dbmd.getDriverName() + " "
-                + dbmd.getDriverVersion());
-        System.out.println("Database: " + dbmd.getURL());
-        System.out.println("User: " + dbmd.getUserName());
-        System.out.println("\n\n");
     }
 }
