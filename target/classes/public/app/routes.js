@@ -1,7 +1,7 @@
 angular.module('waterscan').config(function ($routeProvider) {
 
     $routeProvider.when('/test', {
-        templateUrl: 'assets/partials/add.html',
+        templateUrl: 'assets/partials/testPartial.html',
         controller: 'TestController'
     });
 
