@@ -25,7 +25,7 @@ public abstract class ConnectionManager {
 
         String username = "root";
         String password = "admin";
-        String url = "jdbc:mariadb://localhost:5432/waterscan";
+        String url = "jdbc:mariadb://localhost:3307/waterscan";
 
             connection =
                     DriverManager.getConnection(url, username, password);
