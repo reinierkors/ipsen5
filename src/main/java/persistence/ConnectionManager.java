@@ -16,7 +16,7 @@ import java.sql.SQLException;
 abstract class ConnectionManager {
     Connection connection;
     private String username = "root";
-    private String password = "admin";
+    private String password = "hekken";
     private String url = "jdbc:mariadb://localhost:3306/waterscan";
 
     ConnectionManager() throws SQLException {
