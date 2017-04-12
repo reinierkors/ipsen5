@@ -3,15 +3,24 @@ package persistence;
 import model.TestModel;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Created by Dylan on 10-4-2017.
  */
-public class TestDao extends ConnectionManager implements DatabaseAccess<TestModel> {
-    Connection connection = super.connection;
+public class TestDao implements DatabaseAccess<TestModel> {
 
-    public TestDao() throws SQLException {
+    private Connection connection;
+
+    public TestDao() {
+        connection = ConnectionManager.getInstance().getConnection();
+    }
+
+    @Override
+    public void prepareAllStatements() throws SQLException {
+
     }
 
     @Override
@@ -24,7 +33,7 @@ public class TestDao extends ConnectionManager implements DatabaseAccess<TestMod
     }
 
     @Override
-    public TestModel retrieveAll() {
+    public ArrayList<TestModel> retrieveAll() {
         return null;
     }
 
@@ -36,5 +45,10 @@ public class TestDao extends ConnectionManager implements DatabaseAccess<TestMod
     @Override
     public void delete(TestModel id) {
 
+    }
+
+    @Override
+    public TestModel handleResult(ResultSet resultSet) throws SQLException {
+        return null;
     }
 }

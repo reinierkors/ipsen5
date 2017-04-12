@@ -4,18 +4,14 @@ import model.TestModel;
 import persistence.DatabaseAccess;
 import persistence.TestDao;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class TestService implements Service<TestModel> {
 
     private DatabaseAccess<TestModel> dao;
 
     public TestService() {
-        try {
-            dao = new TestDao();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        dao = new TestDao();
     }
 
     @Override
@@ -29,8 +25,8 @@ public class TestService implements Service<TestModel> {
     }
 
     @Override
-    public TestModel retrieveAll() {
-        return new TestModel();
+    public ArrayList<TestModel> retrieveAll() {
+        return new ArrayList<>();
     }
 
     @Override

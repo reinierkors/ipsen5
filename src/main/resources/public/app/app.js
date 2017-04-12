@@ -10,6 +10,10 @@
     //Init
     addScript("app/AppController.js");
 
+    //Taxon
+    addScript("app/controllers/TaxonController.js");
+    addScript("app/services/TaxonService.js");
+
     //Test
     addScript("app/controllers/TestController.js");
     addScript("app/services/TestService.js");
