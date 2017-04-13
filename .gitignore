@@ -97,3 +97,5 @@ local.properties
 .cache-main
 .scala_dependencies
 .worksheet
+/waterscan.iml
+target/generated-sources/

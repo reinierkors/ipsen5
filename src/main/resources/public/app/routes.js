@@ -1,8 +1,12 @@
-angular.module('waterscan').config(function ($routeProvider) {
+angular.module('Waterscan').config(function ($routeProvider) {
 
-    $routeProvider.when('/test', {
-        templateUrl: 'assets/partials/testPartial.html',
+    $routeProvider.when('/home', {
+        templateUrl: 'assets/partials/add.html'
+    }).when('/test', {
+        templateUrl: 'assets/partials/test.html',
         controller: 'TestController'
+    }).otherwise({
+        redirectTo: /home/
     });
 
 //    Add more routes

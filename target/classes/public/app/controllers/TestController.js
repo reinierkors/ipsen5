@@ -1,4 +1,4 @@
-angular.module('waterscan').controller('TestController', function ($scope, TestService) {
+angular.module('Waterscan').controller('TestController', function ($scope, TestService) {
     var self = this;
 
     TestService.getTest(function (data) {

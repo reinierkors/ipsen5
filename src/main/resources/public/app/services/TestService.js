@@ -1,4 +1,4 @@
-angular.module('waterscan').service('TestService', function ($http) {
+angular.module('Waterscan').service('TestService', function ($http) {
     var self = this;
 
     self.getTest = function (onRetrieved) {
