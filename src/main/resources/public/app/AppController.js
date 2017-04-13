@@ -3,4 +3,8 @@ angular.module('Waterscan').controller('AppController', function($scope, $locati
     $scope.goToTest = function() {
         $location.path('/test');
     };
+
+    $scope.goToSourceData = function () {
+        $location.path('/source')
+    }
 });
