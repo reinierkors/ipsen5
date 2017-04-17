@@ -5,7 +5,7 @@ angular.module('waterscan').config(function ($routeProvider) {
         controller: 'TestController'
     });
 
-    $routeProvider.when('/input', {
+        $routeProvider.when('/input', {
         templateUrl: 'assets/partials/InputScreen.html',
         controller: 'InputController'
     });

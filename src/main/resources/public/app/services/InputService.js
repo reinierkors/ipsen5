@@ -6,5 +6,5 @@ angular.module('waterscan').service('InputService', function ($http) {
 
     self.getInputPage = function () {
         var url = '/input';
-            };
+    };
 });
