@@ -15,3 +15,20 @@
         </md-list>
     </md-content>
 </md-sidenav>
+
+<div layout="column" flex id="content">
+    <md-toolbar layout="row">
+        <div class="md-toolbar-tools">
+            <md-button aria-label="Toggle Sidenav" class="md-icon-button" hide-gt-md style="margin-right: 10px;"
+                       ng-if="auth" ng-click="toggleMenu()">
+                <i class="fa fa-bars pointer"></i>
+            </md-button>
+            <h1 flex style="margin-left: 5px">{{title}}</h1>
+        </div>
+    </md-toolbar>
+    <md-content layout="row" flex>
+        <md-content layout="column" flex id="scrollContent">
+            <main ng-view flex></main>
+        </md-content>
+    </md-content>
+</div>

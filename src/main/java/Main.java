@@ -16,6 +16,11 @@ public class Main {
 //        ipAddress("");
         externalStaticFileLocation("src/main/resources/public");
 
+         get("/home", (req, response) -> {
+            // process request
+            return "200 OK";
+        });
+
         new TestResource(new TestService());
         new TaxonResource(new TaxonService());
 
