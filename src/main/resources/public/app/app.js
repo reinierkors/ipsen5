@@ -1,17 +1,39 @@
 (function () {
 
-    var app = angular.module('waterscan', [
+    var app = angular.module('Waterscan', [
         'ngCookies',
+        'ngMaterial',
         'ngResource',
         'ngSanitize',
         'ngRoute'
     ]);
 
+    app.config(function ($mdThemingProvider) {
+       $mdThemingProvider
+           .theme('default')
+           .primaryPalette('grey')
+           .accentPalette('red')
+           .warnPalette('red')
+           .backgroundPalette('blue');
+    });
+
+    app.config(function ($locationProvider) {
+        $locationProvider.html5Mode(true);
+        $locationProvider.baseHref = '/';
+    });
+
+    app.run(['$route', function ($route) {
+        $route.reload();
+    }]);
+
     //Init
     addScript("app/AppController.js");
 
-    //Test
+    //Controllers
     addScript("app/controllers/TestController.js");
+    addScript("app/controllers/MenuController.js");
+
+    //Services
     addScript("app/services/TestService.js");
 
     //InputScreen
