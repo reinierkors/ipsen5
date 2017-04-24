@@ -6,7 +6,7 @@ angular.module('Waterscan').config(function ($routeProvider) {
         templateUrl: 'assets/partials/test.html',
         controller: 'TestController'
     }).otherwise({
-        redirectTo: /home/
+        redirectTo: '/home/'
     });
 
 //    Add more routes

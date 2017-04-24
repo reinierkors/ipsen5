@@ -12,7 +12,7 @@ class ConnectionManager {
     private static ConnectionManager instance;
     private Connection connection;
     private final String USERNAME = "root";
-    private final String PASSWORD = "admin";
+    private final String PASSWORD = "root";
     private final String URL = "jdbc:mariadb://localhost:3306/waterscan";
 
     static ConnectionManager getInstance() {
