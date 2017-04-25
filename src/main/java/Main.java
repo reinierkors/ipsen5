@@ -1,8 +1,11 @@
 import persistence.DatabaseAccess;
+import persistence.TakenSampleDao;
 import persistence.TaxonDao;
+import resource.TakenSampleResource;
 import resource.TaxonResource;
 import resource.TestResource;
 import service.Service;
+import service.TakenSampleService;
 import service.TaxonService;
 import service.TestService;
 
@@ -16,19 +19,10 @@ public class Main {
 //        ipAddress("");
         externalStaticFileLocation("src/main/resources/public");
 
-         get("/home", (req, response) -> {
-            // process request
-            return "200 OK";
-        });
+        get("/home", (req, response) -> "200 OK");
 
+        new TakenSampleResource(new TakenSampleService());
         new TestResource(new TestService());
         new TaxonResource(new TaxonService());
-
-        try {
-            DatabaseAccess taxonDao = new TaxonDao();
-            taxonDao.retrieveAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
