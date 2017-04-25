@@ -1,7 +1,6 @@
 package resource;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import model.Taxon;
 import service.Service;
 
@@ -16,9 +15,7 @@ public class TaxonResource {
     public TaxonResource(Service<Taxon> taxonService) {
         Gson gson = new Gson();
 
-        get("/sourcetest", (req, response) -> {
-            // process request
-            return gson.toJson(taxonService.retrieveAll());
-        });
+        get("/sourcetest", (req, response) ->
+                gson.toJson(taxonService.retrieveAll()));
     }
 }
