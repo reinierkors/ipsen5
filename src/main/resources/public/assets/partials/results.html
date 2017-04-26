@@ -23,3 +23,24 @@
         Start in de Main > TakenSampleResource > TakenSampleService > TakenSampleDao
     </md-card-content>
 </md-card>
+
+<md-card>
+    <md-card-title>
+        <md-card-title-text>
+            <span class="md-headline">Tabel</span>
+        </md-card-title-text>
+    </md-card-title>
+    <md-table-container>
+        <table md-table>
+            <tbody md-body>
+            <tr ng-repeat="value in values">
+                <th md-cell>{{ value.zoe }}</th>
+                <td md-cell>{{ value.zzb }}</td>
+                <td md-cell>{{ value.zb }}</td>
+                <td md-cell>{{ value.mb }}</td>
+                <td md-cell>{{ value.sbm }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </md-table-container>
+</md-card>

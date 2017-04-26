@@ -5,16 +5,18 @@
         'ngMaterial',
         'ngResource',
         'ngSanitize',
-        'ngRoute'
+        'ngRoute',
+        'chart.js',
+        'md.data.table'
     ]);
 
     app.config(function ($mdThemingProvider) {
-       $mdThemingProvider
-           .theme('default')
-           .primaryPalette('grey')
-           .accentPalette('red')
-           .warnPalette('red')
-           .backgroundPalette('blue');
+        $mdThemingProvider
+            .theme('default')
+            .primaryPalette('grey')
+            .accentPalette('red')
+            .warnPalette('red')
+            .backgroundPalette('grey');
     });
 
     app.config(function ($locationProvider) {
@@ -33,6 +35,7 @@
     addScript("app/controllers/TestController.js");
     addScript("app/controllers/MenuController.js");
     addScript("app/controllers/TakenSampleController.js");
+    addScript("app/controllers/ResultsController.js");
 
     //Services
     addScript("app/services/TestService.js");

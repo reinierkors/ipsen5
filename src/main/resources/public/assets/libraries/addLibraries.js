@@ -9,8 +9,10 @@
     addScript("assets/libraries/angularjs/angular-aria.js");
     addScript("assets/libraries/angularjs/angular-animate.js");
     addScript("https://ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.js");
+    addScript("assets/libraries/md-table/md-data-table.js");
     addScript("assets/libraries/swal/sweetalert2.min.js");
     addScript("assets/libraries/chart/Chart.bundle.min.js");
+    addScript("assets/libraries/angularjs/angular-chart.js");
 
     function addScript(url) {
         document.write('<script type="text/javascript" src="' + url + '"></script>');
