@@ -32,9 +32,11 @@
     //Controllers
     addScript("app/controllers/MenuController.js");
     addScript("app/controllers/TakenSampleController.js");
+    addScript("app/controllers/InputController.js");
 
     //Services
     addScript("app/services/TakenSampleService.js");
+    addScript("app/services/InputService.js");
 
     addScript("app/routes.js");
 

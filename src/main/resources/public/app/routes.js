@@ -11,6 +11,5 @@ angular.module('Waterscan').config(function ($routeProvider) {
     }).otherwise({
         redirectTo: '/home/'
     });
-
 //    Add more routes
 });
