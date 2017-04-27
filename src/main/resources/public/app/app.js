@@ -33,13 +33,11 @@
     addScript("app/controllers/TestController.js");
     addScript("app/controllers/MenuController.js");
     addScript("app/controllers/TakenSampleController.js");
+    addScript("app/controllers/InputController.js");
 
     //Services
     addScript("app/services/TestService.js");
     addScript("app/services/TakenSampleService.js");
-
-    //InputScreen
-    addScript("app/controllers/InputController.js");
     addScript("app/services/InputService.js");
 
     addScript("app/routes.js");

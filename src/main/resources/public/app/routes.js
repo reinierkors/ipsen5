@@ -8,14 +8,14 @@ angular.module('Waterscan').config(function ($routeProvider) {
     }).when('/results', {
         templateUrl: 'assets/partials/results.html',
         controller: 'TakenSampleController'
+    }).when('/input', {
+        templateUrl: 'assets/partials/InputScreen.html',
+        controller: 'InputController'
     }).otherwise({
         redirectTo: '/home/'
     });
 
-        $routeProvider.when('/input', {
-        templateUrl: 'assets/partials/InputScreen.html',
-        controller: 'InputController'
-    });
+
 
 //    Add more routes
 });
