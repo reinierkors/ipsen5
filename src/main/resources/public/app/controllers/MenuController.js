@@ -14,6 +14,8 @@ angular.module('Waterscan').controller('MenuController', function ($scope, $mdSi
             title: "Zoeken", url: "/test"
         }, {
             title: "Resultaten", url: "/results"
+        }, {
+            title: "Invoer", url: "/input"
         }
     ];
 });

@@ -1,5 +1,6 @@
 (function () {
     addScript("assets/libraries/jquery-3.2.0.min.js");
+    addScript("assets/libraries/jquery-csv.js");
     addScript("assets/libraries/angularjs/angular.js");
     addScript("assets/libraries/angularjs/angular-route.js");
     addScript("assets/libraries/angularjs/angular-cookies.js");

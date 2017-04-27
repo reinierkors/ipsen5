@@ -30,4 +30,12 @@ angular.module('Waterscan').service('TakenSampleService', function ($http) {
                 )
             });
     };
+
+    self.uploadFile = function (file) {
+        var uri = '/samples/insert';
+
+        $http.post(uri, file).then(function (response) {
+            console.log(response.data);
+        })
+    };
 });

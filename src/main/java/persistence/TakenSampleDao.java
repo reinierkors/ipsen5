@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class TakenSampleDao implements DatabaseAccess<TakenSample> {
     private Connection connection;
     private PreparedStatement retrieveAll;
+    private PreparedStatement insertSample;
 
     public TakenSampleDao() {
         connection = ConnectionManager.getInstance().getConnection();
@@ -27,11 +28,32 @@ public class TakenSampleDao implements DatabaseAccess<TakenSample> {
     @Override
     public void prepareAllStatements() throws SQLException {
         retrieveAll = connection.prepareStatement("SELECT * FROM taken_sample_new");
+        insertSample = connection.prepareStatement("INSERT INTO taken_sample_new" +
+                "(mp, location, water_code, water_name, krw_code, krw_name, " +
+                "longitude, latitude, date, time, method_code, method_name, " +
+                "method_unit, taxon_name, value)"
+                + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     }
 
     @Override
-    public void insert(TakenSample model) {
-
+    public void insert(TakenSample model) throws SQLException {
+        insertSample.setString(1, model.getMp());
+        insertSample.setString(2, model.getLocation());
+        insertSample.setString(3, model.getWaterCode());
+        insertSample.setString(4, model.getWaterName());
+        insertSample.setString(5, model.getKrwCode());
+        insertSample.setString(6, model.getKrwName());
+        insertSample.setString(7, model.getLongitude());
+        insertSample.setString(8, model.getLatitude());
+        insertSample.setString(9, model.getDate());
+        insertSample.setString(10, "");
+        insertSample.setString(11, model.getMethodCode());
+        insertSample.setString(12, model.getMethodeName());
+        insertSample.setString(13, model.getMethodUnit());
+        insertSample.setString(14, model.getTaxonName());
+        insertSample.setString(15, model.getValue());
+        System.out.println(insertSample.toString());
+        insertSample.executeUpdate();
     }
 
     @Override
@@ -47,7 +69,7 @@ public class TakenSampleDao implements DatabaseAccess<TakenSample> {
         while (resultSet.next()) {
             samples.add(handleResult(resultSet));
         }
-       return samples;
+        return samples;
     }
 
     public ArrayList<ArrayList<TakenSample>> retrieveAllTemp() throws SQLException {
