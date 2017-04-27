@@ -102,3 +102,5 @@ local.properties
 .worksheet
 /waterscan.iml
 target/generated-sources/
+/target/
+/target/classes/public/assets/css/partialsheets/InputStyleSheet.css
