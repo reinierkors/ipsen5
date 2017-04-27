@@ -24,23 +24,45 @@
     </md-card-content>
 </md-card>
 
-<md-card>
-    <md-card-title>
-        <md-card-title-text>
-            <span class="md-headline">Tabel</span>
-        </md-card-title-text>
-    </md-card-title>
-    <md-table-container>
-        <table md-table>
-            <tbody md-body>
-            <tr ng-repeat="value in values">
-                <th md-cell>{{ value.zoe }}</th>
-                <td md-cell>{{ value.zzb }}</td>
-                <td md-cell>{{ value.zb }}</td>
-                <td md-cell>{{ value.mb }}</td>
-                <td md-cell>{{ value.sbm }}</td>
-            </tr>
-            </tbody>
-        </table>
-    </md-table-container>
-</md-card>
+<!--<md-card>-->
+<!--<md-card-title>-->
+<!--<md-card-title-text>-->
+<!--<span class="md-headline">Tabel</span>-->
+<!--</md-card-title-text>-->
+<!--</md-card-title>-->
+<!--<md-table-container>-->
+<!--<table md-table>-->
+<!--<tbody md-body>-->
+<!--<tr ng-repeat="value in values">-->
+<!--<td md-cell>{{ value.zoe }}</td>-->
+<!--<td md-cell>{{ value.zzb }}</td>-->
+<!--<td md-cell>{{ value.zb }}</td>-->
+<!--<td md-cell>{{ value.mb }}</td>-->
+<!--<td md-cell>{{ value.sbm }}</td>-->
+<!--</tr>-->
+<!--</tbody>-->
+<!--</table>-->
+<!--</md-table-container>-->
+<!--</md-card>-->
+
+<div ng-cloak>
+    <md-content>
+        <md-card>
+            <md-tabs md-dynamic-height md-border-bottom>
+                <md-tab label="Zoetheid">
+                    <md-content class="md-padding">
+                        <canvas id="bar" height="400" width="400" class="chart chart-bar" chart-series="zoetSeries"
+                                chart-data="zoetData"
+                                chart-labels="zoetLabels" chart-options="zoetOptions"></canvas>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Zoutheid">
+                    <md-content class="md-padding">
+                        <canvas id="bar" class="chart chart-bar" chart-series="zoetSeries" chart-data="zoetData"
+                                chart-labels="zoetLabels" chart-options="zoetOptions" height="400" width="400"></canvas>
+                    </md-content>
+                </md-tab>
+            </md-tabs>
+        </md-card>
+    </md-content>
+</div>

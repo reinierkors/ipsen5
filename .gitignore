@@ -102,3 +102,4 @@ local.properties
 .worksheet
 /waterscan.iml
 target/generated-sources/
+/target/

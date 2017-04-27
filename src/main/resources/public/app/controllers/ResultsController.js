@@ -27,5 +27,20 @@ angular.module('Waterscan').controller('ResultsController', function ($scope) {
             }]
         }
     };
-    $scope.values = [{"name": "Set 1", "zoe": 10, "zzb": 0, "zb": 0, "mb": 0, "sbm": 0}];
+    $scope.values = [{
+        "name": "Set 1",
+        "zoet": [9, 1, 0, 0, 0],
+        "zoe": 10,
+        "zzb": 0,
+        "zb": 0,
+        "mb": 0,
+        "sbm": 0
+    }, {"name": "Set 2", "zoet": [9, 1, 0, 0, 0], "zoe": 9, "zzb": 1, "zb": 0, "mb": 0, "sbm": 0}];
+    $scope.zoetData = [[9, 1, 0, 0, 0]];
+    $scope.zoetLabels = ["Zoet", "Zeer Zwak Brak", "Zwak Brak", "Matig Brak", "Sterk Brak"];
+    $scope.zoetSeries = ['Set 1'];
+    $scope.zoetOptions = {
+        responsive: false,
+        maintainAspectRatio: false
+    }
 });
