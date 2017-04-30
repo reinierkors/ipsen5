@@ -49,17 +49,61 @@
     <md-content>
         <md-card>
             <md-tabs md-dynamic-height md-border-bottom>
-                <md-tab label="Zoetheid">
-                    <md-content class="md-padding">
-                        <canvas id="bar" height="400" width="400" class="chart chart-bar" chart-series="zoetSeries"
-                                chart-data="zoetData"
-                                chart-labels="zoetLabels" chart-options="zoetOptions"></canvas>
-                    </md-content>
-                </md-tab>
                 <md-tab label="Zoutheid">
                     <md-content class="md-padding">
-                        <canvas id="bar" class="chart chart-bar" chart-series="zoetSeries" chart-data="zoetData"
-                                chart-labels="zoetLabels" chart-options="zoetOptions" height="400" width="400"></canvas>
+                        <canvas id="bar" height="400" width="600" class="chart chart-bar" chart-series="series"
+                                chart-data="zout"
+                                chart-labels="zoutLabels" chart-options="options"></canvas>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Diepte">
+                    <md-content class="md-padding">
+                        <canvas id="bar" class="chart chart-bar" chart-series="series" chart-data="diepte"
+                                chart-labels="diepteLabels" chart-options="options" height="400" width="600"></canvas>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Droogval">
+                    <md-content class="md-padding">
+                        <canvas id="bar" class="chart chart-bar" chart-series="series" chart-data="droogval"
+                                chart-labels="droogvalLabels" chart-options="options" height="400" width="600"></canvas>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Oppervlak">
+                    <md-content class="md-padding">
+                        <canvas id="bar" class="chart chart-bar" chart-series="series" chart-data="oppervlak"
+                                chart-labels="oppervlakLabels" chart-options="options" height="400"
+                                width="600"></canvas>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Saprobie">
+                    <md-content class="md-padding">
+                        <canvas id="bar" class="chart chart-bar" chart-series="series" chart-data="saprobie"
+                                chart-labels="saprobieLabels" chart-options="options" height="400" width="600"></canvas>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Stroming">
+                    <md-content class="md-padding">
+                        <canvas id="bar" class="chart chart-bar" chart-series="series" chart-data="stroming"
+                                chart-labels="stromingLabels" chart-options="options" height="400" width="600"></canvas>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Substraat">
+                    <md-content class="md-padding">
+                        <canvas id="bar" class="chart chart-bar" chart-series="series" chart-data="substraat"
+                                chart-labels="substraatLabels" chart-options="options" height="400"
+                                width="600"></canvas>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Trofie">
+                    <md-content class="md-padding">
+                        <canvas id="bar" class="chart chart-bar" chart-series="series" chart-data="trofie"
+                                chart-labels="trofieLabels" chart-options="options" height="400" width="600"></canvas>
+                    </md-content>
+                </md-tab>
+                <md-tab label="Zuurgraad">
+                    <md-content class="md-padding">
+                        <canvas id="bar" class="chart chart-bar" chart-series="series" chart-data="zuur"
+                                chart-labels="zuurLabels" chart-options="options" height="400" width="600"></canvas>
                     </md-content>
                 </md-tab>
             </md-tabs>

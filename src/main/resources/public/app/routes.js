@@ -8,6 +8,7 @@ angular.module('Waterscan').config(function ($routeProvider) {
     }).when('/results', {
         templateUrl: 'assets/partials/results.html',
         controller: 'ResultsController'
+        // controller: 'TakenSampleController'
     }).otherwise({
         redirectTo: '/home/'
     });
