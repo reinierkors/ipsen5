@@ -8,6 +8,8 @@ angular.module('Waterscan').controller('ResultsController', function ($scope) {
     $scope.onClick = function (points, evt) {
         console.log(points, evt);
     };
+    //Eerste serie zijn de "resultaten" (nu vastgesteld), tweede serie is de referentie
+    $scope.series = ['Resultaten', 'Referentie'];
     $scope.zout = [[9, 1, 0, 0, 0], [7.4, 1, 1, 0.6, 0]];
     $scope.diepte = [[2.3, 0.9, 2.8, 1.1, 1.9, 0.9], [2.0, 0.5, 3.5, 1.0, 2.0, 1.0]];
     $scope.droogval = [[7.0, 2.0, 1.0, 0.0, 0.0], [7.4, 2.3, 0.3, 0.0, 0.0]];
@@ -18,6 +20,7 @@ angular.module('Waterscan').controller('ResultsController', function ($scope) {
     $scope.trofie = [[0.0, 0.0, 2.0, 4.0, 4.0], [0.0, 1.0, 2.3, 3.2, 3.5]];
     $scope.zuur = [[2.0, 3.0, 3.0, 2.0], [2.1, 2.7, 3.2, 2.0]];
 
+    //Labels voor de verschillende grafieken
     $scope.zoutLabels = ["Zoet", "Zeer Zwak Brak", "Zwak Brak", "Matig Brak", "Sterk Brak tot Marien"];
     $scope.diepteLabels = ["Zeer Ondiep Moerassig", "Zeer Ondiep Bron", "Ondiep Stilstaand", "Ondiep Stromend", "Diep Stilstaand", "Diep Stromend"];
     $scope.droogvalLabels = ["Permanent", "Semi Permanent", "Temporair 6wk - 3mnd", "Temporair 3mnd - 5mnd", "Temporair >5mnd"];
@@ -28,7 +31,6 @@ angular.module('Waterscan').controller('ResultsController', function ($scope) {
     $scope.trofieLabels = ["Oligotroof", "Meso-oligotroof", "Mesotroof", "Meso-eutroof", "Eutroof"];
     $scope.zuurLabels = ["Zuur", "Zwak Zuur", "Neutraal", "Basisch"];
 
-    $scope.series = ['Resultaten', 'Referentie'];
     $scope.options = {
         responsive: false,
         maintainAspectRatio: false,
