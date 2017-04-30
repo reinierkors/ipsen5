@@ -18,7 +18,11 @@ public class TakenSampleService implements Service<TakenSample> {
 
     @Override
     public void insert(TakenSample model) {
-
+        try {
+            dao.insert(model);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -32,13 +32,11 @@
     addScript("app/AppController.js");
 
     //Controllers
-    addScript("app/controllers/TestController.js");
     addScript("app/controllers/MenuController.js");
     addScript("app/controllers/TakenSampleController.js");
     addScript("app/controllers/ResultsController.js");
 
     //Services
-    addScript("app/services/TestService.js");
     addScript("app/services/TakenSampleService.js");
 
     addScript("app/routes.js");

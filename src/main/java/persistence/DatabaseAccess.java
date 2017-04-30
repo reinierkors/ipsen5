@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public interface DatabaseAccess<T> {
     void prepareAllStatements() throws SQLException;
 
-    void insert(T model);
+    void insert(T model) throws SQLException;
 
     T retrieveSpecific(T id);
 
