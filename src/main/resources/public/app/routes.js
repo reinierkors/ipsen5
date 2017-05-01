@@ -4,8 +4,8 @@ angular.module('Waterscan').config(function ($routeProvider) {
         templateUrl: 'assets/partials/add.html'
     }).when('/results', {
         templateUrl: 'assets/partials/results.html',
-        // controller: 'ResultsController'
-        controller: 'TakenSampleController'
+        controller: 'ResultsController'
+        // controller: 'TakenSampleController'
     }).when('/input', {
         templateUrl: 'assets/partials/takenSampleInput.html',
         controller: 'TakenSampleController'

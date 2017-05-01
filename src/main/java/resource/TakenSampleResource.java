@@ -15,8 +15,8 @@ public class TakenSampleResource {
     public TakenSampleResource(TakenSampleService service) {
         Gson gson = new Gson();
 
-        get("/samples/temp", (request, response) ->
-                gson.toJson(service.retrieveAllTemp()));
+        get("/samples/average", (request, response) ->
+                gson.toJson(service.retrieveAllAverageSamples()));
 
         get("/samples", (request, response) ->
                 gson.toJson(service.retrieveAll()));

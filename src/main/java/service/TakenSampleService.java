@@ -1,5 +1,6 @@
 package service;
 
+import model.AveragePerSample;
 import model.TakenSample;
 import persistence.TakenSampleDao;
 
@@ -41,10 +42,10 @@ public class TakenSampleService implements Service<TakenSample> {
         return samples;
     }
 
-    public ArrayList<ArrayList<TakenSample>> retrieveAllTemp() {
-        ArrayList<ArrayList<TakenSample>> samples = new ArrayList<>();
+    public ArrayList<AveragePerSample> retrieveAllAverageSamples() {
+        ArrayList<AveragePerSample> samples = new ArrayList<>();
         try {
-            samples = dao.retrieveAllTemp();
+            samples = dao.retrieveAllAverageSamples();
         } catch (SQLException e) {
             e.printStackTrace();
         }

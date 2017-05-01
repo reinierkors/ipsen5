@@ -1,6 +1,8 @@
 package persistence;
 
+import model.AveragePerSample;
 import model.TakenSample;
+import model.Taxon;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,10 +18,13 @@ public class TakenSampleDao implements DatabaseAccess<TakenSample> {
     private PreparedStatement retrieveAll;
     private PreparedStatement insertSample;
 
+    private TaxonDao taxonDao;
+
     public TakenSampleDao() {
         connection = ConnectionManager.getInstance().getConnection();
         try {
             prepareAllStatements();
+            taxonDao = new TaxonDao();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -72,23 +77,35 @@ public class TakenSampleDao implements DatabaseAccess<TakenSample> {
         return samples;
     }
 
-    public ArrayList<ArrayList<TakenSample>> retrieveAllTemp() throws SQLException {
+    public ArrayList<AveragePerSample> retrieveAllAverageSamples() throws SQLException {
         ArrayList<ArrayList<TakenSample>> samples = new ArrayList<>();
         ResultSet resultSet = retrieveAll.executeQuery();
         String previousSampleDate = "";
         ArrayList<TakenSample> sample = new ArrayList<>();
 
+        AveragePerSample averagePerSample = new AveragePerSample();
+        ArrayList<AveragePerSample> averagePerSamples = new ArrayList<>();
+
         while (resultSet.next()) {
             if (previousSampleDate.equals("") || previousSampleDate.equals(resultSet.getString("date"))) {
-                sample.add(handleResult(resultSet));
+                TakenSample takenSample = handleResult(resultSet);
+                averagePerSample.appendTaxons(taxonDao.retrieveSpecificTaxon(takenSample.getTaxonName()));
+                sample.add(takenSample);
                 previousSampleDate = sample.get(sample.size() - 1).getDate();
             } else {
                 samples.add(sample);
                 sample = new ArrayList<>();
                 previousSampleDate = "";
+
+                averagePerSamples.add(averagePerSample);
+                averagePerSample = new AveragePerSample();
             }
         }
-        return samples;
+
+        for(AveragePerSample averageSample : averagePerSamples) {
+            averageSample.calculateAverages();
+        }
+        return averagePerSamples;
     }
 
     @Override
