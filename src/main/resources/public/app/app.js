@@ -28,9 +28,6 @@
         $route.reload();
     }]);
 
-    //Init
-    addScript("app/AppController.js");
-
     //Controllers
     addScript("app/controllers/MenuController.js");
     addScript("app/controllers/TakenSampleController.js");
