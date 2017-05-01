@@ -23,7 +23,7 @@ angular.module('Waterscan').controller('TakenSampleController', function ($scope
         console.log(takenSamples);
     });
 
-    TakenSampleService.retrieveAllTemp(function (data) {
+    TakenSampleService.retrieveAllAverageSamples(function (data) {
         var takenSamplesTemp = angular.fromJson(data);
         console.log(takenSamplesTemp);
     });

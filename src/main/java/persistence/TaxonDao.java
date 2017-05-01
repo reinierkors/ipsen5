@@ -15,6 +15,7 @@ public class TaxonDao implements DatabaseAccess<Taxon> {
 
     private Connection connection;
     private PreparedStatement retrieveAllTaxons;
+    private PreparedStatement retrieveTaxon;
 
     public TaxonDao() throws SQLException {
         connection = ConnectionManager.getInstance().getConnection();
@@ -24,6 +25,7 @@ public class TaxonDao implements DatabaseAccess<Taxon> {
     @Override
     public void prepareAllStatements() throws SQLException {
         retrieveAllTaxons = connection.prepareStatement("SELECT * FROM taxon LIMIT 10");
+        retrieveTaxon = connection.prepareStatement("SELECT * FROM taxon WHERE taxon_name = ?");
     }
 
     @Override
@@ -36,6 +38,15 @@ public class TaxonDao implements DatabaseAccess<Taxon> {
         return null;
     }
 
+    public Taxon retrieveSpecificTaxon(String taxonName) throws SQLException {
+        retrieveTaxon.setString(1, taxonName);
+        ResultSet resultSet = retrieveTaxon.executeQuery();
+        resultSet.next();
+        if(resultSet.isAfterLast()) {
+            return new Taxon();
+        }
+        return handleResult(resultSet);
+    }
     @Override
     public ArrayList<Taxon> retrieveAll() throws SQLException {
         ArrayList<Taxon> taxons = new ArrayList<>();

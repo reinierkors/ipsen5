@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 /**
  * Created by Dylan on 25-4-2017.
  */
@@ -19,6 +21,7 @@ public class TakenSample {
     private String methodUnit;
     private String taxonName;
     private String value;
+    private ArrayList<Taxon> taxons;
 
     public TakenSample() {
 
@@ -142,5 +145,17 @@ public class TakenSample {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public ArrayList<Taxon> getTaxons() {
+        return taxons;
+    }
+
+    public void setTaxons(ArrayList<Taxon> taxons) {
+        this.taxons = taxons;
+    }
+
+    public void appendTaxons(Taxon taxon) {
+        taxons.add(taxon);
     }
 }

@@ -16,8 +16,8 @@ angular.module('Waterscan').service('TakenSampleService', function ($http) {
             });
     };
 
-    self.retrieveAllTemp = function (onRetrieved) {
-        var url = '/samples/temp';
+    self.retrieveAllAverageSamples = function (onRetrieved) {
+        var url = '/samples/average';
         $http.get(url).then(function (response) {
                 onRetrieved(response.data);
             },
