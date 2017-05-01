@@ -18,15 +18,15 @@ angular.module('Waterscan').controller('TakenSampleController', function ($scope
         r.readAsBinaryString(f);
     };
 
-    TakenSampleService.retrieveAll(function (data) {
-        var takenSamples = angular.fromJson(data);
-        console.log(takenSamples);
-    });
-
-    TakenSampleService.retrieveAllAverageSamples(function (data) {
-        var takenSamplesTemp = angular.fromJson(data);
-        console.log(takenSamplesTemp);
-    });
+    // TakenSampleService.retrieveAll(function (data) {
+    //     var takenSamples = angular.fromJson(data);
+    //     console.log(takenSamples);
+    // });
+    //
+    // TakenSampleService.retrieveAllAverageSamples(function (data) {
+    //     var takenSamplesTemp = angular.fromJson(data);
+    //     console.log(takenSamplesTemp);
+    // });
 
     // self.processFile = function (file) {
     //     var allTextLines = file.split(/\r\n|\n/);
