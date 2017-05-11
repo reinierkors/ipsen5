@@ -1,3 +1,4 @@
+import 'hammerjs';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -6,6 +7,8 @@ import {Routes, RouterModule} from "@angular/router";
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
+import { MaterialModule } from '@angular/material';
+
 
 const routes:Routes = [
   {path: '', component: HomeComponent},
@@ -22,7 +25,8 @@ const routes:Routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(routes, {useHash: true})
+    RouterModule.forRoot(routes, {useHash: true}),
+      MaterialModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
