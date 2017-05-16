@@ -104,3 +104,5 @@ local.properties
 target/generated-sources/
 /target/
 /target/classes/public/assets/css/partialsheets/InputStyleSheet.css
+/frontend/node_modules/
+frontend/node_modules/
