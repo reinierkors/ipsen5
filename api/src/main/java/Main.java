@@ -1,9 +1,5 @@
-import resource.TakenSampleResource;
-import resource.TaxonResource;
-import service.TakenSampleService;
-import service.TaxonService;
-
-import static spark.Spark.*;
+import static spark.Spark.get;
+import static spark.Spark.port;
 
 public class Main {
     public static void main(String[] args) {

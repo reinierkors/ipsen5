@@ -10,12 +10,14 @@ import {MdSidenavModule} from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
+import { ResultsComponent } from './results/results.component';
 import { CreateAccountComponent } from './create-account/create-account.component';
 
 const routes:Routes = [
   {path: '', component: HomeComponent},
   {path: 'home', component: HomeComponent},
   {path: 'account', component: CreateAccountComponent},
+  {path: 'results', component: ResultsComponent},
   {path: '**', component: HomeComponent}
 ];
 
@@ -24,6 +26,7 @@ const routes:Routes = [
     AppComponent,
     HomeComponent,
     CreateAccountComponent,
+    ResultsComponent,
   ],
   imports: [
     BrowserModule,
