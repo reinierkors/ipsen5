@@ -1,15 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'app-results',
-  templateUrl: './results.component.html',
-  styleUrls: ['./results.component.css']
+    selector: 'app-results',
+    templateUrl: './results.component.html',
+    styleUrls: ['./results.component.css']
 })
 export class ResultsComponent implements OnInit {
+    message = 'Message works!';
 
-  constructor() { }
+    constructor() {
+    };
 
-  ngOnInit() {
-  }
+    printHello = function () {
+        console.log("hello")
+    };
 
+    ngOnInit() {
+        this.printHello()
+    };
 }
