@@ -12,12 +12,14 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ResultsComponent } from './results/results.component';
 import { CreateAccountComponent } from './create-account/create-account.component';
+import { SampleLocationTableComponent } from './sample-location-table/sample-location-table.component';
 
 const routes:Routes = [
   {path: '', component: HomeComponent},
   {path: 'home', component: HomeComponent},
   {path: 'account', component: CreateAccountComponent},
   {path: 'results', component: ResultsComponent},
+  {path: 'sample', component: SampleLocationTableComponent},
   {path: '**', component: HomeComponent}
 ];
 
@@ -27,6 +29,7 @@ const routes:Routes = [
     HomeComponent,
     CreateAccountComponent,
     ResultsComponent,
+    SampleLocationTableComponent,
   ],
   imports: [
     BrowserModule,
