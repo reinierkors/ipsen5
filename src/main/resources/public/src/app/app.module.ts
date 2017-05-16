@@ -1,6 +1,5 @@
 import 'hammerjs';
 
-import { MaterialModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -25,7 +24,6 @@ const routes:Routes = [
   imports: [
     BrowserModule,
     FormsModule,
-    MaterialModule,
     HttpModule,
     MdCardModule,
     RouterModule.forRoot(routes, {useHash: true}),
