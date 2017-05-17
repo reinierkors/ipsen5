@@ -6,7 +6,10 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import {Routes, RouterModule} from "@angular/router";
 import {MdCardModule} from '@angular/material';
+import {MdMenuModule} from '@angular/material';
+import {MdToolbarModule} from '@angular/material';
 import {MdSidenavModule} from '@angular/material';
+import {MdListModule} from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -29,11 +32,14 @@ const routes:Routes = [
     ResultsComponent,
   ],
   imports: [
+    MdSidenavModule,
     BrowserModule,
     FormsModule,
     HttpModule,
     MdCardModule,
-    MdSidenavModule,
+    MdMenuModule,
+    MdListModule,
+    MdToolbarModule,
     RouterModule.forRoot(routes, {useHash: false}),
   ],
   providers: [],
