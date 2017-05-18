@@ -1,3 +1,12 @@
+Angular CLI:
+--
 ng g component Home - Maakt een Home Component aan, en voegt deze toe aan
 ng serve - start een lokale server op port 4200
 ng build - bouwt een mapje /dist/ met alle productie bestanden
+--
+
+Gulp:
+--
+gulp watch - Automatic compiling van .sass bestanden in /sass/ folder --> app.css
+gulp - compiled sass, en watch'd
+gulp dev - compressed css file
