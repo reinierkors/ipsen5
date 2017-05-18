@@ -1,8 +1,7 @@
-<md-card>
-    <md-card-title>
-        <span class="md-headline"><button (click)="printHello()"> test </button></span>
-    </md-card-title>
-    <md-card-content>
-        <p>{{message}}</p>
-    </md-card-content>
-</md-card>
+<ngui-map zoom="7" center={{center}} (mapClick)="onClick($event)">
+    <marker *ngFor="let pos of positions"
+            [position]="pos"></marker>
+</ngui-map>
+<!--<button (click)="showRandomMarkers()">Show Random Markers</button>-->
+<!--<br/>-->
+<!--<button (click)="addMarker()">Add Marker</button>-->
