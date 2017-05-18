@@ -1,4 +1,6 @@
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
+@import "@swimlane/ngx-datatable/release/index.css";
+@import "@swimlane/ngx-datatable/release/themes/material.css";
 
 body {
   margin: 0;
@@ -12,6 +14,7 @@ body, html, app-root, md-sidenav-container {
 .example-fill-remaining-space {
   flex: 1 1 auto;
 }
+
 
 .nav-header .mat-list-item-content {
   height: 100% !important;

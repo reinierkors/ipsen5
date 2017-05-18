@@ -5,6 +5,8 @@ var sourcemaps = require('gulp-sourcemaps');
 var autoprefixer = require('gulp-autoprefixer');
 // import moduleImporter from 'sass-module-importer';
 var moduleImporter = require('sass-module-importer');
+var uglify = require('gulp-uglify');
+var concat = require('gulp-concat');
 
 var input = './src/assets/sass/**/*.scss';
 var output = './src/assets/css';
@@ -14,6 +16,13 @@ var sassOptions = {
     outputStyle: 'expanded',
     importer: moduleImporter()
 };
+
+gulp.task('js', function() {
+    gulp.src('./src/assets/scripts/*.js')
+        .pipe(uglify())
+        .pipe(concat('script.js'))
+        .pipe(gulp.dest('./src/assets/scripts/'))
+});
 
 gulp.task('sass', function () {
     return gulp
@@ -39,7 +48,12 @@ gulp.task('watch', function() {
         });
 });
 
-gulp.task('default', ['sass', 'watch' /*, possible other tasks... */]);
+gulp.task('watch', function() {
+    gulp.watch('./src/assets/scripts/*.js', ['js']);
+    gulp.watch(input, ['sass']);
+});
+
+gulp.task('default', ['sass', 'watch', 'js' /*, possible other tasks... */]);
 
 gulp.task('prod', function () {
     return gulp
