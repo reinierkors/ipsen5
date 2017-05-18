@@ -1,5 +1,4 @@
 <md-sidenav-container>
-
     <md-sidenav #sidenav mode="side" class="app-sidenav">
         <md-list>
             <md-list-item class="nav-header"><a href="/" class="logo">
@@ -90,56 +89,18 @@
         </md-list>
     </md-sidenav>
 
-<md-toolbar color="primary">
-    <button class="app-icon-button" (click)="sidenav.toggle()">
-        <i class="material-icons app-toolbar-menu">menu</i>
-    </button>
+    <md-toolbar color="primary">
+        <button class="app-icon-button" (click)="sidenav.toggle()">
+            <i class="material-icons app-toolbar-menu">menu</i>
+        </button>
 
-    <span>Application Title</span>
+        <span>Waterscan</span>
 
-    <!-- This fills the remaining space of the current row -->
-    <span class="example-fill-remaining-space"></span>
+        <!-- This fills the remaining space of the current row -->
+        <span class="example-fill-remaining-space"></span>
 
-    <span>Right Aligned Text</span>
-</md-toolbar>
-
-  <!--<md-sidenav md-component-id="left" class="md-sidenav-left nav-bar md-whiteframe-7dp" md-is-locked-open="$mdMedia('gt-md')">-->
-    <!--<md-toolbar layout-padding layout="row" layout-align="start center" class="md-tall md-primary md-theme-indigo">-->
-      <!--<h1 class="md-toolbar-tools">Menu</h1>-->
-    <!--</md-toolbar>-->
-    <!--<md-content>-->
-      <!--<md-list flex>-->
-        <!--<md-list-item ng-repeat="section in sections" ng-href="{{ section.url }}">-->
-          <!--<md-icon>-->
-            <!--<fa name="{{ section.icon }}" size="2"></fa>-->
-          <!--</md-icon>-->
-          <!--<p>{{ section.title }}</p>-->
-          <!--<md-divider></md-divider>-->
-        <!--</md-list-item>-->
-        <!--<md-divider></md-divider>-->
-      <!--</md-list>-->
-    <!--</md-content>-->
-  <!--</md-sidenav>-->
-
-  <!--<div layout="column" flex id="content">-->
-    <!--<md-toolbar layout="row">-->
-      <!--<div class="md-toolbar-tools">-->
-        <!--<md-button aria-label="Toggle Sidenav" class="md-icon-button" hide-gt-md style="margin-right: 10px;"-->
-                   <!--ng-if="auth" ng-click="toggleMenu()">-->
-          <!--<i class="fa fa-bars pointer"></i>-->
-        <!--</md-button>-->
-        <!--<h1 flex style="margin-left: 5px">{{title}}</h1>-->
-      <!--</div>-->
-    <!--</md-toolbar>-->
-    <!--<md-content layout="row" flex>-->
-      <!--<md-content layout="column" flex id="scrollContent">-->
-        <!--<main ng-view flex></main>-->
-      <!--</md-content>-->
-    <!--</md-content>-->
-  <!--</div>-->
-
-  <!-- Our components will be loaded here based on the current URL -->
-
+        <span>Waterscan</span>
+    </md-toolbar>
 
     <router-outlet></router-outlet>
 </md-sidenav-container>
