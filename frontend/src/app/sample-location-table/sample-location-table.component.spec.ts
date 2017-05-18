@@ -22,4 +22,6 @@ describe('SampleLocationTableComponent', () => {
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
+
+
 });
