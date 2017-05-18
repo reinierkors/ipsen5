@@ -16,6 +16,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ResultsComponent } from './results/results.component';
 import { CreateAccountComponent } from './create-account/create-account.component';
+import { SidenavComponent } from './sidenav/sidenav.component';
 
 const routes:Routes = [
   {path: '', component: HomeComponent},
@@ -31,6 +32,7 @@ const routes:Routes = [
     HomeComponent,
     CreateAccountComponent,
     ResultsComponent,
+    SidenavComponent,
   ],
   imports: [
     MdSidenavModule,
