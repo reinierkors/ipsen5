@@ -10,6 +10,7 @@ import {MdMenuModule} from '@angular/material';
 import {MdToolbarModule} from '@angular/material';
 import {MdSidenavModule} from '@angular/material';
 import {MdListModule} from '@angular/material';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -43,6 +44,7 @@ const routes:Routes = [
     MdMenuModule,
     MdListModule,
     MdToolbarModule,
+    NgxDatatableModule,
     RouterModule.forRoot(routes, {useHash: false}),
   ],
   providers: [],
