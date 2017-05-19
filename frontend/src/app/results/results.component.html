@@ -1,6 +1,8 @@
-<ngui-map zoom="7" center={{center}} (mapClick)="onClick($event)">
-    <marker *ngFor="let pos of positions"
-            [position]="pos"></marker>
+<ngui-map [options]="mapConfig" (mapClick)="onClick($event)">
+    <marker (click)="onClick($event)"
+            *ngFor="let pos of positions"
+            [position]="pos"
+            [label]="pos.desc"></marker>
 </ngui-map>
 <!--<button (click)="showRandomMarkers()">Show Random Markers</button>-->
 <!--<br/>-->

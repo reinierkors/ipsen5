@@ -9,19 +9,22 @@ import {NguiMapComponent} from '@ngui/map';
 })
 export class ResultsComponent {
     message = 'Message works!';
-    center = 'Leiden, The Netherlands';
+    mapConfig = {
+        center: {lat: 52.152832, lng: 5.439478},
+        zoom: 8
+    };
 
     positions = [
-        {lat: 51.63497, lng: 5.47588},
+        {lat: 51.63497, lng: 5.47588, desc: "hi"},
         {lat: 51.50600, lng: 4.78167},
         {lat: 53.03982, lng: 6.81579}
     ];
 
     onClick(event) {
-        if (event instanceof MouseEvent) {
-            return false;
-        }
-        console.log('map is clicked', event, event.target);
+        const map = event.target;
+        console.log("Lat:", event.latLng.lat());
+        console.log("Lng:", event.latLng.lng());
+        console.log();
     }
 
     constructor() {
