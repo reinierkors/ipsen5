@@ -11,7 +11,7 @@ export class ApiSampleService extends ApiService{
 		super(http);
 	}
 	
-	test():Observable<string>{
+	public test():Observable<string>{
 		return this.get('/sample/test');
 	}
 }
