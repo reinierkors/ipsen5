@@ -10,11 +10,13 @@ import {MdMenuModule} from '@angular/material';
 import {MdToolbarModule} from '@angular/material';
 import {MdSidenavModule} from '@angular/material';
 import {MdListModule} from '@angular/material';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-import {AppComponent} from './app.component';
-import {HomeComponent} from './home/home.component';
-import {ResultsComponent} from './results/results.component';
-import {CreateAccountComponent} from './create-account/create-account.component';
+import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
+import { ResultsComponent } from './results/results.component';
+import { CreateAccountComponent } from './create-account/create-account.component';
+import { SidenavComponent } from './sidenav/sidenav.component';
 import {NguiMapModule} from '@ngui/map';
 
 const routes: Routes = [
@@ -26,26 +28,27 @@ const routes: Routes = [
 ];
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        HomeComponent,
-        CreateAccountComponent,
-        ResultsComponent,
-    ],
-    imports: [
-        MdSidenavModule,
-        BrowserModule,
-        FormsModule,
-        HttpModule,
-        MdCardModule,
-        MdMenuModule,
-        MdListModule,
-        MdToolbarModule,
-        RouterModule.forRoot(routes, {useHash: false}),
-        NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyA8acwCuestYr1vo1mJK-QdkZ-3AwW1blM'})
-    ],
-    providers: [],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    CreateAccountComponent,
+    ResultsComponent,
+    SidenavComponent,
+  ],
+  imports: [
+    MdSidenavModule,
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    MdCardModule,
+    MdMenuModule,
+    MdListModule,
+    MdToolbarModule,
+    NgxDatatableModule,
+    RouterModule.forRoot(routes, {useHash: false}),
+      NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyA8acwCuestYr1vo1mJK-QdkZ-3AwW1blM'}),
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }
