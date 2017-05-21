@@ -81,6 +81,13 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	protected abstract T resultSetToModel(ResultSet resultSet) throws RepositoryException;
 	
 	/**
+	 * Stores the auto increment keys in the entity
+	 * @param entity
+	 * @param generatedKeys
+	 */
+	protected abstract void handleGeneratedKeys(T entity,ResultSet generatedKeys) throws RepositoryException;
+	
+	/**
 	 * Retrieve a specific row from the database and returns it as model instance
 	 * @param id
 	 * @return a filled model instance found by the id
@@ -125,18 +132,28 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	 */
 	@Override
 	public void persist(T entity) throws RepositoryException {
-		PreparedStatement statement;
 		if(isNew(entity)){
-			statement = psInsert;
-			fillParameters(psInsert, entity, false);
+			persistInsert(entity);
 		}
 		else{
-			statement = psUpdate;
-			fillParameters(psUpdate, entity, true);
+			persistUpdate(entity);
 		}
-		
+	}
+	
+	private void persistInsert(T entity) throws RepositoryException {
 		try {
-			statement.executeUpdate();
+			fillParameters(psInsert, entity, false);
+			psInsert.executeUpdate();
+			handleGeneratedKeys(entity,psInsert.getGeneratedKeys());
+		} catch (SQLException e) {
+			throw new RepositoryException(e);
+		}
+	}
+	
+	private void persistUpdate(T entity) throws RepositoryException {
+		try {
+			fillParameters(psUpdate, entity, true);
+			psUpdate.executeUpdate();
 		} catch (SQLException e) {
 			throw new RepositoryException(e);
 		}

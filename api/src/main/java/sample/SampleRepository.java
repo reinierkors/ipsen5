@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
+ * Repository for samples
  *
  * @author Wander Groeneveld
  * @version 0.1, 20-5-2017
@@ -63,6 +63,16 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 			sample.setLatitude(resultSet.getBigDecimal("latitude"));
 			sample.setLongitude(resultSet.getBigDecimal("longitude"));
 			return sample;
+		} catch (SQLException e) {
+			throw new RepositoryException(e);
+		}
+	}
+	
+	@Override
+	protected void handleGeneratedKeys(Sample entity, ResultSet generatedKeys) throws RepositoryException {
+		try {
+			generatedKeys.next();
+			entity.setId(generatedKeys.getInt("id"));
 		} catch (SQLException e) {
 			throw new RepositoryException(e);
 		}
