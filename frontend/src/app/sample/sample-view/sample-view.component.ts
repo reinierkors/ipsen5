@@ -22,7 +22,7 @@ export class SampleViewComponent implements OnInit{
 	ngOnInit(){
 		this.route.params
 			.switchMap(params => this.apiSample.getSample(params["id"]))
-			.subscribe(sample => this.sample = sample);
+			.subscribe(sample => this.sample = sample, error => console.log(error));
 		
 	}
 }

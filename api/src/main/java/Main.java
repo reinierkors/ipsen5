@@ -1,21 +1,33 @@
-import static spark.Spark.port;
-import static spark.Spark.path;
-import static spark.Spark.options;
-import static spark.Spark.before;
+import api.ApiException;
+import api.ApiExceptionTypeAdapter;
 import config.Config;
 import sample.SampleRouter;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import static spark.Spark.*;
 
 public class Main {
 	public static void main(String[] args) {
 		port(Config.getInstance().api.port);
+		ipAddress(Config.getInstance().api.host);
 		enableCORS("*",null,null);
+		
+		//Handle ApiException
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(ApiException.class,new ApiExceptionTypeAdapter());
+		Gson gson = gsonBuilder.create();
+		exception(ApiException.class, (exception,req,res)-> {
+			res.status(500);
+			res.body(gson.toJson(exception));
+		});
 		
 		//Put all API calls under /api and let package routers handle their own routes
 		path("/api",()->{
 			new SampleRouter();
 			//new WhateverRouter();
 		});
-		
 	}
 	
 	// Enables CORS on requests. This method is an initialization method and should be called once.

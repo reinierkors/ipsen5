@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * MariaDB implementation of the Repository interface
  *
  * @author Wander Groeneveld
- * @version 0.1, 20-5-2017
+ * @version 0.2, 21-5-2017
  */
 public abstract class RepositoryMaria<T> implements Repository<T>{
 	private final Connection connection;
@@ -98,11 +98,15 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 		try{
 			psGet.setInt(1,id);
 			ResultSet resultSet = psGet.executeQuery();
-			resultSet.next();
-			return resultSetToModel(resultSet);
+			if(resultSet.next()) {
+				return resultSetToModel(resultSet);
+			}
+			else{
+				return null;
+			}
 		}
-		catch(SQLException ex){
-			throw new RepositoryException(ex);
+		catch(SQLException e){
+			throw new RepositoryException(e);
 		}
 	}
 	
@@ -120,8 +124,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 			}
 			return list;
 		}
-		catch(SQLException ex){
-			throw new RepositoryException(ex);
+		catch(SQLException e){
+			throw new RepositoryException(e);
 		}
 	}
 	
