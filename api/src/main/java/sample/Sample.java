@@ -14,11 +14,11 @@ public class Sample{
 	private Timestamp datetime;
 	private int locationId;
 	private int ownerId;
-	private double quality;
+	private Double quality;
 	private BigDecimal latitude;
 	private BigDecimal longitude;
 	
-	public Sample(int id, Timestamp datetime, int locationId, int ownerId, double quality, BigDecimal latitude, BigDecimal longitude) {
+	public Sample(int id, Timestamp datetime, int locationId, int ownerId, Double quality, BigDecimal latitude, BigDecimal longitude) {
 		this.id = id;
 		this.datetime = datetime;
 		this.locationId = locationId;
@@ -28,12 +28,12 @@ public class Sample{
 		this.longitude = longitude;
 	}
 	
-	public Sample(Timestamp datetime, int locationId, int ownerId, double quality, BigDecimal latitude, BigDecimal longitude) {
+	public Sample(Timestamp datetime, int locationId, int ownerId, Double quality, BigDecimal latitude, BigDecimal longitude) {
 		this(0,datetime,locationId,ownerId,quality,latitude,longitude);
 	}
 	
 	public Sample(){
-		this(0,null,0,0,0,null,null);
+		this(0,null,0,0,null,null,null);
 	}
 	
 	public int getId() {
@@ -68,11 +68,11 @@ public class Sample{
 		this.ownerId = ownerId;
 	}
 	
-	public double getQuality() {
+	public Double getQuality() {
 		return quality;
 	}
 	
-	public void setQuality(double quality) {
+	public void setQuality(Double quality) {
 		this.quality = quality;
 	}
 	

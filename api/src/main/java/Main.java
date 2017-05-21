@@ -5,6 +5,8 @@ import sample.SampleRouter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import species.SpeciesCategoryRouter;
+import species.SpeciesRouter;
 
 import static spark.Spark.*;
 
@@ -26,7 +28,8 @@ public class Main {
 		//Put all API calls under /api and let package routers handle their own routes
 		path("/api",()->{
 			new SampleRouter();
-			//new WhateverRouter();
+			new SpeciesRouter();
+			new SpeciesCategoryRouter();
 		});
 	}
 	
