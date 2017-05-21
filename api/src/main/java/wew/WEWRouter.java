@@ -21,7 +21,7 @@ public class WEWRouter {
 		Gson gson = gsonBuilder.create();
 		
 		path("/wew", ()->{
-			
+		
 		});
 		
 	}

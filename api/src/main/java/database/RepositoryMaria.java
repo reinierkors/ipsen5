@@ -4,7 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -27,7 +26,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 		String removeQuery = "DELETE FROM `"+getTable()+"` WHERE `id` = ?";
 		String removeMultiQuery = "DELETE FROM `"+getTable()+"` WHERE `id` IN(?)";
 		
-		List<String> columns = Arrays.stream(getColumns()).filter(column -> column!="id").collect(Collectors.toList());
+		List<String> columns = Arrays.stream(getColumns()).filter(column -> !column.equals("id")).collect(Collectors.toList());
 		Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
 		String columnList = columns.stream().map(column -> "`"+column+"`").collect(commaJoiner);
 		String valueList = columns.stream().map(column -> "?").collect(commaJoiner);
@@ -119,7 +118,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	public Iterable<T> getAll() throws RepositoryException {
 		try{
 			ResultSet resultSet = psGetAll.executeQuery();
-			List<T> list = new ArrayList<T>();
+			List<T> list = new ArrayList<>();
 			while(resultSet.next()) {
 				list.add(resultSetToModel(resultSet));
 			}
@@ -172,7 +171,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	 */
 	@Override
 	public void persist(Iterable<T> entities) throws RepositoryException {
-		entities.forEach(entity -> persist(entity));
+		entities.forEach(this::persist);
 	}
 	
 	/**

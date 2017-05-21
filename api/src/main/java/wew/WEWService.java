@@ -3,8 +3,6 @@ package wew;
 import api.ApiException;
 import database.ConnectionManager;
 import database.RepositoryException;
-import species.Species;
-import species.SpeciesRepository;
 import wew.factor.WEWFactorRepository;
 import wew.factorClass.WEWFactorClassRepository;
 import wew.value.WEWValueRepository;
@@ -18,9 +16,9 @@ import wew.value.WEWValueRepository;
  */
 public class WEWService {
 	private static final WEWService instance = new WEWService();
-	private WEWFactorRepository factorRepo;
-	private WEWFactorClassRepository factorClassRepo;
-	private WEWValueRepository valueRepo;
+	private final WEWFactorRepository factorRepo;
+	private final WEWFactorClassRepository factorClassRepo;
+	private final WEWValueRepository valueRepo;
 	
 	private WEWService() {
 		factorRepo = new WEWFactorRepository(ConnectionManager.getInstance().getConnection());

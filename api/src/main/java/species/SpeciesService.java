@@ -13,7 +13,7 @@ import database.RepositoryException;
  */
 public class SpeciesService {
 	private static final SpeciesService instance = new SpeciesService();
-	private SpeciesRepository repo;
+	private final SpeciesRepository repo;
 	
 	private SpeciesService() {
 		repo = new SpeciesRepository(ConnectionManager.getInstance().getConnection());
@@ -42,6 +42,6 @@ public class SpeciesService {
 			species = new Species(name);
 			repo.persist(species);
 		}
-		return null;
+		return species;
 	}
 }

@@ -22,6 +22,5 @@ public class SpeciesRouter {
 		path("/species", ()->{
 			get("/:id",(req,res) -> gson.toJson(speciesService.get(Integer.parseInt(req.params("id")))));
 		});
-		
 	}
 }

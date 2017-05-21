@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import species.SpeciesCategoryRouter;
 import species.SpeciesRouter;
+import wew.WEWRouter;
 
 import static spark.Spark.*;
 
@@ -30,6 +31,7 @@ public class Main {
 			new SampleRouter();
 			new SpeciesRouter();
 			new SpeciesCategoryRouter();
+			new WEWRouter();
 		});
 	}
 	

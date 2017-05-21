@@ -2,7 +2,6 @@ package wew.factorClass;
 
 import database.RepositoryException;
 import database.RepositoryMaria;
-import wew.factor.WEWFactor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

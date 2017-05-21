@@ -13,7 +13,7 @@ import database.RepositoryException;
  */
 public class SpeciesCategoryService {
 	private static final SpeciesCategoryService instance = new SpeciesCategoryService();
-	private SpeciesCategoryRepository repo;
+	private final SpeciesCategoryRepository repo;
 	
 	private SpeciesCategoryService() {
 		repo = new SpeciesCategoryRepository(ConnectionManager.getInstance().getConnection());

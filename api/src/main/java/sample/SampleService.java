@@ -13,7 +13,7 @@ import database.RepositoryException;
  */
 public class SampleService {
 	private static final SampleService instance = new SampleService();
-	private SampleRepository repo;
+	private final SampleRepository repo;
 	
 	private SampleService() {
 		repo = new SampleRepository(ConnectionManager.getInstance().getConnection());
