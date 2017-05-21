@@ -11,7 +11,11 @@ export class ApiSampleService extends ApiService{
 		super(http);
 	}
 	
-	public test():Observable<string>{
-		return this.get('/sample/test');
+	public getSample(id:number):Observable<Sample>{
+		return this.get('/sample/'+id).map(sample=>Sample.fromJSON(sample));
+	}
+	
+	public getSamplesByLocation(locationId:number):Observable<Sample[]>{
+		return this.get('/sample/location/'+locationId).map((samples:Object[]) => samples.map(sample=>Sample.fromJSON(sample)));
 	}
 }

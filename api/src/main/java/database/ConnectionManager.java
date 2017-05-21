@@ -1,4 +1,4 @@
-package persistence;
+package database;
 
 import config.Config;
 
@@ -11,7 +11,7 @@ import java.sql.SQLException;
  * @author Wander Groeneveld
  * @version 1.1, 17-5-2017
  */
-class ConnectionManager {
+public class ConnectionManager {
 	private static ConnectionManager instance;
 	private Connection connection;
 	private Config.Api.Database dbConfig;
@@ -44,12 +44,19 @@ class ConnectionManager {
 	private String getUrl(){
 		return "jdbc:"+dbConfig.driver+"://"+dbConfig.host+":"+dbConfig.port+"/"+dbConfig.database;
 	}
-
-	Connection getConnection() {
+	
+	public Connection getConnection() {
 		return connection;
 	}
-
-	static ConnectionManager getInstance() {
+	
+	public void reconnect() throws SQLException, ClassNotFoundException{
+		if(!connection.isClosed()){
+			connection.close();
+		}
+		initConnection();
+	}
+	
+	public static ConnectionManager getInstance() {
 		if (instance == null) {
 			try {
 				instance = new ConnectionManager();
