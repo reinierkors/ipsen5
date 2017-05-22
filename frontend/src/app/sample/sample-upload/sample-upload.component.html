@@ -1,3 +1,5 @@
-<p>
-  sample-upload works!
-</p>
+<input type="file" (change)="fileChange($event)" multiple/>
+
+<div *ngFor="let dataObj of dataObjs">
+	<textarea rows="30" cols="120">{{dataObj|json}}</textarea>
+</div>
