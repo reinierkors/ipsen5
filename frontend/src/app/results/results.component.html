@@ -1,8 +1,15 @@
 <ngui-map [options]="mapConfig" (mapClick)="onClick($event)">
-    <marker (click)="onClick($event)"
-            *ngFor="let pos of positions"
+    <marker (click)="showMarkerInfo($event)"
+            *ngFor="let pos of markers"
             [position]="pos"
-            [label]="pos.desc"></marker>
+            [title]="pos.id"></marker>
+    <info-window id="iw">
+        <div *ngIf="marker.display">
+            <h2>{{marker.desc}}</h2>
+            Latitude: {{marker.lat}}
+            <br> Longitude: {{marker.lng}}
+        </div>
+    </info-window>
 </ngui-map>
 <!--<button (click)="showRandomMarkers()">Show Random Markers</button>-->
 <!--<br/>-->
