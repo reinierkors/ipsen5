@@ -9,7 +9,7 @@ public class Main {
 
         get("/home", (req, response) -> "200 OK");
 
-//        asnew TakenSampleResource(new TakenSampleService());
+//        new TakenSampleResource(new TakenSampleService());
 //        new TaxonResource(new TaxonService());
     }
 }
