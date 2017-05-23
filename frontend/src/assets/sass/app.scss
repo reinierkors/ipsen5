@@ -15,8 +15,19 @@ body, html, app-root, md-sidenav-container {
   flex: 1 1 auto;
 }
 
+md-toolbar-row {
+  .mat-button-wrapper{
+    color: #000;
+  }
+}
 
+.full-width {
+  width: 100%;
+}
 
+.container {
+  margin: 2rem;
+}
 
 .nav-header .mat-list-item-content {
   height: 100% !important;
