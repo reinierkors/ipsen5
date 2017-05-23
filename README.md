@@ -34,6 +34,7 @@ __Let op:__ Op dit moment werken alleen de API instellingen, de frontend config 
 __Let op:__ zorg dat je in de `ipsen5/frontend` map zit wanneer je deze commands uitvoerd.
 
 ## Angular CLI:
+npm install -g @angular/cli
 `ng g component Home` Maakt een Home Component aan  
 `ng serve` Start een lokale server op port 4200  
 `ng build` Bouwt een mapje /dist/ met alle productie bestanden
@@ -49,6 +50,7 @@ __Enum:__		`ng g enum my-new-enum`
 __Module:__		`ng g module my-module`  
 
 ## Gulp:
+npm install --global gulp
 `gulp watch` - Automatic compiling van .sass bestanden in /sass/ folder --> app.css  
 `gulp` - compiled sass, en watch'd  
 `gulp dev` - compressed css file  
