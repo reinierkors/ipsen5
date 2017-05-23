@@ -17,7 +17,7 @@ export class SampleUploadComponent implements OnInit {
 	fileChange($event:any){
 		let files:FileList = $event.target.files;
 		this.dataObjs = [];
-		for(let i=0;files.length;++i){
+		for(let i=0;i<files.length;++i){
 			let file = files.item(i);
 			Papa.parse(file,{
 				header:true,
