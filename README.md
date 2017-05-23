@@ -43,6 +43,7 @@ Wanneer je een script, css of asset uit een package die met NPM geïnstalleerd i
 1. Dit bestand wordt nu automatisch geladen, je hoeft het niet in index.html toe te voegen
 
 ## Angular CLI:
+`npm install -g @angular/cli` Installeer angular cli
 `ng g component Home` Maakt een Home Component aan  
 `ng serve` Start een lokale server op port 4200  
 `ng build` Bouwt een mapje /dist/ met alle productie bestanden
@@ -58,6 +59,7 @@ __Enum:__		`ng g enum my-new-enum`
 __Module:__		`ng g module my-module`  
 
 ## Gulp:
+`npm install --global gulp`  Installeer gulp
 `gulp watch` Automatic compiling van .sass bestanden in /sass/ folder --> app.css  
 `gulp` Compiles sass, en watch'd  
 `gulp dev` Compressed css file  
