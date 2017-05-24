@@ -11,9 +11,11 @@ import database.ConnectionManager;
 public class LocationService {
     private static final LocationService instance = new LocationService();
     private final LocationRepository repository;
+    private CoordinateConverter converter;
 
     private LocationService() {
         repository = new LocationRepository(ConnectionManager.getInstance().getConnection());
+        converter = new CoordinateConverter();
     }
 
     public static LocationService getInstance() {
@@ -21,6 +23,16 @@ public class LocationService {
     }
 
     public Iterable<Location> getAll() {
+        Iterable<Location> locations = repository.getAll();
+        for (Location location : locations) {
+            if (location.getLatitude() == null && location.getLongitude() == null) {
+                Double[] coordinates = converter.convertToLatLng(location.getxCoord(),
+                        location.getyCoord());
+                location.setLatitude(coordinates[0]);
+                location.setLongitude(coordinates[1]);
+                repository.persist(location);
+            }
+        }
         return repository.getAll();
     }
 }

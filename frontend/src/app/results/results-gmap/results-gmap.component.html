@@ -1,5 +1,6 @@
 <ngui-map [options]="mapConfig" (mapClick)="onClick($event)">
-    <marker (click)="showMarkerInfo($event)"
+    <marker
+            (click)="showMarkerInfo($event)"
             *ngFor="let pos of markers"
             [position]="pos"
             [title]="pos.id"></marker>

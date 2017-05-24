@@ -47,8 +47,8 @@ public class LocationRepository extends RepositoryMaria<Location> {
             preparedStatement.setString(2, entity.getDescription());
             preparedStatement.setInt(3, entity.getxCoord());
             preparedStatement.setInt(4, entity.getyCoord());
-            preparedStatement.setBigDecimal(5, entity.getLatitude());
-            preparedStatement.setBigDecimal(6, entity.getLongitude());
+            preparedStatement.setDouble(5, entity.getLatitude());
+            preparedStatement.setDouble(6, entity.getLongitude());
             if (appendId)
                 preparedStatement.setInt(7, entity.getId());
         } catch (SQLException e) {
@@ -65,8 +65,8 @@ public class LocationRepository extends RepositoryMaria<Location> {
             location.setDescription(resultSet.getString(COLUMNS[2]));
             location.setxCoord(resultSet.getInt(COLUMNS[3]));
             location.setyCoord(resultSet.getInt(COLUMNS[4]));
-            location.setLatitude(resultSet.getBigDecimal(COLUMNS[5]));
-            location.setLongitude(resultSet.getBigDecimal(COLUMNS[6]));
+            location.setLatitude(resultSet.getDouble(COLUMNS[5]));
+            location.setLongitude(resultSet.getDouble(COLUMNS[6]));
             return location;
         } catch (SQLException e) {
             throw new RepositoryException(e);

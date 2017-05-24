@@ -14,15 +14,15 @@ public class Location {
     private String description;
     private int xCoord;
     private int yCoord;
-    private BigDecimal latitude;
-    private BigDecimal longitude;
+    private Double latitude;
+    private Double longitude;
 
     public Location() {
 
     }
 
     public Location(int id, String code, String description, int xCoord,
-                    int yCoord, BigDecimal latitude, BigDecimal longitude) {
+                    int yCoord, Double latitude, Double longitude) {
         this.id = id;
         this.code = code;
         this.description = description;
@@ -33,7 +33,7 @@ public class Location {
     }
 
     public Location(String code, String description, int xCoord,
-                    int yCoord, BigDecimal latitude, BigDecimal longitude) {
+                    int yCoord, Double latitude, Double longitude) {
         this(0, code, description, xCoord, yCoord, latitude, longitude);
     }
 
@@ -77,19 +77,19 @@ public class Location {
         this.yCoord = yCoord;
     }
 
-    public BigDecimal getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(BigDecimal latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public BigDecimal getLongitude() {
+    public Double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(BigDecimal longitude) {
+    public void setLongitude(Double longitude) {
         this.longitude = longitude;
     }
 }

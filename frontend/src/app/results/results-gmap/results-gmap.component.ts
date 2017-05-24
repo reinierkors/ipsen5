@@ -24,7 +24,7 @@ export class ResultsComponent implements OnInit {
     ngOnInit() {
         this.route.params
             .switchMap(params => this.apiLocation.getAllLocations())
-            .subscribe(markerLocations => this.locations = markerLocations, error => console.log(error));
+            .subscribe(markerLocations => {this.locations = markerLocations; console.log(this.locations)} , error => console.log(error));
     }
 
     mapConfig = {
