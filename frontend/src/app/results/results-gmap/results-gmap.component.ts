@@ -1,13 +1,32 @@
 import {Component, OnInit} from '@angular/core';
 import {NguiMapComponent} from '@ngui/map';
-
+import {ActivatedRoute} from "@angular/router";
+import {ApiLocationService} from '../api.location.service';
+import {Location} from '../location.model';
 
 @Component({
     selector: 'app-results',
-    templateUrl: './results.component.html',
-    styleUrls: ['./results.component.css']
+    providers: [ApiLocationService],
+    templateUrl: './results-gmap.component.html',
+    styleUrls: ['./results-gmap.component.css']
 })
-export class ResultsComponent {
+export class ResultsComponent implements OnInit {
+    private route: ActivatedRoute;
+    private apiLocation: ApiLocationService;
+    public locations: Location[];
+
+    constructor(apiLocation: ApiLocationService, route: ActivatedRoute) {
+        this.apiLocation = apiLocation;
+        this.route = route;
+        this.initMarkers();
+    };
+
+    ngOnInit() {
+        this.route.params
+            .switchMap(params => this.apiLocation.getAllLocations())
+            .subscribe(markerLocations => this.locations = markerLocations, error => console.log(error));
+    }
+
     mapConfig = {
         center: {lat: 52.152832, lng: 5.439478},
         zoom: 8
@@ -73,8 +92,4 @@ export class ResultsComponent {
             this.positions.push({lat: item.lat, lng: item.lng})
         });
     }
-
-    constructor() {
-        this.initMarkers();
-    };
 }

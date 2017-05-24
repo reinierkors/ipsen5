@@ -1,6 +1,7 @@
 import api.ApiException;
 import api.ApiExceptionTypeAdapter;
 import config.Config;
+import location.LocationRouter;
 import sample.SampleRouter;
 
 import com.google.gson.Gson;
@@ -32,6 +33,7 @@ public class Main {
 			new SpeciesRouter();
 			new SpeciesCategoryRouter();
 			new WEWRouter();
+			new LocationRouter();
 		});
 	}
 	
