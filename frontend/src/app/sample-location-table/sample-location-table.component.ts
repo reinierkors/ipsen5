@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-sample-location-table',
-  templateUrl: './sample-location-table.component.html',
-  styleUrls: ['./sample-location-table.component.css']
+  selector: 'app-sample-Location-table',
+  templateUrl: './sample-Location-table.component.html',
+  styleUrls: ['./sample-Location-table.component.css']
 })
 export class SampleLocationTableComponent implements OnInit {
 

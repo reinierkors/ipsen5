@@ -20,12 +20,14 @@ import { SidenavComponent } from './sidenav/sidenav.component';
 import { SampleUploadComponent } from './sample/sample-upload/sample-upload.component';
 import { SampleViewComponent } from './sample/sample-view/sample-view.component';
 import { SampleEditComponent } from './sample/sample-edit/sample-edit.component';
+import {SampleLocationTableComponent} from "./sample-location-table/sample-location-table.component";
 
 const routes:Routes = [
   {path: '', component: HomeComponent},
   {path: 'home', component: HomeComponent},
   {path: 'account', component: CreateAccountComponent},
   {path: 'results', component: ResultsComponent},
+  {path: 'locations', component: SampleLocationTableComponent},
   {path: 'sample/upload', component: SampleUploadComponent},
   {path: 'sample/view/:id', component: SampleViewComponent},
   {path: 'sample/edit/:id', component: SampleEditComponent},
@@ -38,6 +40,7 @@ const routes:Routes = [
     HomeComponent,
     CreateAccountComponent,
     ResultsComponent,
+    SampleLocationTableComponent,
     SidenavComponent,
     SampleUploadComponent,
     SampleViewComponent,
