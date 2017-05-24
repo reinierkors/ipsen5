@@ -16,6 +16,8 @@ body, html, app-root, md-sidenav-container {
 }
 
 
+
+
 .nav-header .mat-list-item-content {
   height: 100% !important;
   padding-top: 1rem !important;
@@ -81,6 +83,7 @@ a.nav-item {
   margin: 0;
   min-width: 0;
   padding: 0;
+  outline: 0;
   text-align: left;
   text-decoration: none;
 }

@@ -20,7 +20,8 @@
       "prefix": "app",
       "styles": [],
       "scripts": [
-        "assets/scripts/script.js"
+        "assets/scripts/script.js",
+		"../node_modules/papaparse/papaparse.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

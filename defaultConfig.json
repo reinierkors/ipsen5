@@ -1,0 +1,18 @@
+{
+	"api":{
+		"host":"localhost",
+		"port":8080,
+		"database":{
+			"username":"root",
+			"password":"root",
+			"host":"localhost",
+			"port":3306,
+			"database":"waterscan",
+			"driver":"mariadb"
+		}
+	},
+	"frontend":{
+		"host":"localhost",
+		"port":4200
+	}
+}
