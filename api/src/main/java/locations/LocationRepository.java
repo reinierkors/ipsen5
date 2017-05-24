@@ -4,6 +4,7 @@ import database.RepositoryException;
 import database.RepositoryMaria;
 import locations.Location;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -14,6 +15,10 @@ import java.sql.ResultSet;
  * @version 0.1, 24-5-2017
  */
 public class LocationRepository extends RepositoryMaria<Location> {
+    public LocationRepository(Connection connection) {
+        super(connection);
+    }
+
     @Override
     protected String getTable() {
         return null;
