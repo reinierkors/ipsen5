@@ -1,14 +1,14 @@
 <ngui-map [options]="mapConfig" (mapClick)="onClick($event)">
-    <marker
-            (click)="showMarkerInfo($event)"
-            *ngFor="let pos of markers"
+    <marker (click)="showMarkerInfo($event)"
+            *ngFor="let pos of positions"
             [position]="pos"
-            [title]="pos.id"></marker>
+            [title]="pos.title"></marker>
     <info-window id="iw">
         <div *ngIf="marker.display">
-            <h2>{{marker.desc}}</h2>
-            Latitude: {{marker.lat}}
-            <br> Longitude: {{marker.lng}}
+            <h3>{{marker.code}}</h3>
+            <h4>{{marker.description}}</h4>
+            <p>Latitude: {{marker.lat}}</p>
+            <p>Longitude: {{marker.lng}}</p>
         </div>
     </info-window>
 </ngui-map>
