@@ -29,6 +29,7 @@ export class AuthenticationService extends ApiService{
 
                     // store username and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify({ username: username, token: token }));
+                    this.addToAuthHeaders('Authorization', 'Bearer ' + this.token);
 
                     // return true to indicate successful login
                     return true;

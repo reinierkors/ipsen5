@@ -1,17 +1,15 @@
 import {Inject} from '@angular/core';
 import {Http, Response, Headers} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
-import {AuthenticationService} from './auth.service';
 
 export abstract class ApiService {
 	private http:Http;
-	private authenticationService: AuthenticationService;
+	private authHeaders: Headers;
 	//TODO read from config
 	public apiUri = 'http://127.0.0.1:8080/api';
 	
-	constructor(http:Http, authenticationService: AuthenticationService){
+	constructor(http:Http){
 		this.http = http;
-		this.authenticationService = authenticationService;
 	}
 	
 	private transformResult(res:Response,observer){
@@ -24,9 +22,16 @@ export abstract class ApiService {
 		else
 			observer.error(res);
 	}
+
+	protected addToAuthHeaders(headerType: string, value: string){
+        this.authHeaders.append(headerType, value);
+    }
 	
 	private getHeaderObject():Headers{
-		let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+		let headers = new Headers();
+		for(let key in this.authHeaders){
+		    headers.append(key,this.authHeaders[key]);
+        }
 		//Mogelijkheid om auth headers hier te zetten zodat elke api call die gebruikt
 		//headers.append('X-todo', ...);
 		return headers;

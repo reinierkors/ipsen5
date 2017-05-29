@@ -1,0 +1,23 @@
+<md-card>
+    <md-card-title>
+        <span class="md-headline">Login</span>
+    </md-card-title>
+    <md-card-content>
+        <section layout="row">
+            <md-input-container>
+                <input mdInput placeholder="Gebruikersnaam" [(ngModel)]="model.username" required>
+            </md-input-container>
+        </section>
+
+        <section layout="row">
+            <md-input-container>
+                <input mdInput type="password" placeholder="Wachtwoord" [(ngModel)]="model.password" required>
+            </md-input-container>
+        </section>
+
+        <section layout="row">
+            <button md-raised-button (click)="login()">Login</button>
+        </section>
+
+    </md-card-content>
+</md-card>
