@@ -12,6 +12,7 @@ import {MdSidenavModule} from '@angular/material';
 import {MdListModule} from '@angular/material';
 import {MdInputModule} from '@angular/material';
 import {MdButtonModule} from '@angular/material';
+import {MdSelectModule} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
@@ -35,6 +36,8 @@ const routes:Routes = [
   {path: 'sample/upload', component: SampleUploadComponent},
   {path: 'sample/view/:id', component: SampleViewComponent},
   {path: 'sample/edit/:id', component: SampleEditComponent},
+    /* Admin Routes */
+  {path: 'admin/create-account', component: CreateAccountComponent},
   {path: '**', component: HomeComponent}
 ];
 
@@ -62,6 +65,7 @@ const routes:Routes = [
     MdInputModule,
       MdButtonModule,
       BrowserAnimationsModule,
+      MdSelectModule,
     MdToolbarModule,
     NgxDatatableModule,
     RouterModule.forRoot(routes, {useHash: false}),
