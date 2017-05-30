@@ -1,15 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+
+import {User}    from '../user';
+
 
 @Component({
-  selector: 'app-create-account',
-  templateUrl: './create-account.component.html',
-  styleUrls: ['./create-account.component.css']
+    selector: 'create-account-form',
+    templateUrl: './create-account.component.html'
 })
 export class CreateAccountComponent implements OnInit {
 
-  constructor() { }
+    rollen = [
+        {value: 1, viewValue: 'Gebruiker'},
+        {value: 2, viewValue: 'Administrator'},
+    ];
 
-  ngOnInit() {
-  }
+    constructor() {
+    }
 
+    ngOnInit() {
+    }
+
+    model = new User(1, 'reinierkors@hotmail.com', 'wachtwoord', 'Reinier', 1);
+    submitted = false;
+
+    onSubmit() {
+        this.submitted = true;
+    }
+
+    // TODO: Remove this when we're done
+    get diagnostic() {
+        return JSON.stringify(this.model);
+    }
 }

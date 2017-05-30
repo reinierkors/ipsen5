@@ -1,21 +1,24 @@
 export class Sample{
 	id:number;
-	datetime:Date;
+	date:Date;
 	locationId:number;
+	location:null /*Location*/;
 	ownerId:number;
 	quality:number;
-	latitude:number;
-	longitude:number;
+	xCoor:number;
+	yCoor:number;
+	value:number;
 	
 	public static fromJSON(obj):Sample{
 		var sample = new Sample();
 		sample.id = obj.id;
-		sample.datetime = new Date(obj.datetime);
+		sample.date = new Date(obj.date);
 		sample.locationId = obj.locationId;
 		sample.ownerId = obj.ownerId;
 		sample.quality = obj.quality;
-		sample.latitude = obj.latitude;
-		sample.longitude = obj.longitude;
+		sample.xCoor = obj.xCoor;
+		sample.yCoor = obj.yCoor;
+		sample.value = obj.value;
 		return sample;
 	}
 }
