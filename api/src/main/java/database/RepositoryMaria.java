@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * MariaDB implementation of the Repository interface
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 public abstract class RepositoryMaria<T> implements Repository<T>{
 	private final Connection connection;
 	
-	private final PreparedStatement psGet,psGetAll,psRemove,psRemoveMulti,psInsert,psUpdate;
+	private final PreparedStatement psGet,psGetAll,psRemove,psInsert,psUpdate;
 	
 	public RepositoryMaria(Connection connection){
 		this.connection = connection;
@@ -24,7 +25,6 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 		String getQuery = "SELECT * FROM `"+getTable()+"` WHERE `id` = ?";
 		String getAllQuery = "SELECT * FROM `"+getTable()+"`";
 		String removeQuery = "DELETE FROM `"+getTable()+"` WHERE `id` = ?";
-		String removeMultiQuery = "DELETE FROM `"+getTable()+"` WHERE `id` IN(?)";
 		
 		List<String> columns = Arrays.stream(getColumns()).filter(column -> !column.equals("id")).collect(Collectors.toList());
 		Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
@@ -39,7 +39,6 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 			psGet = connection.prepareStatement(getQuery);
 			psGetAll = connection.prepareStatement(getAllQuery);
 			psRemove = connection.prepareStatement(removeQuery);
-			psRemoveMulti = connection.prepareStatement(removeMultiQuery);
 			psInsert =  connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
 			psUpdate = connection.prepareStatement(updateQuery);
 		} catch (SQLException e) {
@@ -111,11 +110,43 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	}
 	
 	/**
+	 * Retrieve multiple rows by id from the database and return as model instance
+	 * @param ids
+	 * @return filled model instances found by the ids
+	 * @throws RepositoryException
+	 */
+	@Override
+	public List<T> get(List<Integer> ids) throws RepositoryException {
+		try {
+			Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
+			String howManyQuestionMarks = ids.stream().map(id -> "?").collect(commaJoiner);
+			
+			String getMultiQuery = "SELECT * FROM `"+getTable()+"` WHERE `id` IN ("+howManyQuestionMarks+")";
+			PreparedStatement psGetMulti = connection.prepareStatement(getMultiQuery);
+			
+			int index = 1;
+			for(int id:ids){
+				psGetMulti.setInt(index,id);
+				++index;
+			}
+			
+			ResultSet resultSet = psGetMulti.executeQuery();
+			List<T> list = new ArrayList<>();
+			while(resultSet.next()) {
+				list.add(resultSetToModel(resultSet));
+			}
+			return list;
+		} catch (SQLException e) {
+			throw new RepositoryException(e);
+		}
+	}
+	
+	/**
 	 * @return all the rows from the database as model instances
 	 * @throws RepositoryException
 	 */
 	@Override
-	public Iterable<T> getAll() throws RepositoryException {
+	public List<T> getAll() throws RepositoryException {
 		try{
 			ResultSet resultSet = psGetAll.executeQuery();
 			List<T> list = new ArrayList<>();
@@ -170,7 +201,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	 * @throws RepositoryException
 	 */
 	@Override
-	public void persist(Iterable<T> entities) throws RepositoryException {
+	public void persist(List<T> entities) throws RepositoryException {
 		entities.forEach(this::persist);
 	}
 	
@@ -195,14 +226,20 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	 * @throws RepositoryException
 	 */
 	@Override
-	public void remove(Iterable<Integer> ids) throws RepositoryException {
-		ArrayList<Integer> idsList = new ArrayList<>();
-		for(int id:ids){
-			idsList.add(id);
-		}
+	public void remove(List<Integer> ids) throws RepositoryException {
 		try {
-			connection.createArrayOf("INT",idsList.toArray());
-			psRemoveMulti.setArray(1,null);
+			Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
+			String howManyQuestionMarks = ids.stream().map(id -> "?").collect(commaJoiner);
+			
+			String removeMultiQuery = "DELETE FROM `"+getTable()+"` WHERE `id` IN ("+howManyQuestionMarks+")";
+			PreparedStatement psRemoveMulti = connection.prepareStatement(removeMultiQuery);
+			
+			int index = 1;
+			for(int id:ids){
+				psRemoveMulti.setInt(index,id);
+				++index;
+			}
+			
 			psRemoveMulti.executeUpdate();
 		} catch (SQLException e) {
 			throw new RepositoryException(e);

@@ -6,7 +6,7 @@ import sample.SampleRouter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import species.SpeciesCategoryRouter;
+import speciesCategory.SpeciesCategoryRouter;
 import species.SpeciesRouter;
 import waterschap.WaterschapRouter;
 import wew.WEWRouter;
