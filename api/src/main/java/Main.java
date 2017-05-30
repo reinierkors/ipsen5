@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import species.SpeciesCategoryRouter;
 import species.SpeciesRouter;
+import waterschap.WaterschapRouter;
 import wew.WEWRouter;
 
 import static spark.Spark.*;
@@ -34,6 +35,7 @@ public class Main {
 			new SpeciesCategoryRouter();
 			new WEWRouter();
 			new LocationRouter();
+			new WaterschapRouter();
 		});
 	}
 	
