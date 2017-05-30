@@ -1,4 +1,4 @@
-package species;
+package speciesCategory;
 
 /**
  * Species category model

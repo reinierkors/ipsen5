@@ -1,4 +1,4 @@
-package species;
+package speciesCategory;
 
 import api.ApiException;
 import database.ConnectionManager;

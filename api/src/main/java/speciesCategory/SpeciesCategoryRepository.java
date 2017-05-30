@@ -1,4 +1,4 @@
-package species;
+package speciesCategory;
 
 import database.RepositoryException;
 import database.RepositoryMaria;

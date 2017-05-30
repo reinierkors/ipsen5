@@ -4,12 +4,17 @@ import api.ApiException;
 import database.ConnectionManager;
 import database.RepositoryException;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Service voor species-gerelateerde business logic
  * Staat tussen de router en de repository
  *
  * @author Wander Groeneveld
- * @version 0.1, 21-5-2017
+ * @version 0.2, 30-5-2017
  */
 public class SpeciesService {
 	private static final SpeciesService instance = new SpeciesService();
@@ -17,7 +22,6 @@ public class SpeciesService {
 	
 	private SpeciesService() {
 		repo = new SpeciesRepository(ConnectionManager.getInstance().getConnection());
-		
 	}
 	
 	public static SpeciesService getInstance() {
@@ -36,12 +40,24 @@ public class SpeciesService {
 		}
 	}
 	
-	public Species findOrCreate(String name){
-		Species species = repo.findByName(name);
-		if(species==null){
-			species = new Species(name);
-			repo.persist(species);
+	public List<Species> get(List<Integer> ids) throws ApiException {
+		try {
+			return repo.get(ids);
+		} catch(RepositoryException e){
+			throw new ApiException("Cannot retrieve species");
 		}
-		return species;
+	}
+	
+	public Species findOrCreate(String name) throws ApiException{
+		try {
+			Species species = repo.findByName(name);
+			if (species == null) {
+				species = new Species(name);
+				repo.persist(species);
+			}
+			return species;
+		} catch(RepositoryException e){
+			throw new ApiException("Cannot retrieve species");
+		}
 	}
 }
