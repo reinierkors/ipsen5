@@ -1,39 +1,40 @@
 package sample;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.sql.Date;
 
 /**
  * Sample model
  *
  * @author Wander Groeneveld
- * @version 0.1, 19-5-2017
+ * @version 0.2, 30-5-2017
  */
 public class Sample{
 	private int id;
-	private Timestamp datetime;
+	private Date date;
 	private int locationId;
 	private int ownerId;
 	private Double quality;
-	private BigDecimal latitude;
-	private BigDecimal longitude;
+	private Integer xCoor;
+	private Integer yCoor;
+	private Integer value;
 	
-	public Sample(int id, Timestamp datetime, int locationId, int ownerId, Double quality, BigDecimal latitude, BigDecimal longitude) {
+	public Sample(int id, Date date, int locationId, int ownerId, Double quality, Integer xCoor, Integer yCoor, Integer value) {
 		this.id = id;
-		this.datetime = datetime;
+		this.date = date;
 		this.locationId = locationId;
 		this.ownerId = ownerId;
 		this.quality = quality;
-		this.latitude = latitude;
-		this.longitude = longitude;
+		this.xCoor = xCoor;
+		this.yCoor = yCoor;
+		this.value = value;
 	}
 	
-	public Sample(Timestamp datetime, int locationId, int ownerId, Double quality, BigDecimal latitude, BigDecimal longitude) {
-		this(0,datetime,locationId,ownerId,quality,latitude,longitude);
+	public Sample(Date date, int locationId, int ownerId, Double quality, Integer xCoor, Integer yCoor, Integer value) {
+		this(0, date, locationId, ownerId, quality, xCoor, yCoor, value);
 	}
 	
 	public Sample(){
-		this(0,null,0,0,null,null,null);
+		this(0, null, 0, 0, null, null, null, null);
 	}
 	
 	public int getId() {
@@ -44,12 +45,12 @@ public class Sample{
 		this.id = id;
 	}
 	
-	public Timestamp getDatetime() {
-		return datetime;
+	public Date getDate() {
+		return date;
 	}
 	
-	public void setDatetime(Timestamp datetime) {
-		this.datetime = datetime;
+	public void setDate(Date date) {
+		this.date = date;
 	}
 	
 	public int getLocationId() {
@@ -76,19 +77,27 @@ public class Sample{
 		this.quality = quality;
 	}
 	
-	public BigDecimal getLatitude() {
-		return latitude;
+	public Integer getXCoor() {
+		return xCoor;
 	}
 	
-	public void setLatitude(BigDecimal latitude) {
-		this.latitude = latitude;
+	public void setXCoor(Integer xCoor) {
+		this.xCoor = xCoor;
 	}
 	
-	public BigDecimal getLongitude() {
-		return longitude;
+	public Integer getYCoor() {
+		return yCoor;
 	}
 	
-	public void setLongitude(BigDecimal longitude) {
-		this.longitude = longitude;
+	public void setYCoor(Integer yCoor) {
+		this.yCoor = yCoor;
+	}
+	
+	public Integer getValue() {
+		return value;
+	}
+	
+	public void setValue(Integer value) {
+		this.value = value;
 	}
 }
