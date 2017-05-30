@@ -19,7 +19,7 @@ public class CoordinateConverter {
      * @return Array consisting of [0] latitude, [1] longitude
      */
     public Double[] convertToLatLng(int x, int y) {
-        // The city "Amsterfoort" is used as reference "Rijksdriehoek" coordinate.
+        // The city "Amersfoort" is used as reference "Rijksdriehoek" coordinate.
         int xReference = 155000;
         int yReference = 463000;
         double dX = (double) (x - xReference) * Math.pow(10, -5);
@@ -49,7 +49,7 @@ public class CoordinateConverter {
                         (0.00022 * Math.pow(dY, 2)) +
                         (-0.00022 * Math.pow(dX, 2)) +
                         (0.00026 * Math.pow(dX, 5));
-        // The city "Amsterfoort" is used as reference "WGS84" coordinate.
+        // The city "Amersfoort" is used as reference "WGS84" coordinate.
         double referenceWgs84X = 52.15517;
         double referenceWgs84Y = 5.387206;
         double latitude = referenceWgs84X + (sumN / 3600);
