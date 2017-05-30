@@ -22,7 +22,6 @@ public class SampleRouter {
 		
 		path("/sample", ()->{
 			get("/:id",(req,res) -> gson.toJson(sampleService.get(Integer.parseInt(req.params("id")))));
-			
 		});
 		
 	}
