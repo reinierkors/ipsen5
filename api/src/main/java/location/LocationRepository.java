@@ -18,7 +18,7 @@ import java.sql.SQLException;
 public class LocationRepository extends RepositoryMaria<Location> {
     private final String TABLE = "location";
     private final String[] COLUMNS = new String[]{"id", "code", "description",
-            "x-coordinate", "y-coordinate"};
+            "x_coor", "y_coor"};
 
     public LocationRepository(Connection connection) {
         super(connection);
@@ -37,7 +37,7 @@ public class LocationRepository extends RepositoryMaria<Location> {
     @Override
     protected String[] getColumns() {
         return new String[]{"id", "code", "description",
-                "x-coordinate", "y-coordinate"};
+                "x_coor", "y_coor"};
     }
 
     @Override
