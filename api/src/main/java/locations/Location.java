@@ -10,22 +10,33 @@ import java.math.BigDecimal;
  */
 
 public class Location {
+    private int id;
     private String code;
-    private String waterschap;
+    private String description;
+    private int waterschap_id;
     private BigDecimal longitude;
     private BigDecimal latitude;
 
-    public Location() {
-
+    public Location(int id, String description,String code, int waterschap_id, BigDecimal longitude, BigDecimal latitude){
+        this.id = id;
+        this.code = code;
+        this.description = description;
+        this.waterschap_id = waterschap_id;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
+
+    public Location () {  }
+
+    public int getId() { return id;}
 
     public String getCode() {
         return code;
     }
 
-    public String getWaterschap() {
-        return waterschap;
-    }
+    public String getDescriptio() { return description;}
+
+    public int getWaterschap_id() { return waterschap_id; }
 
     public BigDecimal getLongitude() {
         return longitude;
@@ -35,12 +46,16 @@ public class Location {
         return latitude;
     }
 
+    public void setId(int id) {this.id = id;}
+
     public void setCode(String code) {
         this.code = code;
     }
 
-    public void setWaterschap(String waterschap) {
-        this.waterschap = waterschap;
+    public void setDescription(String description) {this.description = description;}
+
+    public void setWaterschap_id(int waterschap_id) {
+        this.waterschap_id = waterschap_id;
     }
 
     public void setLongitude(BigDecimal longitude) {

@@ -7,6 +7,7 @@ import locations.Location;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Repository for samples
@@ -21,7 +22,7 @@ public class LocationRepository extends RepositoryMaria<Location> {
 
     @Override
     protected String getTable() {
-        return null;
+        return "location";
     }
 
     @Override
@@ -31,7 +32,7 @@ public class LocationRepository extends RepositoryMaria<Location> {
 
     @Override
     protected String[] getColumns() {
-        return new String[0];
+        return new String[]{"code","waterschap","latitude","longitude"};
     }
 
     @Override
@@ -41,7 +42,18 @@ public class LocationRepository extends RepositoryMaria<Location> {
 
     @Override
     protected Location resultSetToModel(ResultSet resultSet) throws RepositoryException {
-        return null;
+        try {
+            Location location = new Location();
+            location.setId(resultSet.getInt("id"));
+            location.setCode(resultSet.getString("code"));
+            location.setDescription(resultSet.getString("description"));
+            location.setWaterschap_id(resultSet.getInt("waterschap_id"));
+            location.setLatitude(resultSet.getBigDecimal("latitude"));
+            location.setLongitude(resultSet.getBigDecimal("longitude"));
+            return location;
+        } catch (SQLException e) {
+            throw new RepositoryException(e);
+        }
     }
 
     @Override
