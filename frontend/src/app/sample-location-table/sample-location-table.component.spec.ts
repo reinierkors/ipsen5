@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { SampleLocationTableComponent } from './sample-location-table.component';
 
 describe('SampleLocationTableComponent', () => {
@@ -22,6 +21,8 @@ describe('SampleLocationTableComponent', () => {
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
+
+
 
 
 });
