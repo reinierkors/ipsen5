@@ -2,13 +2,16 @@ package species;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
 import static spark.Spark.path;
 import static spark.Spark.get;
+import static spark.Spark.post;
 
 /**
  * Bevat de routes voor species-onderdelen van de api
@@ -29,7 +32,14 @@ public class SpeciesRouter {
 				List<Integer> ids = stream(req.params("ids").split(",")).map(id -> Integer.parseInt(id)).collect(Collectors.toList());
 				return gson.toJson(speciesService.get(ids));
 			});
+			
 			get("/:id",(req,res) -> gson.toJson(speciesService.get(Integer.parseInt(req.params("id")))));
+			
+			post("/findOrCreate",(req,res) -> {
+				Type listType = new TypeToken<List<String>>(){}.getType();
+				List<String> names = gson.fromJson(req.body(),listType);
+				return gson.toJson(names.stream().map(name->speciesService.findOrCreate(name)).collect(Collectors.toList()));
+			});
 		});
 	}
 }

@@ -3,10 +3,7 @@ package sample;
 import database.RepositoryException;
 import database.RepositoryMaria;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Repository for samples
@@ -37,7 +34,8 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 	@Override
 	protected void fillParameters(PreparedStatement preparedStatement, Sample entity, boolean appendId) throws RepositoryException {
 		try {
-			preparedStatement.setDate(1,entity.getDate());
+			if(entity.getDate()==null)preparedStatement.setNull(1, Types.DATE);
+			else preparedStatement.setDate(1,entity.getDate());
 			preparedStatement.setInt(2,entity.getLocationId());
 			preparedStatement.setInt(3,entity.getOwnerId());
 			preparedStatement.setDouble(4,entity.getQuality());

@@ -3,10 +3,7 @@ package species;
 import database.RepositoryException;
 import database.RepositoryMaria;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Repository for species
@@ -63,7 +60,11 @@ public class SpeciesRepository extends RepositoryMaria<Species>{
 	protected void fillParameters(PreparedStatement preparedStatement, Species entity, boolean appendId) throws RepositoryException {
 		try {
 			preparedStatement.setString(1,entity.getName());
-			preparedStatement.setInt(2,entity.getCategoryId());
+			if(entity.getCategoryId()==null)
+				preparedStatement.setNull(2, Types.INTEGER);
+			else
+				preparedStatement.setInt(2,entity.getCategoryId());
+			
 			if(appendId) {
 				preparedStatement.setInt(3, entity.getId());
 			}

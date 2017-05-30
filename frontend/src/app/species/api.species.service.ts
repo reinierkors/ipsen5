@@ -18,4 +18,8 @@ export class ApiSpeciesService extends ApiService{
 	public getByIds(ids:number[]):Observable<Species[]>{
 		return this.get('/species/ids/'+ids.join(',')).map((species:Object[]) => species.map(species=>Species.fromJSON(species)));
 	}
+	
+	public findOrCreate(names:string[]):Observable<Species[]>{
+		return this.post('/species/findOrCreate',names).map((species:Object[]) => species.map(species=>Species.fromJSON(species)));
+	}
 }
