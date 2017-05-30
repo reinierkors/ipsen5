@@ -2,6 +2,7 @@ import api.ApiException;
 import api.ApiExceptionTypeAdapter;
 import authentication.AuthRouter;
 import config.Config;
+import location.LocationRouter;
 import sample.SampleRouter;
 
 import com.google.gson.Gson;
@@ -34,6 +35,7 @@ public class Main {
 			new AuthRouter();
 			new SpeciesCategoryRouter();
 			new WEWRouter();
+			new LocationRouter();
 		});
 	}
 	

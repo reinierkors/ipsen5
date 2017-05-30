@@ -16,11 +16,12 @@ import {MdSelectModule} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { ResultsComponent } from './results/results.component';
-import { CreateAccountComponent } from './create-account/create-account.component';
-import { SidenavComponent } from './sidenav/sidenav.component';
+import {AppComponent} from './app.component';
+import {HomeComponent} from './home/home.component';
+import {ResultsComponent} from './results/results-gmap/results-gmap.component';
+import {CreateAccountComponent} from './create-account/create-account.component';
+import {SidenavComponent} from './sidenav/sidenav.component';
+import {NguiMapModule} from '@ngui/map';
 import { SampleUploadComponent } from './sample/sample-upload/sample-upload.component';
 import { SampleViewComponent } from './sample/sample-view/sample-view.component';
 import { SampleEditComponent } from './sample/sample-edit/sample-edit.component';
@@ -42,35 +43,37 @@ const routes:Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    CreateAccountComponent,
-    ResultsComponent,
-    SidenavComponent,
-    SampleUploadComponent,
-    SampleViewComponent,
-    SampleEditComponent,
-    LoginComponent,
-  ],
-  imports: [
-    MdSidenavModule,
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-	JsonpModule,
-    MdCardModule,
-    MdMenuModule,
-    MdListModule,
-    MdInputModule,
-      MdButtonModule,
-      BrowserAnimationsModule,
-      MdSelectModule,
-    MdToolbarModule,
-    NgxDatatableModule,
-    RouterModule.forRoot(routes, {useHash: false}),
-  ],
-  providers: [AuthGuard],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        CreateAccountComponent,
+        ResultsComponent,
+        SidenavComponent,
+        SampleUploadComponent,
+        SampleViewComponent,
+        SampleEditComponent,
+        LoginComponent,
+    ],
+    imports: [
+        MdInputModule,
+        MdSidenavModule,
+        BrowserModule,
+        FormsModule,
+        HttpModule,
+        JsonpModule,
+        MdCardModule,
+        MdMenuModule,
+        MdButtonModule,
+        MdListModule,
+        MdSelectModule,
+        MdToolbarModule,
+        NgxDatatableModule,
+        BrowserAnimationsModule,
+        RouterModule.forRoot(routes, {useHash: false}),
+        NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyA8acwCuestYr1vo1mJK-QdkZ-3AwW1blM'}),
+    ],
+    providers: [AuthGuard],
+    bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

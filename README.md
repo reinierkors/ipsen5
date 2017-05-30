@@ -4,7 +4,7 @@
 1. Ga naar de frontend map (`cd frontend`)
 1. Download de dependencies (`npm install`)
 1. Download typescript definities voor js libraries (`typings install`)
-  * Typings moet hiervoor globaal geïnstaleerd zijn op je computer (`npm install typings --global`)
+    * Typings moet hiervoor globaal geïnstaleerd zijn op je computer (`npm install typings --global`)
 1. Voer gulp uit (`gulp`)
 1. Open de project in een tweede command-line
 1. Ga naar de frontend map (`cd frontend`)
@@ -39,11 +39,11 @@ __Let op:__ zorg dat je in de `ipsen5/frontend` map zit wanneer je deze commands
 Wanneer je een script, css of asset uit een package die met NPM geïnstalleerd is aan Angular toe wil voegen:
 1. Vind het bestand in `frontend/node_modules/some-package`
 1. Voeg het toe in `frontend/.angular-cli.json` in de `assets`, `styles` of `scripts` array
- * node_modules staat een map hoger dan .angular-cli.json, dus begin je pad met `../node_modules/etc`
+    * node_modules staat een map hoger dan .angular-cli.json, dus begin je pad met `../node_modules/etc`
 1. Dit bestand wordt nu automatisch geladen, je hoeft het niet in index.html toe te voegen
 
 ## Angular CLI:
-`npm install -g @angular/cli` Installeer angular cli
+`npm install -g @angular/cli` Installeer angular cli  
 `ng g component Home` Maakt een Home Component aan  
 `ng serve` Start een lokale server op port 4200  
 `ng build` Bouwt een mapje /dist/ met alle productie bestanden
@@ -59,7 +59,7 @@ __Enum:__		`ng g enum my-new-enum`
 __Module:__		`ng g module my-module`  
 
 ## Gulp:
-`npm install --global gulp`  Installeer gulp
+`npm install --global gulp`  Installeer gulp  
 `gulp watch` Automatic compiling van .sass bestanden in /sass/ folder --> app.css  
 `gulp` Compiles sass, en watch'd  
 `gulp dev` Compressed css file  
