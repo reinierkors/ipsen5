@@ -16,9 +16,9 @@ export class SampleLocationTableComponent implements OnInit {
 
   columns = [
     { name: 'code' },
-    { name: 'waterschap' },
-    { prop: 'long' },
-    { prop: 'lat'}
+    { name: 'description' },
+    { prop: 'latitude' },
+    { prop: 'longitude'}
   ];
 
   constructor(apiLocationService: ApiLocationService) {
@@ -27,7 +27,8 @@ export class SampleLocationTableComponent implements OnInit {
 
   ngOnInit() {
     this.apiLocationService.getAllLocations().subscribe(locations => {
-      console.log()
+      this.rows = locations;
+      console.log("You are here");
       console.log(locations);
     })
   }
