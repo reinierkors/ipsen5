@@ -2,16 +2,18 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ApiLocationService} from '../api.location.service';
 import {Location} from '../location.model';
+import {ApiWatertypeService} from '../api.watertype.service';
 
 @Component({
     selector: 'app-results',
-    providers: [ApiLocationService],
+    providers: [ApiLocationService, ApiWatertypeService],
     templateUrl: './results-gmap.component.html',
     styleUrls: ['./results-gmap.component.css']
 })
 export class ResultsComponent implements OnInit {
     private route: ActivatedRoute;
     private apiLocation: ApiLocationService;
+    private apiWatertype: ApiWatertypeService;
     public locations: Location[];
     public mapStyle = [
         {
@@ -124,10 +126,18 @@ export class ResultsComponent implements OnInit {
         lng: null,
     };
 
+    public watertype = {
+        id: 0,
+        parentId: 0,
+        name: '',
+        code: '',
+    };
+
     positions = [];
 
-    constructor(apiLocation: ApiLocationService, route: ActivatedRoute) {
+    constructor(apiLocation: ApiLocationService, apiWatertype: ApiWatertypeService, route: ActivatedRoute) {
         this.apiLocation = apiLocation;
+        this.apiWatertype = apiWatertype;
         this.route = route;
     };
 
@@ -160,8 +170,17 @@ export class ResultsComponent implements OnInit {
                 this.marker.description = item.description;
                 this.marker.lat = item.latitude;
                 this.marker.lng = item.longitude;
+                this.retrieveWatertype(item.id)
             }
         });
+    }
+
+    retrieveWatertype(id) {
+        this.route.params
+            .switchMap(params => this.apiWatertype.getWatertype(id))
+            .subscribe(watertype => {
+                this.watertype = watertype;
+            }, error => console.log(error));
     }
 
     initMarkers() {

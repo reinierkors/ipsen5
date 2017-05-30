@@ -5,10 +5,9 @@
             [title]="pos.title"></marker>
     <info-window id="iw">
         <div *ngIf="marker.display">
-            <h3>{{marker.code}}</h3>
-            <h4>{{marker.description}}</h4>
-            <p>Latitude: {{marker.lat}}</p>
-            <p>Longitude: {{marker.lng}}</p>
+            <h3>{{marker.description}}</h3>
+            <h4>{{watertype.name}} ({{watertype.code}})</h4>
+            <h4>{{marker.code}}</h4>
         </div>
     </info-window>
 </ngui-map>

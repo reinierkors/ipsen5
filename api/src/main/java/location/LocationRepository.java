@@ -18,7 +18,7 @@ import java.sql.SQLException;
 public class LocationRepository extends RepositoryMaria<Location> {
     private final String TABLE = "location";
     private final String[] COLUMNS = new String[]{"id", "code", "description",
-            "x_coor", "y_coor"};
+            "x_coor", "y_coor", "waterschap_id", "watertype_id"};
 
     public LocationRepository(Connection connection) {
         super(connection);
@@ -37,7 +37,7 @@ public class LocationRepository extends RepositoryMaria<Location> {
     @Override
     protected String[] getColumns() {
         return new String[]{"id", "code", "description",
-                "x_coor", "y_coor"};
+                "x_coor", "y_coor", "waterschap_id", "watertype_id"};
     }
 
     @Override
@@ -47,6 +47,8 @@ public class LocationRepository extends RepositoryMaria<Location> {
             preparedStatement.setString(2, entity.getDescription());
             preparedStatement.setInt(3, entity.getxCoord());
             preparedStatement.setInt(4, entity.getyCoord());
+            preparedStatement.setInt(6, entity.getWaterschapId());
+            preparedStatement.setInt(7, entity.getWatertypeId());
             if (appendId)
                 preparedStatement.setInt(5, entity.getId());
         } catch (SQLException e) {
@@ -63,6 +65,8 @@ public class LocationRepository extends RepositoryMaria<Location> {
             location.setDescription(resultSet.getString(COLUMNS[2]));
             location.setxCoord(resultSet.getInt(COLUMNS[3]));
             location.setyCoord(resultSet.getInt(COLUMNS[4]));
+            location.setWaterschapId(resultSet.getInt(COLUMNS[5]));
+            location.setWatertypeId(resultSet.getInt(COLUMNS[6]));
             return location;
         } catch (SQLException e) {
             throw new RepositoryException(e);
