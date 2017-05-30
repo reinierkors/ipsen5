@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, JsonpModule } from '@angular/http';
-import {Routes, RouterModule} from "@angular/router";
+import {Routes, RouterModule} from '@angular/router';
 import {MdCardModule} from '@angular/material';
 import {MdMenuModule} from '@angular/material';
 import {MdToolbarModule} from '@angular/material';

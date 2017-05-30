@@ -15,94 +15,94 @@ export class ResultsComponent implements OnInit {
     public locations: Location[];
     public mapStyle = [
         {
-            elementType: "labels",
+            elementType: 'labels',
             stylers: [
                 {
-                    visibility: "off"
+                    visibility: 'off'
                 }
             ]
         },
         {
-            featureType: "administrative.country",
+            featureType: 'administrative.country',
             stylers: [
                 {
-                    visibility: "on"
+                    visibility: 'on'
                 }
             ]
         },
         {
-            featureType: "administrative.country",
-            elementType: "labels.text.fill",
+            featureType: 'administrative.country',
+            elementType: 'labels.text.fill',
             stylers: [
                 {
-                    color: "#606060"
+                    color: '#606060'
                 }
             ]
         },
         {
-            featureType: "administrative.locality",
-            elementType: "labels",
+            featureType: 'administrative.locality',
+            elementType: 'labels',
             stylers: [
                 {
-                    visibility: "simplified"
+                    visibility: 'simplified'
                 }
             ]
         },
         {
-            featureType: "administrative.locality",
-            elementType: "labels.text.fill",
+            featureType: 'administrative.locality',
+            elementType: 'labels.text.fill',
             stylers: [
                 {
-                    color: "#606060"
+                    color: '#606060'
                 }
             ]
         },
         {
-            featureType: "road",
+            featureType: 'road',
             stylers: [
                 {
-                    visibility: "off"
+                    visibility: 'off'
                 }
             ]
         },
         {
-            featureType: "water",
+            featureType: 'water',
             stylers: [
                 {
-                    visibility: "on"
+                    visibility: 'on'
                 }
             ]
         },
         {
-            featureType: "water",
-            elementType: "geometry.fill",
+            featureType: 'water',
+            elementType: 'geometry.fill',
             stylers: [
                 {
-                    color: "#0eb9eb"
+                    color: '#0d9ac7'
                 },
                 {
-                    visibility: "on"
+                    visibility: 'on'
                 }
             ]
         },
         {
-            featureType: "water",
-            elementType: "labels",
+            featureType: 'water',
+            elementType: 'labels',
             stylers: [
                 {
-                    visibility: "on"
+                    visibility: 'on'
                 }
             ]
         },
         {
-            featureType: "water",
-            elementType: "labels.text.fill",
+            featureType: 'water',
+            elementType: 'labels.text.fill',
             stylers: [
                 {
-                    color: "#000000"
+                    color: '#000000'
                 },
                 {
-                    visibility: "on"
+                    visibility: 'on'
                 }
             ]
         }
@@ -136,7 +136,7 @@ export class ResultsComponent implements OnInit {
             .switchMap(params => this.apiLocation.getAllLocations())
             .subscribe(markerLocations => {
                 this.locations = markerLocations;
-                this.initMarkers()
+                this.initMarkers();
             }, error => console.log(error));
     }
 
@@ -154,7 +154,7 @@ export class ResultsComponent implements OnInit {
 
     retrieveMarker(marker) {
         this.locations.forEach((item) => {
-            if (marker.getTitle() == 'm' + <string><any>item.id) {
+            if (marker.getTitle() === 'm' + <string><any>item.id) {
                 this.marker.id = item.id;
                 this.marker.code = item.code;
                 this.marker.description = item.description;
@@ -170,7 +170,7 @@ export class ResultsComponent implements OnInit {
                 title: 'm' + <string><any>item.id,
                 lat: item.latitude,
                 lng: item.longitude
-            })
+            });
         });
     }
 }

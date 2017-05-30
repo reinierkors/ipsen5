@@ -25,14 +25,11 @@ public class LocationService {
     public Iterable<Location> getAll() {
         Iterable<Location> locations = repository.getAll();
         for (Location location : locations) {
-            if (location.getLatitude() == null && location.getLongitude() == null) {
-                Double[] coordinates = converter.convertToLatLng(location.getxCoord(),
-                        location.getyCoord());
-                location.setLatitude(coordinates[0]);
-                location.setLongitude(coordinates[1]);
-                repository.persist(location);
-            }
+            Double[] coordinates = converter.convertToLatLng(location.getxCoord(),
+                    location.getyCoord());
+            location.setLatitude(coordinates[0]);
+            location.setLongitude(coordinates[1]);
         }
-        return repository.getAll();
+        return locations;
     }
 }

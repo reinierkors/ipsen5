@@ -8,7 +8,7 @@ export class Location {
     longitude: number;
 
     public static fromJSON(obj): Location {
-        var location = new Location();
+        const location = new Location();
         location.id = obj.id;
         location.code = obj.code;
         location.description = obj.description;

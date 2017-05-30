@@ -18,7 +18,7 @@ import java.sql.SQLException;
 public class LocationRepository extends RepositoryMaria<Location> {
     private final String TABLE = "location";
     private final String[] COLUMNS = new String[]{"id", "code", "description",
-            "x-coordinate", "y-coordinate", "latitude", "longitude"};
+            "x-coordinate", "y-coordinate"};
 
     public LocationRepository(Connection connection) {
         super(connection);
@@ -37,7 +37,7 @@ public class LocationRepository extends RepositoryMaria<Location> {
     @Override
     protected String[] getColumns() {
         return new String[]{"id", "code", "description",
-                "x-coordinate", "y-coordinate", "latitude", "longitude"};
+                "x-coordinate", "y-coordinate"};
     }
 
     @Override
@@ -47,10 +47,8 @@ public class LocationRepository extends RepositoryMaria<Location> {
             preparedStatement.setString(2, entity.getDescription());
             preparedStatement.setInt(3, entity.getxCoord());
             preparedStatement.setInt(4, entity.getyCoord());
-            preparedStatement.setDouble(5, entity.getLatitude());
-            preparedStatement.setDouble(6, entity.getLongitude());
             if (appendId)
-                preparedStatement.setInt(7, entity.getId());
+                preparedStatement.setInt(5, entity.getId());
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }
@@ -65,8 +63,6 @@ public class LocationRepository extends RepositoryMaria<Location> {
             location.setDescription(resultSet.getString(COLUMNS[2]));
             location.setxCoord(resultSet.getInt(COLUMNS[3]));
             location.setyCoord(resultSet.getInt(COLUMNS[4]));
-            location.setLatitude(resultSet.getDouble(COLUMNS[5]));
-            location.setLongitude(resultSet.getDouble(COLUMNS[6]));
             return location;
         } catch (SQLException e) {
             throw new RepositoryException(e);
