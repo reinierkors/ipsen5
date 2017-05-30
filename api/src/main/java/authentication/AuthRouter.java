@@ -2,7 +2,6 @@ package authentication;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import sample.SampleService;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -20,10 +19,9 @@ public class AuthRouter {
 		AuthService authService = AuthService.getInstance();
 
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
 		Gson gson = gsonBuilder.create();
 
-        post("/authenticate",(request,response) -> gson.toJson(authService.getSession(request.params("username"), request.params("password"))));
+        post("/authenticate",(request,response) -> gson.toJson(authService.createSessionToken(gson.fromJson(request.body(), User.class))));
 		
 	}
 }

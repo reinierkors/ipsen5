@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 
 export abstract class ApiService {
 	private http:Http;
-	private authHeaders: Headers;
+	private authHeaders = {};
 	//TODO read from config
 	public apiUri = 'http://127.0.0.1:8080/api';
 	
@@ -24,7 +24,7 @@ export abstract class ApiService {
 	}
 
 	protected addToAuthHeaders(headerType: string, value: string){
-        this.authHeaders.append(headerType, value);
+        this.authHeaders[headerType] = value;
     }
 	
 	private getHeaderObject():Headers{

@@ -25,11 +25,11 @@ public class AuthService {
 		return instance;
 	}
 	
-	public String getSession(String username, String password) throws ApiException {
+	public String createSessionToken(User tempUser) throws ApiException {
 		try {
             System.out.println("Trying to find user");
-            User user = repo.findByUsername(username);
-            if (password.equals(user.getPassword())){
+            User user = repo.findByUsername(tempUser.getUsername());
+            if (user.getPassword().equals(tempUser.getPassword())){
                 System.out.println("Creating and sending session ID");
                 return UUID.randomUUID().toString();
             } else {
