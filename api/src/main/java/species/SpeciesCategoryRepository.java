@@ -12,7 +12,7 @@ import java.sql.SQLException;
  * Repository for species categories
  *
  * @author Wander Groeneveld
- * @version 0.1, 21-5-2017
+ * @version 0.2, 30-5-2017
  */
 public class SpeciesCategoryRepository extends RepositoryMaria<SpeciesCategory>{
 	public SpeciesCategoryRepository(Connection connection) {
@@ -31,15 +31,16 @@ public class SpeciesCategoryRepository extends RepositoryMaria<SpeciesCategory>{
 	
 	@Override
 	protected String[] getColumns() {
-		return new String[]{"id","name"};
+		return new String[]{"id","name","parent"};
 	}
 	
 	@Override
 	protected void fillParameters(PreparedStatement preparedStatement, SpeciesCategory entity, boolean appendId) throws RepositoryException {
 		try {
 			preparedStatement.setString(1,entity.getName());
+			preparedStatement.setInt(2,entity.getParent());
 			if(appendId) {
-				preparedStatement.setInt(2, entity.getId());
+				preparedStatement.setInt(3, entity.getId());
 			}
 		} catch (SQLException e) {
 			throw new RepositoryException(e);
@@ -52,6 +53,7 @@ public class SpeciesCategoryRepository extends RepositoryMaria<SpeciesCategory>{
 			SpeciesCategory speciesCategory = new SpeciesCategory();
 			speciesCategory.setId(resultSet.getInt("id"));
 			speciesCategory.setName(resultSet.getString("name"));
+			speciesCategory.setParent(resultSet.getInt("parent"));
 			return speciesCategory;
 		} catch (SQLException e) {
 			throw new RepositoryException(e);
