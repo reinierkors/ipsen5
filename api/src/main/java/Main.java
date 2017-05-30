@@ -1,5 +1,6 @@
 import api.ApiException;
 import api.ApiExceptionTypeAdapter;
+import authentication.AuthRouter;
 import config.Config;
 import sample.SampleRouter;
 
@@ -30,6 +31,7 @@ public class Main {
 		path("/api",()->{
 			new SampleRouter();
 			new SpeciesRouter();
+			new AuthRouter();
 			new SpeciesCategoryRouter();
 			new WEWRouter();
 		});

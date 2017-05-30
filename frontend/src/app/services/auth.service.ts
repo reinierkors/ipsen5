@@ -23,6 +23,7 @@ export class AuthenticationService extends ApiService{
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let token = response.json() && response.json().token;
+                console.log(response.json().session);
                 if (token) {
                     // set token property
                     this.token = token;
