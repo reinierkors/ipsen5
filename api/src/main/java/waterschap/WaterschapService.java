@@ -3,6 +3,7 @@ package waterschap;
 import api.ApiException;
 import database.ConnectionManager;
 import database.RepositoryException;
+import watertype.Watertype;
 
 /**
  * Service voor waterschap-gerelateerde business logic
@@ -29,6 +30,10 @@ public class WaterschapService {
 		} catch(RepositoryException e){
 			throw new ApiException("Cannot retrieve waterschappen");
 		}
+	}
+
+	public Waterschap get(int id) {
+		return repo.get(id);
 	}
 	
 }

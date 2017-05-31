@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { HttpModule, JsonpModule } from '@angular/http';
 import {Routes, RouterModule} from '@angular/router';
-import {MdButton, MdCardModule} from '@angular/material';
+import {MaterialModule, MdCardModule, MdButton} from '@angular/material';
 import {MdMenuModule} from '@angular/material';
 import {MdSnackBarModule} from '@angular/material';
 import {MdToolbarModule} from '@angular/material';
@@ -16,7 +16,6 @@ import {MdButtonModule} from '@angular/material';
 import {MdSelectModule} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 import {ResultsComponent} from './results/results-gmap/results-gmap.component';
@@ -71,8 +70,8 @@ const routes:Routes = [
         MdSnackBarModule,
         NgxDatatableModule,
         BrowserAnimationsModule,
-        RouterModule.forRoot(routes, {useHash: false}),
         ReactiveFormsModule,
+        RouterModule.forRoot(routes, {useHash: false}),
         NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyA8acwCuestYr1vo1mJK-QdkZ-3AwW1blM'}),
     ],
     providers: [AuthGuard],
