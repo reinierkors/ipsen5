@@ -35,4 +35,10 @@ export class LoginComponent implements OnInit {
             });
     }
 
+    logout() {
+      this.loading = true;
+      this.authenticationService.logout();
+      this.router.navigate(['/login']);
+    }
+
 }

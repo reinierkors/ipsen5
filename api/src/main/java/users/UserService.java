@@ -93,4 +93,10 @@ public class UserService {
         System.out.println("Saving session to database");
         repo.saveSession(id, sessionToken, expirationDate);
     }
+
+    public boolean logout(String token){
+        User user = repo.findBySession(token);
+        repo.deleteSession(user.getId());
+        return true;
+    }
 }

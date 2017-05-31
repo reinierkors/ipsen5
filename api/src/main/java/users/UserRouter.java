@@ -27,6 +27,5 @@ public class UserRouter {
 
 		});
 
-        post("/authenticate",(request,response) -> gson.toJson(userService.createSessionToken(gson.fromJson(request.body(), User.class))));
 	}
 }

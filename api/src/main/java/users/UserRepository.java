@@ -14,14 +14,20 @@ import java.sql.*;
  */
 public class UserRepository extends RepositoryMaria<User>{
     private final PreparedStatement psFindByEmail;
+    private final PreparedStatement psFindBySession;
     private final PreparedStatement psSaveSession;
+    private final PreparedStatement psDeleteSession;
 	public UserRepository(Connection connection) {
 		super(connection);
         String findByEmailQuery = "SELECT * FROM `"+getTable()+"` WHERE `email` LIKE ?";
+        String findBySessionQuery = "SELECT * FROM `"+getTable()+"` WHERE `session_token` = ?";
         String saveSessionQuery = "UPDATE user SET session_token = ?, expiration_date = ? WHERE `id` = ?";
+        String deleteSessionQuery = "UPDATE user SET session_token = NULL, expiration_date = NULL WHERE `id` = ?";
         try {
             psFindByEmail = connection.prepareStatement(findByEmailQuery);
+            psFindBySession = connection.prepareStatement(findBySessionQuery);
             psSaveSession = connection.prepareStatement(saveSessionQuery);
+            psDeleteSession = connection.prepareStatement(deleteSessionQuery);
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }
@@ -59,6 +65,20 @@ public class UserRepository extends RepositoryMaria<User>{
         try {
             psFindByEmail.setString(1, email);
             ResultSet resultSet = psFindByEmail.executeQuery();
+            if(resultSet.next()){
+                return resultSetToModel(resultSet);
+            }
+            else
+                return null;
+        } catch (SQLException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    public User findBySession(String sessionToken){
+        try {
+            psFindBySession.setString(1, sessionToken);
+            ResultSet resultSet = psFindBySession.executeQuery();
             if(resultSet.next())
                 return resultSetToModel(resultSet);
             else
@@ -75,6 +95,15 @@ public class UserRepository extends RepositoryMaria<User>{
             psSaveSession.setInt(3, id);
             psSaveSession.executeUpdate();
         } catch (SQLException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    public void deleteSession(int id){
+        try{
+            psDeleteSession.setInt(1, id);
+            psDeleteSession.executeUpdate();
+        }catch (SQLException e) {
             throw new RepositoryException(e);
         }
     }

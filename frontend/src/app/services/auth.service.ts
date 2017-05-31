@@ -21,7 +21,7 @@ export class AuthenticationService extends ApiService{
     addToStorage(email: string, token: string): void {
         let expireDate = Date.now() + (24*60*60*1000);
         localStorage.setItem('currentUser', JSON.stringify({ email: email, token: token, expireDate: expireDate}));
-        this.addToAuthHeaders('Authorization', 'Token ' + token);
+        this.addToAuthHeaders('Authorization', token);
     }
 
     login(email: string, password: string): Observable<boolean> {
@@ -43,9 +43,10 @@ export class AuthenticationService extends ApiService{
             });
     }
 
-    logout(): void {
+    logout() {
         // clear token remove user from local storage to log user out
         this.token = null;
+        this.get('/authenticate/logout');
         localStorage.removeItem('currentUser');
     }
 }
