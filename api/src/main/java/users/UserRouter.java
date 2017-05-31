@@ -22,5 +22,6 @@ public class UserRouter {
             post("/add", (req, res) -> userService.create(new Gson().fromJson(req.body(), User.class)));
 
 		});
+
 	}
 }
