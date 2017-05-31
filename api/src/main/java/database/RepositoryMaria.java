@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * MariaDB implementation of the Repository interface
@@ -26,7 +25,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 		String getAllQuery = "SELECT * FROM `"+getTable()+"`";
 		String removeQuery = "DELETE FROM `"+getTable()+"` WHERE `id` = ?";
 		
-		List<String> columns = Arrays.stream(getColumns()).filter(column -> !column.equals("id")).collect(Collectors.toList());
+		List<String> columns = Arrays.stream(getColumns()).filter(column -> !column.isPrimary()).map(ColumnData::getColumnName).collect(Collectors.toList());
 		Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
 		String columnList = columns.stream().map(column -> "`"+column+"`").collect(commaJoiner);
 		String valueList = columns.stream().map(column -> "?").collect(commaJoiner);
@@ -59,32 +58,85 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	protected abstract boolean isNew(T entity);
 	
 	/**
-	 * Array of columns in the database table
-	 * @return array of columns
+	 * Creates an object that newly retrieved values will be stored in
+	 * @return a model
 	 */
-	protected abstract String[] getColumns();
+	protected abstract T createModel();
 	
 	/**
-	 * Call the setInt, setString, etc for each column in the table, in the same order they are in getColumns()
-	 * When appendId is true, add the id at the end
-	 * @param preparedStatement
-	 * @param appendId
+	 * Information, getters and setters from all the columns in the table
+	 * @return array of columns
 	 */
-	protected abstract void fillParameters(PreparedStatement preparedStatement,T entity,boolean appendId) throws RepositoryException;
+	protected abstract ColumnData<T,?>[] getColumns();
+	
+	/**
+	 * Fills parameters of the prepared statement with values from the model
+	 * @param preparedStatement
+	 * @param entity
+	 * @param appendPrimary
+	 * @throws RepositoryException
+	 */
+	protected void fillParameters(PreparedStatement preparedStatement, T entity, boolean appendPrimary) throws RepositoryException {
+		try {
+			int index = 1;
+			for(ColumnData cd : this.getColumns()){
+				if(cd.isPrimary())
+					continue;
+				if(cd.callGetter(entity)==null)
+					preparedStatement.setNull(index,cd.getSqlType());
+				else
+					preparedStatement.setObject(index,cd.callGetter(entity),cd.getSqlType());
+				++index;
+			}
+			
+			if(appendPrimary){
+				for(ColumnData cd : this.getColumns()) {
+					if(!cd.isPrimary())
+						continue;
+					preparedStatement.setObject(index,cd.callGetter(entity),cd.getSqlType());
+				}
+				++index;
+			}
+		} catch (SQLException e) {
+			throw new RepositoryException(e);
+		}
+	}
 	
 	/**
 	 * Creates a model instance from a result set
 	 * @param resultSet
 	 * @return a filled model instance
 	 */
-	protected abstract T resultSetToModel(ResultSet resultSet) throws RepositoryException;
+	protected T resultSetToModel(ResultSet resultSet) throws RepositoryException {
+		try {
+			T entity = createModel();
+			for(ColumnData cd:getColumns()){
+				cd.callSetter(entity,resultSet.getObject(cd.getColumnName()));
+			}
+			return entity;
+		} catch (SQLException e) {
+			throw new RepositoryException(e);
+		}
+	}
 	
 	/**
 	 * Stores the auto increment keys in the entity
 	 * @param entity
 	 * @param generatedKeys
 	 */
-	protected abstract void handleGeneratedKeys(T entity,ResultSet generatedKeys) throws RepositoryException;
+	protected void handleGeneratedKeys(T entity, ResultSet generatedKeys) throws RepositoryException {
+		try {
+			for(ColumnData cd:getColumns()) {
+				if(cd.isPrimary()) {
+					generatedKeys.next();
+					cd.callSetter(entity,generatedKeys.getInt(cd.getColumnName()));
+				}
+			}
+		} catch (SQLException e) {
+			throw new RepositoryException(e);
+		}
+	}
+	
 	
 	/**
 	 * Retrieve a specific row from the database and returns it as model instance

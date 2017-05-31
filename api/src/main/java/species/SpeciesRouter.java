@@ -29,7 +29,7 @@ public class SpeciesRouter {
 		
 		path("/species", ()->{
 			get("/ids/:ids",(req,res) -> {
-				List<Integer> ids = stream(req.params("ids").split(",")).map(id -> Integer.parseInt(id)).collect(Collectors.toList());
+				List<Integer> ids = stream(req.params("ids").split(",")).map(Integer::parseInt).collect(Collectors.toList());
 				return gson.toJson(speciesService.get(ids));
 			});
 			
@@ -38,7 +38,7 @@ public class SpeciesRouter {
 			post("/findOrCreate",(req,res) -> {
 				Type listType = new TypeToken<List<String>>(){}.getType();
 				List<String> names = gson.fromJson(req.body(),listType);
-				return gson.toJson(names.stream().map(name->speciesService.findOrCreate(name)).collect(Collectors.toList()));
+				return gson.toJson(names.stream().map(speciesService::findOrCreate).collect(Collectors.toList()));
 			});
 		});
 	}

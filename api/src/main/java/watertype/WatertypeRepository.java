@@ -1,11 +1,9 @@
 package watertype;
 
-import database.RepositoryException;
+import database.ColumnData;
 import database.RepositoryMaria;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 /**
  * Created by Dylan on 30-5-2017.
@@ -24,24 +22,14 @@ public class WatertypeRepository extends RepositoryMaria<Watertype> {
     protected boolean isNew(Watertype entity) {
         return false;
     }
-
+    
     @Override
-    protected String[] getColumns() {
-        return new String[0];
-    }
-
-    @Override
-    protected void fillParameters(PreparedStatement preparedStatement, Watertype entity, boolean appendId) throws RepositoryException {
-
-    }
-
-    @Override
-    protected Watertype resultSetToModel(ResultSet resultSet) throws RepositoryException {
+    protected Watertype createModel() {
         return null;
     }
-
+    
     @Override
-    protected void handleGeneratedKeys(Watertype entity, ResultSet generatedKeys) throws RepositoryException {
-
+    protected ColumnData[] getColumns() {
+        return new ColumnData[0];
     }
 }
