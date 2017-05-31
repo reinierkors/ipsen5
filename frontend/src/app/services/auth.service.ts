@@ -18,21 +18,21 @@ export class AuthenticationService extends ApiService{
         // this.token = currentUser.token;
     }
 
-    addToStorage(username: string, token: string): void {
+    addToStorage(email: string, token: string): void {
         let expireDate = Date.now() + (24*60*60*1000);
-        localStorage.setItem('currentUser', JSON.stringify({ username: username, token: token, expireDate: expireDate}));
+        localStorage.setItem('currentUser', JSON.stringify({ email: email, token: token, expireDate: expireDate}));
         this.addToAuthHeaders('Authorization', 'Token ' + token);
     }
 
-    login(username: string, password: string): Observable<boolean> {
-        return this.post('/authenticate', { username: username, password: password })
+    login(email: string, password: string): Observable<boolean> {
+        return this.post('/authenticate', { email: email, password: password })
             .map((response: Response) => {
                 // login successful if there's a token in the response
                 let token = response.toString();
                 console.log(token);
                 if (token) {
                     // store username and token in local storage to keep user logged in between page refreshes
-                    this.addToStorage(username, token);
+                    this.addToStorage(email, token);
 
                     // return true to indicate successful login
                     return true;

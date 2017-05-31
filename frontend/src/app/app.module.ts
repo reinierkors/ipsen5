@@ -29,17 +29,17 @@ import { LoginComponent } from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
 
 const routes:Routes = [
-  {path: '', component: HomeComponent},
+  {path: '', component: HomeComponent, canActivate: [AuthGuard]},
     {path: 'login', component: LoginComponent},
-  {path: 'home', component: HomeComponent},
+  {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
   {path: 'account', component: CreateAccountComponent, canActivate: [AuthGuard]},
-  {path: 'results', component: ResultsComponent},
-  {path: 'sample/upload', component: SampleUploadComponent},
-  {path: 'sample/view/:id', component: SampleViewComponent},
-  {path: 'sample/edit/:id', component: SampleEditComponent},
+  {path: 'results', component: ResultsComponent, canActivate: [AuthGuard]},
+  {path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
+  {path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
+  {path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
     /* Admin Routes */
-  {path: 'admin/create-account', component: CreateAccountComponent},
-  {path: '**', component: HomeComponent}
+  {path: 'admin/create-account', component: CreateAccountComponent, canActivate: [AuthGuard]},
+  {path: '**', component: HomeComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({

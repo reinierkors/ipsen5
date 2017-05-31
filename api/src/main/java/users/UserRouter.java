@@ -26,5 +26,7 @@ public class UserRouter {
             post("/add", (req, res) -> userService.create(gson.fromJson(req.body(), User.class)));
 
 		});
+
+        post("/authenticate",(request,response) -> gson.toJson(userService.createSessionToken(gson.fromJson(request.body(), User.class))));
 	}
 }

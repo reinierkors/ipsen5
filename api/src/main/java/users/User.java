@@ -2,7 +2,7 @@ package users;
 
 
 import javax.validation.constraints.NotNull;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * User model
@@ -20,21 +20,26 @@ public class User {
 	private String name;
 	@NotNull(message = "Group_id is mandatory")
 	private int group_id;
+    private String sessionToken;
+    private Timestamp expirationDate;
 
-	public User(int id, String email, String password, String name, int group_id) {
+	public User(int id, String email, String password, String name, int group_id,
+        String sessionToken, Timestamp expirationDate) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
 		this.name = name;
 		this.group_id = group_id;
-	}
+        this.sessionToken = sessionToken;
+        this.expirationDate = expirationDate;
+    }
 
-	public User(String email, String password, String name, int group_id) {
-		this(0, email, password, name, group_id);
+	public User(String email, String password, String name, int group_id, String sessionToken, Timestamp expirationDate) {
+		this(0, email, password, name, group_id, sessionToken, expirationDate);
 	}
 	
 	public User(){
-		this(0, null, null, null, 1);
+		this(0, null, null, null, 1, null, null);
 	}
 
 	public int getId() {
@@ -76,4 +81,20 @@ public class User {
 	public void setGroup_id(int group_id) {
 		this.group_id = group_id;
 	}
+
+    public String getSessionToken() {
+        return sessionToken;
+    }
+
+    public void setSessionToken(String sessionToken) {
+        this.sessionToken = sessionToken;
+    }
+
+    public Timestamp getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Timestamp expirationDate) {
+        this.expirationDate = expirationDate;
+    }
 }
