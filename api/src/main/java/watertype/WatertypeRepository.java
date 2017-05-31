@@ -1,13 +1,9 @@
 package watertype;
 
-import api.ApiException;
-import database.RepositoryException;
+import database.ColumnData;
 import database.RepositoryMaria;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * Created by Dylan on 30-5-2017.
@@ -31,45 +27,12 @@ public class WatertypeRepository extends RepositoryMaria<Watertype> {
     }
 
     @Override
-    protected String[] getColumns() {
-        return new String[]{"id", "name", "code", "parent"};
+    protected Watertype createModel() {
+        return null;
     }
 
     @Override
-    protected void fillParameters(PreparedStatement preparedStatement, Watertype entity, boolean appendId) throws RepositoryException {
-        try {
-            if (appendId) {
-                preparedStatement.setInt(1, entity.getId());
-            }
-            preparedStatement.setString(2, entity.getName());
-            preparedStatement.setString(3, entity.getCode());
-            preparedStatement.setInt(4, entity.getParentId());
-        } catch (SQLException e) {
-            throw new RepositoryException(e);
-        }
-    }
-
-    @Override
-    protected Watertype resultSetToModel(ResultSet resultSet) throws RepositoryException {
-        Watertype watertype = new Watertype();
-        try {
-            watertype.setId(resultSet.getInt(COLUMNS[0]));
-            watertype.setName(resultSet.getString(COLUMNS[1]));
-            watertype.setCode(resultSet.getString(COLUMNS[2]));
-            watertype.setParentId(resultSet.getInt(COLUMNS[3]));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return watertype;
-    }
-
-    @Override
-    protected void handleGeneratedKeys(Watertype entity, ResultSet generatedKeys) throws RepositoryException {
-        try {
-            generatedKeys.next();
-            entity.setId(generatedKeys.getInt("id"));
-        } catch (SQLException e) {
-            throw new RepositoryException(e);
-        }
+    protected ColumnData[] getColumns() {
+        return new ColumnData[0];
     }
 }

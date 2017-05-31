@@ -6,7 +6,7 @@ package api;
  * @author Wander Groeneveld
  * @version 0.1, 21-5-2017
  */
-public class ApiException extends Exception{
+public class ApiException extends RuntimeException{
 	public ApiException() {
 	}
 	
