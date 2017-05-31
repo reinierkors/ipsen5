@@ -12,15 +12,13 @@ import java.sql.*;
  * @version 0.1, 24-5-2017
  */
 public class LocationRepository extends RepositoryMaria<Location> {
-    private final String TABLE = "location";
-
     public LocationRepository(Connection connection) {
         super(connection);
     }
 
     @Override
     protected String getTable() {
-        return TABLE;
+        return "location";
     }
 
     @Override
@@ -41,6 +39,8 @@ public class LocationRepository extends RepositoryMaria<Location> {
                 new ColumnData<>("description", Types.VARCHAR, Location::getDescription, Location::setDescription),
                 new ColumnData<>("x_coor", Types.INTEGER, Location::getxCoord, Location::setxCoord),
                 new ColumnData<>("y_coor", Types.INTEGER, Location::getyCoord, Location::setyCoord),
+                new ColumnData<>("waterschap_id", Types.INTEGER, Location::getWaterschapId, Location::setWaterschapId),
+                new ColumnData<>("watertype_id", Types.INTEGER, Location::getWatertypeId, Location::setWatertypeId),
         };
     }
 }

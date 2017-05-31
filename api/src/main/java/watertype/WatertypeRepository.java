@@ -10,15 +10,13 @@ import java.sql.Types;
  * Created by Dylan on 30-5-2017.
  */
 public class WatertypeRepository extends RepositoryMaria<Watertype> {
-    private final String TABLE = "watertype";
-
     public WatertypeRepository(Connection connection) {
         super(connection);
     }
 
     @Override
     protected String getTable() {
-        return TABLE;
+        return "watertype";
     }
 
     @Override

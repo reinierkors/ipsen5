@@ -5,7 +5,7 @@ package watertype;
  */
 public class Watertype {
     private int id;
-    private int parentId;
+    private Integer parentId;
     private String name;
     private String code;
 
@@ -32,11 +32,11 @@ public class Watertype {
         this.id = id;
     }
 
-    public int getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(Integer parentId) {
         this.parentId = parentId;
     }
 

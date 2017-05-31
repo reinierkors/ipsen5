@@ -3,14 +3,58 @@
             *ngFor="let pos of positions"
             [position]="pos"
             [title]="pos.title"></marker>
-    <info-window id="iw">
-        <div *ngIf="marker.display">
-            <h3>{{marker.description}}</h3>
-            <h4>{{watertype.name}} ({{watertype.code}})</h4>
-            <h4>{{marker.code}}</h4>
-        </div>
-    </info-window>
+
+
+    <md-card _ngcontent-qsj-1="" class="md2 md-card" *ngIf="marker.display">
+        <info-window id="iw">
+            <md-list _ngcontent-qsj-1="" class="app-list md2 md-list" role="list">
+                <md-list-item _ngcontent-qsj-1="" role="listitem"
+                              class="md2 md-list-item md-2-line">
+                    <div class="md-list-item">
+                        <div class="md-list-text"><h4 _ngcontent-qsj-1=""
+                                                      md-line="">
+                            Locatie</h4>
+                            <p _ngcontent-qsj-1="" class="demo-secondary-text"
+                               md-line="">{{marker.description}}</p></div>
+                    </div>
+                </md-list-item>
+                <md-list-item _ngcontent-qsj-1="" role="listitem"
+                              class="md2 md-list-item md-2-line">
+                    <div class="md-list-item">
+                        <div class="md-list-text"><h4 _ngcontent-qsj-1=""
+                                                      md-line="">
+                            Mp</h4>
+                            <p _ngcontent-qsj-1="" class="demo-secondary-text"
+                               md-line="">{{marker.code}}</p></div>
+                    </div>
+                </md-list-item>
+                <md-list-item _ngcontent-qsj-1="" role="listitem"
+                              class="md2 md-list-item md-2-line">
+                    <div class="md-list-item">
+                        <div class="md-list-text"><h4 _ngcontent-qsj-1=""
+                                                      md-line="">
+                            Waterschap</h4>
+                            <p _ngcontent-qsj-1="" class="demo-secondary-text"
+                               md-line="">{{waterschap.name}}</p></div>
+                    </div>
+                </md-list-item>
+                <md-list-item _ngcontent-qsj-1="" role="listitem"
+                              class="md2 md-list-item md-2-line">
+                    <div class="md-list-item">
+                        <div class="md-list-text"><h4 _ngcontent-qsj-1=""
+                                                      md-line="">
+                            Watertype</h4>
+                            <p _ngcontent-qsj-1="" class="demo-secondary-text"
+                               md-line="">
+                                {{watertype.name}} ({{watertype.code}})<br>
+                                {{parentWatertype.name}} ({{parentWatertype.code}})
+                            </p></div>
+                    </div>
+                </md-list-item>
+            </md-list>
+            <button id="iw-button" _ngcontent-puf-1="" md-raised-button="" style="">
+                <span class="md-button-wrapper">DETAILS</span>
+            </button>
+        </info-window>
+    </md-card>
 </ngui-map>
-<!--<button (click)="showRandomMarkers()">Show Random Markers</button>-->
-<!--<br/>-->
-<!--<button (click)="addMarker()">Add Marker</button>-->
