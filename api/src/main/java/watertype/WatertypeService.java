@@ -22,4 +22,8 @@ public class WatertypeService {
     public Watertype get(int id) {
         return repository.get(id);
     }
+
+    public Iterable<Watertype> getAll() {
+        return repository.getAll();
+    }
 }

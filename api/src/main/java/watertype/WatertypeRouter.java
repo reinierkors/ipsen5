@@ -17,6 +17,9 @@ public class WatertypeRouter {
         WatertypeService service = WatertypeService.getInstance();
 
         path("/watertype", () -> {
+            get("/all", (((request, response) -> {
+                return gson.toJson(service.getAll());
+            })));
             get("/:id", ((request, response) -> {
                 int id = Integer.valueOf(request.params("id"));
                 return gson.toJson(service.get(id));

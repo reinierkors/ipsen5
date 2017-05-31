@@ -6,7 +6,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, JsonpModule } from '@angular/http';
 import {Routes, RouterModule} from '@angular/router';
-import {MdCardModule} from '@angular/material';
+import {MaterialModule, MdCardModule} from '@angular/material';
 import {MdMenuModule} from '@angular/material';
 import {MdToolbarModule} from '@angular/material';
 import {MdSidenavModule} from '@angular/material';
@@ -15,7 +15,6 @@ import {MdInputModule} from '@angular/material';
 import {MdSelectModule} from '@angular/material';
 import {MdButtonModule} from '@angular/material';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 import {ResultsComponent} from './results/results-gmap/results-gmap.component';

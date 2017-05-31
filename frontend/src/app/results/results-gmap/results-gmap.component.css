@@ -3,9 +3,32 @@ ngui-map {
     height: 100%;
 }
 
-#iw-button {
-    margin-top: 20px;
-    float: right;
+.iw-button, .search-button, .filter-button {
     background-color: #3f51b5;
     color: #FFFFFF;
+}
+
+.search-button, .iw-button {
+    margin-top: 20px;
+    float: right;
+}
+
+.filter-button {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.filter-list {
+    float: left;
+    margin-left: 10px;
+}
+
+.filters {
+    margin-left: 30%;
+    width: 700px;
+}
+
+.app-action {
+    right: 20px;
+    top: 120px;
 }

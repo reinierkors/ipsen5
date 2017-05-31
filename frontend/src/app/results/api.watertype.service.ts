@@ -14,4 +14,9 @@ export class ApiWatertypeService extends ApiService {
     public getWatertype(id): Observable<Watertype> {
         return this.get('/watertype/' + id).map(watertype => Watertype.fromJSON(watertype));
     }
+
+    public getAllTypes(): Observable<Watertype[]> {
+        return this.get('/watertype/all').map((watertypes: Object[]) =>
+            watertypes.map(watertypes => Watertype.fromJSON(watertypes)));
+    }
 }
