@@ -4,13 +4,13 @@ import database.ColumnData;
 import database.RepositoryMaria;
 
 import java.sql.Connection;
+import java.sql.Types;
 
 /**
  * Created by Dylan on 30-5-2017.
  */
 public class WatertypeRepository extends RepositoryMaria<Watertype> {
     private final String TABLE = "watertype";
-    private final String[] COLUMNS = new String[]{"id", "name", "code", "parent"};
 
     public WatertypeRepository(Connection connection) {
         super(connection);
@@ -28,11 +28,16 @@ public class WatertypeRepository extends RepositoryMaria<Watertype> {
 
     @Override
     protected Watertype createModel() {
-        return null;
+        return new Watertype();
     }
 
     @Override
     protected ColumnData[] getColumns() {
-        return new ColumnData[0];
+        return new ColumnData[]{
+                new ColumnData<>("id", Types.INTEGER, Watertype::getId, Watertype::setId, true),
+                new ColumnData<>("name", Types.VARCHAR, Watertype::getName, Watertype::setName),
+                new ColumnData<>("code", Types.VARCHAR, Watertype::getCode, Watertype::setCode),
+                new ColumnData<>("parent", Types.INTEGER, Watertype::getParentId, Watertype::setParentId)
+        };
     }
 }
