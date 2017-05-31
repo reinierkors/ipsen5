@@ -1,7 +1,11 @@
 package users;
 
 
+import org.hibernate.validator.constraints.Email;
+
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Date;
 
 /**
@@ -12,13 +16,20 @@ import java.sql.Date;
  */
 public class User {
 	private int id;
-	@NotNull(message = "Email is mandatory")
+
+	@NotNull(message="Email is verplicht")
+	@Email(message="Email is incorrect")
 	private String email;
-	@NotNull(message = "Password is mandatory")
+
+	@NotNull(message="Password is verplicht")
+	@Size(min = 2, message="Password moet minimaal 2 karakters lang zijn")
 	private String password;
-	@NotNull(message = "Name is mandatory")
+
+	@NotNull(message="Name is verplicht")
 	private String name;
-	@NotNull(message = "Group_id is mandatory")
+
+	@NotNull(message="Group ID is verplicht")
+	@Digits(integer=1, fraction=0, message="Group ID moet een getal bevatten")
 	private int group_id;
 
 	public User(int id, String email, String password, String name, int group_id) {
