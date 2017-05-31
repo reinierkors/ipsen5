@@ -23,8 +23,7 @@ public class UserRouter {
 			get("",(req,res) -> gson.toJson(userService.getAll()));
 			get("/",(req,res) -> gson.toJson(userService.getAll()));
 			get("/:id",(req,res) -> gson.toJson(userService.get(Integer.parseInt(req.params("id")))));
-            //post("/add",(req,res) -> gson.toJson(userService.create(req.body())));
-            post("/add", (req, res) -> gson.toJson(userService.create(req.queryParams("email"),req.queryParams("password"),req.queryParams("name"),req.queryParams("group_id"))));
+            post("/add", (req, res) -> userService.create(gson.fromJson(req.body(), User.class)));
 
 		});
 	}

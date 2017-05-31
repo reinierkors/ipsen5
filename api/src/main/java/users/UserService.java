@@ -2,9 +2,15 @@ package users;
 
 import api.ApiException;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import database.ConnectionManager;
 import database.RepositoryException;
-import waterschap.Waterschap;
+
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Service voor user-gerelateerde business logic
@@ -16,9 +22,12 @@ import waterschap.Waterschap;
 public class UserService {
 	private static final UserService instance = new UserService();
 	private final UserRepository repo;
+	private static Validator validator;
 	
 	private UserService() {
 		repo = new UserRepository(ConnectionManager.getInstance().getConnection());
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
 	}
 	
 	public static UserService getInstance() {
@@ -45,9 +54,15 @@ public class UserService {
 		}
 	}
 
-	public User create(String email, String password, String name, String group_id) {
-		User user = new User(email, password, name, Integer.parseInt(group_id));
+	public String create(User user) {
+	    List<String> errors = new ArrayList<>();
+        validator
+                .validate(user).stream()
+                .forEach(violation -> errors.add(violation.getMessage()));
 
-		return user;
+        if (errors.size() > 0) {
+            return new Gson().toJson(errors);
+        }
+        return new Gson().toJson(user);
 	}
 }

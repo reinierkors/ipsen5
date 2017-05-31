@@ -1,9 +1,7 @@
 package users;
 
 import database.ColumnData;
-import database.RepositoryException;
 import database.RepositoryMaria;
-import waterschap.Waterschap;
 
 import java.sql.*;
 

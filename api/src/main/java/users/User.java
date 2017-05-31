@@ -1,8 +1,7 @@
 package users;
 
-import javax.validation.constraints.Min;
+
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.sql.Date;
 
 /**
@@ -13,13 +12,13 @@ import java.sql.Date;
  */
 public class User {
 	private int id;
-	@NotNull
+	@NotNull(message = "Email is mandatory")
 	private String email;
-	@NotNull
+	@NotNull(message = "Password is mandatory")
 	private String password;
-	@NotNull
+	@NotNull(message = "Name is mandatory")
 	private String name;
-	@NotNull
+	@NotNull(message = "Group_id is mandatory")
 	private int group_id;
 
 	public User(int id, String email, String password, String name, int group_id) {
