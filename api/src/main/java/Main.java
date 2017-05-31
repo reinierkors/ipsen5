@@ -7,8 +7,10 @@ import sample.SampleRouter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import species.SpeciesCategoryRouter;
+import speciesCategory.SpeciesCategoryRouter;
 import species.SpeciesRouter;
+import users.UserRouter;
+import waterschap.WaterschapRouter;
 import wew.WEWRouter;
 
 import static spark.Spark.*;
@@ -36,6 +38,13 @@ public class Main {
 			new SpeciesCategoryRouter();
 			new WEWRouter();
 			new LocationRouter();
+			new UserRouter();
+			new WaterschapRouter();
+
+			exception(IllegalArgumentException.class, (e, req, res) -> {
+				res.status(400);
+				res.body(gson.toJson("An error occurred: " + e));
+			});
 		});
 	}
 	

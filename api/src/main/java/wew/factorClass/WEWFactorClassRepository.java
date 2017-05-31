@@ -1,18 +1,15 @@
 package wew.factorClass;
 
-import database.RepositoryException;
+import database.ColumnData;
 import database.RepositoryMaria;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Repository for WEW factor classes
  *
  * @author Wander Groeneveld
- * @version 0.1, 21-5-2017
+ * @version 0.2, 31-5-2017
  */
 public class WEWFactorClassRepository extends RepositoryMaria<WEWFactorClass>{
 	public WEWFactorClassRepository(Connection connection) {
@@ -30,45 +27,18 @@ public class WEWFactorClassRepository extends RepositoryMaria<WEWFactorClass>{
 	}
 	
 	@Override
-	protected String[] getColumns() {
-		return new String[]{"id","factor_id","code","description"};
+	protected WEWFactorClass createModel() {
+		return new WEWFactorClass();
 	}
 	
 	@Override
-	protected void fillParameters(PreparedStatement preparedStatement, WEWFactorClass entity, boolean appendId) throws RepositoryException {
-		try {
-			preparedStatement.setInt(1,entity.getFactorId());
-			preparedStatement.setString(2,entity.getCode());
-			preparedStatement.setString(3,entity.getDescription());
-			if(appendId) {
-				preparedStatement.setInt(4, entity.getId());
-			}
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
+	protected ColumnData[] getColumns() {
+		return new ColumnData[]{
+				new ColumnData<>("id", Types.INTEGER, WEWFactorClass::getId, WEWFactorClass::setId, true),
+				new ColumnData<>("factor_id", Types.INTEGER, WEWFactorClass::getFactorId, WEWFactorClass::setFactorId),
+				new ColumnData<>("code", Types.VARCHAR, WEWFactorClass::getCode, WEWFactorClass::setCode),
+				new ColumnData<>("description", Types.VARCHAR, WEWFactorClass::getDescription, WEWFactorClass::setDescription),
+		};
 	}
 	
-	@Override
-	protected WEWFactorClass resultSetToModel(ResultSet resultSet) throws RepositoryException {
-		try {
-			WEWFactorClass wewFactorClass = new WEWFactorClass();
-			wewFactorClass.setId(resultSet.getInt("id"));
-			wewFactorClass.setFactorId(resultSet.getInt("factor_id"));
-			wewFactorClass.setCode(resultSet.getString("code"));
-			wewFactorClass.setDescription(resultSet.getString("description"));
-			return wewFactorClass;
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
-	}
-	
-	@Override
-	protected void handleGeneratedKeys(WEWFactorClass entity, ResultSet generatedKeys) throws RepositoryException {
-		try {
-			generatedKeys.next();
-			entity.setId(generatedKeys.getInt("id"));
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
-	}
 }

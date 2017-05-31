@@ -1,4 +1,4 @@
-package species;
+package speciesCategory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

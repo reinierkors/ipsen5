@@ -108,7 +108,8 @@ local.properties
 .cache-main
 .scala_dependencies
 .worksheet
-/waterscan.iml
+waterscan.iml
+IPSEN5.iml
 target/generated-sources/
 /target/
 /target/classes/public/assets/css/partialsheets/InputStyleSheet.css

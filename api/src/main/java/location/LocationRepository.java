@@ -1,13 +1,9 @@
 package location;
 
-import database.RepositoryException;
+import database.ColumnData;
 import database.RepositoryMaria;
-import javafx.scene.control.Tab;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Location repository
@@ -17,8 +13,6 @@ import java.sql.SQLException;
  */
 public class LocationRepository extends RepositoryMaria<Location> {
     private final String TABLE = "location";
-    private final String[] COLUMNS = new String[]{"id", "code", "description",
-            "x-coordinate", "y-coordinate"};
 
     public LocationRepository(Connection connection) {
         super(connection);
@@ -33,49 +27,20 @@ public class LocationRepository extends RepositoryMaria<Location> {
     protected boolean isNew(Location entity) {
         return entity.getId() == 0;
     }
-
+    
     @Override
-    protected String[] getColumns() {
-        return new String[]{"id", "code", "description",
-                "x-coordinate", "y-coordinate"};
+    protected Location createModel() {
+        return new Location();
     }
-
+    
     @Override
-    protected void fillParameters(PreparedStatement preparedStatement, Location entity, boolean appendId) throws RepositoryException {
-        try {
-            preparedStatement.setString(1, entity.getCode());
-            preparedStatement.setString(2, entity.getDescription());
-            preparedStatement.setInt(3, entity.getxCoord());
-            preparedStatement.setInt(4, entity.getyCoord());
-            if (appendId)
-                preparedStatement.setInt(5, entity.getId());
-        } catch (SQLException e) {
-            throw new RepositoryException(e);
-        }
-    }
-
-    @Override
-    protected Location resultSetToModel(ResultSet resultSet) throws RepositoryException {
-        try {
-            Location location = new Location();
-            location.setId(resultSet.getInt(COLUMNS[0]));
-            location.setCode(resultSet.getString(COLUMNS[1]));
-            location.setDescription(resultSet.getString(COLUMNS[2]));
-            location.setxCoord(resultSet.getInt(COLUMNS[3]));
-            location.setyCoord(resultSet.getInt(COLUMNS[4]));
-            return location;
-        } catch (SQLException e) {
-            throw new RepositoryException(e);
-        }
-    }
-
-    @Override
-    protected void handleGeneratedKeys(Location entity, ResultSet generatedKeys) throws RepositoryException {
-        try {
-            generatedKeys.next();
-            entity.setId(generatedKeys.getInt("id"));
-        } catch (SQLException e) {
-            throw new RepositoryException(e);
-        }
+    protected ColumnData[] getColumns() {
+        return new ColumnData[]{
+                new ColumnData<>("id", Types.INTEGER, Location::getId, Location::setId, true),
+                new ColumnData<>("code", Types.VARCHAR, Location::getCode, Location::setCode),
+                new ColumnData<>("description", Types.VARCHAR, Location::getDescription, Location::setDescription),
+                new ColumnData<>("x_coor", Types.INTEGER, Location::getxCoord, Location::setxCoord),
+                new ColumnData<>("y_coor", Types.INTEGER, Location::getyCoord, Location::setyCoord),
+        };
     }
 }

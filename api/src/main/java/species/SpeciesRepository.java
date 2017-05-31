@@ -1,18 +1,16 @@
 package species;
 
+import database.ColumnData;
 import database.RepositoryException;
 import database.RepositoryMaria;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Repository for species
  *
  * @author Wander Groeneveld
- * @version 0.1, 21-5-2017
+ * @version 0.2, 31-5-2017
  */
 public class SpeciesRepository extends RepositoryMaria<Species>{
 	private final PreparedStatement psFindByName;
@@ -55,43 +53,16 @@ public class SpeciesRepository extends RepositoryMaria<Species>{
 	}
 	
 	@Override
-	protected String[] getColumns() {
-		return new String[]{"id","name","category_id"};
+	protected Species createModel() {
+		return new Species();
 	}
 	
 	@Override
-	protected void fillParameters(PreparedStatement preparedStatement, Species entity, boolean appendId) throws RepositoryException {
-		try {
-			preparedStatement.setString(1,entity.getName());
-			preparedStatement.setInt(2,entity.getCategoryId());
-			if(appendId) {
-				preparedStatement.setInt(3, entity.getId());
-			}
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
-	}
-	
-	@Override
-	protected Species resultSetToModel(ResultSet resultSet) throws RepositoryException {
-		try {
-			Species species = new Species();
-			species.setId(resultSet.getInt("id"));
-			species.setName(resultSet.getString("name"));
-			species.setCategoryId(resultSet.getInt("category_id"));
-			return species;
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
-	}
-	
-	@Override
-	protected void handleGeneratedKeys(Species entity, ResultSet generatedKeys) throws RepositoryException {
-		try {
-			generatedKeys.next();
-			entity.setId(generatedKeys.getInt("id"));
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
+	protected ColumnData[] getColumns() {
+		return new ColumnData[]{
+				new ColumnData<>("id",Types.INTEGER,Species::getId,Species::setId,true),
+				new ColumnData<>("name",Types.VARCHAR,Species::getName,Species::setName),
+				new ColumnData<>("category_id",Types.INTEGER,Species::getCategoryId,Species::setCategoryId)
+		};
 	}
 }
