@@ -3,9 +3,7 @@ package users;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import static spark.Spark.get;
-import static spark.Spark.path;
-
+import static spark.Spark.*;
 
 /**
  * Bevat de routes voor user-onderdelen van de api
@@ -22,9 +20,12 @@ public class UserRouter {
 		Gson gson = gsonBuilder.create();
 		
 		path("/user", ()->{
+			get("",(req,res) -> gson.toJson(userService.getAll()));
+			get("/",(req,res) -> gson.toJson(userService.getAll()));
 			get("/:id",(req,res) -> gson.toJson(userService.get(Integer.parseInt(req.params("id")))));
-			
+            //post("/add",(req,res) -> gson.toJson(userService.create(req.body())));
+            post("/add", (req, res) -> gson.toJson(userService.create(req.queryParams("email"),req.queryParams("password"),req.queryParams("name"),req.queryParams("group_id"))));
+
 		});
-		
 	}
 }

@@ -1,8 +1,10 @@
 package users;
 
 import api.ApiException;
+import com.google.gson.Gson;
 import database.ConnectionManager;
 import database.RepositoryException;
+import waterschap.Waterschap;
 
 /**
  * Service voor user-gerelateerde business logic
@@ -17,7 +19,6 @@ public class UserService {
 	
 	private UserService() {
 		repo = new UserRepository(ConnectionManager.getInstance().getConnection());
-		
 	}
 	
 	public static UserService getInstance() {
@@ -35,5 +36,18 @@ public class UserService {
 			throw new ApiException("Cannot retrieve user");
 		}
 	}
-	
+
+	public Iterable<User> getAll() throws ApiException {
+		try {
+			return repo.getAll();
+		} catch(RepositoryException e){
+			throw new ApiException("Cannot retrieve users");
+		}
+	}
+
+	public User create(String email, String password, String name, String group_id) {
+		User user = new User(email, password, name, Integer.parseInt(group_id));
+
+		return user;
+	}
 }

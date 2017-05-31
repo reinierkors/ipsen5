@@ -38,6 +38,11 @@ public class Main {
 			new LocationRouter();
 			new UserRouter();
 			new WaterschapRouter();
+
+			exception(IllegalArgumentException.class, (e, req, res) -> {
+				res.status(400);
+				res.body(gson.toJson("An error occurred: " + e));
+			});
 		});
 	}
 	
