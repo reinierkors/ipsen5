@@ -1,6 +1,7 @@
 package users;
 
 import api.ApiException;
+import api.ApiValidationException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import database.ConnectionManager;
@@ -37,12 +38,12 @@ public class UserService {
 	public User get(int id) throws ApiException {
 		try {
 			User user = repo.get(id);
-			if(user ==null) {
-				throw new ApiException("User does not exist");
+			if (user == null) {
+				throw new ApiValidationException("User does not exist");
 			}
 			return user;
-		} catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve user");
+		} catch(RepositoryException e) {
+			throw new ApiValidationException("Cannot retrieve user");
 		}
 	}
 
@@ -61,7 +62,7 @@ public class UserService {
                 .forEach(violation -> errors.add(violation.getMessage()));
 
         if (errors.size() > 0) {
-            return new Gson().toJson(errors);
+            throw new ApiValidationException(errors);
         }
         return new Gson().toJson(user);
 	}

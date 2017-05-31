@@ -14,16 +14,12 @@ import static spark.Spark.*;
 public class UserRouter {
 	public UserRouter(){
 		UserService userService = UserService.getInstance();
-		
-		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
-		Gson gson = gsonBuilder.create();
-		
+
 		path("/user", ()->{
-			get("",(req,res) -> gson.toJson(userService.getAll()));
-			get("/",(req,res) -> gson.toJson(userService.getAll()));
-			get("/:id",(req,res) -> gson.toJson(userService.get(Integer.parseInt(req.params("id")))));
-            post("/add", (req, res) -> userService.create(gson.fromJson(req.body(), User.class)));
+			get("",(req,res) -> new Gson().toJson(userService.getAll()));
+			get("/",(req,res) -> new Gson().toJson(userService.getAll()));
+			get("/:id",(req,res) -> new Gson().toJson(userService.get(Integer.parseInt(req.params("id")))));
+            post("/add", (req, res) -> userService.create(new Gson().fromJson(req.body(), User.class)));
 
 		});
 	}
