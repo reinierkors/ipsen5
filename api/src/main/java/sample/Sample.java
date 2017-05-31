@@ -3,7 +3,7 @@ package sample;
 import java.sql.Date;
 
 /**
- * User model
+ * Sample model
  *
  * @author Wander Groeneveld
  * @version 0.2, 30-5-2017

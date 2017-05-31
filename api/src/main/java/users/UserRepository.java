@@ -1,12 +1,11 @@
 package users;
 
+import database.ColumnData;
 import database.RepositoryException;
 import database.RepositoryMaria;
+import waterschap.Waterschap;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Repository for users
@@ -30,49 +29,18 @@ public class UserRepository extends RepositoryMaria<User>{
 	}
 
 	@Override
-	protected String[] getColumns() {
-		return new String[]{"id","email","password","name","group_id"};
+	protected User createModel() {
+		return new User();
 	}
 
 	@Override
-	protected void fillParameters(PreparedStatement preparedStatement, User user, boolean appendId) throws RepositoryException {
-		try {
-			preparedStatement.setInt(1,user.getId());
-			preparedStatement.setString(2,user.getEmail());
-			preparedStatement.setString(3,user.getPassword());
-			preparedStatement.setString(4,user.getName());
-			preparedStatement.setInt(5,user.getGroup_id());
-			if(appendId) {
-				preparedStatement.setInt(6, user.getId());
-			}
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
-	}
-
-	@Override
-	protected User resultSetToModel(ResultSet resultSet) throws RepositoryException {
-		try {
-			User user = new User();
-			user.setId(resultSet.getInt("id"));
-			user.setEmail(resultSet.getString("email"));
-			user.setPassword(resultSet.getString("password"));
-			user.setName(resultSet.getString("name"));
-			user.setGroup_id(resultSet.getInt("group_id"));
-
-			return user;
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
-	}
-
-	@Override
-	protected void handleGeneratedKeys(User entity, ResultSet generatedKeys) throws RepositoryException {
-		try {
-			generatedKeys.next();
-			entity.setId(generatedKeys.getInt("id"));
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
+	protected ColumnData[] getColumns() {
+		return new ColumnData[]{
+				new ColumnData<>("id", Types.INTEGER, User::getId, User::setId, true),
+				new ColumnData<>("email", Types.VARCHAR, User::getEmail, User::setEmail),
+				new ColumnData<>("password", Types.VARCHAR, User::getPassword, User::setPassword),
+				new ColumnData<>("name", Types.VARCHAR, User::getName, User::setName),
+				new ColumnData<>("group_id", Types.INTEGER, User::getGroup_id, User::setGroup_id)
+		};
 	}
 }
