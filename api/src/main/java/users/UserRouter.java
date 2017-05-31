@@ -20,7 +20,6 @@ public class UserRouter {
 			get("/",(req,res) -> new Gson().toJson(userService.getAll()));
 			get("/:id",(req,res) -> new Gson().toJson(userService.get(Integer.parseInt(req.params("id")))));
             post("/add", (req, res) -> userService.create(new Gson().fromJson(req.body(), User.class)));
-
 		});
 	}
 }

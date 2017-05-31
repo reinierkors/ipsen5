@@ -64,6 +64,9 @@ public class UserService {
         if (errors.size() > 0) {
             throw new ApiValidationException(errors);
         }
+
+        repo.persist(user);
+
         return new Gson().toJson(user);
 	}
 }

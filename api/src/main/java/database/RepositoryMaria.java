@@ -1,5 +1,7 @@
 package database;
 
+import api.ApiValidationException;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -232,6 +234,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 			fillParameters(psInsert, entity, false);
 			psInsert.executeUpdate();
 			handleGeneratedKeys(entity,psInsert.getGeneratedKeys());
+		} catch (SQLIntegrityConstraintViolationException e) {
+			throw new ApiValidationException("Deze data is al aanwezig, controleer uw gegevens");
 		} catch (SQLException e) {
 			throw new RepositoryException(e);
 		}
