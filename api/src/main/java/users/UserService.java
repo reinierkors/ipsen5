@@ -3,15 +3,15 @@ package users;
 import api.ApiException;
 import api.ApiValidationException;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import database.ConnectionManager;
 import database.RepositoryException;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.*;
 
 /**
  * Service voor user-gerelateerde business logic
@@ -69,4 +69,38 @@ public class UserService {
 
         return new Gson().toJson(user);
 	}
+
+	public String createSessionToken(User tempUser) throws ApiException {
+        try {
+            System.out.println("Trying to find user");
+            User user = repo.findByEmail(tempUser.getEmail());
+            if (user.getPassword().equals(tempUser.getPassword())){
+                System.out.println("Creating session token");
+                String sessionToken = UUID.randomUUID().toString();
+                saveSession(sessionToken, user.getId());
+                return sessionToken;
+            } else {
+                System.out.println("Passwords don't match");
+                return null;
+            }
+        } catch(RepositoryException e){
+            throw new ApiException("Cannot retrieve sample");
+        }
+    }
+
+    public void saveSession(String sessionToken, int id){
+        System.out.println("Creating expiration date");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE, 1);
+        Timestamp expirationDate = new Timestamp(calendar.getTimeInMillis());
+        System.out.println("Saving session to database");
+        repo.saveSession(id, sessionToken, expirationDate);
+    }
+
+    public boolean logout(String token){
+        User user = repo.findBySession(token);
+        repo.deleteSession(user.getId());
+        return true;
+    }
 }

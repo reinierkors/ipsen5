@@ -163,6 +163,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` char(40) NOT NULL,
   `name` varchar(100) NOT NULL,
   `group_id` int(3) NOT NULL,
+  `session_token` char(36) DEFAULT NULL,
+  `expiration_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `group_id` (`group_id`)
