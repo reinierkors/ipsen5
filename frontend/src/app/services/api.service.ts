@@ -17,7 +17,7 @@ export abstract class ApiService {
 	
 	private transformError(res:Response,observer){
 		if(res.json)
-			observer.error(res.json().error);
+			observer.error(res.json().detailMessage);
 		else
 			observer.error(res);
 	}
@@ -34,7 +34,7 @@ export abstract class ApiService {
 		var headers = this.getHeaderObject();
 		return Observable.create(observer => {
 			this.http.get(path,{headers:headers})
-				.subscribe(res=>this.transformResult(res,observer), res=>this.transformError(res,observer), ()=>observer.complete());
+				.subscribe(res=>this.transformResult(res,observer), err=>this.transformError(err,observer), ()=>observer.complete());
 		});
 	}
 	
@@ -44,7 +44,7 @@ export abstract class ApiService {
 		headers.append('Content-Type','application/json');
 		return Observable.create(observer => {
 			this.http.post(path,JSON.stringify(data),{headers:headers})
-				.subscribe(res=>this.transformResult(res,observer), res=>this.transformError(res,observer), ()=>observer.complete());
+				.subscribe(res=>this.transformResult(res,observer), err=>this.transformError(err,observer), ()=>observer.complete());
 		});
 	}
 }

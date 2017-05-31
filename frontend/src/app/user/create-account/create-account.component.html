@@ -1,8 +1,5 @@
 <div class="container">
   <h1>Maak een nieuwe gebruiker aan</h1>
-  <div [hidden]="!submitted">
-    <p>Gebruiker toegevoegd!</p>
-  </div>
   <form [formGroup]="complexForm" (ngSubmit)="submitForm(complexForm.value)">
 
       <md-input-container class="full-width">

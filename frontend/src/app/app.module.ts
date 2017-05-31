@@ -8,6 +8,7 @@ import { HttpModule, JsonpModule } from '@angular/http';
 import {Routes, RouterModule} from '@angular/router';
 import {MdCardModule} from '@angular/material';
 import {MdMenuModule} from '@angular/material';
+import {MdSnackBarModule} from '@angular/material';
 import {MdToolbarModule} from '@angular/material';
 import {MdSidenavModule} from '@angular/material';
 import {MdListModule} from '@angular/material';
@@ -62,6 +63,7 @@ const routes: Routes = [
         MdListModule,
         MdSelectModule,
         MdToolbarModule,
+        MdSnackBarModule,
         NgxDatatableModule,
         BrowserAnimationsModule,
         RouterModule.forRoot(routes, {useHash: false}),

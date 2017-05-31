@@ -2,7 +2,10 @@ import {Component,OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ApiUserService} from '../api.user.service';
 import {User}    from '../user.model';
-import { FormGroup, FormBuilder, Validators  } from '@angular/forms';
+import {FormGroup, FormBuilder, Validators } from '@angular/forms';
+import {MdSnackBar} from '@angular/material';
+import swal from 'sweetalert2'
+
 
 @Component({
     providers: [ApiUserService],
@@ -13,10 +16,9 @@ export class CreateAccountComponent implements OnInit{
     private route:ActivatedRoute;
     private apiUser:ApiUserService;
     public user:User;
-    private submitted = false;
     public complexForm : FormGroup;
 
-    constructor(apiUser:ApiUserService,route:ActivatedRoute, fb: FormBuilder){
+    constructor(apiUser:ApiUserService,route:ActivatedRoute, fb: FormBuilder, public snackBar: MdSnackBar){
         this.apiUser = apiUser;
         this.route = route;
         this.complexForm = fb.group({
@@ -31,15 +33,14 @@ export class CreateAccountComponent implements OnInit{
     }
 
     submitForm(value: any) {
-        this.submitted = true;
-        console.log(User.fromJSON(value));
-        this.apiUser.createUser(User.fromJSON(value));
+        this.apiUser.createUser(User.fromJSON(value)).subscribe(data => {
+            this.snackBar.open(`Gebruiker ${data.name} aangemaakt!`);
+            this.resetForm();
+        }, error => swal('Oops...', error, 'error'));
     }
 
     resetForm() {
-
         this.complexForm.reset();
-        this.submitted = false;
         this.complexForm.clearValidators();
     }
 
@@ -47,7 +48,4 @@ export class CreateAccountComponent implements OnInit{
         {value: 1, viewValue: 'Gebruiker'},
         {value: 2, viewValue: 'Administrator'},
     ];
-
-
-
 }

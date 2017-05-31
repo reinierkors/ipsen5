@@ -16,7 +16,6 @@ export class ApiUserService extends ApiService{
     }
 
     public createUser(user:User):Observable<User> {
-        console.log("created");
         return this.post('/user/add', user);
     }
 }
