@@ -12,6 +12,7 @@ import speciesCategory.SpeciesCategoryRouter;
 import species.SpeciesRouter;
 import users.UserRouter;
 import waterschap.WaterschapRouter;
+import watertype.WatertypeRouter;
 import wew.WEWRouter;
 
 import static spark.Spark.*;
@@ -47,6 +48,7 @@ public class Main {
 			new LocationRouter();
 			new UserRouter();
 			new WaterschapRouter();
+			new WatertypeRouter();
 
 			exception(IllegalArgumentException.class, (e, req, res) -> {
 				res.status(400);
