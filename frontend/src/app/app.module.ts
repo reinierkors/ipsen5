@@ -34,7 +34,7 @@ const routes:Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
   {path: 'account', component: CreateAccountComponent, canActivate: [AuthGuard]},
-  {path: 'locations', component: SampleLocationTableComponent},
+  {path: 'locations', component: SampleLocationTableComponent, canActivate: [AuthGuard]},
   {path: 'results', component: ResultsComponent, canActivate: [AuthGuard]},
   {path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
   {path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
