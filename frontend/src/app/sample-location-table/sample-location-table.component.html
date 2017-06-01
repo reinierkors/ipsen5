@@ -1,0 +1,22 @@
+<md-card>
+  <md-card-title>Monster Locatie Tabel</md-card-title>
+  <md-card-content>
+    <ngx-datatable
+            class="material"
+            [rows]="rows"
+            [columns]="columns"
+            [columnMode]="'force'"
+            [headerHeight]="50"
+            [footerHeight]="50"
+            [rowHeight]="'auto'"
+            [limit]="50">
+
+        <!--<ngx-datatable-column name="code">-->
+          <!--<ng-template let-row="code" ngx-datatable-cell-template>-->
+            <!--My name is: <i [innerHTML]="row['name']"></i> and <i>{{ Link }}</i>-->
+        <!--</ng-template>-->
+
+      <!--</ngx-datatable-column>-->
+    </ngx-datatable>
+  </md-card-content>
+</md-card>

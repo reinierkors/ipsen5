@@ -1,7 +1,5 @@
 package location;
 
-import java.math.BigDecimal;
-
 /**
  * Location model
  *
@@ -10,6 +8,8 @@ import java.math.BigDecimal;
  */
 public class Location {
     private int id;
+    private Integer waterschapId;
+    private Integer watertypeId;
     private String code;
     private String description;
     private Integer xCoord;
@@ -26,6 +26,8 @@ public class Location {
     public Location(int id, String code, String description, int xCoord,
                     int yCoord, Double latitude, Double longitude, Integer waterschapId, Integer watertypeId) {
         this.id = id;
+        this.waterschapId = waterschapId;
+        this.watertypeId = watertypeId;
         this.code = code;
         this.description = description;
         this.xCoord = xCoord;
@@ -47,6 +49,22 @@ public class Location {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Integer getWaterschapId() {
+        return waterschapId;
+    }
+
+    public void setWaterschapId(Integer waterschapId) {
+        this.waterschapId = waterschapId;
+    }
+
+    public Integer getWatertypeId() {
+        return watertypeId;
+    }
+
+    public void setWatertypeId(Integer watertypeId) {
+        this.watertypeId = watertypeId;
     }
 
     public String getCode() {

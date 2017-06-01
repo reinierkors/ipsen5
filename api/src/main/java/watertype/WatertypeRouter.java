@@ -12,7 +12,7 @@ import static spark.Spark.post;
  *
  * @author Dylan de Wit
  * @author Wander Groeneveld
- * @version 0.2, 31-5-2017
+ * @version 0.4, 1-6-2017
  */
 public class WatertypeRouter {
 	public WatertypeRouter(){
@@ -29,6 +29,13 @@ public class WatertypeRouter {
 				Watertype watertype = gson.fromJson(req.body(),Watertype.class);
 				return gson.toJson(watertypeService.save(watertype));
 			});
+      get("/all", (((request, response) -> {
+          return gson.toJson(watertypeService.getAll());
+      })));
+      get("/:id", ((request, response) -> {
+          int id = Integer.valueOf(request.params("id"));
+          return gson.toJson(watertypeService.get(id));
+      }));
 		});
 		
 	}

@@ -99,6 +99,7 @@ public class UserService {
     }
 
     public boolean logout(String token){
+        System.out.println("removing token");
         User user = repo.findBySession(token);
         repo.deleteSession(user.getId());
         return true;

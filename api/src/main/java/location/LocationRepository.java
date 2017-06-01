@@ -14,7 +14,6 @@ import java.sql.*;
  * @version 0.2, 31-5-2017
  */
 public class LocationRepository extends RepositoryMaria<Location> {
-    private final String TABLE = "location";
     private final PreparedStatement psFindByCode;
     
     public LocationRepository(Connection connection) {
@@ -31,7 +30,7 @@ public class LocationRepository extends RepositoryMaria<Location> {
 
     @Override
     protected String getTable() {
-        return TABLE;
+        return "location";
     }
 
     @Override

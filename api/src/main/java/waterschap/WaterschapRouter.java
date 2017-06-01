@@ -23,6 +23,7 @@ public class WaterschapRouter {
 		path("/waterschap", ()->{
 			get("",(req,res) -> gson.toJson(waterschapService.getAll()));
 			get("/",(req,res) -> gson.toJson(waterschapService.getAll()));
+			get("/:id", (req, res) -> gson.toJson(waterschapService.get(Integer.valueOf(req.params("id")))));
 		});
 		
 	}

@@ -12,6 +12,7 @@ import speciesCategory.SpeciesCategoryRouter;
 import species.SpeciesRouter;
 import users.UserRouter;
 import waterschap.WaterschapRouter;
+import watertype.Watertype;
 import watertype.WatertypeRouter;
 import wew.WEWRouter;
 
@@ -46,6 +47,7 @@ public class Main {
 			new SpeciesCategoryRouter();
 			new WEWRouter();
 			new LocationRouter();
+			new WatertypeRouter();
 			new UserRouter();
 			new WaterschapRouter();
 			new WatertypeRouter();

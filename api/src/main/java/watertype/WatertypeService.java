@@ -10,7 +10,7 @@ import database.RepositoryException;
  *
  * @author Dylan de Wit
  * @author Wander Groeneveld
- * @version 0.2, 31-5-2017
+ * @version 0.3, 1-6-2017
  */
 public class WatertypeService {
 	private static final WatertypeService instance = new WatertypeService();
@@ -20,10 +20,12 @@ public class WatertypeService {
 		repo = new WatertypeRepository(ConnectionManager.getInstance().getConnection());
 	}
 	
-	public static WatertypeService getInstance() {
-return instance;
-}
-	
+	public static WatertypeService getInstance() {return instance;}
+
+  public Watertype get(int id) {
+      return repo.get(id);
+  }
+
 	public Iterable<Watertype> getAll() throws ApiException {
 		try {
 			return repo.getAll();

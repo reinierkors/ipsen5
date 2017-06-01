@@ -27,12 +27,12 @@ public class WatertypeRepository extends RepositoryMaria<Watertype> {
     protected boolean isNew(Watertype entity) {
         return entity.getId()==0;
     }
-    
+
     @Override
     protected Watertype createModel() {
         return new Watertype();
     }
-    
+
     @Override
     protected ColumnData[] getColumns() {
         return new ColumnData[]{

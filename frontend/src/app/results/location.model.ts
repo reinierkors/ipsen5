@@ -1,5 +1,7 @@
 export class Location {
     id: number;
+    waterschapId: number;
+    watertypeId: number;
     code: string;
     description: string;
     xCoord: number;
@@ -12,6 +14,8 @@ export class Location {
     public static fromJSON(obj): Location {
         const location = new Location();
         location.id = obj.id;
+        location.waterschapId = obj.waterschapId;
+        location.watertypeId = obj.watertypeId;
         location.code = obj.code;
         location.description = obj.description;
         location.xCoord = obj.xCoord;
