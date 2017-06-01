@@ -50,6 +50,7 @@ public class Main {
 			new WatertypeRouter();
 			new UserRouter();
 			new WaterschapRouter();
+			new WatertypeRouter();
 
 			exception(IllegalArgumentException.class, (e, req, res) -> {
 				res.status(400);

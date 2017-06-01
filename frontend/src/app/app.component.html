@@ -10,8 +10,13 @@
 
         <!-- This fills the remaining space of the current row -->
         <span class="example-fill-remaining-space"></span>
-
-        <a md-raised-button (click)="toLogin()">Login</a>
+        <div *ngIf="loggedIn; then logout else login"></div>
+        <ng-template #login>
+            <a md-raised-button (click)="toLogin()">Login</a>
+        </ng-template>
+        <ng-template #logout>
+        <a md-raised-button (click)="toLogout()">Logout</a>
+    </ng-template>
     </md-toolbar>
 
     <router-outlet></router-outlet>

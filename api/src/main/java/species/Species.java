@@ -26,7 +26,7 @@ public class Species {
 	}
 	
 	public Species() {
-		this(0,null,0);
+		this(0,null,null);
 	}
 	
 	public int getId() {

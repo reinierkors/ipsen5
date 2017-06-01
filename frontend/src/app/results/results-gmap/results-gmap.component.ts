@@ -2,9 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ApiLocationService} from '../api.location.service';
 import {Location} from '../location.model';
-import {ApiWatertypeService} from '../api.watertype.service';
+import {ApiWatertypeService} from '../../watertype/api.watertype.service';
 import {ApiWaterschapService} from "../../waterschap/api.waterschap.service";
-import {Watertype} from "../watertype.model";
+import {Watertype} from "../../watertype/watertype.model";
 import {Waterschap} from "../../waterschap/waterschap.model";
 
 @Component({
@@ -144,7 +144,7 @@ export class ResultsComponent implements OnInit {
 
     private retrieveWatertypes() {
         this.route.params
-            .switchMap(params => this.apiWatertype.getAllTypes())
+            .switchMap(params => this.apiWatertype.getAll())
             .subscribe(watertypes => {
                 this.watertypes = watertypes;
             }, error => console.log(error));

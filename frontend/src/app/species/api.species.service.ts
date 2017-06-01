@@ -19,7 +19,15 @@ export class ApiSpeciesService extends ApiService{
 		return this.get('/species/ids/'+ids.join(',')).map((species:Object[]) => species.map(species=>Species.fromJSON(species)));
 	}
 	
+	public getByNames(names:string[]):Observable<Species[]>{
+		return this.post('/species/find',names).map((species:Object[]) => species.map(species=>Species.fromJSON(species)));
+	}
+	
 	public findOrCreate(names:string[]):Observable<Species[]>{
 		return this.post('/species/findOrCreate',names).map((species:Object[]) => species.map(species=>Species.fromJSON(species)));
+	}
+	
+	public save(species:Species):Observable<Species>{
+		return this.post('/species',species).map(species=>Species.fromJSON(species));
 	}
 }

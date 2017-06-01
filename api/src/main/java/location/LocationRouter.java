@@ -5,12 +5,14 @@ import com.google.gson.GsonBuilder;
 
 import static spark.Spark.get;
 import static spark.Spark.path;
+import static spark.Spark.post;
 
 /**
  * Location router
  *
  * @author Dylan de Wit
- * @version 0.1, 24-5-2017
+ * @author Wander Groeneveld
+ * @version 0.2, 31-5-2017
  */
 public class LocationRouter {
     public LocationRouter() {
@@ -20,6 +22,11 @@ public class LocationRouter {
 
         path("/location", () -> {
             get("/all", ((request, response) -> gson.toJson(locationService.getAll())));
+            get("/code/:code", (req,res) -> gson.toJson(locationService.getByCode(req.params("code"))));
+            post("",(req,res) -> {
+                Location location = gson.fromJson(req.body(),Location.class);
+                return gson.toJson(locationService.save(location));
+            });
         });
     }
 }
