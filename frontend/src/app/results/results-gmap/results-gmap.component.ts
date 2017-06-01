@@ -80,6 +80,7 @@ export class ResultsComponent implements OnInit {
 
     ngOnInit() {
         this.retrieveLocations();
+        this.retrieveFilterList();
     };
 
     public showMarkerInfo({target: marker}) {
@@ -185,7 +186,6 @@ export class ResultsComponent implements OnInit {
             waterschap: marker[3],
         });
         this.insertIntoPositions(this.markers[this.markers.length - 1]);
-        this.retrieveFilterList();
         console.log("Le markers", this.markers);
     };
 
