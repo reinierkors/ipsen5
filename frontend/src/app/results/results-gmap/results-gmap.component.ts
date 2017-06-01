@@ -98,15 +98,18 @@ export class ResultsComponent implements OnInit {
 
     public refreshMarkers() {
         this.positions.splice(0);
-        this.waterschappen = [];
-        this.watertypes = [];
-        this.retrieveWatertypes();
-        this.retrieveWaterschappen();
+        this.retrieveFilterList();
         this.markers.forEach((item) => {
             this.insertIntoPositions(item);
         });
     };
 
+    private retrieveFilterList() {
+        this.waterschappen = [];
+        this.watertypes = [];
+        this.retrieveWatertypes();
+        this.retrieveWaterschappen();
+    }
     private insertIntoPositions(item) {
         this.positions.push({
             title: 'm' + <string><any>item.location.id,
@@ -182,6 +185,7 @@ export class ResultsComponent implements OnInit {
             waterschap: marker[3],
         });
         this.insertIntoPositions(this.markers[this.markers.length - 1]);
+        this.retrieveFilterList();
         console.log("Le markers", this.markers);
     };
 
