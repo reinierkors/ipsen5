@@ -7,7 +7,11 @@ import java.sql.Connection;
 import java.sql.Types;
 
 /**
- * Created by Dylan on 30-5-2017.
+ * Repository for watertype
+ *
+ * @author Dylan de Wit
+ * @author Wander Groeneveld
+ * @version 0.2, 31-5-2017
  */
 public class WatertypeRepository extends RepositoryMaria<Watertype> {
     public WatertypeRepository(Connection connection) {
@@ -21,7 +25,7 @@ public class WatertypeRepository extends RepositoryMaria<Watertype> {
 
     @Override
     protected boolean isNew(Watertype entity) {
-        return entity.getId() == 0;
+        return entity.getId()==0;
     }
 
     @Override

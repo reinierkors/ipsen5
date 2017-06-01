@@ -1,5 +1,42 @@
-<input type="file" (change)="fileChange($event)" multiple/>
-
-<div *ngFor="let dataObj of dataObjs">
-	<textarea rows="30" cols="120">{{dataObj|json}}</textarea>
+<div class="container">
+	<h1>Importeer monsters</h1>
+	<md-card *ngIf="status=='loading'">
+		Laden...
+	</md-card>
+	<md-card *ngIf="status=='start'">
+		<md-card-title>Upload CSV bestanden</md-card-title>
+		<input type="file" (change)="fileChange($event)" multiple/>
+	</md-card>
+	<div *ngIf="status=='confirmData'">
+		<md-card *ngIf="confirm.watertypes.length||confirm.species.length||confirm.locations.length">
+			<h2>Bevestiging vereist</h2>
+			<p>De volgende entiteiten bestaan nog niet en worden aangemaakt: <button (click)="confirmAll()">Bevestig alles</button></p>
+			<md-list dense>
+				<div *ngIf="confirm.watertypes.length">
+					<h3 md-subheader>Watertypes</h3>
+					<md-list-item *ngFor="let watertype of confirm.watertypes">
+						{{watertype.code}} - {{watertype.name}}
+					</md-list-item>
+					<md-divider></md-divider>
+				</div>
+				<div *ngIf="confirm.species.length">
+					<h3 md-subheader>Soorten</h3>
+					<md-list-item *ngFor="let species of confirm.species">
+						{{species.name}}
+					</md-list-item>
+					<md-divider></md-divider>
+				</div>
+				<div *ngIf="confirm.locations.length">
+					<h3 md-subheader>Locaties</h3>
+					<md-list-item *ngFor="let location of confirm.locations">
+						{{location.code}} - {{location.description}}
+					</md-list-item>
+				</div>
+			</md-list>
+		</md-card>
+	</div>
+	<md-card *ngIf="status=='confirmSample'">
+		<h2>Sample bevestiging</h2>
+		<p>Totale sample data komt hier op een overzichtelijke manier</p>
+	</md-card>
 </div>

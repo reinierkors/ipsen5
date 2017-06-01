@@ -12,17 +12,19 @@ public class Location {
     private Integer watertypeId;
     private String code;
     private String description;
-    private int xCoord;
-    private int yCoord;
+    private Integer xCoord;
+    private Integer yCoord;
     private Double latitude;
     private Double longitude;
-
+    private Integer waterschapId;
+    private Integer watertypeId;
+    
     public Location() {
 
     }
 
-    public Location(int id, int waterschapId, int watertypeId, String code, String description, int xCoord,
-                    int yCoord, Double latitude, Double longitude) {
+    public Location(int id, String code, String description, int xCoord,
+                    int yCoord, Double latitude, Double longitude, Integer waterschapId, Integer watertypeId) {
         this.id = id;
         this.waterschapId = waterschapId;
         this.watertypeId = watertypeId;
@@ -32,11 +34,13 @@ public class Location {
         this.yCoord = yCoord;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.waterschapId = waterschapId;
+        this.watertypeId = watertypeId;
     }
 
     public Location(String code, String description, int xCoord,
-                    int yCoord, Double latitude, Double longitude) {
-        this(0, 0, 0, code, description, xCoord, yCoord, latitude, longitude);
+                    int yCoord, Double latitude, Double longitude, Integer waterschapId, Integer watertypeId) {
+        this(0, code, description, xCoord, yCoord, latitude, longitude, waterschapId, watertypeId);
     }
 
     public int getId() {
@@ -79,19 +83,19 @@ public class Location {
         this.description = description;
     }
 
-    public int getxCoord() {
+    public Integer getxCoord() {
         return xCoord;
     }
 
-    public void setxCoord(int xCoord) {
+    public void setxCoord(Integer xCoord) {
         this.xCoord = xCoord;
     }
 
-    public int getyCoord() {
+    public Integer getyCoord() {
         return yCoord;
     }
 
-    public void setyCoord(int yCoord) {
+    public void setyCoord(Integer yCoord) {
         this.yCoord = yCoord;
     }
 
@@ -109,5 +113,21 @@ public class Location {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+    
+    public Integer getWaterschapId() {
+        return waterschapId;
+    }
+    
+    public void setWaterschapId(Integer waterschapId) {
+        this.waterschapId = waterschapId;
+    }
+    
+    public Integer getWatertypeId() {
+        return watertypeId;
+    }
+    
+    public void setWatertypeId(Integer watertypeId) {
+        this.watertypeId = watertypeId;
     }
 }

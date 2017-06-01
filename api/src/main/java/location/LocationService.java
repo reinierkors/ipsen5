@@ -1,12 +1,15 @@
 package location;
 
+import api.ApiException;
 import database.ConnectionManager;
+import database.RepositoryException;
 
 /**
  * Location service
  *
  * @author Dylan de Wit
- * @version 0.1, 24-5-2017
+ * @author Wander Groeneveld
+ * @version 0.2, 31-5-2017
  */
 public class LocationService {
     private static final LocationService instance = new LocationService();
@@ -32,4 +35,25 @@ public class LocationService {
         }
         return locations;
     }
+    
+    public Location getByCode(String code) throws ApiException {
+    	try{
+		    Location location = repository.findByCode(code);
+		    if(location==null){
+		    	throw new ApiException("Location does not exist");
+		    }
+		    return location;
+	    } catch(RepositoryException e){
+		    throw new ApiException("Cannot retrieve location");
+	    }
+    }
+    
+	public Location save(Location location) throws ApiException{
+		try {
+			repository.persist(location);
+			return location;
+		} catch(RepositoryException e){
+			throw new ApiException("Cannot save location");
+		}
+	}
 }
