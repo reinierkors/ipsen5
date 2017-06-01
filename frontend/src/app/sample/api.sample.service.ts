@@ -16,6 +16,6 @@ export class ApiSampleService extends ApiService{
 	}
 	
 	public getSamplesByLocation(locationId:number):Observable<Sample[]>{
-		return this.get('/sample/location/'+locationId).map((samples:Object[]) => samples.map(sample=>Sample.fromJSON(sample)));
+		return this.get('/sample/Location/'+locationId).map((samples:Object[]) => samples.map(sample=>Sample.fromJSON(sample)));
 	}
 }

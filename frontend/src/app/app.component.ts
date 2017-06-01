@@ -10,5 +10,9 @@ export class AppComponent {
   title = 'Waterscan';
 
   constructor(public router: Router) {}
+
+  toLogin() {
+      this.router.navigate(['/login'])
+    }
 }
 
