@@ -11,17 +11,20 @@ import {AuthenticationService} from "./services/auth.service";
 export class AppComponent {
   title = 'Waterscan';
 
-  constructor(public router: Router, private authenticationService: AuthenticationService) {}
+  constructor(public router: Router, private authenticationService: AuthenticationService) {
+      this.router.events.subscribe((val) => {
+          this.loggedIn = !(localStorage.getItem('currentUser') === null);
+      })
+  }
 
   toLogin() {
       this.router.navigate(['/login']);
-      location.reload();
     }
 
     toLogout() {
-        this.authenticationService.logout();
-        this.router.navigate(['/login']);
-        location.reload();
+        this.authenticationService.logout().subscribe(()=>{
+            this.router.navigate(['/login']);
+        });
     }
 
     loggedIn = !(localStorage.getItem('currentUser') === null);
