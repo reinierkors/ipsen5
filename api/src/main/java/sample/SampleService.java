@@ -35,19 +35,4 @@ public class SampleService {
 			throw new ApiException("Cannot retrieve sample");
 		}
 	}
-	
-	public Sample test() throws ApiException{
-		try {
-			Sample sample = new Sample();
-			sample.setOwnerId(1);
-			sample.setLocationId(1);
-			sample.setQuality(1.5);
-			repo.persist(sample);
-			return sample;
-		}
-		catch (RepositoryException e){
-			throw new ApiException(e.getMessage());
-		}
-	}
-	
 }

@@ -1,6 +1,7 @@
 package location;
 
 import database.ColumnData;
+import database.RepositoryException;
 import database.RepositoryMaria;
 
 import java.sql.*;
@@ -9,11 +10,22 @@ import java.sql.*;
  * Location repository
  *
  * @author Dylan de Wit
- * @version 0.1, 24-5-2017
+ * @author Wander Groeneveld
+ * @version 0.2, 31-5-2017
  */
 public class LocationRepository extends RepositoryMaria<Location> {
+    private final PreparedStatement psFindByCode;
+    
     public LocationRepository(Connection connection) {
         super(connection);
+    
+        String findByCodeQuery = "SELECT * FROM `"+getTable()+"` WHERE `code` LIKE ?";
+    
+        try {
+            psFindByCode = connection.prepareStatement(findByCodeQuery);
+        } catch (SQLException e) {
+            throw new RepositoryException(e);
+        }
     }
 
     @Override
@@ -40,7 +52,22 @@ public class LocationRepository extends RepositoryMaria<Location> {
                 new ColumnData<>("x_coor", Types.INTEGER, Location::getxCoord, Location::setxCoord),
                 new ColumnData<>("y_coor", Types.INTEGER, Location::getyCoord, Location::setyCoord),
                 new ColumnData<>("waterschap_id", Types.INTEGER, Location::getWaterschapId, Location::setWaterschapId),
-                new ColumnData<>("watertype_id", Types.INTEGER, Location::getWatertypeId, Location::setWatertypeId),
+                new ColumnData<>("watertype_id", Types.INTEGER, Location::getWatertypeId, Location::setWatertypeId)
         };
+    }
+    
+    public Location findByCode(String code) throws RepositoryException {
+        try {
+            psFindByCode.setString(1,code);
+            ResultSet resultSet = psFindByCode.executeQuery();
+            if(resultSet.next()) {
+                return resultSetToModel(resultSet);
+            }
+            else{
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RepositoryException(e);
+        }
     }
 }

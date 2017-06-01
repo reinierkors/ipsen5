@@ -1,29 +1,45 @@
 package watertype;
 
+import api.ApiException;
 import database.ConnectionManager;
+import database.RepositoryException;
 
 /**
+ * Service voor watertype-gerelateerde business logic
+ * Staat tussen de router en de repository
+ *
  * @author Dylan de Wit
- * @version 30-5-2017, 0.1
+ * @author Wander Groeneveld
+ * @version 0.3, 1-6-2017
  */
 public class WatertypeService {
+	private static final WatertypeService instance = new WatertypeService();
+	private final WatertypeRepository repo;
+	
+	private WatertypeService() {
+		repo = new WatertypeRepository(ConnectionManager.getInstance().getConnection());
+	}
+	
+	public static WatertypeService getInstance() {return instance;}
 
-    private static final WatertypeService instance = new WatertypeService();
-    private WatertypeRepository repository;
+  public Watertype get(int id) {
+      return repo.get(id);
+  }
 
-    private WatertypeService() {
-        repository = new WatertypeRepository(ConnectionManager.getInstance().getConnection());
-    }
-
-    public static WatertypeService getInstance() {
-        return instance;
-    }
-
-    public Watertype get(int id) {
-        return repository.get(id);
-    }
-
-    public Iterable<Watertype> getAll() {
-        return repository.getAll();
-    }
+	public Iterable<Watertype> getAll() throws ApiException {
+		try {
+			return repo.getAll();
+		} catch(RepositoryException e){
+			throw new ApiException("Cannot retrieve watertypes");
+		}
+	}
+	
+	public Watertype save(Watertype watertype) throws ApiException{
+		try {
+			repo.persist(watertype);
+			return watertype;
+		} catch(RepositoryException e){
+			throw new ApiException("Cannot save watertypes");
+		}
+	}
 }

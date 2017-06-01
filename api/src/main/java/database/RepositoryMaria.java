@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * MariaDB implementation of the Repository interface
  *
  * @author Wander Groeneveld
- * @version 0.2, 21-5-2017
+ * @version 0.3, 31-5-2017
  */
 public abstract class RepositoryMaria<T> implements Repository<T>{
 	private final Connection connection;
@@ -96,8 +96,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 					if(!cd.isPrimary())
 						continue;
 					preparedStatement.setObject(index,cd.callGetter(entity),cd.getSqlType());
+					++index;
 				}
-				++index;
 			}
 		} catch (SQLException e) {
 			throw new RepositoryException(e);

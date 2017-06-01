@@ -57,4 +57,23 @@ public class SpeciesService {
 			throw new ApiException("Cannot retrieve species");
 		}
 	}
+	
+	//TODO: optimise, find multiple in a single database query
+	public Species find(String name) throws ApiException{
+		try {
+			return repo.findByName(name);
+		} catch(RepositoryException e){
+			throw new ApiException("Cannot retrieve species");
+		}
+	}
+	
+	public Species save(Species species) throws ApiException{
+		try {
+			repo.persist(species);
+			return species;
+		} catch(RepositoryException e){
+			throw new ApiException("Cannot save species");
+		}
+	}
+	
 }
