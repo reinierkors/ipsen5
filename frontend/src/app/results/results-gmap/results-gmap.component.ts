@@ -100,14 +100,20 @@ export class ResultsComponent implements OnInit {
     public refreshMarkers() {
         this.positions.splice(0);
         this.retrieveFilterList();
+        this.retrieveLocations();
         this.markers.forEach((item) => {
             this.insertIntoPositions(item);
         });
     };
 
     private retrieveFilterList() {
-        this.waterschappen = [];
-        this.watertypes = [];
+        this.waterschappen.splice(0);
+        this.watertypes.splice(0);
+        this.filters = {
+            waterschapName: ' ',
+            watertypeName: ' ',
+            watertypeCode: ' ',
+        };
         this.retrieveWatertypes();
         this.retrieveWaterschappen();
     }
