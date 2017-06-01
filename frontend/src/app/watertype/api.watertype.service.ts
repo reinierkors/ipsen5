@@ -10,11 +10,15 @@ export class ApiWatertypeService extends ApiService{
 	constructor(@Inject(Http) http:Http){
 		super(http);
 	}
-	
+
+	public getWatertype(id): Observable<Watertype> {
+		return this.get('/watertype/' + id).map(watertype => Watertype.fromJSON(watertype));
+	}
+
 	public getAll():Observable<Watertype[]>{
 		return this.get('/watertype').map((watertypes:Object[]) => watertypes.map(watertype=>Watertype.fromJSON(watertype)));
 	}
-	
+
 	public save(watertype:Watertype):Observable<Watertype>{
 		return this.post('/watertype',watertype).map(watertype=>Watertype.fromJSON(watertype));
 	}

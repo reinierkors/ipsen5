@@ -25,18 +25,14 @@ public class WatertypeRouter {
 		path("/watertype", ()->{
 			get("",(req,res) -> gson.toJson(watertypeService.getAll()));
 			get("/",(req,res) -> gson.toJson(watertypeService.getAll()));
+			get("/:id", ((request, response) -> {
+				int id = Integer.valueOf(request.params("id"));
+				return gson.toJson(watertypeService.get(id));
+			}));
 			post("",(req,res) -> {
 				Watertype watertype = gson.fromJson(req.body(),Watertype.class);
 				return gson.toJson(watertypeService.save(watertype));
 			});
-      get("/all", (((request, response) -> {
-          return gson.toJson(watertypeService.getAll());
-      })));
-      get("/:id", ((request, response) -> {
-          int id = Integer.valueOf(request.params("id"));
-          return gson.toJson(watertypeService.get(id));
-      }));
 		});
-		
 	}
 }
