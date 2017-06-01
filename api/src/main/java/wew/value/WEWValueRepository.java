@@ -1,19 +1,16 @@
 package wew.value;
 
-import database.RepositoryException;
+import database.ColumnData;
 import database.RepositoryMaria;
 import wew.value.WEWValue;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Repository for WEW values
  *
  * @author Wander Groeneveld
- * @version 0.1, 21-5-2017
+ * @version 0.2, 31-5-2017
  */
 public class WEWValueRepository extends RepositoryMaria<WEWValue>{
 	public WEWValueRepository(Connection connection) {
@@ -31,45 +28,17 @@ public class WEWValueRepository extends RepositoryMaria<WEWValue>{
 	}
 	
 	@Override
-	protected String[] getColumns() {
-		return new String[]{"id","factor_class_id","species_id","value"};
+	protected WEWValue createModel() {
+		return new WEWValue();
 	}
 	
 	@Override
-	protected void fillParameters(PreparedStatement preparedStatement, WEWValue entity, boolean appendId) throws RepositoryException {
-		try {
-			preparedStatement.setInt(1,entity.getFactorClassId());
-			preparedStatement.setInt(2,entity.getSpeciesId());
-			preparedStatement.setDouble(3,entity.getValue());
-			if(appendId) {
-				preparedStatement.setInt(4, entity.getId());
-			}
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
-	}
-	
-	@Override
-	protected WEWValue resultSetToModel(ResultSet resultSet) throws RepositoryException {
-		try {
-			WEWValue wewValue = new WEWValue();
-			wewValue.setId(resultSet.getInt("id"));
-			wewValue.setFactorClassId(resultSet.getInt("factor_class_id"));
-			wewValue.setSpeciesId(resultSet.getInt("species_id"));
-			wewValue.setValue(resultSet.getDouble("value"));
-			return wewValue;
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
-	}
-	
-	@Override
-	protected void handleGeneratedKeys(WEWValue entity, ResultSet generatedKeys) throws RepositoryException {
-		try {
-			generatedKeys.next();
-			entity.setId(generatedKeys.getInt("id"));
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
+	protected ColumnData[] getColumns() {
+		return new ColumnData[]{
+				new ColumnData<>("id", Types.INTEGER, WEWValue::getId, WEWValue::setId, true),
+				new ColumnData<>("factor_class_id", Types.INTEGER, WEWValue::getFactorClassId, WEWValue::setFactorClassId),
+				new ColumnData<>("species_id", Types.INTEGER, WEWValue::getSpeciesId, WEWValue::setSpeciesId),
+				new ColumnData<>("value", Types.DOUBLE, WEWValue::getValue, WEWValue::setValue)
+		};
 	}
 }

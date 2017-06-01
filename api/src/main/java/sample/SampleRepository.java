@@ -1,12 +1,9 @@
 package sample;
 
-import database.RepositoryException;
+import database.ColumnData;
 import database.RepositoryMaria;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Repository for samples
@@ -30,53 +27,21 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 	}
 	
 	@Override
-	protected String[] getColumns() {
-		return new String[]{"id","date","location_id","owner_id","quality","x_coor","y_coor","value"};
+	protected Sample createModel() {
+		return new Sample();
 	}
 	
 	@Override
-	protected void fillParameters(PreparedStatement preparedStatement, Sample entity, boolean appendId) throws RepositoryException {
-		try {
-			preparedStatement.setDate(1,entity.getDate());
-			preparedStatement.setInt(2,entity.getLocationId());
-			preparedStatement.setInt(3,entity.getOwnerId());
-			preparedStatement.setDouble(4,entity.getQuality());
-			preparedStatement.setInt(5,entity.getXCoor());
-			preparedStatement.setInt(6,entity.getYCoor());
-			preparedStatement.setInt(7,entity.getValue());
-			if(appendId) {
-				preparedStatement.setInt(8, entity.getId());
-			}
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
-	}
-	
-	@Override
-	protected Sample resultSetToModel(ResultSet resultSet) throws RepositoryException {
-		try {
-			Sample sample = new Sample();
-			sample.setId(resultSet.getInt("id"));
-			sample.setDate(resultSet.getDate("date"));
-			sample.setLocationId(resultSet.getInt("location_id"));
-			sample.setOwnerId(resultSet.getInt("owner_id"));
-			sample.setQuality(resultSet.getDouble("quality"));
-			sample.setXCoor(resultSet.getInt("x_coor"));
-			sample.setYCoor(resultSet.getInt("y_coor"));
-			sample.setValue(resultSet.getInt("value"));
-			return sample;
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
-	}
-	
-	@Override
-	protected void handleGeneratedKeys(Sample entity, ResultSet generatedKeys) throws RepositoryException {
-		try {
-			generatedKeys.next();
-			entity.setId(generatedKeys.getInt("id"));
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
+	protected ColumnData[] getColumns() {
+		return new ColumnData[]{
+				new ColumnData<>("id", Types.INTEGER, Sample::getId, Sample::setId, true),
+				new ColumnData<>("date", Types.DATE, Sample::getDate, Sample::setDate),
+				new ColumnData<>("location_id", Types.INTEGER, Sample::getLocationId, Sample::setLocationId),
+				new ColumnData<>("owner_id", Types.INTEGER, Sample::getOwnerId, Sample::setOwnerId),
+				new ColumnData<>("quality", Types.DOUBLE, Sample::getQuality, Sample::setQuality),
+				new ColumnData<>("x_coor", Types.INTEGER, Sample::getXCoor, Sample::setXCoor),
+				new ColumnData<>("y_coor", Types.INTEGER, Sample::getYCoor, Sample::setYCoor),
+				new ColumnData<>("value", Types.INTEGER, Sample::getValue, Sample::setValue)
+		};
 	}
 }

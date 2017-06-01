@@ -1,6 +1,7 @@
-@import "@angular/material/prebuilt-themes/indigo-pink.css";
-@import "@swimlane/ngx-datatable/release/index.css";
-@import "@swimlane/ngx-datatable/release/themes/material.css";
+@import "../../../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+@import "../../../node_modules/@swimlane/ngx-datatable/release/index.css";
+@import "../../../node_modules/@swimlane/ngx-datatable/release/themes/material.css";
+@import "../../../node_modules/sweetalert2/dist/sweetalert2.css";
 
 body {
   margin: 0;
@@ -104,4 +105,17 @@ a.nav-item {
   position: fixed;
   bottom: 20px;
   right: 20px;
+}
+
+.alert-danger {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
 }

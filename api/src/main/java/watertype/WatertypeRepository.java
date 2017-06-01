@@ -1,11 +1,10 @@
 package watertype;
 
-import database.RepositoryException;
+import database.ColumnData;
 import database.RepositoryMaria;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.Types;
 
 /**
  * Created by Dylan on 30-5-2017.
@@ -17,31 +16,26 @@ public class WatertypeRepository extends RepositoryMaria<Watertype> {
 
     @Override
     protected String getTable() {
-        return null;
+        return "watertype";
     }
 
     @Override
     protected boolean isNew(Watertype entity) {
-        return false;
+        return entity.getId() == 0;
     }
 
     @Override
-    protected String[] getColumns() {
-        return new String[0];
+    protected Watertype createModel() {
+        return new Watertype();
     }
 
     @Override
-    protected void fillParameters(PreparedStatement preparedStatement, Watertype entity, boolean appendId) throws RepositoryException {
-
-    }
-
-    @Override
-    protected Watertype resultSetToModel(ResultSet resultSet) throws RepositoryException {
-        return null;
-    }
-
-    @Override
-    protected void handleGeneratedKeys(Watertype entity, ResultSet generatedKeys) throws RepositoryException {
-
+    protected ColumnData[] getColumns() {
+        return new ColumnData[]{
+                new ColumnData<>("id", Types.INTEGER, Watertype::getId, Watertype::setId, true),
+                new ColumnData<>("name", Types.VARCHAR, Watertype::getName, Watertype::setName),
+                new ColumnData<>("code", Types.VARCHAR, Watertype::getCode, Watertype::setCode),
+                new ColumnData<>("parent", Types.INTEGER, Watertype::getParentId, Watertype::setParentId)
+        };
     }
 }

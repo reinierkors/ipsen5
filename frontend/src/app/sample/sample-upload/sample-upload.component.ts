@@ -1,19 +1,27 @@
 import {Component,OnInit} from '@angular/core';
 
 import {Sample} from '../sample.model';
+import {ApiSampleService} from '../api.sample.service';
+import {ApiSpeciesService} from '../../species/api.species.service';
+import {ApiLocationService} from '../../results/api.location.service';
 
 import * as Papa from 'papaparse';
 import * as _ from 'lodash';
 
 @Component({
   selector: 'app-sample-upload',
+  providers: [ApiSampleService,ApiSpeciesService,ApiLocationService],
   templateUrl: './sample-upload.component.html',
   styleUrls: ['./sample-upload.component.css']
 })
 export class SampleUploadComponent implements OnInit {
 	dataObjs:any[];
 	
-	constructor(){}
+	constructor(
+		private sampleApi:ApiSampleService,
+		private speciesApi:ApiSpeciesService,
+		private locationApi:ApiLocationService
+	){}
 	
 	ngOnInit(){}
 	

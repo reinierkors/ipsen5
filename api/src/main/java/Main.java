@@ -1,13 +1,19 @@
 import api.ApiException;
 import api.ApiExceptionTypeAdapter;
+import api.ApiGuard;
+import authenticate.AuthRouter;
 import config.Config;
 import location.LocationRouter;
 import sample.SampleRouter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import species.SpeciesCategoryRouter;
+import speciesCategory.SpeciesCategoryRouter;
 import species.SpeciesRouter;
+import users.UserRouter;
+import waterschap.WaterschapRouter;
+import watertype.Watertype;
+import watertype.WatertypeRouter;
 import wew.WEWRouter;
 
 import static spark.Spark.*;
@@ -26,14 +32,29 @@ public class Main {
 			res.status(500);
 			res.body(gson.toJson(exception));
 		});
-		
+        ApiGuard apiGuard = new ApiGuard();
+
+        before("/api",(request, response) -> {
+            if(!apiGuard.authCheck(request.headers("Authorization"))){
+                halt(401, "Your session has expired");
+            }
+        });
 		//Put all API calls under /api and let package routers handle their own routes
 		path("/api",()->{
+		    new AuthRouter();
 			new SampleRouter();
 			new SpeciesRouter();
 			new SpeciesCategoryRouter();
 			new WEWRouter();
 			new LocationRouter();
+			new WatertypeRouter();
+			new UserRouter();
+			new WaterschapRouter();
+
+			exception(IllegalArgumentException.class, (e, req, res) -> {
+				res.status(400);
+				res.body(gson.toJson("An error occurred: " + e));
+			});
 		});
 	}
 	
