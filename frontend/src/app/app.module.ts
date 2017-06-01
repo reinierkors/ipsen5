@@ -25,14 +25,16 @@ import {NguiMapModule} from '@ngui/map';
 import { SampleUploadComponent } from './sample/sample-upload/sample-upload.component';
 import { SampleViewComponent } from './sample/sample-view/sample-view.component';
 import { SampleEditComponent } from './sample/sample-edit/sample-edit.component';
+import {SampleLocationTableComponent} from "./sample-location-table/sample-location-table.component";
 import { LoginComponent } from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
 
 const routes:Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},
-    {path: 'login', component: LoginComponent},
+  {path: 'login', component: LoginComponent},
   {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
   {path: 'account', component: CreateAccountComponent, canActivate: [AuthGuard]},
+  {path: 'locations', component: SampleLocationTableComponent, canActivate: [AuthGuard]},
   {path: 'results', component: ResultsComponent, canActivate: [AuthGuard]},
   {path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
   {path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
@@ -48,6 +50,7 @@ const routes:Routes = [
         HomeComponent,
         CreateAccountComponent,
         ResultsComponent,
+        SampleLocationTableComponent,
         SidenavComponent,
         SampleUploadComponent,
         SampleViewComponent,
