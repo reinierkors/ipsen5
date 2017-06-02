@@ -110,6 +110,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	 * @return a filled model instance
 	 */
 	protected T resultSetToModel(ResultSet resultSet) throws RepositoryException {
+		if(resultSet==null)
+			return null;
 		try {
 			T entity = createModel();
 			for(ColumnData cd:getColumns()){
@@ -127,6 +129,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	 * @param generatedKeys
 	 */
 	protected void handleGeneratedKeys(T entity, ResultSet generatedKeys) throws RepositoryException {
+		if(generatedKeys==null)
+			return;
 		try {
 			for(ColumnData cd:getColumns()) {
 				if(cd.isPrimary()) {
@@ -151,7 +155,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 		try{
 			psGet.setInt(1,id);
 			ResultSet resultSet = psGet.executeQuery();
-			if(resultSet.next()) {
+			if(resultSet!=null && resultSet.next()) {
 				return resultSetToModel(resultSet);
 			}
 			else{
@@ -186,6 +190,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 			
 			ResultSet resultSet = psGetMulti.executeQuery();
 			List<T> list = new ArrayList<>();
+			if(resultSet==null)
+				return list;
 			while(resultSet.next()) {
 				list.add(resultSetToModel(resultSet));
 			}
@@ -204,6 +210,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 		try{
 			ResultSet resultSet = psGetAll.executeQuery();
 			List<T> list = new ArrayList<>();
+			if(resultSet==null)
+				return list;
 			while(resultSet.next()) {
 				list.add(resultSetToModel(resultSet));
 			}

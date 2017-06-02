@@ -60,7 +60,7 @@ public class LocationRepository extends RepositoryMaria<Location> {
         try {
             psFindByCode.setString(1,code);
             ResultSet resultSet = psFindByCode.executeQuery();
-            if(resultSet.next()) {
+            if(resultSet!=null && resultSet.next()) {
                 return resultSetToModel(resultSet);
             }
             else{
