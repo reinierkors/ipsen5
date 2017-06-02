@@ -12,7 +12,6 @@ import speciesCategory.SpeciesCategoryRouter;
 import species.SpeciesRouter;
 import users.UserRouter;
 import waterschap.WaterschapRouter;
-import watertype.Watertype;
 import watertype.WatertypeRouter;
 import wew.WEWRouter;
 
@@ -32,6 +31,17 @@ public class Main {
 			res.status(500);
 			res.body(gson.toJson(exception));
 		});
+		
+		//Turn 404 and 500 errors into json
+		notFound((req,res) -> {
+			res.type("application/json");
+			return gson.toJson(new ApiException("404 Not Found"));
+		});
+		internalServerError((req,res) -> {
+			res.type("application/json");
+			return gson.toJson(new ApiException("500 Server Error"));
+		});
+		
         ApiGuard apiGuard = new ApiGuard();
 
         before("/api",(request, response) -> {
