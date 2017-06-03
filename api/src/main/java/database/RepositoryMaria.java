@@ -13,19 +13,19 @@ import java.util.stream.Collectors;
  * MariaDB implementation of the Repository interface
  *
  * @author Wander Groeneveld
- * @version 0.3, 31-5-2017
+ * @version 0.4, 3-6-2017
  */
 public abstract class RepositoryMaria<T> implements Repository<T>{
 	private final Connection connection;
 	
-	private final PreparedStatement psGet,psGetAll,psRemove,psInsert,psUpdate;
+	private final String queryGet,queryGetAll,queryRemove,queryInsert,queryUpdate;
 	
 	public RepositoryMaria(Connection connection){
 		this.connection = connection;
 		
-		String getQuery = "SELECT * FROM `"+getTable()+"` WHERE `id` = ?";
-		String getAllQuery = "SELECT * FROM `"+getTable()+"`";
-		String removeQuery = "DELETE FROM `"+getTable()+"` WHERE `id` = ?";
+		queryGet = "SELECT * FROM `"+getTable()+"` WHERE `id` = ?";
+		queryGetAll = "SELECT * FROM `"+getTable()+"`";
+		queryRemove = "DELETE FROM `"+getTable()+"` WHERE `id` = ?";
 		
 		List<String> columns = Arrays.stream(getColumns()).filter(column -> !column.isPrimary()).map(ColumnData::getColumnName).collect(Collectors.toList());
 		Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
@@ -33,19 +33,16 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 		String valueList = columns.stream().map(column -> "?").collect(commaJoiner);
 		String updateList = columns.stream().map(column -> "`"+column+"` = ?").collect(commaJoiner);
 		
-		String insertQuery = "INSERT INTO `"+getTable()+"`("+columnList+") VALUES("+valueList+")";
-		String updateQuery = "UPDATE `"+getTable()+"` SET "+updateList+" WHERE `id` = ?";
-		
-		try {
-			psGet = connection.prepareStatement(getQuery);
-			psGetAll = connection.prepareStatement(getAllQuery);
-			psRemove = connection.prepareStatement(removeQuery);
-			psInsert =  connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
-			psUpdate = connection.prepareStatement(updateQuery);
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
+		queryInsert = "INSERT INTO `"+getTable()+"`("+columnList+") VALUES("+valueList+")";
+		queryUpdate = "UPDATE `"+getTable()+"` SET "+updateList+" WHERE `id` = ?";
 	}
+	
+	protected PreparedStatement psGet() throws SQLException {return connection.prepareStatement(queryGet);}
+	protected PreparedStatement psGetAll() throws SQLException {return connection.prepareStatement(queryGetAll);}
+	protected PreparedStatement psRemove() throws SQLException {return connection.prepareStatement(queryRemove);}
+	protected PreparedStatement psInsert() throws SQLException {return connection.prepareStatement(queryInsert,Statement.RETURN_GENERATED_KEYS);}
+	protected PreparedStatement psUpdate() throws SQLException {return connection.prepareStatement(queryUpdate);}
+	
 	
 	/**
 	 * @return the name of the sql table
@@ -153,6 +150,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	@Override
 	public T get(int id) throws RepositoryException {
 		try{
+			PreparedStatement psGet = psGet();
 			psGet.setInt(1,id);
 			ResultSet resultSet = psGet.executeQuery();
 			if(resultSet!=null && resultSet.next()) {
@@ -208,6 +206,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	@Override
 	public List<T> getAll() throws RepositoryException {
 		try{
+			PreparedStatement psGetAll = psGetAll();
 			ResultSet resultSet = psGetAll.executeQuery();
 			List<T> list = new ArrayList<>();
 			if(resultSet==null)
@@ -239,11 +238,13 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	private void persistInsert(T entity) throws RepositoryException {
 		try {
+			PreparedStatement psInsert = psInsert();
 			fillParameters(psInsert, entity, false);
 			psInsert.executeUpdate();
 			handleGeneratedKeys(entity,psInsert.getGeneratedKeys());
 		} catch (SQLIntegrityConstraintViolationException e) {
-			throw new ApiValidationException("Deze data is al aanwezig, controleer uw gegevens");
+			//ToDo: different exception or message depending on the error (foreign key vs null vs duplicate value, etc)
+			throw new ApiValidationException("SQL Constraint Violation ("+e.getSQLState()+"): "+e.getMessage());
 		} catch (SQLException e) {
 			throw new RepositoryException(e);
 		}
@@ -251,6 +252,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	private void persistUpdate(T entity) throws RepositoryException {
 		try {
+			PreparedStatement psUpdate = psUpdate();
 			fillParameters(psUpdate, entity, true);
 			psUpdate.executeUpdate();
 		} catch (SQLException e) {
@@ -277,6 +279,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	@Override
 	public void remove(int id) throws RepositoryException {
 		try {
+			PreparedStatement psRemove = psRemove();
 			psRemove.setInt(1,id);
 			psRemove.executeUpdate();
 		} catch (SQLException e) {
