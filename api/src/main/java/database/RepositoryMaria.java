@@ -16,8 +16,7 @@ import java.util.stream.Collectors;
  * @version 0.4, 3-6-2017
  */
 public abstract class RepositoryMaria<T> implements Repository<T>{
-	private final Connection connection;
-	
+	protected final Connection connection;
 	private final String queryGet,queryGetAll,queryRemove,queryInsert,queryUpdate;
 	
 	public RepositoryMaria(Connection connection){

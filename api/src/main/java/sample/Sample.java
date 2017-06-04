@@ -1,24 +1,25 @@
 package sample;
 
 import java.sql.Date;
+import java.util.List;
 
 /**
  * Sample model
  *
  * @author Wander Groeneveld
- * @version 0.2, 30-5-2017
+ * @version 0.3, 3-6-2017
  */
 public class Sample{
 	private int id;
 	private Date date;
 	private int locationId;
-	private int ownerId;
+	private Integer ownerId;
 	private Double quality;
 	private Integer xCoor;
 	private Integer yCoor;
-	private Integer value;
+	private List<Integer> speciesIds;
 	
-	public Sample(int id, Date date, int locationId, int ownerId, Double quality, Integer xCoor, Integer yCoor, Integer value) {
+	public Sample(int id, Date date, int locationId, Integer ownerId, Double quality, Integer xCoor, Integer yCoor, List<Integer> speciesIds) {
 		this.id = id;
 		this.date = date;
 		this.locationId = locationId;
@@ -26,15 +27,15 @@ public class Sample{
 		this.quality = quality;
 		this.xCoor = xCoor;
 		this.yCoor = yCoor;
-		this.value = value;
+		this.speciesIds = speciesIds;
 	}
 	
-	public Sample(Date date, int locationId, int ownerId, Double quality, Integer xCoor, Integer yCoor, Integer value) {
-		this(0, date, locationId, ownerId, quality, xCoor, yCoor, value);
+	public Sample(Date date, int locationId, Integer ownerId, Double quality, Integer xCoor, Integer yCoor, List<Integer> speciesIds) {
+		this(0, date, locationId, ownerId, quality, xCoor, yCoor, speciesIds);
 	}
 	
 	public Sample(){
-		this(0, null, 0, 0, null, null, null, null);
+		this(0, null, 0, null, null, null, null, null);
 	}
 	
 	public int getId() {
@@ -61,11 +62,11 @@ public class Sample{
 		this.locationId = locationId;
 	}
 	
-	public int getOwnerId() {
+	public Integer getOwnerId() {
 		return ownerId;
 	}
 	
-	public void setOwnerId(int ownerId) {
+	public void setOwnerId(Integer ownerId) {
 		this.ownerId = ownerId;
 	}
 	
@@ -93,11 +94,11 @@ public class Sample{
 		this.yCoor = yCoor;
 	}
 	
-	public Integer getValue() {
-		return value;
+	public List<Integer> getSpeciesIds() {
+		return speciesIds;
 	}
 	
-	public void setValue(Integer value) {
-		this.value = value;
+	public void setSpeciesIds(List<Integer> speciesIds) {
+		this.speciesIds = speciesIds;
 	}
 }

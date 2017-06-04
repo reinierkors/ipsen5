@@ -17,18 +17,22 @@ SET time_zone = "+00:00";
 -- Table structure for table `location`
 --
 
+-- TODO: waterschap_id => NOT NULL
+
 CREATE TABLE IF NOT EXISTS `location` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `code` varchar(100) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
   `x_coor` int(6) DEFAULT NULL,
   `y_coor` int(6) DEFAULT NULL,
-  `waterschap_id` int(3) NOT NULL,
+  `waterschap_id` int(3) DEFAULT NULL,
   `watertype_id` int(3) NOT NULL,
+  `watertype_krw_id` int(3) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
   KEY `waterschap_id` (`waterschap_id`),
-  KEY `watertype_id` (`watertype_id`)
+  KEY `watertype_id` (`watertype_id`),
+  KEY `watertype_krw_id` (`watertype_krw_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
@@ -80,15 +84,16 @@ CREATE TABLE IF NOT EXISTS `reference_wew_factor_class` (
 -- Table structure for table `sample`
 --
 
+-- TODO: owner not null
+
 CREATE TABLE IF NOT EXISTS `sample` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `date` date DEFAULT NULL,
   `location_id` int(8) NOT NULL,
-  `owner_id` int(6) NOT NULL,
+  `owner_id` int(6) DEFAULT NULL,
   `quality` double DEFAULT NULL,
   `x_coor` int(6) DEFAULT NULL,
   `y_coor` int(6) DEFAULT NULL,
-  `value` int(4) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `location_id` (`location_id`),
   KEY `owner_id` (`owner_id`)
@@ -206,10 +211,8 @@ CREATE TABLE IF NOT EXISTS `watertype` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `code` varchar(10) NOT NULL,
-  `parent` int(4) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`,`code`),
-  KEY `parent` (`parent`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -266,7 +269,8 @@ CREATE TABLE IF NOT EXISTS `wew_value` (
 --
 ALTER TABLE `location`
   ADD CONSTRAINT `location_ibfk_1` FOREIGN KEY (`waterschap_id`) REFERENCES `waterschap` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `location_ibfk_2` FOREIGN KEY (`watertype_id`) REFERENCES `watertype` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `location_ibfk_2` FOREIGN KEY (`watertype_id`) REFERENCES `watertype` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `location_ibfk_3` FOREIGN KEY (`watertype_krw_id`) REFERENCES `watertype` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `reference`
@@ -320,12 +324,6 @@ ALTER TABLE `species`
 --
 ALTER TABLE `user`
   ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `user_group` (`id`) ON UPDATE CASCADE;
-
---
--- Constraints for table `watertype`
---
-ALTER TABLE `watertype`
-  ADD CONSTRAINT `watertype_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `watertype` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Constraints for table `wew_factor_class`

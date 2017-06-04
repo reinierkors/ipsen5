@@ -5,15 +5,19 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { HttpModule, JsonpModule } from '@angular/http';
 import {Routes, RouterModule} from '@angular/router';
-import {MaterialModule, MdCardModule, MdButton} from '@angular/material';
-import {MdMenuModule} from '@angular/material';
-import {MdSnackBarModule} from '@angular/material';
-import {MdToolbarModule} from '@angular/material';
-import {MdSidenavModule} from '@angular/material';
-import {MdListModule} from '@angular/material';
-import {MdInputModule} from '@angular/material';
-import {MdButtonModule} from '@angular/material';
-import {MdSelectModule} from '@angular/material';
+import {
+	MaterialModule,
+	MdCardModule,
+	MdMenuModule,
+	MdSnackBarModule,
+	MdToolbarModule,
+	MdSidenavModule,
+	MdListModule,
+	MdInputModule,
+	MdButtonModule,
+	MdSelectModule,
+	MdProgressBarModule
+} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import {AppComponent} from './app.component';
@@ -58,19 +62,22 @@ const routes:Routes = [
         LoginComponent,
     ],
     imports: [
-        MdInputModule,
-        MdSidenavModule,
+		MaterialModule,
+		MdCardModule,
+		MdMenuModule,
+		MdSnackBarModule,
+		MdToolbarModule,
+		MdSidenavModule,
+		MdListModule,
+		MdInputModule,
+		MdButtonModule,
+		MdSelectModule,
+		MdProgressBarModule,
+		
         BrowserModule,
         FormsModule,
         HttpModule,
         JsonpModule,
-        MdCardModule,
-        MdMenuModule,
-        MdButtonModule,
-        MdListModule,
-        MdSelectModule,
-        MdToolbarModule,
-        MdSnackBarModule,
         NgxDatatableModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,

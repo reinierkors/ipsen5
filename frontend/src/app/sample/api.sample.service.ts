@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 
 import {ApiService} from '../services/api.service';
 import {Sample} from './sample.model';
+import {Species} from '../species/species.model';
 
 @Injectable()
 export class ApiSampleService extends ApiService{
@@ -15,7 +16,11 @@ export class ApiSampleService extends ApiService{
 		return this.get('/sample/'+id).map(sample=>Sample.fromJSON(sample));
 	}
 	
-	public getSamplesByLocation(locationId:number):Observable<Sample[]>{
-		return this.get('/sample/Location/'+locationId).map((samples:Object[]) => samples.map(sample=>Sample.fromJSON(sample)));
+	public save(sample:Sample):Observable<Sample>{
+		return this.post('/sample',[sample]).map(samples => Sample.fromJSON(samples[0]));
+	}
+	
+	public saveMulti(samples:Sample[]):Observable<Sample[]>{
+		return this.post('/sample',samples).map(samples => samples.map(sample => Sample.fromJSON(sample)));
 	}
 }

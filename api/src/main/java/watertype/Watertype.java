@@ -5,27 +5,25 @@ package watertype;
  *
  * @author Dylan de Wit
  * @author Wander Groeneveld
- * @version 0.2, 31-5-2017
+ * @version 0.3, 4-6-2017
  */
 public class Watertype {
 	private int id;
 	private String name;
 	private String code;
-	private Integer parentId;
 	
-	public Watertype(int id, String name, String code, Integer parentId) {
+	public Watertype(int id, String name, String code) {
 		this.id = id;
 		this.name = name;
 		this.code = code;
-		this.parentId = parentId;
 	}
 	
 	public Watertype(String name, String code, Integer parentId) {
-		this(0, name, code, parentId);
+		this(0, name, code);
 	}
 	
 	public Watertype() {
-		this(0, null, null, null);
+		this(0, null, null);
 	}
 	
 	public int getId() {
@@ -50,13 +48,5 @@ public class Watertype {
 	
 	public void setCode(String code) {
 		this.code = code;
-	}
-	
-	public Integer getParentId() {
-		return parentId;
-	}
-	
-	public void setParentId(Integer parentId) {
-		this.parentId = parentId;
 	}
 }
