@@ -1,0 +1,102 @@
+<div class="container">
+	<h1>Importeer monsters</h1>
+	
+	<!-- ToDo: handle errors nicely -->
+	<md-card *ngIf="state=='error'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<md-card-title>Error</md-card-title>
+		<md-card-content>{{errors|json}}</md-card-content>
+	</md-card>
+	
+	<!-- Loading card -->
+	<md-card *ngIf="state=='loading'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<md-card-title>Laden...</md-card-title>
+		<md-card-content>
+			<md-spinner></md-spinner>
+		</md-card-content>
+	</md-card>
+	
+	<!-- Start, show file input -->
+	<md-card *ngIf="state=='start'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<md-card-title>Upload CSV bestanden</md-card-title>
+		<md-card-content>
+			<input type="file" (change)="fileChange($event)" multiple/>
+		</md-card-content>
+	</md-card>
+	
+	<!-- Let the user confirm sample subresources -->
+	<div *ngIf="state=='confirmData'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<md-card>
+			<md-card-title>Bevestiging vereist</md-card-title>
+			<md-card-content>
+				<p>De volgende watertypes, locaties of soorten zijn nog niet in het systeem bekend, controleer of deze correct zijn.</p>
+				<button md-raised-button (click)="confirmAll()">Bevestig alles</button>
+			</md-card-content>
+		</md-card>
+		<md-card *ngIf="confirm.watertypes.length">
+			<md-card-title>Nieuwe watertypes</md-card-title>
+			<md-card-content>
+				<md-list dense>
+					<md-list-item *ngFor="let watertype of confirm.watertypes">
+						{{watertype.code}} - {{watertype.name}}
+					</md-list-item>
+				</md-list>
+			</md-card-content>
+		</md-card>
+		<md-card *ngIf="confirm.locations.length">
+			<md-card-title>Nieuwe locaties</md-card-title>
+			<md-card-content>
+				<md-list dense>
+					<md-list-item *ngFor="let location of confirm.locations">
+						{{location.code}} - {{location.description}}
+					</md-list-item>
+				</md-list>
+			</md-card-content>
+		</md-card>
+		<md-card *ngIf="confirm.species.length">
+			<md-card-title>Nieuwe soorten</md-card-title>
+			<md-card-content>
+				<md-list dense>
+					<md-list-item *ngFor="let species of confirm.species">
+						{{species.name}}
+					</md-list-item>
+				</md-list>
+			</md-card-content>
+		</md-card>
+	</div>
+	
+	<!-- Let the user confirm the samples -->
+	<div *ngIf="state=='confirmSample'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<md-card>
+			<md-card-title>Monster controle</md-card-title>
+			<md-card-content>
+				<p>Controleer de volgende monster gegevens voor ze opgeslagen worden.</p>
+				<button md-raised-button (click)="confirmSamples()">Bevestig alles</button>
+			</md-card-content>
+		</md-card>
+		<md-card *ngFor="let sample of confirm.samplesFast">
+			<md-card-header>
+				<md-card-title><strong>{{sample.locationCode}}:</strong> {{sample.locationDescription}}</md-card-title>
+				<md-card-subtitle>{{sample.date|date:'d MMMM y'}}</md-card-subtitle>
+			</md-card-header>
+			<md-card-content>
+				{{sample.speciesNames.length}} soorten
+				<!-- TODO: Makes the page very slow
+				<md-list dense>
+					<md-list-item *ngFor="let speciesName of sample.speciesNames">
+						{{speciesName}}
+					</md-list-item>
+				</md-list>
+				-->
+			</md-card-content>
+		</md-card>
+	</div>
+	
+	<!-- Show final confirmation -->
+	<md-card *ngIf="state=='finished'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<md-card-title>Klaar</md-card-title>
+		<md-card-content>
+			De monsters zijn opgeslagen.
+			<button md-raised-button (click)="goToStart()">Importeer meer monsters</button>
+		</md-card-content>
+	</md-card>
+</div>

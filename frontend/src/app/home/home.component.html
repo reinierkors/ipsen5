@@ -26,9 +26,20 @@
 
 <md-card>
   <md-card-title>
-    <span class="md-headline">Nav</span>
+      <span class="md-headline">Contactgegevens</span>
   </md-card-title>
   <md-card-content>
-    <a routerLink="/results">results</a>
+
+
+    <ngx-datatable
+            class="material"
+            [rows]="rows"
+            [columns]="[{name:'Name'},{name:'Gender'},{name:'Company'}]"
+            [columnMode]="'force'"
+            [headerHeight]="50"
+            [footerHeight]="50"
+            [rowHeight]="'auto'"
+            [limit]="10">
+    </ngx-datatable>
   </md-card-content>
 </md-card>
