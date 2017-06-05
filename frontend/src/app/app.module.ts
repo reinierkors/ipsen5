@@ -32,6 +32,8 @@ import { SampleEditComponent } from './sample/sample-edit/sample-edit.component'
 import {SampleLocationTableComponent} from "./sample-location-table/sample-location-table.component";
 import { LoginComponent } from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
+import { WewUploadComponent } from './wew/wew-upload/wew-upload.component';
+import { WewViewComponent } from './wew/wew-view/wew-view.component';
 
 const routes:Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},
@@ -43,6 +45,8 @@ const routes:Routes = [
   {path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
   {path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
   {path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
+  {path: 'wew/upload', component: WewUploadComponent, canActivate: [AuthGuard]},
+  {path: 'wew/view', component: WewViewComponent, canActivate: [AuthGuard]},
     /* Admin Routes */
   {path: 'admin/create-account', component: CreateAccountComponent, canActivate: [AuthGuard]},
   {path: '**', component: HomeComponent, canActivate: [AuthGuard]}
@@ -60,6 +64,8 @@ const routes:Routes = [
         SampleViewComponent,
         SampleEditComponent,
         LoginComponent,
+        WewUploadComponent,
+        WewViewComponent,
     ],
     imports: [
 		MaterialModule,
