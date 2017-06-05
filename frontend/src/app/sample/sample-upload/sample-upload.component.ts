@@ -11,7 +11,7 @@ import {ApiSpeciesService} from '../../species/api.species.service';
 import {ApiLocationService} from '../../results/api.location.service';
 import {ApiWatertypeService} from '../../watertype/api.watertype.service';
 
-import * as Papa from 'papaparse';
+import 'papaparse';
 
 type ImportState = 'anim'|'start'|'loading'|'confirmData'|'confirmSample'|'finished'|'error';
 type SampleImport = {
@@ -50,7 +50,6 @@ export class SampleUploadComponent implements OnInit {
 	state:ImportState = 'start';
 	private nextState:ImportState;
 	errors:any[] = [];
-	
 	//All rows from all csv files
 	private csvData:SampleImport[];
 	
@@ -133,7 +132,7 @@ export class SampleUploadComponent implements OnInit {
 	}
 	
 	//Calls PapaParse to turn the csv files into objects
-	private parseCSV(file:File):Promise<{result:Papa.ParseResultWithHeader<any>,file:File}>{
+	private parseCSV(file:File):Promise<{result:PapaParse.ParseResult,file:File}>{
 		return new Promise((resolve,reject)=>{
 			Papa.parse(file,{
 				header:true,
