@@ -38,8 +38,6 @@ export class SampleLocationTableComponent implements OnInit {
     })
   }
 
-  // TODO: When a row is selected, it needs to get the id of the object and make a request to GET the relevant data.
-
     onSelect({ selected }) {
         console.log('Select Event', selected, this.selected);
         this.router.navigate(['results/results-graphs/', selected[0].id])
