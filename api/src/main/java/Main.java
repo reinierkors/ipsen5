@@ -49,15 +49,13 @@ public class Main {
 		path("/api",()->{
             before("/*",(request, response) -> {
                 if(request.url().contains("login")){
-                    System.out.println("login in url");
                     return;
                 }
                 if(request.requestMethod().contains("OPTIONS")){
-                    System.out.println("Options request");
                     return;
                 }
                 if(!apiGuard.authCheck(request.headers("X-Authorization"))){
-                    System.out.println("Halted");
+                    System.out.println("Request halted");
                     halt(401, "Your session has expired");
                 }
             });

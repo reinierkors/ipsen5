@@ -74,14 +74,12 @@ public class UserService {
 
 	public String createSessionToken(User tempUser) throws ApiException {
         try {
-            System.out.println("Trying to find user with email " + tempUser.getEmail());
             if(repo.findByEmail(tempUser.getEmail()) == null){
                 System.out.println("Couldn't find user");
                 return null;
             }
             User user = repo.findByEmail(tempUser.getEmail());
             if (checkPassword(tempUser.getPassword(), user)){
-                System.out.println("Creating session token");
                 String sessionToken = UUID.randomUUID().toString();
                 saveSession(sessionToken, user.getId());
                 return sessionToken;
@@ -95,20 +93,14 @@ public class UserService {
     }
 
     private boolean checkPassword(String password, User user){
-//	    System.out.println("Old password: " + user.getPassword());
-//	    user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-//	    System.out.println("New password: " + user.getPassword());
-        System.out.println("BCrypt checkpw with plain password: " + password + " and hash: " + user.getPassword());
         return BCrypt.checkpw(password, user.getPassword());
     }
 
     public void saveSession(String sessionToken, int id){
-        System.out.println("Creating expiration date");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.DATE, 1);
         Timestamp expirationDate = new Timestamp(calendar.getTimeInMillis());
-        System.out.println("Saving session to database");
         repo.saveSession(id, sessionToken, expirationDate);
     }
 

@@ -51,7 +51,6 @@ export abstract class ApiService {
 		path = this.apiUri+path;
 		var headers = this.getHeaderObject();
 		headers.append('Content-Type','application/json');
-		console.log(headers);
 		return Observable.create(observer => {
 			this.http.post(path,JSON.stringify(data),{headers:headers})
 				.subscribe(res=>this.transformResult(res,observer), err=>this.transformError(err,observer), ()=>observer.complete());
