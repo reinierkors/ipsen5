@@ -10,25 +10,21 @@ import java.sql.*;
  * Repository for species
  *
  * @author Wander Groeneveld
- * @version 0.2, 31-5-2017
+ * @version 0.3, 5-6-2017
  */
 public class SpeciesRepository extends RepositoryMaria<Species>{
-	private final PreparedStatement psFindByName;
+	private final String queryFindByName;
 	
 	public SpeciesRepository(Connection connection) {
 		super(connection);
-		
-		String findByNameQuery = "SELECT * FROM `"+getTable()+"` WHERE `name` LIKE ?";
-		
-		try {
-			psFindByName = connection.prepareStatement(findByNameQuery);
-		} catch (SQLException e) {
-			throw new RepositoryException(e);
-		}
+		queryFindByName = "SELECT * FROM `"+getTable()+"` WHERE `name` LIKE ?";
 	}
+	
+	PreparedStatement psFindByName() throws SQLException {return connection.prepareStatement(queryFindByName);}
 	
 	public Species findByName(String name) throws RepositoryException {
 		try {
+			PreparedStatement psFindByName = psFindByName();
 			psFindByName.setString(1,name);
 			ResultSet resultSet = psFindByName.executeQuery();
 			if(resultSet!=null && resultSet.next()) {

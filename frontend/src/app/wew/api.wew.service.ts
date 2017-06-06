@@ -3,7 +3,7 @@ import {Http, Response, Headers} from '@angular/http';
 import {Observable} from 'rxjs';
 
 import {ApiService} from '../services/api.service';
-//import {} from './wew.model';
+import {WEWValue,WEWFactor,WEWFactorClass} from './wew.model';
 
 @Injectable()
 export class ApiWewService extends ApiService{
@@ -11,11 +11,19 @@ export class ApiWewService extends ApiService{
 		super(http);
 	}
 	
-	/*public get():Observable<Wew>{
-		return this.get('/wew').map(wew=>Wew.fromJSON(wew));
+	public getBySpecies(ids:number[]):Observable<WEWValue[]>{
+		return this.get('/wew/value/species/'+ids.join(',')).map(values=>values.map(value => WEWValue.fromJSON(value)));
 	}
 	
-	public save(wew:Wew):Observable<Wew>{
-		return this.post('/wew',wew).map(wew => Wew.fromJSON(wew));
-	}*/
+	public saveValues(values:WEWValue[]):Observable<WEWValue[]>{
+		return this.post('/wew/value',values).map(values=>values.map(value => WEWValue.fromJSON(value)));
+	}
+	
+	public getFactors():Observable<WEWFactor[]>{
+		return this.get('/wew/factor').map(factors=>factors.map(factor => WEWFactor.fromJSON(factor)));
+	}
+	
+	public saveFactors(factors:WEWFactor[]):Observable<WEWFactor[]>{
+		return this.post('/wew/factor',factors).map(factors=>factors.map(factor => WEWFactor.fromJSON(factor)));
+	}
 }

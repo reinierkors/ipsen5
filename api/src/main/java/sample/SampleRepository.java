@@ -175,7 +175,7 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 	}
 	
 	@Override
-	public void persist(List<Sample> samples) throws RepositoryException {
+	public void persist(List<? extends Sample> samples) throws RepositoryException {
 		samples.forEach(this::persist);
 	}
 	

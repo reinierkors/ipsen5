@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * MariaDB implementation of the Repository interface
  *
  * @author Wander Groeneveld
- * @version 0.4, 3-6-2017
+ * @version 0.5, 5-6-2017
  */
 public abstract class RepositoryMaria<T> implements Repository<T>{
 	protected final Connection connection;
@@ -65,7 +65,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	 * Information, getters and setters from all the columns in the table
 	 * @return array of columns
 	 */
-	protected abstract ColumnData<T,?>[] getColumns();
+	protected abstract ColumnData<? extends T,?>[] getColumns();
 	
 	/**
 	 * Fills parameters of the prepared statement with values from the model
@@ -266,7 +266,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	 * @throws RepositoryException
 	 */
 	@Override
-	public void persist(List<T> entities) throws RepositoryException {
+	public void persist(List<? extends T> entities) throws RepositoryException {
 		entities.forEach(this::persist);
 	}
 	
