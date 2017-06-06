@@ -25,7 +25,7 @@ export class ResultsComponent implements OnInit {
     public marker = {
         location: Location,
         watertype: Watertype,
-        parentWatertype: Watertype,
+        watertypeKrw: Watertype,
         waterschap: Waterschap
     };
 
@@ -117,6 +117,7 @@ export class ResultsComponent implements OnInit {
         this.retrieveWatertypes();
         this.retrieveWaterschappen();
     }
+
     private insertIntoPositions(item) {
         this.positions.push({
             title: 'm' + <string><any>item.location.id,
@@ -130,13 +131,7 @@ export class ResultsComponent implements OnInit {
             let marker = [];
             marker.push(item,);
             console.log(item)
-            if(item.watertypeId == null && item.waterschapId != null) {
-                this.retrieveWaterschap(marker);
-            } else if (item.watertypeId != null) {
-                this.retrieveWatertype(marker);
-            } else if (item.watertypeId == null && item.waterschapId == null) {
-                this.addToMarkers(marker);
-            }
+            this.retrieveWatertype(marker);
         });
     };
 
@@ -170,16 +165,17 @@ export class ResultsComponent implements OnInit {
             .switchMap(params => this.apiWatertype.getWatertype(marker[0].watertypeId))
             .subscribe(watertype => {
                 marker.push(watertype);
-                this.retrieveParentWatertype(marker);
+                this.retrieveWatertypeKrw(marker);
             }, error => console.log(error));
     };
 
-    private retrieveParentWatertype(marker) {
+    private retrieveWatertypeKrw(marker) {
         this.route.params
-            .switchMap(params => this.apiWatertype.getWatertype(marker[1].parentId))
-            .subscribe(parent => {
-                marker.push(parent);
+            .switchMap(params => this.apiWatertype.getWatertype(marker[0].watertypeKrwId))
+            .subscribe(watertypeKrw => {
+                marker.push(watertypeKrw);
                 if (marker[0].waterschapId == null) {
+                    marker.push({id: 0, name: "Niet bekend"})
                     this.addToMarkers(marker)
                 } else {
                     this.retrieveWaterschap(marker);
@@ -199,7 +195,7 @@ export class ResultsComponent implements OnInit {
         this.markers.push({
             location: marker[0],
             watertype: marker[1],
-            parentWatertype: marker[2],
+            watertypeKrw: marker[2],
             waterschap: marker[3],
         });
         this.insertIntoPositions(this.markers[this.markers.length - 1]);
@@ -209,19 +205,32 @@ export class ResultsComponent implements OnInit {
     public filterMarkers() {
         this.positions.splice(0);
         this.markers.forEach((item) => {
-            if ((item.waterschap.name == this.filters.waterschapName ||
-                this.filters.waterschapName == (' ') ||
-                this.filters.waterschapName == undefined) &&
-                (item.watertype.name == this.filters.watertypeName ||
-                item.parentWatertype.name == this.filters.watertypeName ||
+            let watertypeNameCheck = false;
+            let watertypeCodeCheck = false;
+            let waterschapCheck = false;
+
+            if (item.watertype.name == this.filters.watertypeName ||
+                item.watertypeKrw.name == this.filters.watertypeName ||
                 this.filters.watertypeName == (' ') ||
-                this.filters.watertypeName == undefined) &&
-                (item.watertype.code == this.filters.watertypeCode ||
-                item.parentWatertype.code == this.filters.watertypeCode ||
-                this.filters.watertypeCode == (' ') ||
-                this.filters.watertypeCode == undefined)) {
-                this.insertIntoPositions(item)
+                this.filters.watertypeName == undefined) {
+                watertypeNameCheck = true;
             }
+
+            if (item.watertype.code == this.filters.watertypeCode ||
+                item.watertypeKrw.code == this.filters.watertypeCode ||
+                this.filters.watertypeCode == (' ') ||
+                this.filters.watertypeCode == undefined) {
+                watertypeCodeCheck = true;
+            }
+
+            if (item.waterschap.name == this.filters.waterschapName ||
+                this.filters.waterschapName == (' ') ||
+                this.filters.waterschapName == undefined) {
+                waterschapCheck = true;
+            }
+
+            if (watertypeNameCheck && watertypeCodeCheck && waterschapCheck)
+                this.insertIntoPositions(item);
         });
 
     };

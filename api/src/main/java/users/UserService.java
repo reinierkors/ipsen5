@@ -2,6 +2,7 @@ package users;
 
 import api.ApiException;
 import api.ApiValidationException;
+import authenticate.BCrypt;
 import com.google.gson.Gson;
 import database.ConnectionManager;
 import database.RepositoryException;
@@ -64,6 +65,7 @@ public class UserService {
         if (errors.size() > 0) {
             throw new ApiValidationException(errors);
         }
+        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
         repo.persist(user);
 
@@ -72,9 +74,13 @@ public class UserService {
 
 	public String createSessionToken(User tempUser) throws ApiException {
         try {
-            System.out.println("Trying to find user");
+            System.out.println("Trying to find user with email " + tempUser.getEmail());
+            if(repo.findByEmail(tempUser.getEmail()) == null){
+                System.out.println("Couldn't find user");
+                return null;
+            }
             User user = repo.findByEmail(tempUser.getEmail());
-            if (user.getPassword().equals(tempUser.getPassword())){
+            if (checkPassword(tempUser.getPassword(), user)){
                 System.out.println("Creating session token");
                 String sessionToken = UUID.randomUUID().toString();
                 saveSession(sessionToken, user.getId());
@@ -84,8 +90,16 @@ public class UserService {
                 return null;
             }
         } catch(RepositoryException e){
-            throw new ApiException("Cannot retrieve sample");
+            throw new ApiException("Cannot retrieve user");
         }
+    }
+
+    private boolean checkPassword(String password, User user){
+//	    System.out.println("Old password: " + user.getPassword());
+//	    user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+//	    System.out.println("New password: " + user.getPassword());
+        System.out.println("BCrypt checkpw with plain password: " + password + " and hash: " + user.getPassword());
+        return BCrypt.checkpw(password, user.getPassword());
     }
 
     public void saveSession(String sessionToken, int id){

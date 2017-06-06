@@ -22,7 +22,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
-import {ResultsComponent} from './results/results-gmap/results-gmap.component';
+import {ResultsComponent} from './locations/google-map/results-gmap.component';
 import {CreateAccountComponent} from './user/create-account/create-account.component';
 import {SidenavComponent} from './sidenav/sidenav.component';
 import {NguiMapModule} from '@ngui/map';
@@ -34,6 +34,7 @@ import { LoginComponent } from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
 import { WewUploadComponent } from './wew/wew-upload/wew-upload.component';
 import { WewViewComponent } from './wew/wew-view/wew-view.component';
+import { AngularEchartsModule } from 'ngx-echarts';
 
 const routes:Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},
@@ -68,7 +69,8 @@ const routes:Routes = [
         WewViewComponent,
     ],
     imports: [
-		MaterialModule,
+        MdInputModule,
+        MdSidenavModule,
 		MdCardModule,
 		MdMenuModule,
 		MdSnackBarModule,
@@ -79,7 +81,6 @@ const routes:Routes = [
 		MdButtonModule,
 		MdSelectModule,
 		MdProgressBarModule,
-		
         BrowserModule,
         FormsModule,
         HttpModule,
@@ -87,6 +88,7 @@ const routes:Routes = [
         NgxDatatableModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
+		AngularEchartsModule,
         RouterModule.forRoot(routes, {useHash: false}),
         NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyA8acwCuestYr1vo1mJK-QdkZ-3AwW1blM'}),
     ],

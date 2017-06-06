@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 
 export abstract class ApiService {
 	private http:Http;
-	private authHeaders = {};
+	private static authHeaders = {};
 	//TODO read from config
 	public apiUri = 'http://127.0.0.1:8080/api';
 	
@@ -23,14 +23,14 @@ export abstract class ApiService {
 			observer.error(res);
 	}
 
-	protected addToAuthHeaders(headerType: string, value: string){
-        this.authHeaders[headerType] = value;
+	protected static addToAuthHeaders(headerType: string, value: string){
+        ApiService.authHeaders[headerType] = value;
     }
 	
 	private getHeaderObject():Headers{
 		let headers = new Headers();
-		for(let key in this.authHeaders){
-		    headers.append(key,this.authHeaders[key]);
+		for(let key in ApiService.authHeaders){
+		    headers.append(key,ApiService.authHeaders[key]);
         }
 		//Mogelijkheid om auth headers hier te zetten zodat elke api call die gebruikt
 		//headers.append('X-todo', ...);
@@ -50,6 +50,7 @@ export abstract class ApiService {
 		path = this.apiUri+path;
 		var headers = this.getHeaderObject();
 		headers.append('Content-Type','application/json');
+		console.log(headers);
 		return Observable.create(observer => {
 			this.http.post(path,JSON.stringify(data),{headers:headers})
 				.subscribe(res=>this.transformResult(res,observer), err=>this.transformError(err,observer), ()=>observer.complete());
