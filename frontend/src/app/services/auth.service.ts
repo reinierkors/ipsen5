@@ -18,10 +18,10 @@ export class AuthenticationService extends ApiService{
         // this.token = currentUser.token;
     }
 
-    addToStorage(email: string, token: string): void {
+    addToStorage(token: string): void {
         let expireDate = Date.now() + (24*60*60*1000);
-        localStorage.setItem('currentUser', JSON.stringify({ email: email, token: token, expireDate: expireDate}));
-        this.addToAuthHeaders('Authorization', token);
+        localStorage.setItem('currentUser', JSON.stringify({token: token, expireDate: expireDate}));
+        ApiService.addToAuthHeaders('X-Authorization', token);
     }
 
     login(email: string, password: string): Observable<boolean> {
@@ -29,10 +29,9 @@ export class AuthenticationService extends ApiService{
             .map((response: Response) => {
                 // login successful if there's a token in the response
                 let token = response.toString();
-                console.log(token);
                 if (token) {
                     // store username and token in local storage to keep user logged in between page refreshes
-                    this.addToStorage(email, token);
+                    this.addToStorage(token);
 
                     // return true to indicate successful login
                     return true;
@@ -43,10 +42,14 @@ export class AuthenticationService extends ApiService{
             });
     }
 
-    logout(): Observable<null>{
+    logout(): Observable<boolean>{
         // clear token remove user from local storage to log user out
         this.token = null;
         localStorage.removeItem('currentUser');
-        return this.post('/authenticate/logout',{});
+        console.log("creating remove post call");
+        return this.post('/authenticate/logout',{})
+            .map((response: Response) => {
+                return response.ok;
+            });
     }
 }

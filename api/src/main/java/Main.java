@@ -22,7 +22,7 @@ public class Main {
 	public static void main(String[] args) {
 		port(Config.getInstance().api.port);
 		ipAddress(Config.getInstance().api.host);
-		enableCORS("*",null,null);
+		enableCORS("*",null,"X-Authorization");
 		
 		//Handle ApiException
 		GsonBuilder gsonBuilder = new GsonBuilder();
