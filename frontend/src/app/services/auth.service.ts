@@ -43,10 +43,10 @@ export class AuthenticationService extends ApiService{
             });
     }
 
-    logout() {
+    logout(): Observable<null>{
         // clear token remove user from local storage to log user out
         this.token = null;
-        this.get('/authenticate/logout');
         localStorage.removeItem('currentUser');
+        return this.post('/authenticate/logout',{});
     }
 }

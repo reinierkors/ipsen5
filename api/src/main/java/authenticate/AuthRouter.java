@@ -20,6 +20,6 @@ public class AuthRouter {
 
         post("/authenticate",(request,response) -> gson.toJson(userService.createSessionToken(gson.fromJson(request.body(), User.class))));
 
-        get("/authenticate/logout", (request, response) -> userService.logout(request.headers("Authorization")));
+        post("/authenticate/logout", (request, response) -> userService.logout(request.headers("Authorization")));
     }
 }

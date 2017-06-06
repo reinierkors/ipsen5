@@ -59,15 +59,15 @@
                 <h3 md-line><b>Mp</b></h3>
                 <p md-line>{{marker.location.code}}</p>
             </md-list-item>
-            <md-list-item>
+            <md-list-item *ngIf="marker.waterschap != undefined">
                 <h3 md-line><b>Waterschap</b></h3>
                 <p md-line>{{marker.waterschap.name}}</p>
             </md-list-item>
             <md-list-item>
-                <h3 md-line><b>Watertype</b></h3>
-                <p md-line>{{marker.watertype.name}}
+                <h3 md-line *ngIf="(marker.watertype && marker.parentWatertype) != undefined"><b>Watertype</b></h3>
+                <p md-line *ngIf="marker.watertype != undefined">{{marker.watertype.name}}
                     ({{marker.watertype.code}})</p>
-                <p md-line>{{marker.parentWatertype.name}}
+                <p md-line *ngIf="marker.parentWatertype != undefined">{{marker.parentWatertype.name}}
                     ({{marker.parentWatertype.code}})</p>
             </md-list-item>
         </md-list>

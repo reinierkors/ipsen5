@@ -1,4 +1,5 @@
 import {Component,OnInit} from '@angular/core';
+import {trigger,style,transition,animate,group,state} from '@angular/animations';
 
 import {Sample} from '../sample.model';
 import {Location} from '../../results/location.model';
@@ -10,56 +11,128 @@ import {ApiSpeciesService} from '../../species/api.species.service';
 import {ApiLocationService} from '../../results/api.location.service';
 import {ApiWatertypeService} from '../../watertype/api.watertype.service';
 
-import * as Papa from 'papaparse';
+import 'papaparse';
+
+type ImportState = 'anim'|'start'|'loading'|'confirmData'|'confirmSample'|'finished'|'error';
+type SampleImport = {
+	//Location code and description
+	Mp:string, Locatie:string,
+	//Parent watertype code and name
+	'Code watertype':string, 'Naam watertype':string,
+	//Water Framework Directive watertype code and name
+	Krw_Code:string, Krw_Naam:string,
+	//Rijksdriehoekscoördinaten
+	'X-coor':number, 'Y-coor':number,
+	//Date, ignore time, it'll always be empty
+	Datum:string, Tijd:string,
+	//Method used to obtain sample
+	'Code methode':string, 'Naam methode':string, 'Eenheid methode':string,
+	//Species name
+	Taxonnaam:string,
+	//Amount of species found in sample
+	Waarde:number,
+};
 
 @Component({
 	selector: 'app-sample-upload',
 	providers: [ApiSampleService,ApiSpeciesService,ApiLocationService,ApiWatertypeService],
 	templateUrl: './sample-upload.component.html',
-	styleUrls: ['./sample-upload.component.css']
+	styleUrls: ['./sample-upload.component.css'],
+	animations:[
+		trigger('mainCardAnim',[
+			state('void',style({opacity:0})),
+			transition(':enter',[animate('300ms 150ms',style({opacity:1}))]),
+			transition(':leave',[animate('150ms', style({opacity:0}))])
+		])
+	]
 })
 export class SampleUploadComponent implements OnInit {
-	status:"start"|"loading"|"confirmData"|"confirmSample"|"finished" = "start";
+	state:ImportState = 'start';
+	private nextState:ImportState;
+	errors:any[] = [];
+	//All rows from all csv files
+	private csvData:SampleImport[];
 	
+	//Map codes to objects
 	private watertypeMap:Map<string,Watertype> = new Map();
-	private watertypeParents:Map<Watertype,string/*parent code*/> = new Map();
 	private locationMap:Map<string,Location> = new Map();
-	private locationWatertype:Map<Location,string/*watertype code*/> = new Map();
 	private speciesMap:Map<string,Species> = new Map();
+	//Map ids to objects (only used when confirming samples)
+	public locationIdsMap:Map<number,Location> = new Map();
+	public speciesIdsMap:Map<number,Species> = new Map();
+	//Store parent relations
+	private locationWatertype:Map<Location,string/*watertype code*/> = new Map();
+	private locationWatertypeKrw:Map<Location,string/*watertype code*/> = new Map();
 	
+	//Data to conform on the page before saving to server
 	confirm:{
 		watertypes:Watertype[],
 		locations:Location[],
 		species:Species[],
-		samples:Sample[]
-	} = {watertypes:[],locations:[],species:[],samples:[]};
+		samples:Sample[],
+		samplesFast:any[]
+	} = {watertypes:[],locations:[],species:[],samples:[],samplesFast:[]};
 	
 	constructor(
 		private sampleApi:ApiSampleService,
 		private speciesApi:ApiSpeciesService,
 		private locationApi:ApiLocationService,
 		private watertypeApi:ApiWatertypeService
+
 	){}
 	
 	ngOnInit(){}
 	
+	//Set the state of the importing process
+	private setState(state:ImportState){
+		this.state = 'anim';
+		this.nextState = state;
+	}
+	
+	//Go to the next state when the :leave animation finishes
+	mainCardAnimDone($event){
+		if($event.toState==='void'){
+			this.state = this.nextState;
+		}
+	}
+	
+	//ToDo: improve error handling
+	//Right now we just print the array as json on the page
+	public handleError(...error){
+		this.setState('error');
+		this.errors.push(error);
+	}
+	
+	//One or more files has been uploaded
 	public fileChange($event:any){
-		this.status = "loading";
+		this.setState('loading');
+		
 		let files:FileList = $event.target.files;
 		let filesArr:File[] = [];
 		for(let i=0;i<files.length;++i){
 			filesArr.push(files.item(i));
 		}
+		
 		this.handleUploadedFiles(filesArr);
 	}
 	
+	//Parse the files
 	private handleUploadedFiles(files:File[]):void{
-		files.forEach(file=>{
-			this.parseCSV(file).then(r => this.handleRawData(r));
-		});
+		Promise.all(files.map(this.parseCSV))
+			.then(csvs => csvs.map(({result}) => result.data).reduce((arr,data)=>[...arr,...data]))
+			.then(data => {
+				data.forEach(row => {
+					row['X-coor'] = parseInt(row['X-coor'],10);
+					row['Y-coor'] = parseInt(row['Y-coor'],10);
+					row['Waarde'] = parseInt(row['Waarde'],10);
+				});
+				this.csvData = data;
+				this.handleRawData();
+			});
 	}
 	
-	private parseCSV(file:File):Promise<{result:Papa.ParseResultWithHeader<any>,file:File}>{
+	//Calls PapaParse to turn the csv files into objects
+	private parseCSV(file:File):Promise<{result:PapaParse.ParseResult,file:File}>{
 		return new Promise((resolve,reject)=>{
 			Papa.parse(file,{
 				header:true,
@@ -70,9 +143,24 @@ export class SampleUploadComponent implements OnInit {
 		});
 	}
 	
-	private handleWatertypes(result:Papa.ParseResultWithHeader<any>):Promise<null>{
+	//Start with the sample subresources: watertypes, locations and species
+	private handleRawData(){
+		Promise.all([
+			this.handleWatertypes(),
+			this.handleLocations(),
+			this.handleSpecies()
+		]).then(()=>{
+			if(this.confirm.locations.length+this.confirm.watertypes.length+this.confirm.species.length > 0)
+				this.setState('confirmData');
+			else
+				this.createSamples();
+		},(...params) => this.handleError(...params));
+	}
+	
+	//Find all the watertypes in the data and retrieve existing ones from the server
+	private handleWatertypes():Promise<null>{
 		//Go through CSV data and create models for each watertype
-		result.data.forEach(row => {
+		this.csvData.forEach(row => {
 			//Parent watertype
 			if(!this.watertypeMap.has(row['Code watertype'])){
 				let wt:Watertype = new Watertype();
@@ -86,8 +174,6 @@ export class SampleUploadComponent implements OnInit {
 				wt.code = row.Krw_Code;
 				wt.name = row.Krw_Naam;
 				this.watertypeMap.set(row.Krw_Code,wt);
-				//We don't have a parent id yet, save relation for later
-				this.watertypeParents.set(wt,row['Code watertype']);
 			}
 		});
 		return new Promise((resolve,reject) => {
@@ -100,13 +186,14 @@ export class SampleUploadComponent implements OnInit {
 				//Show non-existing watertypes for confirmation
 				this.confirm.watertypes = Array.from(this.watertypeMap.values()).filter(watertype => !watertype.id);
 				resolve();
-			},reject);
+			},(...params) => this.handleError(...params));
 		});
 	}
 	
-	private handleLocations(result:Papa.ParseResultWithHeader<any>):Promise<null>{
+	//Find all the locations in the data and retrieve existing ones from the server
+	private handleLocations():Promise<null>{
 		//Go through CSV data and create models for each location
-		result.data.forEach(row => {
+		this.csvData.forEach(row => {
 			if(!this.locationMap.has(row.Mp)){
 				let location = new Location();
 				location.code = row.Mp;
@@ -115,7 +202,8 @@ export class SampleUploadComponent implements OnInit {
 				location.yCoord = row['Y-coor'];
 				this.locationMap.set(row.Mp,location);
 				//We don't have a watertype id yet, save relation for later
-				this.locationWatertype.set(location,row.Krw_Code);
+				this.locationWatertype.set(location,row['Code watertype']);
+				this.locationWatertypeKrw.set(location,row.Krw_Code);
 			}
 		});
 		let retrievePrs:Promise<Location>[] = [];
@@ -131,12 +219,13 @@ export class SampleUploadComponent implements OnInit {
 		return Promise.all(retrievePrs).then(()=>{
 			//Show non-existing locations for confirmation
 			this.confirm.locations = Array.from(this.locationMap.values()).filter(location => !location.id);
-		});
+		},this.handleError);
 	}
 	
-	private handleSpecies(result:Papa.ParseResultWithHeader<any>):Promise<null>{
+	//Find all the species in the data and retrieve existing ones from the server
+	private handleSpecies():Promise<null>{
 		//Go through CSV data
-		result.data.forEach(row => {
+		this.csvData.forEach(row => {
 			if(!this.speciesMap.has(row.Taxonnaam)){
 				let species = new Species();
 				species.name = row.Taxonnaam;
@@ -150,104 +239,122 @@ export class SampleUploadComponent implements OnInit {
 				//Show non-existing species for confirmation
 				this.confirm.species = Array.from(this.speciesMap.values()).filter(species => !species.id);
 				resolve();
-			},reject);
+			},(...params) => this.handleError(...params));
 		});
 	}
 	
-	private handleRawData({result,file}:{result:Papa.ParseResultWithHeader<any>,file:File}):void{
-		Promise.all([
-			this.handleWatertypes(result),
-			this.handleLocations(result),
-			this.handleSpecies(result)
-		]).then(()=>{
-			this.status = "confirmData";
-		});
-	}
-	
-	private confirmWatertype(watertype:Watertype):Promise<Watertype>{
-		let needsConfirmation = this.confirm.watertypes.includes(watertype);
-		
-		if(needsConfirmation){
-			//Remove from confirm list
-			let index = this.confirm.watertypes.indexOf(watertype);
-			if(index!==-1)
-				this.confirm.watertypes.splice(index,1);
-		}
-		
-		return new Promise((resolve,reject) => {
-			//Is not waiting to be confirmed
-			if(!needsConfirmation)
-				return resolve(watertype);
-			//Has a parent, confirm that first
-			if(this.watertypeParents.has(watertype)){
-				let parent = this.watertypeMap.get(this.watertypeParents.get(watertype));
-				this.confirmWatertype(parent).then(parent => {
-					watertype.parentId = parent.id;
-					//Parent is confirmed, remove unknown relation, try again
-					this.watertypeParents.delete(watertype);
-					this.confirm.watertypes.push(watertype);
-					return this.confirmWatertype(watertype);
-				});
-			}
-			else{
-				this.watertypeApi.save(watertype).subscribe(saved => {
-					watertype.id = saved.id;
-					return resolve(watertype);
-				}, error => reject(error));
-			}
-		});
-	}
-	
-	private confirmLocation(location:Location):Promise<Location>{
-		let index = this.confirm.locations.indexOf(location);
-		if(index!==-1)
-			this.confirm.locations.splice(index,1);
-		return new Promise((resolve,reject) => {
-				let watertype = this.watertypeMap.get(this.locationWatertype.get(location));
-				location.watertypeId = watertype.id;
-				this.locationApi.save(location).subscribe(saved => {
-					location.id = saved.id;
-					return resolve(location);
-				}, error => reject(error));
-			});
-	}
-	
-	private confirmSpecies(species:Species):Promise<Species>{
-		let index = this.confirm.species.indexOf(species);
-		if(index!==-1)
-			this.confirm.species.splice(index,1);
-		return new Promise((resolve,reject) => {
-				this.speciesApi.save(species).subscribe(saved => {
-					species.id = saved.id;
-					return resolve(species);
-				}, error => reject(error));
-			});
-	}
-	
+	//Saves all sample subresources to the server
 	public confirmAll(){
-		//Save all watertypes
-		let waitForWatertypes:Promise<Watertype>[] = [];
-		this.confirm.watertypes.slice().forEach(watertype => waitForWatertypes.push(this.confirmWatertype(watertype)));
+		this.setState('loading');
 		
-		//Save all locations (watertypes have to be saved first)
-		let waitForLocations:Promise<Location>[] = [];
-		Promise.all(waitForWatertypes).then(()=>{
-			this.confirm.locations.slice().forEach(location => waitForLocations.push(this.confirmLocation(location)));
-		});
+		//Save all watertypes
+		let waitForWatertypes:Promise<Watertype>[] = []
+		this.confirm.watertypes.slice().forEach(watertype => waitForWatertypes.push(this.confirmWatertype(watertype)));
 		
 		//Save all species
 		let waitForSpecies:Promise<Species>[] = [];
 		this.confirm.species.slice().forEach(species => waitForSpecies.push(this.confirmSpecies(species)));
 		
-		Promise.all([].concat(waitForLocations,waitForSpecies)).then(()=>{
-			console.log('All is saved');
-			this.status = "confirmSample";
-		}, err => console.log(err));
-		
-		this.createSample();
+		Promise.all(waitForWatertypes).then(()=>{
+			//Save all locations (watertypes have to be saved first)
+			let waitForLocations:Promise<Location>[] = [];
+			this.confirm.locations.slice().forEach(location => waitForLocations.push(this.confirmLocation(location)));
+
+			//Data this sample depends on is all saved, move on to creating the sample
+			let allPromises:Promise<Location|Species>[] = [...waitForLocations,...waitForSpecies];
+			Promise.all(allPromises)
+				.then(()=>{
+					this.createSamples();
+				},(...params) => this.handleError(...params));
+		});
 	}
 	
-	private createSample(){
-		console.log('Sample object maken');
+	//Save a watertype to the server
+	private confirmWatertype(watertype:Watertype):Promise<Watertype>{
+		return new Promise((resolve,reject) => {
+			this.watertypeApi.save(watertype).subscribe(saved => {
+				watertype.id = saved.id;
+				resolve(watertype);
+			}, error => reject(error));
+		});
+	}
+	
+	//Save all locations to the server
+	private confirmLocation(location:Location):Promise<Location>{
+		return new Promise((resolve,reject) => {
+			let watertype = this.watertypeMap.get(this.locationWatertype.get(location));
+			let watertypeKrw = this.watertypeMap.get(this.locationWatertypeKrw.get(location));
+			location.watertypeId = watertype.id;
+			location.watertypeKrwId = watertypeKrw.id;
+			this.locationApi.save(location).subscribe(saved => {
+				location.id = saved.id;
+				resolve(location);
+			}, error => reject(error));
+		});
+	}
+	
+	//Save all species to the server
+	private confirmSpecies(species:Species):Promise<Species>{
+		return new Promise((resolve,reject) => {
+			this.speciesApi.save(species).subscribe(saved => {
+				species.id = saved.id;
+				resolve(species);
+			}, error => reject(error));
+		});
+	}
+	
+	//Create the sample objects
+	private createSamples(){
+		this.setState('loading');
+		
+		let sampleMap:Map<string,Sample> = new Map();
+		this.csvData.forEach(row => {
+			let sampleUnique = ""+row.Mp+row.Datum;
+			let sample:Sample;
+			if(sampleMap.has(sampleUnique)){
+				sample = sampleMap.get(sampleUnique);
+			}
+			else{
+				sample = new Sample();
+				let [day,month,year] = row.Datum.split('/').map(n => parseInt(n,10));
+				sample.date = new Date(year,month-1,day);
+				sample.locationId = this.locationMap.get(row.Mp).id;
+				sample.xCoor = row['X-coor'];
+				sample.yCoor = row['Y-coor'];
+				sampleMap.set(sampleUnique,sample);
+			}
+			sample.speciesIds.push(this.speciesMap.get(row.Taxonnaam).id);
+		});
+		
+		Array.from(this.speciesMap.values()).forEach(species => this.speciesIdsMap.set(species.id,species));
+		Array.from(this.locationMap.values()).forEach(location => this.locationIdsMap.set(location.id,location));
+		this.confirm.samples = Array.from(sampleMap.values());
+		
+		//Increase template rendering by only storing what we need on the page
+		this.confirm.samplesFast = this.confirm.samples.map(sample => {
+			return {
+				locationCode:this.locationIdsMap.get(sample.locationId).code,
+				locationDescription:this.locationIdsMap.get(sample.locationId).description,
+				date:sample.date,
+				speciesNames:sample.speciesIds.map(id => this.speciesIdsMap.get(id).name)
+			};
+		});
+		
+		this.setState('confirmSample');
+	}
+	
+	//Save all samples to the server
+	confirmSamples(){
+		this.setState('loading');
+		
+		let waitForSamples:Promise<Sample[]> = new Promise((resolve,reject) => {
+			this.sampleApi.saveMulti(this.confirm.samples).subscribe(samples => resolve(samples), err => reject(err));
+		});
+		waitForSamples.then(samples => this.setState('finished'), (...params) => this.handleError(...params));
+	}
+	
+	//Go back to the start of the importing process
+	goToStart(){
+		this.setState('start');
 	}
 }

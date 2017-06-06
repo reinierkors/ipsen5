@@ -8,6 +8,7 @@ export class Location {
     longitude: number;
 	waterschapId: number;
 	watertypeId: number;
+	watertypeKrwId: number;
 
     public static fromJSON(obj): Location {
         const location = new Location();
@@ -20,6 +21,7 @@ export class Location {
         location.longitude = obj.longitude;
 		location.waterschapId = obj.waterschapId;
 		location.watertypeId = obj.watertypeId;
+		location.watertypeKrwId = obj.watertypeKrwId;
         return location;
     }
 }

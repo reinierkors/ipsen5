@@ -100,14 +100,20 @@ export class ResultsComponent implements OnInit {
     public refreshMarkers() {
         this.positions.splice(0);
         this.retrieveFilterList();
+        this.retrieveLocations();
         this.markers.forEach((item) => {
             this.insertIntoPositions(item);
         });
     };
 
     private retrieveFilterList() {
-        this.waterschappen = [];
-        this.watertypes = [];
+        this.waterschappen.splice(0);
+        this.watertypes.splice(0);
+        this.filters = {
+            waterschapName: ' ',
+            watertypeName: ' ',
+            watertypeCode: ' ',
+        };
         this.retrieveWatertypes();
         this.retrieveWaterschappen();
     }
@@ -123,7 +129,14 @@ export class ResultsComponent implements OnInit {
         this.locations.forEach((item) => {
             let marker = [];
             marker.push(item,);
-            this.retrieveWatertype(marker);
+            console.log(item)
+            if(item.watertypeId == null && item.waterschapId != null) {
+                this.retrieveWaterschap(marker);
+            } else if (item.watertypeId != null) {
+                this.retrieveWatertype(marker);
+            } else if (item.watertypeId == null && item.waterschapId == null) {
+                this.addToMarkers(marker);
+            }
         });
     };
 
@@ -166,7 +179,11 @@ export class ResultsComponent implements OnInit {
             .switchMap(params => this.apiWatertype.getWatertype(marker[1].parentId))
             .subscribe(parent => {
                 marker.push(parent);
-                this.retrieveWaterschap(marker);
+                if (marker[0].waterschapId == null) {
+                    this.addToMarkers(marker)
+                } else {
+                    this.retrieveWaterschap(marker);
+                }
             }, error => console.log(error));//TODO: ERROR WHEN NULL
     };
 
