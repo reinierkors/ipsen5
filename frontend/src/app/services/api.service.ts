@@ -10,6 +10,7 @@ export abstract class ApiService {
 	
 	constructor(http:Http){
 		this.http = http;
+
 	}
 	
 	private transformResult(res:Response,observer){
