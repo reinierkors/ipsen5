@@ -209,8 +209,6 @@ export class ResultsComponent implements OnInit {
             let watertypeCodeCheck = false;
             let waterschapCheck = false;
 
-            console.log("oi", this.filters.waterschapName)
-            console.log("hoi", item.waterschap)
             if (item.watertype.name == this.filters.watertypeName ||
                 item.watertypeKrw.name == this.filters.watertypeName ||
                 this.filters.watertypeName == (' ') ||

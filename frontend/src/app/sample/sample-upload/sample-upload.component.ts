@@ -2,13 +2,13 @@ import {Component,OnInit} from '@angular/core';
 import {trigger,style,transition,animate,group,state} from '@angular/animations';
 
 import {Sample} from '../sample.model';
-import {Location} from '../../results/location.model';
+import {Location} from '../../locations/location.model';
 import {Species} from '../../species/species.model';
 import {Watertype} from '../../watertype/watertype.model';
 
 import {ApiSampleService} from '../api.sample.service';
 import {ApiSpeciesService} from '../../species/api.species.service';
-import {ApiLocationService} from '../../results/api.location.service';
+import {ApiLocationService} from '../../locations/api.location.service';
 import {ApiWatertypeService} from '../../watertype/api.watertype.service';
 
 import 'papaparse';

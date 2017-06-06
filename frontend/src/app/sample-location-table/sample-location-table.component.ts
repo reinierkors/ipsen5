@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiLocationService } from '../results/api.location.service';
+import { ApiLocationService } from '../locations/api.location.service';
 
 @Component({
   selector: 'app-sample-Location-table',
