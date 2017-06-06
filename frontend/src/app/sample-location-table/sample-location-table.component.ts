@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiLocationService } from '../results/api.location.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-sample-Location-table',
@@ -11,18 +12,23 @@ import { ApiLocationService } from '../results/api.location.service';
 export class SampleLocationTableComponent implements OnInit {
 
   private apiLocationService: ApiLocationService;
+  location : Location;
+  router : Router;
 
   rows = [];
 
   columns = [
     { name: 'code' },
-    { name: 'description' },
     { prop: 'latitude' },
-    { prop: 'longitude'}
+    { prop: 'longitude'},
+    { name: 'description'}
   ];
 
-  constructor(apiLocationService: ApiLocationService) {
+  selected = [];
+
+  constructor(apiLocationService: ApiLocationService, router:Router) {
     this.apiLocationService = apiLocationService;
+    this.router = router;
   }
 
   ngOnInit() {
@@ -31,5 +37,16 @@ export class SampleLocationTableComponent implements OnInit {
       this.rows = locations;
     })
   }
+
+  // TODO: When a row is selected, it needs to get the id of the object and make a request to GET the relevant data.
+
+    onSelect({ selected }) {
+        console.log('Select Event', selected, this.selected);
+        this.router.navigate(['results/results-graphs/', selected[0].id])
+    }
+
+    onActivate(event) {
+        console.log('Activate Event', event);
+    }
 
 }

@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { HttpModule, JsonpModule } from '@angular/http';
-import {Routes, RouterModule} from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import {
 	MaterialModule,
 	MdCardModule,
@@ -20,18 +20,19 @@ import {
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import {AppComponent} from './app.component';
-import {HomeComponent} from './home/home.component';
-import {ResultsComponent} from './results/results-gmap/results-gmap.component';
-import {CreateAccountComponent} from './user/create-account/create-account.component';
-import {SidenavComponent} from './sidenav/sidenav.component';
-import {NguiMapModule} from '@ngui/map';
+import { AppComponent } from './app.component';
+import { HomeComponent } from './home/home.component';
+import { ResultsComponent } from './results/results-gmap/results-gmap.component';
+import { CreateAccountComponent } from './user/create-account/create-account.component';
+import { SidenavComponent } from './sidenav/sidenav.component';
+import { NguiMapModule } from '@ngui/map';
 import { SampleUploadComponent } from './sample/sample-upload/sample-upload.component';
 import { SampleViewComponent } from './sample/sample-view/sample-view.component';
 import { SampleEditComponent } from './sample/sample-edit/sample-edit.component';
-import {SampleLocationTableComponent} from "./sample-location-table/sample-location-table.component";
+import {SampleLocationTableComponent } from "./sample-location-table/sample-location-table.component";
 import { LoginComponent } from './login/login.component';
-import {AuthGuard} from "./auth/auth.guard";
+import { AuthGuard } from "./auth/auth.guard";
+import { ResultGraphsComponent } from './results/results-graphs/result-graphs/result-graphs.component';
 
 const routes:Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},
@@ -43,6 +44,7 @@ const routes:Routes = [
   {path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
   {path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
   {path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
+  {path: 'results/results-graphs/:id', component: ResultGraphsComponent, canActivate: [AuthGuard]},
     /* Admin Routes */
   {path: 'admin/create-account', component: CreateAccountComponent, canActivate: [AuthGuard]},
   {path: '**', component: HomeComponent, canActivate: [AuthGuard]}
@@ -60,6 +62,7 @@ const routes:Routes = [
         SampleViewComponent,
         SampleEditComponent,
         LoginComponent,
+        ResultGraphsComponent,
     ],
     imports: [
 		MaterialModule,
