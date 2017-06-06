@@ -28,6 +28,7 @@ import { SampleEditComponent } from './sample/sample-edit/sample-edit.component'
 import {SampleLocationTableComponent} from "./sample-location-table/sample-location-table.component";
 import { LoginComponent } from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
+import { AngularEchartsModule } from 'ngx-echarts';
 
 const routes:Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},
@@ -59,6 +60,7 @@ const routes:Routes = [
     ],
     imports: [
         MdInputModule,
+        AngularEchartsModule,
         MdSidenavModule,
         BrowserModule,
         FormsModule,
