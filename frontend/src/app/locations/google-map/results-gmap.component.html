@@ -64,11 +64,13 @@
                 <p md-line>{{marker.waterschap.name}}</p>
             </md-list-item>
             <md-list-item>
-                <h3 md-line *ngIf="(marker.watertype && marker.parentWatertype) != undefined"><b>Watertype</b></h3>
-                <p md-line *ngIf="marker.watertype != undefined">{{marker.watertype.name}}
+                <h3 md-line><b>Watertype</b></h3>
+                <p md-line>
+                    {{marker.watertype.name}}
                     ({{marker.watertype.code}})</p>
-                <p md-line *ngIf="marker.parentWatertype != undefined">{{marker.parentWatertype.name}}
-                    ({{marker.parentWatertype.code}})</p>
+                <p md-line>
+                    {{marker.watertypeKrw.name}}
+                    ({{marker.watertypeKrw.code}})</p>
             </md-list-item>
         </md-list>
         <button class="iw-button" md-raised-button>

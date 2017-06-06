@@ -21,6 +21,7 @@
       "styles": [],
       "scripts": [
         "assets/scripts/script.js",
+        "../node_modules/echarts/dist/echarts.min.js",
 		"../node_modules/papaparse/papaparse.js"
       ],
       "environmentSource": "environments/environment.ts",

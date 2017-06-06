@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiLocationService } from '../results/api.location.service';
+import { ApiLocationService } from '../locations/api.location.service';
 import {Router} from "@angular/router";
 
 @Component({

@@ -31,7 +31,8 @@ import { SampleViewComponent } from './sample/sample-view/sample-view.component'
 import { SampleEditComponent } from './sample/sample-edit/sample-edit.component';
 import {SampleLocationTableComponent } from "./sample-location-table/sample-location-table.component";
 import { LoginComponent } from './login/login.component';
-import { AuthGuard } from "./auth/auth.guard";
+import {AuthGuard} from "./auth/auth.guard";
+import { AngularEchartsModule } from 'ngx-echarts';
 import { ResultGraphsComponent } from './results/results-graphs/result-graphs/result-graphs.component';
 
 const routes:Routes = [
@@ -66,6 +67,7 @@ const routes:Routes = [
     ],
     imports: [
 		MaterialModule,
+        AngularEchartsModule,
 		MdCardModule,
 		MdMenuModule,
 		MdSnackBarModule,
@@ -76,7 +78,6 @@ const routes:Routes = [
 		MdButtonModule,
 		MdSelectModule,
 		MdProgressBarModule,
-		
         BrowserModule,
         FormsModule,
         HttpModule,

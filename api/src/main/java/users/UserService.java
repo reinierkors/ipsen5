@@ -2,6 +2,7 @@ package users;
 
 import api.ApiException;
 import api.ApiValidationException;
+import authenticate.BCrypt;
 import com.google.gson.Gson;
 import database.ConnectionManager;
 import database.RepositoryException;
@@ -64,6 +65,7 @@ public class UserService {
         if (errors.size() > 0) {
             throw new ApiValidationException(errors);
         }
+        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
         repo.persist(user);
 
@@ -72,10 +74,12 @@ public class UserService {
 
 	public String createSessionToken(User tempUser) throws ApiException {
         try {
-            System.out.println("Trying to find user");
+            if(repo.findByEmail(tempUser.getEmail()) == null){
+                System.out.println("Couldn't find user");
+                return null;
+            }
             User user = repo.findByEmail(tempUser.getEmail());
-            if (user.getPassword().equals(tempUser.getPassword())){
-                System.out.println("Creating session token");
+            if (checkPassword(tempUser.getPassword(), user)){
                 String sessionToken = UUID.randomUUID().toString();
                 saveSession(sessionToken, user.getId());
                 return sessionToken;
@@ -84,17 +88,19 @@ public class UserService {
                 return null;
             }
         } catch(RepositoryException e){
-            throw new ApiException("Cannot retrieve sample");
+            throw new ApiException("Cannot retrieve user");
         }
     }
 
+    private boolean checkPassword(String password, User user){
+        return BCrypt.checkpw(password, user.getPassword());
+    }
+
     public void saveSession(String sessionToken, int id){
-        System.out.println("Creating expiration date");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.DATE, 1);
         Timestamp expirationDate = new Timestamp(calendar.getTimeInMillis());
-        System.out.println("Saving session to database");
         repo.saveSession(id, sessionToken, expirationDate);
     }
 
