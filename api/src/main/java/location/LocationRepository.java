@@ -11,7 +11,7 @@ import java.sql.*;
  *
  * @author Dylan de Wit
  * @author Wander Groeneveld
- * @version 0.2, 31-5-2017
+ * @version 0.3, 4-6-2017
  */
 public class LocationRepository extends RepositoryMaria<Location> {
     private final PreparedStatement psFindByCode;
@@ -52,7 +52,8 @@ public class LocationRepository extends RepositoryMaria<Location> {
                 new ColumnData<>("x_coor", Types.INTEGER, Location::getxCoord, Location::setxCoord),
                 new ColumnData<>("y_coor", Types.INTEGER, Location::getyCoord, Location::setyCoord),
                 new ColumnData<>("waterschap_id", Types.INTEGER, Location::getWaterschapId, Location::setWaterschapId),
-                new ColumnData<>("watertype_id", Types.INTEGER, Location::getWatertypeId, Location::setWatertypeId)
+                new ColumnData<>("watertype_id", Types.INTEGER, Location::getWatertypeId, Location::setWatertypeId),
+                new ColumnData<>("watertype_krw_id", Types.INTEGER, Location::getWatertypeKrwId, Location::setWatertypeKrwId)
         };
     }
     
@@ -60,7 +61,7 @@ public class LocationRepository extends RepositoryMaria<Location> {
         try {
             psFindByCode.setString(1,code);
             ResultSet resultSet = psFindByCode.executeQuery();
-            if(resultSet.next()) {
+            if(resultSet!=null && resultSet.next()) {
                 return resultSetToModel(resultSet);
             }
             else{

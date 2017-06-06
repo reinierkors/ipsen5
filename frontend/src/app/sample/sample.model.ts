@@ -2,12 +2,11 @@ export class Sample{
 	id:number;
 	date:Date;
 	locationId:number;
-	location:null /*Location*/;
 	ownerId:number;
 	quality:number;
 	xCoor:number;
 	yCoor:number;
-	value:number;
+	speciesIds:number[] = [];
 	
 	public static fromJSON(obj):Sample{
 		var sample = new Sample();
@@ -18,7 +17,7 @@ export class Sample{
 		sample.quality = obj.quality;
 		sample.xCoor = obj.xCoor;
 		sample.yCoor = obj.yCoor;
-		sample.value = obj.value;
+		sample.speciesIds = obj.speciesIds;
 		return sample;
 	}
 }

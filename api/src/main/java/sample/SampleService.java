@@ -4,12 +4,14 @@ import api.ApiException;
 import database.ConnectionManager;
 import database.RepositoryException;
 
+import java.util.List;
+
 /**
  * Service voor sample-gerelateerde business logic
  * Staat tussen de router en de repository
  *
  * @author Wander Groeneveld
- * @version 0.1, 21-5-2017
+ * @version 0.2, 4-6-2017
  */
 public class SampleService {
 	private static final SampleService instance = new SampleService();
@@ -33,6 +35,24 @@ public class SampleService {
 			return sample;
 		} catch(RepositoryException e){
 			throw new ApiException("Cannot retrieve sample");
+		}
+	}
+	
+	public Sample save(Sample sample) throws ApiException{
+		try {
+			repo.persist(sample);
+			return sample;
+		} catch(RepositoryException e){
+			throw new ApiException("Cannot save sample");
+		}
+	}
+	
+	public List<Sample> save(List<Sample> samples) throws ApiException{
+		try {
+			repo.persist(samples);
+			return samples;
+		} catch(RepositoryException e){
+			throw new ApiException("Cannot save samples");
 		}
 	}
 }

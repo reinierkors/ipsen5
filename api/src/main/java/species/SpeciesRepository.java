@@ -31,7 +31,7 @@ public class SpeciesRepository extends RepositoryMaria<Species>{
 		try {
 			psFindByName.setString(1,name);
 			ResultSet resultSet = psFindByName.executeQuery();
-			if(resultSet.next()) {
+			if(resultSet!=null && resultSet.next()) {
 				return resultSetToModel(resultSet);
 			}
 			else{

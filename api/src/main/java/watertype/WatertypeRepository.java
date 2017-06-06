@@ -11,7 +11,7 @@ import java.sql.Types;
  *
  * @author Dylan de Wit
  * @author Wander Groeneveld
- * @version 0.2, 31-5-2017
+ * @version 0.3, 4-6-2017
  */
 public class WatertypeRepository extends RepositoryMaria<Watertype> {
     public WatertypeRepository(Connection connection) {
@@ -38,8 +38,7 @@ public class WatertypeRepository extends RepositoryMaria<Watertype> {
         return new ColumnData[]{
                 new ColumnData<>("id", Types.INTEGER, Watertype::getId, Watertype::setId, true),
                 new ColumnData<>("name", Types.VARCHAR, Watertype::getName, Watertype::setName),
-                new ColumnData<>("code", Types.VARCHAR, Watertype::getCode, Watertype::setCode),
-                new ColumnData<>("parent", Types.INTEGER, Watertype::getParentId, Watertype::setParentId)
+                new ColumnData<>("code", Types.VARCHAR, Watertype::getCode, Watertype::setCode)
         };
     }
 }

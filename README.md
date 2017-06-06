@@ -3,8 +3,6 @@
 1. Open de project map in command-line
 1. Ga naar de frontend map (`cd frontend`)
 1. Download de dependencies (`npm install`)
-1. Download typescript definities voor js libraries (`typings install`)
-    * Typings moet hiervoor globaal geïnstaleerd zijn op je computer (`npm install typings --global`)
 1. Voer gulp uit (`gulp`)
 1. Open de project in een tweede command-line
 1. Ga naar de frontend map (`cd frontend`)
@@ -46,7 +44,7 @@ Wanneer je een script, css of asset uit een package die met NPM geïnstalleerd i
 `npm install -g @angular/cli` Installeer angular cli  
 `ng g component Home` Maakt een Home Component aan  
 `ng serve` Start een lokale server op port 4200  
-`ng build` Bouwt een mapje /dist/ met alle productie bestanden
+`ng build` Bouwt een mapje /dist/ met alle productie bestanden  
 
 __Component:__	`ng g component my-new-component`  
 __Directive:__	`ng g directive my-new-directive`  
@@ -64,6 +62,14 @@ __Module:__		`ng g module my-module`
 `gulp` Compiles sass, en watch'd  
 `gulp dev` Compressed css file  
 
-## Typings
-`typings search some-library-name` Zoekt naar types van javascript libraries  
-`typings install npm~some-package --save` Installeerd de types en slaat ze op in typings.json. Voor de "~" staat het repository waar het vandaan komt. Vaak is dit npm, maar je moet degene kiezen die in de tweede kolom bij `typings search` staat.
+## Typescript types
+Wanneer je een library installeerd, en deze komt standaard niet met typescript types, kan je deze installeren met het volgende command:  
+`npm install @types/some-package-name --save-dev`  
+
+Hoe je deze in je typescript gebruikt kan per library verschillen. Het toevoegen aan de pagina en het toegang hebben tot de types in .ts bestanden zijn vaak twee verschillende dingen.  
+In je .ts bestanden kan je de volgende opties proberen:
+* `import 'some-package-name'`
+* `import * as SomePackageName from 'some-package-name'`
+* `import {SomePackageName} from 'some-package-name'`
+
+Voor het importeren van het javascript bestand in de website kan je deze toevoegen in `frontend/.angular-cli.json` onder `{...,apps:[{...,scripts:[...hier..]}]}`
