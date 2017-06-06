@@ -27,6 +27,7 @@ export class SampleLocationTableComponent implements OnInit {
 
   ngOnInit() {
     this.apiLocationService.getAllLocations().subscribe(locations => {
+      console.log(locations);
       this.rows = locations;
     })
   }
