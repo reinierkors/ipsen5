@@ -65,6 +65,7 @@ public class UserService {
         if (errors.size() > 0) {
             throw new ApiValidationException(errors);
         }
+        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
         repo.persist(user);
 
