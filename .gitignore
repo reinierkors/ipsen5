@@ -1,5 +1,5 @@
 # Developer-specific configuration
-devConfig.json
+api/devConfig.json
 
 # Generated files
 frontend/src/assets/css/app.css
