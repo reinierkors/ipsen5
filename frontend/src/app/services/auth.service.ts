@@ -25,7 +25,7 @@ export class AuthenticationService extends ApiService{
     }
 
     login(email: string, password: string): Observable<boolean> {
-        return this.post('/authenticate', { email: email, password: password })
+        return this.post('/authenticate/login', { email: email, password: password })
             .map((response: Response) => {
                 // login successful if there's a token in the response
                 let token = response.toString();
