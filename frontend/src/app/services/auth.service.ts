@@ -13,9 +13,10 @@ export class AuthenticationService extends ApiService{
 
     constructor(http: Http) {
         super(http);
-        // // set token if saved in local storage
-        // let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        // this.token = currentUser.token;
+        if(localStorage.getItem("currentUser") != null){
+            let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            ApiService.addToAuthHeaders("X-Authorization", currentUser.token);
+        }
     }
 
     addToStorage(token: string): void {
@@ -46,7 +47,6 @@ export class AuthenticationService extends ApiService{
         // clear token remove user from local storage to log user out
         this.token = null;
         localStorage.removeItem('currentUser');
-        console.log("creating remove post call");
         return this.post('/authenticate/logout',{})
             .map((response: Response) => {
                 return response.ok;
