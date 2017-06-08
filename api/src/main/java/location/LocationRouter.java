@@ -22,6 +22,7 @@ public class LocationRouter {
 
         path("/location", () -> {
             get("/all", ((request, response) -> gson.toJson(locationService.getAll())));
+            get("/id/:id", ((request, response) -> gson.toJson(locationService.getById(Integer.valueOf(request.params("id"))))));
             get("/code/:code", (req,res) -> gson.toJson(locationService.getByCode(req.params("code"))));
             post("",(req,res) -> {
                 Location location = gson.fromJson(req.body(),Location.class);
