@@ -321,9 +321,10 @@ export class SampleUploadComponent implements OnInit {
 				sample.locationId = this.locationMap.get(row.Mp).id;
 				sample.xCoor = row['X-coor'];
 				sample.yCoor = row['Y-coor'];
+				sample.speciesValues = new Map();
 				sampleMap.set(sampleUnique,sample);
 			}
-			sample.speciesIds.push(this.speciesMap.get(row.Taxonnaam).id);
+			sample.speciesValues.set(this.speciesMap.get(row.Taxonnaam).id,row.Waarde);
 		});
 		
 		Array.from(this.speciesMap.values()).forEach(species => this.speciesIdsMap.set(species.id,species));
@@ -332,11 +333,13 @@ export class SampleUploadComponent implements OnInit {
 		
 		//Increase template rendering by only storing what we need on the page
 		this.confirm.samplesFast = this.confirm.samples.map(sample => {
+			let speciesValuesFast = new Map<string,number>();
+			sample.speciesValues.forEach((value,speciesId) => speciesValuesFast.set(this.speciesIdsMap.get(speciesId).name,value));
 			return {
 				locationCode:this.locationIdsMap.get(sample.locationId).code,
 				locationDescription:this.locationIdsMap.get(sample.locationId).description,
 				date:sample.date,
-				speciesNames:sample.speciesIds.map(id => this.speciesIdsMap.get(id).name)
+				speciesValues:speciesValuesFast
 			};
 		});
 		
