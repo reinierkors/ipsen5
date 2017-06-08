@@ -72,16 +72,13 @@ public class UserService {
 
 	public String createSessionToken(User tempUser) throws ApiException {
         try {
-            System.out.println("Trying to find user");
             User user = repo.findByEmail(tempUser.getEmail());
-            if (user.getPassword().equals(tempUser.getPassword())){
-                System.out.println("Creating session token");
+            if (user != null && user.getPassword().equals(tempUser.getPassword())) {
                 String sessionToken = UUID.randomUUID().toString();
                 saveSession(sessionToken, user.getId());
                 return sessionToken;
             } else {
-                System.out.println("Passwords don't match");
-                return null;
+                throw new ApiValidationException("Fout wachtwoord");
             }
         } catch(RepositoryException e){
             throw new ApiException("Cannot retrieve sample");
