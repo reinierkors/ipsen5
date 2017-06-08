@@ -16,7 +16,8 @@ import {
 	MdInputModule,
 	MdButtonModule,
 	MdSelectModule,
-	MdProgressBarModule
+	MdProgressBarModule,
+	MdProgressSpinnerModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -81,6 +82,7 @@ const routes:Routes = [
 		MdButtonModule,
 		MdSelectModule,
 		MdProgressBarModule,
+		MdProgressSpinnerModule,
         BrowserModule,
         FormsModule,
         HttpModule,

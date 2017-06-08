@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
  * MariaDB implementation of the Repository interface
  *
  * @author Wander Groeneveld
- * @version 0.5, 5-6-2017
+ * @version 0.6, 8-6-2017
  */
 public abstract class RepositoryMaria<T> implements Repository<T>{
 	protected final Connection connection;
-	private final String queryGet,queryGetAll,queryRemove,queryInsert,queryUpdate;
+	private final String queryGet,queryGetAll,queryRemove,queryInsert,queryUpdate,queryIsEmpty,queryRemoveAll;
 	
 	public RepositoryMaria(Connection connection){
 		this.connection = connection;
@@ -25,6 +25,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 		queryGet = "SELECT * FROM `"+getTable()+"` WHERE `id` = ?";
 		queryGetAll = "SELECT * FROM `"+getTable()+"`";
 		queryRemove = "DELETE FROM `"+getTable()+"` WHERE `id` = ?";
+		queryIsEmpty = "SELECT NULL FROM `"+getTable()+"` LIMIT 1";
+		queryRemoveAll = "DELETE FROM `"+getTable()+"`";
 		
 		List<String> columns = Arrays.stream(getColumns()).filter(column -> !column.isPrimary()).map(ColumnData::getColumnName).collect(Collectors.toList());
 		Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
@@ -41,6 +43,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	protected PreparedStatement psRemove() throws SQLException {return connection.prepareStatement(queryRemove);}
 	protected PreparedStatement psInsert() throws SQLException {return connection.prepareStatement(queryInsert,Statement.RETURN_GENERATED_KEYS);}
 	protected PreparedStatement psUpdate() throws SQLException {return connection.prepareStatement(queryUpdate);}
+	protected PreparedStatement psIsEmpty() throws SQLException {return connection.prepareStatement(queryIsEmpty);}
+	protected PreparedStatement psRemoveAll() throws SQLException {return connection.prepareStatement(queryRemoveAll);}
 	
 	
 	/**
@@ -402,6 +406,25 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 			}
 			
 			psRemoveMulti.executeUpdate();
+		} catch (SQLException e) {
+			throw new RepositoryException(e);
+		}
+	}
+	
+	public boolean isEmpty(){
+		try{
+			PreparedStatement psIsEmpty = psIsEmpty();
+			ResultSet resultSet = psIsEmpty.executeQuery();
+			return resultSet==null || !resultSet.next();
+		} catch (SQLException e) {
+			throw new RepositoryException(e);
+		}
+	}
+	
+	public void emptyTable(){
+		try{
+			PreparedStatement psRemoveAll = psRemoveAll();
+			psRemoveAll.executeUpdate();
 		} catch (SQLException e) {
 			throw new RepositoryException(e);
 		}

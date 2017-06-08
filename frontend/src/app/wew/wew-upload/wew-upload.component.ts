@@ -24,14 +24,20 @@ type ImportState = 'anim'|'start'|'loading'|'confirm'|'finished'|'error';
 	]
 })
 export class WewUploadComponent implements OnInit {
-	state:ImportState = 'start';
+	state:ImportState = 'loading';
 	private nextState:ImportState;
 	errors:any[] = [];
+	wewTablesEmpty:boolean;
 	
 	constructor(
 		private wewApi:ApiWewService,
 		private speciesApi:ApiSpeciesService
-	){}
+	){
+		wewApi.areTablesEmpty().subscribe(bool => {
+			this.wewTablesEmpty = bool;
+			this.setState('start');
+		});
+	}
 	
 	ngOnInit(){}
 	
@@ -53,6 +59,11 @@ export class WewUploadComponent implements OnInit {
 	public handleError(...error){
 		this.setState('error');
 		this.errors.push(error);
+	}
+	
+	//Empty all wew tables
+	public emptyWEWTables(){
+		this.wewApi.emptyAllTables().subscribe(bool => this.wewTablesEmpty = bool, (...params)=>this.handleError(...params));
 	}
 	
 	//A file is choses from the upload page
@@ -77,14 +88,17 @@ export class WewUploadComponent implements OnInit {
 			let reader = new FileReader();
 			let name = file.name;
 			reader.onload = function(e:any){
-				let data = e.target.result;
-				let arr = fixdata(data);
-				let workbook = XLSX.read(btoa(arr), {type: 'base64'});
-				resolve(workbook);
+				setTimeout(()=>{
+					let data = e.target.result;
+					let arr = fixdata(data);
+					let workbook = XLSX.read(btoa(arr), {type: 'base64'});
+					resolve(workbook);
+				});
 			};
 			reader.onerror = function(e){
 				reject(e);
 			}
+	
 			reader.readAsArrayBuffer(file);
 		});
 	}
@@ -192,8 +206,7 @@ export class WewUploadComponent implements OnInit {
 			//Save values
 			this.wewApi.saveValues(Array.from(values.keys())).subscribe(() => {
 				this.setState('finished');
-				console.log('Alles is saved',factors,values);
-			});
-		});
+			}, (...params)=>this.handleError(...params));
+		}, (...params)=>this.handleError(...params));
 	}
 }

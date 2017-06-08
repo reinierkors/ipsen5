@@ -18,11 +18,12 @@
 	<!-- Start, show file input -->
 	<md-card *ngIf="state=='start'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
 		<md-card-title>Upload WEW soortenlijst (XLS)</md-card-title>
-		<md-card-content>
-			<p>
-				Work in progress: browser kan voor 2 minuten hangen en unresponsive zijn tijdens wew lijst uploaden.
-			</p>
+		<md-card-content *ngIf="wewTablesEmpty">
 			<input type="file" (change)="fileChange($event)"/>
+		</md-card-content>
+		<md-card-content *ngIf="!wewTablesEmpty">
+			De WEW-tabellen op de server zijn niet leeg.<br/>
+			<button md-raised-button (click)="emptyWEWTables()">Leeg WEW tabellen</button>
 		</md-card-content>
 	</md-card>
 	

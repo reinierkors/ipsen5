@@ -27,4 +27,12 @@ export class ApiWewService extends ApiService{
 	public saveFactors(factors:WEWFactor[]):Observable<WEWFactor[]>{
 		return this.post('/wew/factor',factors).map(factors=>factors.map(factor => WEWFactor.fromJSON(factor)));
 	}
+	
+	public areTablesEmpty():Observable<boolean>{
+		return this.get('/wew/isEmpty');
+	}
+	
+	public emptyAllTables():Observable<boolean>{
+		return this.post('/wew/emptyAll',null);
+	}
 }

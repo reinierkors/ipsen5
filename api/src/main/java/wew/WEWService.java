@@ -105,6 +105,26 @@ public class WEWService {
 		}
 	}
 	
+	public boolean areTablesEmpty() throws ApiException{
+		try{
+			return valueRepo.isEmpty() && factorRepo.isEmpty() && factorClassRepo.isEmpty();
+		}
+		catch(RepositoryException e){
+			throw new ApiException("Could not determine whether WEW tables are empty");
+		}
+	}
+	
+	public void emptyAllTables() throws ApiException{
+		try{
+			valueRepo.emptyTable();
+			factorClassRepo.emptyTable();
+			factorRepo.emptyTable();
+		}
+		catch(RepositoryException e){
+			throw new ApiException("Could not empty all WEW tables");
+		}
+	}
+	
 	//It's like the non-web version, but with extra toppings
 	public class WEWFactorWeb extends WEWFactor{
 		List<WEWFactorClass> classes;

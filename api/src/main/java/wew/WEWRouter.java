@@ -36,6 +36,7 @@ public class WEWRouter {
 			});
 			get("/value", (req,res) -> gson.toJson(wewService.getAllValues()));
 			get("/factor", (req,res) -> gson.toJson(wewService.getFactors()));
+			get("/isEmpty", (req,res) -> gson.toJson(wewService.areTablesEmpty()));
 			
 			post("/value", (req,res) -> {
 				Type listType = new TypeToken<List<WEWValue>>(){}.getType();
@@ -47,6 +48,10 @@ public class WEWRouter {
 				Type listType = new TypeToken<List<WEWService.WEWFactorWeb>>(){}.getType();
 				List<WEWService.WEWFactorWeb> factors = gson.fromJson(req.body(),listType);
 				return gson.toJson(wewService.saveFactors(factors));
+			});
+			post("/emptyAll", (req,res) -> {
+				wewService.emptyAllTables();
+				return gson.toJson(true);
 			});
 		});
 		
