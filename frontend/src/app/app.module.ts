@@ -22,7 +22,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import { ResultsComponent } from './results/results-gmap/results-gmap.component';
+import { ResultsComponent } from './locations/google-map/results-gmap.component';
 import { CreateAccountComponent } from './user/create-account/create-account.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { NguiMapModule } from '@ngui/map';
