@@ -74,9 +74,8 @@ public class UserService {
 
 	public String createSessionToken(User tempUser) throws ApiException {
         try {
-            if(repo.findByEmail(tempUser.getEmail()) == null){
-                System.out.println("Couldn't find user: " + tempUser.getEmail());
-                return null;
+            if (repo.findByEmail(tempUser.getEmail()) == null){
+                throw new ApiValidationException("Fout wachtwoord");
             }
             User user = repo.findByEmail(tempUser.getEmail());
             if (checkPassword(tempUser.getPassword(), user)){
