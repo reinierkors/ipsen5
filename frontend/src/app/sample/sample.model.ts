@@ -37,7 +37,7 @@ export class Sample{
 		sample.yCoor = obj.yCoor;
 		sample.speciesValues = new Map();
 		for(let key in obj.speciesValues){
-			sample.speciesValues[parseInt(key,10)] = obj.speciesValues[key];
+			sample.speciesValues.set(parseInt(key,10),obj.speciesValues[key]);
 		}
 		return sample;
 	}

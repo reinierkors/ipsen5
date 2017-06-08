@@ -55,6 +55,8 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 	public Sample get(int id) throws RepositoryException {
 		try {
 			Sample sample = super.get(id);
+			if(sample==null)
+				return null;
 			//Retrieve species ids and values, and put them in the sample object
 			PreparedStatement psGetSpecies = connection.prepareStatement(queryGetSpecies);
 			psGetSpecies.setInt(1,sample.getId());
@@ -78,6 +80,8 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 	public List<Sample> get(List<Integer> ids) throws RepositoryException {
 		try {
 			List<Sample> samples = super.get(ids);
+			if(samples.isEmpty())
+				return samples;
 			
 			//Retrieve species ids and values, and put them in the sample object
 			Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
