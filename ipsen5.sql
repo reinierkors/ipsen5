@@ -282,7 +282,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(6) NOT NULL AUTO_INCREMENT,
   `email` varchar(100) NOT NULL,
-  `password` char(40) NOT NULL,
+  `password` char(60) NOT NULL,
   `name` varchar(100) NOT NULL,
   `group_id` int(3) NOT NULL,
   `session_token` char(36) DEFAULT NULL,
