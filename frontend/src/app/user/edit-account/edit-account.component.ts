@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiUserService} from '../api.user.service';
-import {MdSnackBar} from '@angular/material';
 import swal from 'sweetalert2';
 
 @Component({
@@ -15,7 +14,7 @@ export class EditAccountComponent implements OnInit {
     currentUser = {
 
     };
-  constructor(userService:ApiUserService, public snackBar: MdSnackBar) {
+  constructor(userService:ApiUserService) {
       this.userService = userService;
   }
 
@@ -24,7 +23,7 @@ export class EditAccountComponent implements OnInit {
 
   editPassword(value: any) {
       this.userService.editPassword(this.model.oldPassword, this.model.newPassword, this.model.confirmPassword).subscribe(data => {
-          this.snackBar.open(`Wachtwoord aangepast!`);
+          swal('', `Wachtwoord aangepast!`, 'success');
       }, error => swal('Oops...', error, 'error'));
   }
 }

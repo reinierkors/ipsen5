@@ -33,7 +33,7 @@ export class CreateAccountComponent implements OnInit{
 
     submitForm(value: any) {
         this.apiUser.createUser(User.fromJSON(value)).subscribe(data => {
-            swal('Success...', `Gebruiker ${data.name} aangemaakt!`, 'success');
+            swal('', `Gebruiker ${data.name} aangemaakt!`, 'success');
             this.resetForm();
         }, error => swal('Oops...', error, 'error'));
     }
