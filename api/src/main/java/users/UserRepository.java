@@ -17,17 +17,20 @@ public class UserRepository extends RepositoryMaria<User>{
     private final PreparedStatement psFindBySession;
     private final PreparedStatement psSaveSession;
     private final PreparedStatement psDeleteSession;
+    private final PreparedStatement psEditPassword;
 	public UserRepository(Connection connection) {
 		super(connection);
         String findByEmailQuery = "SELECT * FROM `"+getTable()+"` WHERE `email` LIKE ?";
         String findBySessionQuery = "SELECT * FROM `"+getTable()+"` WHERE `session_token` = ?";
         String saveSessionQuery = "UPDATE user SET session_token = ?, expiration_date = ? WHERE `id` = ?";
         String deleteSessionQuery = "UPDATE user SET session_token = NULL, expiration_date = NULL WHERE `id` = ?";
+        String editPasswordQuery = "UPDATE user SET `password` = ? WHERE `session_token` = ?";
         try {
             psFindByEmail = connection.prepareStatement(findByEmailQuery);
             psFindBySession = connection.prepareStatement(findBySessionQuery);
             psSaveSession = connection.prepareStatement(saveSessionQuery);
             psDeleteSession = connection.prepareStatement(deleteSessionQuery);
+            psEditPassword = connection.prepareStatement(editPasswordQuery);
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }
@@ -104,6 +107,16 @@ public class UserRepository extends RepositoryMaria<User>{
             psDeleteSession.setInt(1, id);
             psDeleteSession.executeUpdate();
         }catch (SQLException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    public void editPassword(String newPassword, String sessionToken){
+        try{
+            psEditPassword.setString(1, newPassword);
+            psEditPassword.setString(2, sessionToken);
+            psEditPassword.executeUpdate();
+        } catch (SQLException e) {
             throw new RepositoryException(e);
         }
     }

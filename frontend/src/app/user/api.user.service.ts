@@ -18,4 +18,8 @@ export class ApiUserService extends ApiService{
     public createUser(user:User):Observable<User> {
         return this.post('/user/add', user);
     }
+
+    public editPassword(oldPassword: String, newPassword: String, confirmPassword: String):Observable<boolean> {
+        return this.post('/user/editpassword', {oldPassword: oldPassword, newPassword: newPassword, confirmPassword: confirmPassword});
+    }
 }

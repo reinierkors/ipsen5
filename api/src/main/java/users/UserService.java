@@ -6,6 +6,7 @@ import authenticate.BCrypt;
 import com.google.gson.Gson;
 import database.ConnectionManager;
 import database.RepositoryException;
+import jdk.nashorn.internal.parser.JSONParser;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -89,6 +90,27 @@ public class UserService {
         } catch(RepositoryException e){
             throw new ApiException("Cannot retrieve user");
         }
+    }
+
+    public boolean editPassword(String oldPassword, String newPassword, String confirmPassword, String sessionToken){
+	    if(repo.findBySession(sessionToken) == null){
+            throw new ApiValidationException("Gebruiker niet gevonden");
+        }
+        User currentUser = repo.findBySession(sessionToken);
+	    if(!checkPassword(oldPassword, currentUser)){
+            throw new ApiValidationException("Wachtwoord klopt niet");
+        }
+	    if(!newPassword.equals(confirmPassword)){
+            throw new ApiValidationException("Nieuwe wachtwoorden komen niet overeen");
+        }
+	    repo.editPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()), sessionToken);
+        return true;
+    }
+
+    public boolean check(List<String> passwords){
+
+        System.out.println(passwords);
+        return true;
     }
 
     private boolean checkPassword(String password, User user){

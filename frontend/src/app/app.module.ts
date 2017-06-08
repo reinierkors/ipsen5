@@ -33,12 +33,13 @@ import {SampleLocationTableComponent} from "./sample-location-table/sample-locat
 import { LoginComponent } from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
 import { AngularEchartsModule } from 'ngx-echarts';
+import { EditAccountComponent } from './user/edit-account/edit-account.component';
 
 const routes:Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},
   {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
-  {path: 'account', component: CreateAccountComponent, canActivate: [AuthGuard]},
+  {path: 'account', component: EditAccountComponent, canActivate: [AuthGuard]},
   {path: 'locations', component: SampleLocationTableComponent, canActivate: [AuthGuard]},
   {path: 'results', component: ResultsComponent, canActivate: [AuthGuard]},
   {path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
@@ -46,6 +47,7 @@ const routes:Routes = [
   {path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
     /* Admin Routes */
   {path: 'admin/create-account', component: CreateAccountComponent, canActivate: [AuthGuard]},
+    /* Directs back to home if route is unknown */
   {path: '**', component: HomeComponent, canActivate: [AuthGuard]}
 ];
 
@@ -61,6 +63,7 @@ const routes:Routes = [
         SampleViewComponent,
         SampleEditComponent,
         LoginComponent,
+        EditAccountComponent,
     ],
     imports: [
         MdInputModule,
