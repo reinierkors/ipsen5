@@ -15,7 +15,8 @@ import {
 	MdInputModule,
 	MdButtonModule,
 	MdSelectModule,
-	MdProgressBarModule
+	MdProgressBarModule,
+	MdProgressSpinnerModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
@@ -31,6 +32,8 @@ import { SampleEditComponent } from './sample/sample-edit/sample-edit.component'
 import {SampleLocationTableComponent} from "./sample-location-table/sample-location-table.component";
 import { LoginComponent } from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
+import { WewUploadComponent } from './wew/wew-upload/wew-upload.component';
+import { WewViewComponent } from './wew/wew-view/wew-view.component';
 import { AngularEchartsModule } from 'ngx-echarts';
 
 const routes:Routes = [
@@ -42,6 +45,8 @@ const routes:Routes = [
   {path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
   {path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
   {path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
+  {path: 'wew/upload', component: WewUploadComponent, canActivate: [AuthGuard]},
+  {path: 'wew/view', component: WewViewComponent, canActivate: [AuthGuard]},
     /* Admin Routes */
   {path: 'admin/create-account', component: CreateAccountComponent, canActivate: [AuthGuard]},
   {path: '**', component: HomeComponent, canActivate: [AuthGuard]}
@@ -59,10 +64,11 @@ const routes:Routes = [
         SampleViewComponent,
         SampleEditComponent,
         LoginComponent,
+        WewUploadComponent,
+        WewViewComponent,
     ],
     imports: [
         MdInputModule,
-        AngularEchartsModule,
         MdSidenavModule,
 		MdCardModule,
 		MdMenuModule,
@@ -74,6 +80,7 @@ const routes:Routes = [
 		MdButtonModule,
 		MdSelectModule,
 		MdProgressBarModule,
+		MdProgressSpinnerModule,
         BrowserModule,
         FormsModule,
         HttpModule,
@@ -81,6 +88,7 @@ const routes:Routes = [
         NgxDatatableModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
+		AngularEchartsModule,
         RouterModule.forRoot(routes, {useHash: false}),
         NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyA8acwCuestYr1vo1mJK-QdkZ-3AwW1blM'}),
     ],
