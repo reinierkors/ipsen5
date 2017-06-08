@@ -1,5 +1,21 @@
-<div *ngIf="sample">
-	Sample id: {{sample.id}}<br/>
-	Sample datetime: {{sample.datetime}}
-</div>
-<div echarts [options]="chartOption" class="demo-chart"></div>
+<md-card *ngIf="sample && location && species && showChart">
+    <md-card-title>
+        Monster genomen bij {{location.description}}
+    </md-card-title>
+    <md-card-subtitle>{{sample.date|date:'d MMMM y'}}</md-card-subtitle>
+    <md-card-content>
+        <div echarts [options]="option" class="echart"></div>
+    </md-card-content>
+</md-card>
+
+<md-card *ngIf="location">
+    <md-card-title>
+        {{location.description}}
+    </md-card-title>
+    <md-card-content>
+        <ngui-map [options]="mapConfig">
+            <marker *ngIf="markerPos" [position]="markerPos">
+            </marker>
+        </ngui-map>
+    </md-card-content>
+</md-card>

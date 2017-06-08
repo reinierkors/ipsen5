@@ -4,7 +4,7 @@ import {ApiUserService} from '../api.user.service';
 import {User}    from '../user.model';
 import {FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {MdSnackBar} from '@angular/material';
-import swal from 'sweetalert2'
+import swal from 'sweetalert2';
 
 
 @Component({

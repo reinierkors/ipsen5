@@ -74,9 +74,8 @@ public class UserService {
 
 	public String createSessionToken(User tempUser) throws ApiException {
         try {
-            if(repo.findByEmail(tempUser.getEmail()) == null){
-                System.out.println("Couldn't find user");
-                return null;
+            if (repo.findByEmail(tempUser.getEmail()) == null){
+                throw new ApiValidationException("Fout wachtwoord/email");
             }
             User user = repo.findByEmail(tempUser.getEmail());
             if (checkPassword(tempUser.getPassword(), user)){
@@ -84,8 +83,7 @@ public class UserService {
                 saveSession(sessionToken, user.getId());
                 return sessionToken;
             } else {
-                System.out.println("Passwords don't match");
-                return null;
+                throw new ApiValidationException("Fout wachtwoord/email");
             }
         } catch(RepositoryException e){
             throw new ApiException("Cannot retrieve user");
