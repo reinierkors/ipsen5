@@ -347,8 +347,9 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 					index += usedColumns.size();
 				}
 				psInsertMulti.executeUpdate();
+				ResultSet generatedKeys = psInsertMulti.getGeneratedKeys();
 				for (T entity : sub) {
-					handleGeneratedKeys(entity, psInsertMulti.getGeneratedKeys());
+					handleGeneratedKeys(entity, generatedKeys);
 				}
 			}
 		} catch (SQLIntegrityConstraintViolationException e) {
