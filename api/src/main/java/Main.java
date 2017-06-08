@@ -21,7 +21,7 @@ public class Main {
 	public static void main(String[] args) {
 		port(Config.getInstance().api.port);
 		ipAddress(Config.getInstance().api.host);
-		enableCORS("*",null,null);
+		enableCORS("*",null,"X-Authorization");
 		
 		//Handle ApiException
 		GsonBuilder gsonBuilder = new GsonBuilder();
@@ -44,13 +44,21 @@ public class Main {
 		
         ApiGuard apiGuard = new ApiGuard();
 
-        before("/api",(request, response) -> {
-            if(!apiGuard.authCheck(request.headers("Authorization"))){
-                halt(401, "Your session has expired");
-            }
-        });
+
 		//Put all API calls under /api and let package routers handle their own routes
 		path("/api",()->{
+            before("/*",(request, response) -> {
+                if(request.url().contains("login")){
+                    return;
+                }
+                if(request.requestMethod().contains("OPTIONS")){
+                    return;
+                }
+                if(!apiGuard.authCheck(request.headers("X-Authorization"))){
+                    System.out.println("Request halted");
+                    halt(401, "Your session has expired");
+                }
+            });
 		    new AuthRouter();
 			new SampleRouter();
 			new SpeciesRouter();

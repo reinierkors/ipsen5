@@ -16,12 +16,10 @@ public class ApiGuard {
     }
 
     public boolean authCheck(String token){
-        System.out.println("Checking header token");
         if (repo.findBySession(token) != null) {
             User currentUser = repo.findBySession(token);
             if (currentUser.getExpirationDate().getTime() > new Timestamp(
                 System.currentTimeMillis()).getTime()) {
-                System.out.println(currentUser.getExpirationDate().getTime() + " < " + new Timestamp(System.currentTimeMillis()).getTime());
                 return true;
             }
             repo.deleteSession(currentUser.getId());

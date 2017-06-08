@@ -22,7 +22,8 @@ export class AppComponent {
     }
 
     toLogout() {
-        this.authenticationService.logout().subscribe(()=>{
+        this.authenticationService.logout()
+            .subscribe(()=>{
             this.router.navigate(['/login']);
         });
     }

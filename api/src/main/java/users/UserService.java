@@ -2,6 +2,7 @@ package users;
 
 import api.ApiException;
 import api.ApiValidationException;
+import authenticate.BCrypt;
 import com.google.gson.Gson;
 import database.ConnectionManager;
 import database.RepositoryException;
@@ -64,6 +65,7 @@ public class UserService {
         if (errors.size() > 0) {
             throw new ApiValidationException(errors);
         }
+        user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 
         repo.persist(user);
 
@@ -81,17 +83,19 @@ public class UserService {
                 throw new ApiValidationException("Fout wachtwoord");
             }
         } catch(RepositoryException e){
-            throw new ApiException("Cannot retrieve sample");
+            throw new ApiException("Cannot retrieve user");
         }
     }
 
+    private boolean checkPassword(String password, User user){
+        return BCrypt.checkpw(password, user.getPassword());
+    }
+
     public void saveSession(String sessionToken, int id){
-        System.out.println("Creating expiration date");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.DATE, 1);
         Timestamp expirationDate = new Timestamp(calendar.getTimeInMillis());
-        System.out.println("Saving session to database");
         repo.saveSession(id, sessionToken, expirationDate);
     }
 
