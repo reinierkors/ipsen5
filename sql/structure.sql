@@ -72,6 +72,7 @@ CREATE TABLE `reference_wew_factor_class` (
   `factor_class_id` int(5) NOT NULL,
   `computed_value` double DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `reference_id_factor_class_id` (`reference_id`,`factor_class_id`),
   KEY `reference_id` (`reference_id`),
   KEY `factor_class` (`factor_class_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
@@ -121,6 +122,7 @@ CREATE TABLE `sample_wew_factor_class` (
   `factor_class_id` int(5) NOT NULL,
   `computed_value` double DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `sample_id_factor_class_id` (`sample_id`,`factor_class_id`),
   KEY `sample_id` (`sample_id`),
   KEY `factor_class_id` (`factor_class_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
@@ -248,11 +250,12 @@ CREATE TABLE `wew_factor_class` (
 --
 
 CREATE TABLE `wew_value` (
-  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `id` int(7) NOT NULL AUTO_INCREMENT,
   `factor_class_id` int(3) NOT NULL,
   `species_id` int(5) NOT NULL,
   `value` double DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `factor_class_id_species_id` (`factor_class_id`,`species_id`),
   KEY `factor_class_id` (`factor_class_id`),
   KEY `species_id` (`species_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

@@ -1,6 +1,7 @@
 package sample;
 
 import api.ApiException;
+import calculate.CalculateService;
 import database.ConnectionManager;
 import database.RepositoryException;
 
@@ -16,10 +17,11 @@ import java.util.List;
 public class SampleService {
 	private static final SampleService instance = new SampleService();
 	private final SampleRepository repo;
+	private final CalculateService calcService;
 	
 	private SampleService() {
 		repo = new SampleRepository(ConnectionManager.getInstance().getConnection());
-		
+		calcService = CalculateService.getInstance();
 	}
 	
 	public static SampleService getInstance() {
@@ -41,6 +43,7 @@ public class SampleService {
 	public Sample save(Sample sample) throws ApiException{
 		try {
 			repo.persist(sample);
+			calcService.calculateSampleValues(sample.getId());
 			return sample;
 		} catch(RepositoryException e){
 			throw new ApiException("Cannot save sample");
@@ -50,6 +53,7 @@ public class SampleService {
 	public List<Sample> save(List<Sample> samples) throws ApiException{
 		try {
 			repo.persist(samples);
+			samples.forEach(sample -> calcService.calculateSampleValues(sample.getId()));
 			return samples;
 		} catch(RepositoryException e){
 			throw new ApiException("Cannot save samples");
