@@ -22,7 +22,7 @@ export class SampleViewComponent implements OnInit {
     public species: Species[];
     public location: Location;
     public showChart = false;
-    public markerPos = {lat: 52.152832, lng: 5.439478}
+    public markerPos;
 
     constructor(apiSample: ApiSampleService, apiSpecies: ApiSpeciesService, apiLocation: ApiLocationService, route: ActivatedRoute) {
         this.apiSample = apiSample;
@@ -66,6 +66,10 @@ export class SampleViewComponent implements OnInit {
             .subscribe(location => {
                 this.location = location;
                 this.mapConfig.center = {
+                    lat: location.latitude,
+                    lng: location.longitude
+                }
+                this.markerPos = {
                     lat: location.latitude,
                     lng: location.longitude
                 }
@@ -197,9 +201,6 @@ export class SampleViewComponent implements OnInit {
         center: {},
         zoom: 18,
         disableDefaultUI: true,
-        draggable: false,
-        scrollwheel: false,
-        disableDoubleClickZoom: true,
         clickableIcons: true,
     };
     // options

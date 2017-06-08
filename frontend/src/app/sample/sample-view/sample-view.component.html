@@ -14,7 +14,7 @@
     </md-card-title>
     <md-card-content>
         <ngui-map [options]="mapConfig">
-            <marker [position]="markerPos">
+            <marker *ngIf="markerPos" [position]="markerPos">
             </marker>
         </ngui-map>
     </md-card-content>
