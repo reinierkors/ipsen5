@@ -3,7 +3,6 @@ import {ActivatedRoute} from '@angular/router';
 import {ApiUserService} from '../api.user.service';
 import {User}    from '../user.model';
 import {FormGroup, FormBuilder, Validators } from '@angular/forms';
-import {MdSnackBar} from '@angular/material';
 import swal from 'sweetalert2';
 
 
@@ -18,7 +17,7 @@ export class CreateAccountComponent implements OnInit{
     public user:User;
     public complexForm : FormGroup;
 
-    constructor(apiUser:ApiUserService,route:ActivatedRoute, fb: FormBuilder, public snackBar: MdSnackBar){
+    constructor(apiUser:ApiUserService,route:ActivatedRoute, fb: FormBuilder){
         this.apiUser = apiUser;
         this.route = route;
         this.complexForm = fb.group({
@@ -34,7 +33,7 @@ export class CreateAccountComponent implements OnInit{
 
     submitForm(value: any) {
         this.apiUser.createUser(User.fromJSON(value)).subscribe(data => {
-            this.snackBar.open(`Gebruiker ${data.name} aangemaakt!`);
+            swal('Success...', `Gebruiker ${data.name} aangemaakt!`, 'success');
             this.resetForm();
         }, error => swal('Oops...', error, 'error'));
     }
