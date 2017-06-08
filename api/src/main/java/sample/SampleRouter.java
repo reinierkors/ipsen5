@@ -23,7 +23,7 @@ public class SampleRouter {
 		SampleService sampleService = SampleService.getInstance();
 		
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
+		gsonBuilder.setDateFormat("yyyy-MM-dd").create();
 		Gson gson = gsonBuilder.create();
 		
 		path("/sample", ()->{

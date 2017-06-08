@@ -56,4 +56,13 @@ public class LocationService {
 			throw new ApiException("Cannot save location");
 		}
 	}
+
+    public Location getById(int id) {
+        Location location = repository.get(id);
+        Double[] coordinates = converter.convertToLatLng(location.getxCoord(),
+                location.getyCoord());
+        location.setLatitude(coordinates[0]);
+        location.setLongitude(coordinates[1]);
+        return location;
+    }
 }

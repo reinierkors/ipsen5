@@ -15,7 +15,10 @@ export class ApiLocationService extends ApiService {
         return this.get('/location/all').map((markerLocations: Object[]) =>
             markerLocations.map(markerLocation => Location.fromJSON(markerLocation)));
     }
-	
+
+    public getById(id): Observable<Location> {
+        return this.get('/location/id/'+id).map(location => Location.fromJSON(location));
+    }
 	public getByCode(code:string):Observable<Location>{
 		return this.get('/location/code/'+code).map(location => Location.fromJSON(location));
 	}
