@@ -33,7 +33,6 @@ import {SampleLocationTableComponent} from "./sample-location-table/sample-locat
 import { LoginComponent } from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
 import { AngularEchartsModule } from 'ngx-echarts';
-import { ChangePasswordComponent } from './user/change-password/change-password.component';
 
 const routes:Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},
@@ -62,7 +61,6 @@ const routes:Routes = [
         SampleViewComponent,
         SampleEditComponent,
         LoginComponent,
-        ChangePasswordComponent,
     ],
     imports: [
         MdInputModule,
