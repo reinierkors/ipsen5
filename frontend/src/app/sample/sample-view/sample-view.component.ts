@@ -43,15 +43,16 @@ export class SampleViewComponent implements OnInit {
     }
 
     private retrieveSpecies() {
+		
         this.route.params
-            .switchMap(params => this.apiSpecies.getByIds(this.sample.speciesIds))
+            .switchMap(params => this.apiSpecies.getByIds(Array.from(this.sample.speciesValues.keys())))
             .subscribe(species => {
                 let names = [];
                 let values = [];
                 this.species = species;
                 this.species.forEach((item) => {
                     names.push(item.name);
-                    values.push(item.id);
+                    values.push(this.sample.speciesValues.get(item.id));
                 });
                 this.option.yAxis.data = names;
                 this.option.series[0].data = values;
