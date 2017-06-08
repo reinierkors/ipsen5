@@ -75,8 +75,20 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	 * @throws RepositoryException
 	 */
 	protected void fillParameters(PreparedStatement preparedStatement, T entity, boolean appendPrimary) throws RepositoryException {
+		fillParameters(preparedStatement,1,entity,appendPrimary);
+	}
+	
+	/**
+	 * Fills parameters of the prepared statement with values from the model
+	 * @param preparedStatement
+	 * @param statementStartIndex
+	 * @param entity
+	 * @param appendPrimary
+	 * @throws RepositoryException
+	 */
+	protected void fillParameters(PreparedStatement preparedStatement, int statementStartIndex, T entity, boolean appendPrimary) throws RepositoryException {
 		try {
-			int index = 1;
+			int index = statementStartIndex;
 			for(ColumnData cd : this.getColumns()){
 				if(cd.isPrimary())
 					continue;
@@ -235,6 +247,11 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 		}
 	}
 	
+	/**
+	 * Uses INSERT to save the entity to the database
+	 * @param entity
+	 * @throws RepositoryException
+	 */
 	private void persistInsert(T entity) throws RepositoryException {
 		try {
 			PreparedStatement psInsert = psInsert();
@@ -249,6 +266,11 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 		}
 	}
 	
+	/**
+	 * Uses UPDATE to save the entity to the database
+	 * @param entity
+	 * @throws RepositoryException
+	 */
 	private void persistUpdate(T entity) throws RepositoryException {
 		try {
 			PreparedStatement psUpdate = psUpdate();
@@ -261,13 +283,86 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	/**
 	 * Saves the objects to the database
-	 * TODO: optimise
 	 * @param entities
 	 * @throws RepositoryException
 	 */
 	@Override
 	public void persist(List<? extends T> entities) throws RepositoryException {
-		entities.forEach(this::persist);
+		List<T> newEntities = new ArrayList<>();
+		List<T> updatedEntities = new ArrayList<>();
+		
+		entities.forEach((T entity) -> {
+			if(isNew(entity)){
+				newEntities.add(entity);
+			}
+			else{
+				updatedEntities.add(entity);
+			}
+		});
+		persistUpdate(updatedEntities);
+		persistInsert(newEntities);
+	}
+	
+	/**
+	 * Uses INSERT to save the entities to the database, does this in batches of 1000 entities
+	 * @param entities
+	 * @throws RepositoryException
+	 */
+	private void persistInsert(List<? extends T> entities) throws RepositoryException {
+		if(entities.isEmpty()){
+			return;
+		}
+		
+		int listSize = entities.size();
+		int subSize = 1000;
+		int howManySubs = (listSize/subSize)+(listSize%subSize==0?0:1);
+		List<List<? extends T>> subs = new ArrayList<>();
+		
+		for(int i=0;i<howManySubs;++i){
+			int startIndex = i*subSize;
+			int endIndex = (i+1)*subSize;
+			endIndex = Math.min(endIndex,listSize);
+			subs.add(entities.subList(startIndex,endIndex));
+		}
+		
+		try {
+			for(List<? extends T> sub : subs) {
+				Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
+				List<ColumnData> usedColumns = Arrays.stream(getColumns()).filter(cd -> !cd.isPrimary()).collect(Collectors.toList());
+				
+				String columnList = usedColumns.stream().map(ColumnData::getColumnName).collect(commaJoiner);
+				String valueListSingle = "(" + usedColumns.stream().filter(cd -> !cd.isPrimary()).map(cd -> "?").collect(commaJoiner) + ")";
+				String valueList = sub.stream().map(ent -> valueListSingle).collect(commaJoiner);
+				
+				String queryInsertMulti = "INSERT INTO `" + getTable() + "` (" + columnList + ") VALUES " + valueList;
+				PreparedStatement psInsertMulti = connection.prepareStatement(queryInsertMulti);
+				
+				int index = 1;
+				for (T entity : sub) {
+					fillParameters(psInsertMulti, index, entity, false);
+					index += usedColumns.size();
+				}
+				psInsertMulti.executeUpdate();
+				for (T entity : sub) {
+					handleGeneratedKeys(entity, psInsertMulti.getGeneratedKeys());
+				}
+			}
+		} catch (SQLIntegrityConstraintViolationException e) {
+			//ToDo: different exception or message depending on the error (foreign key vs null vs duplicate value, etc)
+			throw new ApiValidationException("SQL Constraint Violation ("+e.getSQLState()+"): "+e.getMessage());
+		} catch (SQLException e) {
+			throw new RepositoryException(e);
+		}
+	}
+	
+	/**
+	 * Uses UPDATE to save the entities to the database
+	 * ToDO: optimise
+	 * @param entities
+	 * @throws RepositoryException
+	 */
+	private void persistUpdate(List<? extends T> entities) throws RepositoryException {
+		entities.forEach(this::persistUpdate);
 	}
 	
 	/**
