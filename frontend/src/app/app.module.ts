@@ -33,7 +33,7 @@ import {SampleLocationTableComponent } from "./sample-location-table/sample-loca
 import { LoginComponent } from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
 import { AngularEchartsModule } from 'ngx-echarts';
-import { ResultGraphsComponent } from './results/results-graphs/result-graphs/result-graphs.component';
+import { WatersComponent } from './results/waters/waters.component';
 
 const routes:Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},
@@ -45,7 +45,7 @@ const routes:Routes = [
   {path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
   {path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
   {path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
-  {path: 'results/results-graphs/:id', component: ResultGraphsComponent, canActivate: [AuthGuard]},
+  {path: 'results/waters/:id', component: WatersComponent, canActivate: [AuthGuard]},
     /* Admin Routes */
   {path: 'admin/create-account', component: CreateAccountComponent, canActivate: [AuthGuard]},
   {path: '**', component: HomeComponent, canActivate: [AuthGuard]}
@@ -63,7 +63,7 @@ const routes:Routes = [
         SampleViewComponent,
         SampleEditComponent,
         LoginComponent,
-        ResultGraphsComponent,
+        WatersComponent,
     ],
     imports: [
 		MaterialModule,

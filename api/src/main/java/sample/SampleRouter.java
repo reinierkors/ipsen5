@@ -28,6 +28,7 @@ public class SampleRouter {
 		
 		path("/sample", ()->{
 			get("/:id",(req,res) -> gson.toJson(sampleService.get(Integer.parseInt(req.params("id")))));
+			get("/getRelevant/:id",(req,res) -> gson.toJson(sampleService.getByLocationId(Integer.parseInt(req.params("id")))));
 			post("",(req,res) -> {
 				Type listType = new TypeToken<List<Sample>>(){}.getType();
 				List<Sample> samples = gson.fromJson(req.body(),listType);
