@@ -48,6 +48,15 @@ public class WEWService {
 		 }
 	}
 	
+	public List<WEWValue> getAllValues() throws ApiException{
+		try{
+			return valueRepo.getAll();
+		}
+		catch(RepositoryException e){
+			throw new ApiException("Could not retrieve WEW values");
+		}
+	}
+	
 	public List<WEWFactorWeb> getFactors() throws ApiException{
 		try{
 			List<WEWFactor> factors = factorRepo.getAll();

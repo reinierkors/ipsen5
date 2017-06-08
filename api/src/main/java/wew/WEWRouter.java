@@ -1,7 +1,6 @@
 package wew;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import wew.value.WEWValue;
 
@@ -19,7 +18,7 @@ import static spark.Spark.post;
  * Bevat de routes voor WEW-onderdelen van de api
  *
  * @author Wander Groeneveld
- * @version 0.2, 6-6-2017
+ * @version 0.3, 7-6-2017
  */
 public class WEWRouter {
 	public WEWRouter(){
@@ -27,6 +26,7 @@ public class WEWRouter {
 		
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
+		gsonBuilder.registerTypeAdapter(WEWValue.class,new WEWValueJSON());
 		Gson gson = gsonBuilder.create();
 		
 		path("/wew", ()->{
@@ -34,12 +34,14 @@ public class WEWRouter {
 				List<Integer> ids = stream(req.params("ids").split(",")).map(Integer::parseInt).collect(Collectors.toList());
 				return gson.toJson(wewService.getBySpecies(ids));
 			});
-			get("/factor", (req,res) -> wewService.getFactors());
+			get("/value", (req,res) -> gson.toJson(wewService.getAllValues()));
+			get("/factor", (req,res) -> gson.toJson(wewService.getFactors()));
 			
 			post("/value", (req,res) -> {
 				Type listType = new TypeToken<List<WEWValue>>(){}.getType();
 				List<WEWValue> values = gson.fromJson(req.body(),listType);
-				return gson.toJson(wewService.saveValues(values));
+				values = wewService.saveValues(values);
+				return "{\"count\":"+values.size()+"}";
 			});
 			post("/factor", (req,res) -> {
 				Type listType = new TypeToken<List<WEWService.WEWFactorWeb>>(){}.getType();
@@ -48,5 +50,30 @@ public class WEWRouter {
 			});
 		});
 		
+	}
+	
+	//Custom WEWValue format for performance reasons
+	private class WEWValueJSON implements JsonSerializer<WEWValue>, JsonDeserializer<WEWValue>{
+		@Override
+		public JsonElement serialize(WEWValue wewValue, Type type, JsonSerializationContext jsonSerializationContext) {
+			JsonObject value = new JsonObject();
+			value.addProperty("i",wewValue.getId());
+			value.addProperty("c",wewValue.getFactorClassId());
+			value.addProperty("s",wewValue.getSpeciesId());
+			value.addProperty("v",wewValue.getValue());
+			return value;
+		}
+		@Override
+		public WEWValue deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+			WEWValue value = new WEWValue();
+			JsonObject obj = jsonElement.getAsJsonObject();
+			if(obj.has("i") && !obj.get("i").isJsonNull())
+				value.setId(obj.get("i").getAsInt());
+				value.setFactorClassId(obj.get("c").getAsInt());
+				value.setSpeciesId(obj.get("s").getAsInt());
+			if(obj.has("v") && !obj.get("v").isJsonNull())
+				value.setValue(obj.get("v").getAsDouble());
+			return value;
+		}
 	}
 }

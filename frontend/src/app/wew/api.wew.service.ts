@@ -15,8 +15,9 @@ export class ApiWewService extends ApiService{
 		return this.get('/wew/value/species/'+ids.join(',')).map(values=>values.map(value => WEWValue.fromJSON(value)));
 	}
 	
-	public saveValues(values:WEWValue[]):Observable<WEWValue[]>{
-		return this.post('/wew/value',values).map(values=>values.map(value => WEWValue.fromJSON(value)));
+	//Returns number of inserted values
+	public saveValues(values:WEWValue[]):Observable<number>{
+		return this.post('/wew/value',values).map(obj=>obj.count);
 	}
 	
 	public getFactors():Observable<WEWFactor[]>{

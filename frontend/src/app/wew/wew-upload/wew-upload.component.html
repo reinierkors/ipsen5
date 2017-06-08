@@ -19,7 +19,18 @@
 	<md-card *ngIf="state=='start'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
 		<md-card-title>Upload WEW soortenlijst (XLS)</md-card-title>
 		<md-card-content>
+			<p>
+				Work in progress: browser kan voor 2 minuten hangen en unresponsive zijn tijdens wew lijst uploaden.
+			</p>
 			<input type="file" (change)="fileChange($event)"/>
+		</md-card-content>
+	</md-card>
+	
+	<!-- Finished, wew list is on the server -->
+	<md-card *ngIf="state=='finished'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<md-card-title>Klaar</md-card-title>
+		<md-card-content>
+			WEW-Lijst is opgeslagen op de server.
 		</md-card-content>
 	</md-card>
 </div>

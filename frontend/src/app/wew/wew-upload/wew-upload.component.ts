@@ -190,7 +190,7 @@ export class WewUploadComponent implements OnInit {
 			});
 			
 			//Save values
-			this.wewApi.saveValues(Array.from(values.keys())).subscribe(values => {
+			this.wewApi.saveValues(Array.from(values.keys())).subscribe(() => {
 				this.setState('finished');
 				console.log('Alles is saved',factors,values);
 			});
