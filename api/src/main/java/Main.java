@@ -44,7 +44,6 @@ public class Main {
 		
         ApiGuard apiGuard = new ApiGuard();
 
-
 		//Put all API calls under /api and let package routers handle their own routes
 		path("/api",()->{
             before("/*",(request, response) -> {

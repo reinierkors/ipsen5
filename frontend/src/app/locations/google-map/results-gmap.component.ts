@@ -13,7 +13,7 @@ import {Waterschap} from "../../waterschap/waterschap.model";
     templateUrl: './results-gmap.component.html',
     styleUrls: ['./results-gmap.component.css']
 })
-export class ResultsComponent implements OnInit {
+export class GMapsComponent implements OnInit {
     public locations: Location[];
     public positions = [];
     public markers = [];
