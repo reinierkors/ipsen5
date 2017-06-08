@@ -1,34 +1,46 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiLocationService } from '../locations/api.location.service';
+import {Component, OnInit} from '@angular/core';
+import {ApiLocationService} from '../locations/api.location.service';
+import {ApiWaterschapService} from '../waterschap/api.waterschap.service';
 
 @Component({
-  selector: 'app-sample-Location-table',
-  providers: [ApiLocationService],
-  templateUrl: './sample-Location-table.component.html',
-  styleUrls: ['./sample-Location-table.component.css']
+    selector: 'app-sample-Location-table',
+    providers: [ApiLocationService, ApiWaterschapService],
+    templateUrl: './sample-Location-table.component.html',
+    styleUrls: ['./sample-Location-table.component.css']
 })
 
 export class SampleLocationTableComponent implements OnInit {
 
-  private apiLocationService: ApiLocationService;
+    private apiLocationService: ApiLocationService;
+    private apiWaterschap: ApiWaterschapService;
 
-  rows = [];
+    locationRows = [];
+    locationColumns = [
+        {name: 'Mp', prop: 'code'},
+        {name: 'Naam', prop: 'description'}
+    ];
+    waterschapRows = [];
+    waterschapColumns = [
+        {name: 'Naam', prop: 'name'},
+        {name: 'Adres', prop: 'address'},
+        {name: 'Huisnummer', prop: 'houseNumber'},
+        {name: 'Postcode', prop: 'zipCode'},
+        {name: 'Locatie', prop: 'location'},
+        {name: 'Telefoonnummer', prop: 'phoneNumber'}
+    ];
 
-  columns = [
-    { name: 'code' },
-    { name: 'description' },
-    { prop: 'latitude' },
-    { prop: 'longitude'}
-  ];
+    constructor(apiLocationService: ApiLocationService, apiWaterschap: ApiWaterschapService) {
+        this.apiLocationService = apiLocationService;
+        this.apiWaterschap = apiWaterschap;
+    }
 
-  constructor(apiLocationService: ApiLocationService) {
-    this.apiLocationService = apiLocationService;
-  }
-
-  ngOnInit() {
-    this.apiLocationService.getAllLocations().subscribe(locations => {
-      this.rows = locations;
-    })
-  }
+    ngOnInit() {
+        this.apiLocationService.getAllLocations().subscribe(locations => {
+            this.locationRows = locations;
+        });
+        this.apiWaterschap.getAll().subscribe(waterschappen => {
+            this.waterschapRows = waterschappen;
+        });
+    }
 
 }
