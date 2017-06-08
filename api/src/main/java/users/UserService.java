@@ -74,8 +74,12 @@ public class UserService {
 
 	public String createSessionToken(User tempUser) throws ApiException {
         try {
+            if(repo.findByEmail(tempUser.getEmail()) == null){
+                System.out.println("Couldn't find user: " + tempUser.getEmail());
+                return null;
+            }
             User user = repo.findByEmail(tempUser.getEmail());
-            if (user != null && checkPassword(tempUser.getPassword(), user)){
+            if (checkPassword(tempUser.getPassword(), user)){
                 String sessionToken = UUID.randomUUID().toString();
                 saveSession(sessionToken, user.getId());
                 return sessionToken;
