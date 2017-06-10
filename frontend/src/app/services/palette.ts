@@ -35,6 +35,8 @@ class HSL{
 		public saturation:number,
 		public lightness:number
 	){}
+	
+	//Returns this color as hsl(h,s,l) string
 	public toString():string{
 		return `hsl(${this.hue},${this.saturation}%,${this.lightness}%)`;
 	}
@@ -47,6 +49,8 @@ class RGB{
 		public green:number,
 		public blue:number
 	){}
+	
+	//Returns this color as rgb(r,g,b) string
 	public toString():string{
 		return `rgb(${this.red},${this.green},${this.blue})`;
 	}
@@ -61,6 +65,7 @@ abstract class Palette{
 		this.loop = loop==null?true:loop;
 	}
 	
+	//Returns all colors in this palette
 	public getColors():(HSL|RGB)[]{
 		return this.colors;
 	}
