@@ -25,14 +25,47 @@ public class Main {
 		ipAddress(Config.getInstance().api.host);
 		enableCORS("*",null,"X-Authorization");
 		
-		//Handle ApiException
+		//Take care if 404s, 500s and exceptions
+		handleErrors();
+		
+		//Used for permission checking
+		ApiGuard apiGuard = new ApiGuard();
+		
+		//Put all API calls under /api and let package routers handle their own routes
+		path("/api",()->{
+			//Check authorization
+			before("/*",(request, response) -> {
+				if(request.url().contains("login")){
+					return;
+				}
+				if(request.requestMethod().contains("OPTIONS")){
+					return;
+				}
+				if(!apiGuard.authCheck(request.headers("X-Authorization"))){
+					System.out.println("Request halted");
+					halt(401, "Your session has expired");
+				}
+			});
+			
+			new AuthRouter();
+			new SampleRouter();
+			new SpeciesRouter();
+			new SpeciesCategoryRouter();
+			new WEWRouter();
+			new LocationRouter();
+			new WatertypeRouter();
+			new UserRouter();
+			new WaterschapRouter();
+			new WatertypeRouter();
+			new CalculateRouter();
+		});
+	}
+	
+	//What to do with what kind of error
+	private static void handleErrors(){
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(ApiException.class,new ApiExceptionTypeAdapter());
 		Gson gson = gsonBuilder.create();
-		exception(ApiException.class, (exception,req,res)-> {
-			res.status(500);
-			res.body(gson.toJson(exception));
-		});
 		
 		//Turn 404 and 500 errors into json
 		notFound((req,res) -> {
@@ -44,41 +77,16 @@ public class Main {
 			return gson.toJson(new ApiException("500 Server Error"));
 		});
 		
-		//Used for permission checking
-        ApiGuard apiGuard = new ApiGuard();
-
-		//Put all API calls under /api and let package routers handle their own routes
-		path("/api",()->{
-            //Check authorization
-			before("/*",(request, response) -> {
-                if(request.url().contains("login")){
-                    return;
-                }
-                if(request.requestMethod().contains("OPTIONS")){
-                    return;
-                }
-                if(!apiGuard.authCheck(request.headers("X-Authorization"))){
-                    System.out.println("Request halted");
-                    halt(401, "Your session has expired");
-                }
-            });
-		    new AuthRouter();
-			new SampleRouter();
-			new SpeciesRouter();
-			new SpeciesCategoryRouter();
-			new WEWRouter();
-			new LocationRouter();
-			new WatertypeRouter();
-			new UserRouter();
-			new WaterschapRouter();
-			new WatertypeRouter();
-			new CalculateRouter();
-			
-			//Put this exception in JSON
-			exception(IllegalArgumentException.class, (e, req, res) -> {
-				res.status(400);
-				res.body(gson.toJson("An error occurred: " + e));
-			});
+		//Handle ApiException
+		exception(ApiException.class, (exception,req,res)-> {
+			res.status(500);
+			res.body(gson.toJson(exception));
+		});
+		
+		//ToDo: we shouldn't print java exception messages to the client
+		exception(IllegalArgumentException.class, (e, req, res) -> {
+			res.status(400);
+			res.body(gson.toJson("An error occurred: " + e));
 		});
 	}
 	
