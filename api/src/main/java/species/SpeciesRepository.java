@@ -22,6 +22,12 @@ public class SpeciesRepository extends RepositoryMaria<Species>{
 	
 	PreparedStatement psFindByName() throws SQLException {return connection.prepareStatement(queryFindByName);}
 	
+	/**
+	 * Finds a species with a specified name
+	 * @param name the name of the species to look for
+	 * @return a species with the specified name, or null of none is found
+	 * @throws RepositoryException when there was a problem retrieving the species
+	 */
 	public Species findByName(String name) throws RepositoryException {
 		try {
 			PreparedStatement psFindByName = psFindByName();

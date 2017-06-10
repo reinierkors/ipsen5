@@ -15,7 +15,7 @@ import static spark.Spark.path;
 import static spark.Spark.post;
 
 /**
- * Bevat de routes voor WEW-onderdelen van de api
+ * Routes for the WEW-related parts of the API
  *
  * @author Wander Groeneveld
  * @version 0.3, 7-6-2017
@@ -30,25 +30,37 @@ public class WEWRouter {
 		Gson gson = gsonBuilder.create();
 		
 		path("/wew", ()->{
+			//Retrieve all WEW values of the species with the given ids
 			get("/value/species/:ids", (req,res) -> {
 				List<Integer> ids = stream(req.params("ids").split(",")).map(Integer::parseInt).collect(Collectors.toList());
 				return gson.toJson(wewService.getBySpecies(ids));
 			});
+			//Retrieve all WEW values
 			get("/value", (req,res) -> gson.toJson(wewService.getAllValues()));
+			//Retrieve all WEW factors
 			get("/factor", (req,res) -> gson.toJson(wewService.getFactors()));
+			//Checks if the WEW tables is empty
 			get("/isEmpty", (req,res) -> gson.toJson(wewService.areTablesEmpty()));
 			
+			//Stores new values
+			//Post data should be a list of WEWValue objects
+			//Returns the number of values that were saved
 			post("/value", (req,res) -> {
 				Type listType = new TypeToken<List<WEWValue>>(){}.getType();
 				List<WEWValue> values = gson.fromJson(req.body(),listType);
 				values = wewService.saveValues(values);
 				return "{\"count\":"+values.size()+"}";
 			});
+			
+			//Stores the WEW factors
+			//Post data should be a list of WEWService.WEWFactorWeb objects
 			post("/factor", (req,res) -> {
 				Type listType = new TypeToken<List<WEWService.WEWFactorWeb>>(){}.getType();
 				List<WEWService.WEWFactorWeb> factors = gson.fromJson(req.body(),listType);
 				return gson.toJson(wewService.saveFactors(factors));
 			});
+			
+			//Empty all WEW databases
 			post("/emptyAll", (req,res) -> {
 				wewService.emptyAllTables();
 				return gson.toJson(true);

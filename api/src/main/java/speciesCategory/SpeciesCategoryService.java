@@ -5,8 +5,7 @@ import database.ConnectionManager;
 import database.RepositoryException;
 
 /**
- * Service voor species-category-gerelateerde business logic
- * Staat tussen de router en de repository
+ * Service for species-categories
  *
  * @author Wander Groeneveld
  * @version 0.1, 21-5-2017
@@ -24,6 +23,12 @@ public class SpeciesCategoryService {
 		return instance;
 	}
 	
+	/**
+	 * Retrieves a species category by name
+	 * @param id the id of the species category
+	 * @return the species category with the given id
+	 * @throws ApiException when there's a problem retrieving the species category or it was not found
+	 */
 	public SpeciesCategory get(int id) throws ApiException {
 		try {
 			SpeciesCategory speciesCategory = repo.get(id);
@@ -36,6 +41,11 @@ public class SpeciesCategoryService {
 		}
 	}
 	
+	/**
+	 * Retrieves all species categories
+	 * @return a list of all species categories
+	 * @throws ApiException when there was a problem retrieving all species categories
+	 */
 	public Iterable<SpeciesCategory> getAll() throws ApiException{
 		try {
 			return repo.getAll();

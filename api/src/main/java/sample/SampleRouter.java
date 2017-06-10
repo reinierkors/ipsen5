@@ -13,7 +13,7 @@ import static spark.Spark.post;
 
 
 /**
- * Bevat de routes voor sample-onderdelen van de api
+ * Contains the routes for sample parts of the API
  *
  * @author Wander Groeneveld
  * @version 0.3, 4-6-2017

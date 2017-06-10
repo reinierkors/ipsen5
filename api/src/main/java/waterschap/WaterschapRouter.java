@@ -7,7 +7,7 @@ import static spark.Spark.get;
 
 
 /**
- * Bevat de routes voor waterschap-onderdelen van de api
+ * Contains waterschap routes
  *
  * @author Wander Groeneveld
  * @version 0.1, 30-5-2017

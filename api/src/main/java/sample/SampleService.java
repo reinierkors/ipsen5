@@ -8,8 +8,7 @@ import database.RepositoryException;
 import java.util.List;
 
 /**
- * Service voor sample-gerelateerde business logic
- * Staat tussen de router en de repository
+ * Service for samples
  *
  * @author Wander Groeneveld
  * @version 0.2, 4-6-2017
@@ -28,6 +27,12 @@ public class SampleService {
 		return instance;
 	}
 	
+	/**
+	 * Retrieve sample with the specified by
+	 * @param id the id of the sample to be retrieved
+	 * @return a sample
+	 * @throws ApiException when there's a problem retrieving the sample, or the sample does not exist
+	 */
 	public Sample get(int id) throws ApiException {
 		try {
 			Sample sample = repo.get(id);
@@ -40,6 +45,12 @@ public class SampleService {
 		}
 	}
 	
+	/**
+	 * Stores the sample
+	 * @param sample the sample to be stored
+	 * @return the sample after it's been stored
+	 * @throws ApiException when there's a problem storing the sample
+	 */
 	public Sample save(Sample sample) throws ApiException{
 		try {
 			repo.persist(sample);
@@ -50,6 +61,12 @@ public class SampleService {
 		}
 	}
 	
+	/**
+	 * Stores a list of samples
+	 * @param samples a list of samples to be stored
+	 * @return the list of samples after they've been stored
+	 * @throws ApiException when there's a problem storing the samples
+	 */
 	public List<Sample> save(List<Sample> samples) throws ApiException{
 		try {
 			repo.persist(samples);

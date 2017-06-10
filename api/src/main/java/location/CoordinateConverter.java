@@ -1,6 +1,7 @@
 package location;
 
 /**
+ * Class to convert between coordinate systems
  * @author Dylan de Wit
  * @version 1.0, 24-5-2017
  */
@@ -14,8 +15,8 @@ public class CoordinateConverter {
      * Converts Rijksdriekhoek coordinates to usable Latitude and Longitude
      * coordinates
      *
-     * @param x
-     * @param y
+     * @param x the x-coordinate
+     * @param y the y-coordinate
      * @return Array consisting of [0] latitude, [1] longitude
      */
     public Double[] convertToLatLng(int x, int y) {

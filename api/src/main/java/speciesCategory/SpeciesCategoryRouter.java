@@ -7,7 +7,7 @@ import static spark.Spark.get;
 import static spark.Spark.path;
 
 /**
- * Bevat de routes voor species-category-onderdelen van de api
+ * Routes for species categories
  *
  * @author Wander Groeneveld
  * @version 0.1, 21-5-2017
