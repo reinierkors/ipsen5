@@ -31,10 +31,15 @@ public class CalculateService {
 	public CalculateService(){
 		this.connection = ConnectionManager.getInstance().getConnection();
 	}
+	
 	public static CalculateService getInstance() {
 		return instance;
 	}
 	
+	/**
+	 * Runs a query on the server that calculates and stores water quality properties
+	 * @param sampleId the id of the sample object to calculate the properties of
+	 */
 	public void calculateSampleValues(int sampleId){
 		try {
 			PreparedStatement psCalcSample = this.connection.prepareStatement(queryCalcSample);
@@ -47,6 +52,11 @@ public class CalculateService {
 		}
 	}
 	
+	/**
+	 * Retrieves calculated water quality properties of a single sample
+	 * @param sampleId the id of a sample
+	 * @return a list containing water quality properties
+	 */
 	public List<CalculationData> getBySample(int sampleId){
 		try {
 			PreparedStatement psGetBySample = this.connection.prepareStatement(queryGetBySample);
@@ -69,6 +79,10 @@ public class CalculateService {
 		}
 	}
 	
+	/**
+	 * A samples pair of factor class and calculated value
+	 * The value is the average of all species in the WEW list for a given factor class
+	 */
 	public class CalculationData{
 		public int factorClassId;
 		public double computedValue;

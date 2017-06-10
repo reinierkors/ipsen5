@@ -8,6 +8,7 @@ import {ApiSpeciesService} from '../../species/api.species.service';
 
 import * as XLSX from 'xlsx';
 
+//States the importing process can be in
 type ImportState = 'anim'|'start'|'loading'|'confirm'|'finished'|'error';
 
 @Component({
@@ -24,15 +25,20 @@ type ImportState = 'anim'|'start'|'loading'|'confirm'|'finished'|'error';
 	]
 })
 export class WewUploadComponent implements OnInit {
+	//The current state of the import process
 	state:ImportState = 'loading';
+	//State to apply after an animation finishes
 	private nextState:ImportState;
+	//Any errors to show
 	errors:any[] = [];
+	//Are the wew tables empty?
 	wewTablesEmpty:boolean;
 	
 	constructor(
 		private wewApi:ApiWewService,
 		private speciesApi:ApiSpeciesService
 	){
+		//Check if the WEW tables are empty
 		wewApi.areTablesEmpty().subscribe(bool => {
 			this.wewTablesEmpty = bool;
 			this.setState('start');
@@ -84,6 +90,8 @@ export class WewUploadComponent implements OnInit {
 			o += String.fromCharCode.apply(null,new Uint8Array(data.slice(l*w)));
 			return o;
 		}
+		
+		//Resolves when the file is parsed and available as XLSX.WorkBook
 		return new Promise((resolve,reject) => {
 			let reader = new FileReader();
 			let name = file.name;
@@ -98,7 +106,7 @@ export class WewUploadComponent implements OnInit {
 			reader.onerror = function(e){
 				reject(e);
 			}
-	
+			
 			reader.readAsArrayBuffer(file);
 		});
 	}
@@ -107,8 +115,11 @@ export class WewUploadComponent implements OnInit {
 	private handleWorkBook(wb:XLSX.WorkBook):Promise<{factors:WEWFactor[],values:Map<WEWValue,WEWFactorClass>}>{
 		let matrixSheet = wb.Sheets[wb.SheetNames[0]];
 		let factorSheet = wb.Sheets[wb.SheetNames[1]];
+		//Get factors from the factor sheet
 		let factors:WEWFactor[] = this.handleFactorSheet(factorSheet);
+		//Get values from the matrix sheet
 		let values:Promise<Map<WEWValue,WEWFactorClass>> = this.handleMatrixSheet(matrixSheet,factors);
+		//Resolve with all factors and values
 		return new Promise((resolve,reject) => {
 			values.then(values => resolve({factors:factors,values:values}),reject);
 		});
@@ -116,11 +127,16 @@ export class WewUploadComponent implements OnInit {
 	
 	//Reads all the factors and classes from the sheet
 	private handleFactorSheet(factorSheet:XLSX.WorkSheet):WEWFactor[]{
+		//Turn the worksheet in a 2D array
 		let rows:any[] = XLSX.utils.sheet_to_json(factorSheet);
-		let factorMap:Map<string,WEWFactor> = new Map();
+		//Maps factor names to factor objects
+		let factorMap:Map<string/*factor name*/,WEWFactor> = new Map();
+		//Factor name doesn't repeat on every row, so keep track of the last one
 		let lastFactor:string;
+		
 		rows.forEach((row,index) => {
 			let factor:WEWFactor;
+			//Row contains a new factor name, create object
 			if(row.factor){
 				lastFactor = row.factor;
 				factor = new WEWFactor();
@@ -128,18 +144,22 @@ export class WewUploadComponent implements OnInit {
 				factor.classes = [];
 				factorMap.set(factor.name,factor);
 			}
+			//Use the previous one
 			else{
 				row.factor = lastFactor;
 				factor = factorMap.get(row.factor);
 			}
+			//Create a factor class for this row
 			let factorClass = new WEWFactorClass();
 			factorClass.code = row.code;
 			factorClass.description = row.klasse;
 			factorClass.order = index;
+			//Store it in the current factor
 			factor.classes.push(factorClass);
 		});
-		//Zeldzaamheid is a special case, let's ignore it
-		factorMap.delete("zeldzaamheid");
+		//Zeldzaamheid is a special case, its rows in this sheet are not factor classes but possible values
+		//We don't have plans on visualizing this any time soon, so ignore it for now
+		factorMap.delete('zeldzaamheid');
 		
 		return Array.from(factorMap.values());
 	}
@@ -174,20 +194,28 @@ export class WewUploadComponent implements OnInit {
 		});
 		
 		//Map species names to wew values
-		let speciesValuesMap:Map<string,WEWValue[]> = new Map();
+		let speciesValuesMap:Map<string/*species name*/,WEWValue[]> = new Map();
 		let factorClassValuesMap:Map<WEWValue,WEWFactorClass> = new Map();
 		
-		//Get all values
+		//Get all values, every row is a species
 		rows.forEach((row,index) => {
+			//First 3 rows of the sheet are headers, ignore them
 			if(index<3)
 				return;
+			
 			let rowValues:WEWValue[] = [];
+			
+			//Store every field in this row as a WEWValue
 			factorClassColumns.forEach((factorClass,index) => {
 				let value = new WEWValue();
+				//'x' means null in this sheet
 				value.value = row[index+1]==='x'?null:row[index+1];
+				
 				rowValues.push(value);
 				factorClassValuesMap.set(value,factorClass);
 			});
+			
+			//Map the species name of this row to all values on the row
 			speciesValuesMap.set(row[0],rowValues);
 		});
 		
@@ -198,7 +226,8 @@ export class WewUploadComponent implements OnInit {
 			});
 		});
 		
-		//Return stuff
+		//Return a promise that resolves with a Map<WEWValue,WEWFactorClass>
+		//FactorClasses aren't saved yet, so without IDs, this map saves the relation
 		return new Promise((resolve,reject) => {
 			speciesPr.then(() => resolve(factorClassValuesMap),reject);
 		});
@@ -206,9 +235,10 @@ export class WewUploadComponent implements OnInit {
 	
 	//Saves all data to the server
 	private saveData(factors:WEWFactor[],values:Map<WEWValue,WEWFactorClass>){
-		//Save factors
-		let factorClassMap:Map<string,WEWFactorClass> = new Map();
+		let factorClassMap:Map<string/*factor class code*/,WEWFactorClass> = new Map();
+		//Save factors and factor classes in them
 		this.wewApi.saveFactors(factors).subscribe(factors => {
+			//Put them in the map for lookup
 			factors.forEach(factor => factor.classes.forEach(cl => factorClassMap.set(cl.code,cl)));
 			
 			//Set factor class ids in values
@@ -218,6 +248,7 @@ export class WewUploadComponent implements OnInit {
 			
 			//Save values
 			this.wewApi.saveValues(Array.from(values.keys())).subscribe(() => {
+				//Show the end page
 				this.setState('finished');
 			}, (...params)=>this.handleError(...params));
 		}, (...params)=>this.handleError(...params));

@@ -47,6 +47,12 @@ public class WEWValueRepository extends RepositoryMaria<WEWValue>{
 		};
 	}
 	
+	/**
+	 * Retrieve all WEW values for a given species
+	 * @param speciesIds list of ids of species
+	 * @return a list of values for all the species with the given ids
+	 * @throws RepositoryException when there was a problem retrieving the wew values
+	 */
 	public List<WEWValue> getBySpecies(List<Integer> speciesIds) throws RepositoryException{
 		try{
 			Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");

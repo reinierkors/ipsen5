@@ -74,7 +74,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	 * Override to change how getAll() orders its rows
 	 * This string is added after "ORDER BY " in the query
 	 * Example: `date` ASC
-	 * @return
+	 * @return a string to be placed after ORDER BY in a SELECT query
 	 */
 	protected String orderBy(){
 		return null;
@@ -82,10 +82,10 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	/**
 	 * Fills parameters of the prepared statement with values from the model
-	 * @param preparedStatement
-	 * @param entity
-	 * @param appendPrimary
-	 * @throws RepositoryException
+	 * @param preparedStatement statement to add entity values in
+	 * @param entity values of which should be added to the statement
+	 * @param appendPrimary whether or not it should add the primary value to the end
+	 * @throws RepositoryException when something goes wrong adding parameters to the prepared statement
 	 */
 	protected void fillParameters(PreparedStatement preparedStatement, T entity, boolean appendPrimary) throws RepositoryException {
 		fillParameters(preparedStatement,1,entity,appendPrimary);
@@ -93,11 +93,11 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	/**
 	 * Fills parameters of the prepared statement with values from the model
-	 * @param preparedStatement
-	 * @param statementStartIndex
-	 * @param entity
-	 * @param appendPrimary
-	 * @throws RepositoryException
+	 * @param preparedStatement statement to add entity values in
+	 * @param statementStartIndex at what index should it start filling the parameters
+	 * @param entity values of which should be added to the statement
+	 * @param appendPrimary whether or not it should add the primary value to the end
+	 * @throws RepositoryException when something goes wrong adding parameters to the prepared statement
 	 */
 	protected void fillParameters(PreparedStatement preparedStatement, int statementStartIndex, T entity, boolean appendPrimary) throws RepositoryException {
 		try {
@@ -127,7 +127,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	/**
 	 * Creates a model instance from a result set
-	 * @param resultSet
+	 * @param resultSet a resultset out of which the values for the entity come
 	 * @return a filled model instance
 	 */
 	protected T resultSetToModel(ResultSet resultSet) throws RepositoryException {
@@ -146,8 +146,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	/**
 	 * Stores the auto increment keys in the entity
-	 * @param entity
-	 * @param generatedKeys
+	 * @param entity the entity to store the generated keys in
+	 * @param generatedKeys resultset containing the generated keys
 	 */
 	protected void handleGeneratedKeys(T entity, ResultSet generatedKeys) throws RepositoryException {
 		if(generatedKeys==null)
@@ -167,9 +167,9 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	/**
 	 * Retrieve a specific row from the database and returns it as model instance
-	 * @param id
+	 * @param id the id of the row to retrieve
 	 * @return a filled model instance found by the id
-	 * @throws RepositoryException
+	 * @throws RepositoryException when there's a problem retrieving the row
 	 */
 	@Override
 	public T get(int id) throws RepositoryException {
@@ -191,9 +191,9 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	/**
 	 * Retrieve multiple rows by id from the database and return as model instance
-	 * @param ids
+	 * @param ids the ids of the rows to retrieve
 	 * @return filled model instances found by the ids
-	 * @throws RepositoryException
+	 * @throws RepositoryException when there's a problem retrieving the rows
 	 */
 	@Override
 	public List<T> get(List<Integer> ids) throws RepositoryException {
@@ -225,7 +225,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	/**
 	 * @return all the rows from the database as model instances
-	 * @throws RepositoryException
+	 * @throws RepositoryException when there's a problem retrieving the rows
 	 */
 	@Override
 	public List<T> getAll() throws RepositoryException {
@@ -247,8 +247,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	/**
 	 * Saves the object to the database
-	 * @param entity
-	 * @throws RepositoryException
+	 * @param entity the entity to be stored in the database
+	 * @throws RepositoryException when there's a problem storing the entity
 	 */
 	@Override
 	public void persist(T entity) throws RepositoryException {
@@ -261,9 +261,9 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	}
 	
 	/**
-	 * Uses INSERT to save the entity to the database
-	 * @param entity
-	 * @throws RepositoryException
+	 * Uses INSERT to save the entity to the database and stores any generated keys in the entity
+	 * @param entity the entity to be inserted
+	 * @throws RepositoryException when there's a problem inserting the entity
 	 */
 	private void persistInsert(T entity) throws RepositoryException {
 		try {
@@ -281,8 +281,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	/**
 	 * Uses UPDATE to save the entity to the database
-	 * @param entity
-	 * @throws RepositoryException
+	 * @param entity the entity to be updated
+	 * @throws RepositoryException when there's a problem updating the entity
 	 */
 	private void persistUpdate(T entity) throws RepositoryException {
 		try {
@@ -296,8 +296,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	/**
 	 * Saves the objects to the database
-	 * @param entities
-	 * @throws RepositoryException
+	 * @param entities list of entities to be saved
+	 * @throws RepositoryException when there's a problem saving the entities
 	 */
 	@Override
 	public void persist(List<? extends T> entities) throws RepositoryException {
@@ -318,14 +318,15 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	/**
 	 * Uses INSERT to save the entities to the database, does this in batches of 1000 entities
-	 * @param entities
-	 * @throws RepositoryException
+	 * @param entities the entities to be inserted
+	 * @throws RepositoryException when there's a problem inserting the entities
 	 */
 	private void persistInsert(List<? extends T> entities) throws RepositoryException {
 		if(entities.isEmpty()){
 			return;
 		}
 		
+		//Split the list in sub-lists of no more than 1000 entities
 		int listSize = entities.size();
 		int subSize = 1000;
 		int howManySubs = (listSize/subSize)+(listSize%subSize==0?0:1);
@@ -339,6 +340,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 		}
 		
 		try {
+			//Save each sub-list
 			for(List<? extends T> sub : subs) {
 				Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
 				List<ColumnData> usedColumns = Arrays.stream(getColumns()).filter(cd -> !cd.isPrimary()).collect(Collectors.toList());
@@ -372,8 +374,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	/**
 	 * Uses UPDATE to save the entities to the database
 	 * ToDO: optimise
-	 * @param entities
-	 * @throws RepositoryException
+	 * @param entities the entities to be updated in the database
+	 * @throws RepositoryException when there's a problem updating the entities
 	 */
 	private void persistUpdate(List<? extends T> entities) throws RepositoryException {
 		entities.forEach(this::persistUpdate);
@@ -381,8 +383,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	/**
 	 * Removes the row with the specified id from the database
-	 * @param id
-	 * @throws RepositoryException
+	 * @param id the id of the row to be removed
+	 * @throws RepositoryException when there's a problem removing the row
 	 */
 	@Override
 	public void remove(int id) throws RepositoryException {
@@ -397,8 +399,8 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	
 	/**
 	 * Removes the rows with the specified ids from the database
-	 * @param ids
-	 * @throws RepositoryException
+	 * @param ids the ids of the rows to be removed
+	 * @throws RepositoryException when there's a problem removing the rows
 	 */
 	@Override
 	public void remove(List<Integer> ids) throws RepositoryException {

@@ -1,3 +1,5 @@
+/* Style the contents of the custom tooltip */
+
 :host >>> .tooltip-title{
 	margin:5px 0;
 	font-weight:bold;

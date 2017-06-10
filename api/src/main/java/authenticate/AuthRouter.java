@@ -8,6 +8,7 @@ import users.UserService;
 import static spark.Spark.*;
 
 /**
+ * A router for authentication features such as logging in and out
  * @author Marijn Kroon
  */
 public class AuthRouter {

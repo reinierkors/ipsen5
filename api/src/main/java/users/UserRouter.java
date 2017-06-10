@@ -10,7 +10,7 @@ import java.util.List;
 import static spark.Spark.*;
 
 /**
- * Bevat de routes voor user-onderdelen van de api
+ * Routes for the user parts of the API
  *
  * @author Reinier Kors
  * @version 0.1, 30-5-2017

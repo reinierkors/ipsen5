@@ -63,7 +63,12 @@ public class UserRepository extends RepositoryMaria<User>{
                 new ColumnData<>("expiration_date", Types.TIMESTAMP, User::getExpirationDate, User::setExpirationDate)
 		};
 	}
-
+	
+	/**
+	 * Finds a user by its email address
+	 * @param email the email address to look for
+	 * @return a user object or null if none was found
+	 */
     public User findByEmail(String email){
         try {
             psFindByEmail.setString(1, email);
@@ -77,8 +82,13 @@ public class UserRepository extends RepositoryMaria<User>{
             throw new RepositoryException(e);
         }
     }
-
-    public User findBySession(String sessionToken){
+	
+	/**
+	 * Finds a user by its session token
+	 * @param sessionToken the session token to look for
+	 * @return a user object or null if not found
+	 */
+	public User findBySession(String sessionToken){
         try {
             psFindBySession.setString(1, sessionToken);
             ResultSet resultSet = psFindBySession.executeQuery();
@@ -90,8 +100,14 @@ public class UserRepository extends RepositoryMaria<User>{
             throw new RepositoryException(e);
         }
     }
-
-    public void saveSession(int id, String sessionToken, Timestamp expirationDate){
+	
+	/**
+	 * Saves a session to the database
+	 * @param id the user id
+	 * @param sessionToken a session token to store
+	 * @param expirationDate date and time when the session expires
+	 */
+	public void saveSession(int id, String sessionToken, Timestamp expirationDate){
         try{
             psSaveSession.setString(1, sessionToken);
             psSaveSession.setTimestamp(2, expirationDate);
@@ -101,8 +117,12 @@ public class UserRepository extends RepositoryMaria<User>{
             throw new RepositoryException(e);
         }
     }
-
-    public void deleteSession(int id){
+	
+	/**
+	 * Deletes the session of the user with the given id
+	 * @param id user id
+	 */
+	public void deleteSession(int id){
         try{
             psDeleteSession.setInt(1, id);
             psDeleteSession.executeUpdate();
@@ -110,8 +130,13 @@ public class UserRepository extends RepositoryMaria<User>{
             throw new RepositoryException(e);
         }
     }
-
-    public void editPassword(String newPassword, String sessionToken){
+	
+	/**
+	 * Changes the password of the user with the given session token
+	 * @param newPassword a password hash
+	 * @param sessionToken a session token
+	 */
+	public void editPassword(String newPassword, String sessionToken){
         try{
             psEditPassword.setString(1, newPassword);
             psEditPassword.setString(2, sessionToken);

@@ -15,12 +15,14 @@
 		</md-card-content>
 	</md-card>
 	
-	<!-- Start, show file input -->
+	<!-- Start -->
 	<md-card *ngIf="state=='start'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
 		<md-card-title>Upload WEW soortenlijst (XLS)</md-card-title>
+		<!-- Show file upload if the wew tables are empty -->
 		<md-card-content *ngIf="wewTablesEmpty">
 			<input type="file" (change)="fileChange($event)"/>
 		</md-card-content>
+		<!-- Show a button to empty the WEW tables if they're not -->
 		<md-card-content *ngIf="!wewTablesEmpty">
 			De WEW-tabellen op de server zijn niet leeg.<br/>
 			<button md-raised-button (click)="emptyWEWTables()">Leeg WEW tabellen</button>

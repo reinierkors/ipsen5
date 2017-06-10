@@ -57,6 +57,12 @@ public class LocationRepository extends RepositoryMaria<Location> {
         };
     }
     
+    /**
+     * Finds a location with the given code
+     * @param code a unique location code
+     * @return the location object or null if none is found
+     * @throws RepositoryException when there's a problem retrieving the location from the database
+     */
     public Location findByCode(String code) throws RepositoryException {
         try {
             psFindByCode.setString(1,code);

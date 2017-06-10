@@ -20,6 +20,7 @@ import static spark.Spark.*;
 
 public class Main {
 	public static void main(String[] args) {
+		//Set the API server up
 		port(Config.getInstance().api.port);
 		ipAddress(Config.getInstance().api.host);
 		enableCORS("*",null,"X-Authorization");
@@ -43,11 +44,13 @@ public class Main {
 			return gson.toJson(new ApiException("500 Server Error"));
 		});
 		
+		//Used for permission checking
         ApiGuard apiGuard = new ApiGuard();
 
 		//Put all API calls under /api and let package routers handle their own routes
 		path("/api",()->{
-            before("/*",(request, response) -> {
+            //Check authorization
+			before("/*",(request, response) -> {
                 if(request.url().contains("login")){
                     return;
                 }
@@ -71,6 +74,7 @@ public class Main {
 			new WatertypeRouter();
 			new CalculateRouter();
 			
+			//Put this exception in JSON
 			exception(IllegalArgumentException.class, (e, req, res) -> {
 				res.status(400);
 				res.body(gson.toJson("An error occurred: " + e));

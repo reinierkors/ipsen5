@@ -13,7 +13,9 @@ import {ApiWatertypeService} from '../../watertype/api.watertype.service';
 
 import 'papaparse';
 
+//The states an import process can be in
 type ImportState = 'anim'|'start'|'loading'|'confirmData'|'confirmSample'|'finished'|'error';
+//A row in a sample csv file
 type SampleImport = {
 	//Location code and description
 	Mp:string, Locatie:string,
@@ -47,8 +49,11 @@ type SampleImport = {
 	]
 })
 export class SampleUploadComponent implements OnInit {
+	//The state of the import process
 	state:ImportState = 'start';
+	//NextState is used to go to the correct state after an animated transition
 	private nextState:ImportState;
+	//Any errors that happen during the process
 	errors:any[] = [];
 	//All rows from all csv files
 	private csvData:SampleImport[];
@@ -346,13 +351,16 @@ export class SampleUploadComponent implements OnInit {
 		this.setState('confirmSample');
 	}
 	
-	//Save all samples to the server
+	//User agrees with all samples
 	confirmSamples(){
 		this.setState('loading');
 		
+		//Store all samples
 		let waitForSamples:Promise<Sample[]> = new Promise((resolve,reject) => {
 			this.sampleApi.saveMulti(this.confirm.samples).subscribe(samples => resolve(samples), err => reject(err));
 		});
+		
+		//Go to finished when all samples are saved
 		waitForSamples.then(samples => this.setState('finished'), (...params) => this.handleError(...params));
 	}
 	

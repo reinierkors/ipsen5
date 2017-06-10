@@ -16,8 +16,7 @@ import java.time.Instant;
 import java.util.*;
 
 /**
- * Service voor user-gerelateerde business logic
- * Staat tussen de router en de repository
+ * Service for user features
  *
  * @author Reinier Kors
  * @version 0.1, 30-5-2017
@@ -37,6 +36,12 @@ public class UserService {
 		return instance;
 	}
 	
+	/**
+	 * Retrieve a user by id
+	 * @param id user id
+	 * @return user object
+	 * @throws ApiException when there's a problem retrieving the user, or the user does not exist
+	 */
 	public User get(int id) throws ApiException {
 		try {
 			User user = repo.get(id);
@@ -48,7 +53,12 @@ public class UserService {
 			throw new ApiValidationException("Cannot retrieve user");
 		}
 	}
-
+	
+	/**
+	 * Retrieves all users
+	 * @return a list of all users
+	 * @throws ApiException when there was a problem retrieving all users
+	 */
 	public Iterable<User> getAll() throws ApiException {
 		try {
 			return repo.getAll();
@@ -56,7 +66,12 @@ public class UserService {
 			throw new ApiException("Cannot retrieve users");
 		}
 	}
-
+	
+	/**
+	 * Creates a mew user
+	 * @param user object
+	 * @return a json string of the user
+	 */
 	public String create(User user) {
 	    List<String> errors = new ArrayList<>();
         validator
@@ -72,7 +87,7 @@ public class UserService {
 
         return new Gson().toJson(user);
 	}
-
+	
 	public String createSessionToken(User tempUser) throws ApiException {
         try {
             if (repo.findByEmail(tempUser.getEmail()) == null){
@@ -90,7 +105,7 @@ public class UserService {
             throw new ApiException("Cannot retrieve user");
         }
     }
-
+	
     public boolean editPassword(String oldPassword, String newPassword, String confirmPassword, String sessionToken){
 	    if(repo.findBySession(sessionToken) == null){
             throw new ApiValidationException("Gebruiker niet gevonden");
