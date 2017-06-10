@@ -6,6 +6,8 @@ import {ApiService} from '../services/api.service';
 import {Sample} from './sample.model';
 import {Species} from '../species/species.model';
 
+export type CalculationData = {factorClassId:number,computedValue:number};
+
 @Injectable()
 export class ApiSampleService extends ApiService{
 	constructor(@Inject(Http) http:Http){
@@ -22,5 +24,9 @@ export class ApiSampleService extends ApiService{
 	
 	public saveMulti(samples:Sample[]):Observable<Sample[]>{
 		return this.post('/sample',samples).map(samples => samples.map(sample => Sample.fromJSON(sample)));
+	}
+	
+	public getCalculationsBySample(sampleId:number):Observable<CalculationData[]>{
+		return this.get('/calculate/sample/'+sampleId);
 	}
 }

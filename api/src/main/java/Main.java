@@ -2,6 +2,7 @@ import api.ApiException;
 import api.ApiExceptionTypeAdapter;
 import api.ApiGuard;
 import authenticate.AuthRouter;
+import calculate.CalculateRouter;
 import config.Config;
 import location.LocationRouter;
 import sample.SampleRouter;
@@ -68,7 +69,8 @@ public class Main {
 			new UserRouter();
 			new WaterschapRouter();
 			new WatertypeRouter();
-
+			new CalculateRouter();
+			
 			exception(IllegalArgumentException.class, (e, req, res) -> {
 				res.status(400);
 				res.body(gson.toJson("An error occurred: " + e));

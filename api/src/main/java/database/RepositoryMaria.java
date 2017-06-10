@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * MariaDB implementation of the Repository interface
  *
  * @author Wander Groeneveld
- * @version 0.6, 8-6-2017
+ * @version 0.7, 9-6-2017
  */
 public abstract class RepositoryMaria<T> implements Repository<T>{
 	protected final Connection connection;
@@ -23,7 +23,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 		this.connection = connection;
 		
 		queryGet = "SELECT * FROM `"+getTable()+"` WHERE `id` = ?";
-		queryGetAll = "SELECT * FROM `"+getTable()+"`";
+		queryGetAll = "SELECT * FROM `"+getTable()+"`"+(orderBy()==null?"":" ORDER BY "+orderBy());
 		queryRemove = "DELETE FROM `"+getTable()+"` WHERE `id` = ?";
 		queryIsEmpty = "SELECT NULL FROM `"+getTable()+"` LIMIT 1";
 		queryRemoveAll = "DELETE FROM `"+getTable()+"`";
@@ -45,7 +45,6 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	protected PreparedStatement psUpdate() throws SQLException {return connection.prepareStatement(queryUpdate);}
 	protected PreparedStatement psIsEmpty() throws SQLException {return connection.prepareStatement(queryIsEmpty);}
 	protected PreparedStatement psRemoveAll() throws SQLException {return connection.prepareStatement(queryRemoveAll);}
-	
 	
 	/**
 	 * @return the name of the sql table
@@ -70,6 +69,16 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 	 * @return array of columns
 	 */
 	protected abstract ColumnData<? extends T,?>[] getColumns();
+	
+	/**
+	 * Override to change how getAll() orders its rows
+	 * This string is added after "ORDER BY " in the query
+	 * Example: `date` ASC
+	 * @return
+	 */
+	protected String orderBy(){
+		return null;
+	}
 	
 	/**
 	 * Fills parameters of the prepared statement with values from the model
@@ -334,7 +343,7 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 				Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
 				List<ColumnData> usedColumns = Arrays.stream(getColumns()).filter(cd -> !cd.isPrimary()).collect(Collectors.toList());
 				
-				String columnList = usedColumns.stream().map(ColumnData::getColumnName).collect(commaJoiner);
+				String columnList = usedColumns.stream().map(cd -> "`"+cd.getColumnName()+"`").collect(commaJoiner);
 				String valueListSingle = "(" + usedColumns.stream().filter(cd -> !cd.isPrimary()).map(cd -> "?").collect(commaJoiner) + ")";
 				String valueList = sub.stream().map(ent -> valueListSingle).collect(commaJoiner);
 				
@@ -412,6 +421,10 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 		}
 	}
 	
+	/**
+	 * Checks if the table is empty
+	 * @return true if there are no rows in the table
+	 */
 	public boolean isEmpty(){
 		try{
 			PreparedStatement psIsEmpty = psIsEmpty();
@@ -422,6 +435,9 @@ public abstract class RepositoryMaria<T> implements Repository<T>{
 		}
 	}
 	
+	/**
+	 * Removes all rows in the table
+	 */
 	public void emptyTable(){
 		try{
 			PreparedStatement psRemoveAll = psRemoveAll();

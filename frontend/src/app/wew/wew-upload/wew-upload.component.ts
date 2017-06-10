@@ -119,7 +119,7 @@ export class WewUploadComponent implements OnInit {
 		let rows:any[] = XLSX.utils.sheet_to_json(factorSheet);
 		let factorMap:Map<string,WEWFactor> = new Map();
 		let lastFactor:string;
-		rows.forEach(row => {
+		rows.forEach((row,index) => {
 			let factor:WEWFactor;
 			if(row.factor){
 				lastFactor = row.factor;
@@ -135,6 +135,7 @@ export class WewUploadComponent implements OnInit {
 			let factorClass = new WEWFactorClass();
 			factorClass.code = row.code;
 			factorClass.description = row.klasse;
+			factorClass.order = index;
 			factor.classes.push(factorClass);
 		});
 		//Zeldzaamheid is a special case, let's ignore it
@@ -149,10 +150,22 @@ export class WewUploadComponent implements OnInit {
 		let factorClassMap:Map<string,WEWFactorClass> = new Map();
 		factors.forEach(factor => factor.classes.forEach(cl => factorClassMap.set(cl.code,cl)));
 		
-		//Get the order of the factor classes in the columns
+		//Convert the sheet to 2D array
 		let rows:any[] = XLSX.utils.sheet_to_json(matrixSheet,{raw:true,header:1});
+		
+		//Get the order of the factor classes in the columns
 		let factorClassColumns:WEWFactorClass[] = [];
-		rows[1].forEach(col => factorClassColumns.push(factorClassMap.get(col)));
+		rows[1].filter(field => field.trim().length).forEach(code => factorClassColumns.push(factorClassMap.get(code)));
+		
+		//Store the short description of each factor class instead of the long one
+		//TODO: should we store both?
+		rows[2].forEach((desc,index) => {
+			if(index==0)
+				return;
+			let factorClass = factorClassColumns[index-1];
+			if(factorClass)
+				factorClass.description = desc
+		});
 		
 		//Get the species
 		let speciesNames = rows.filter((row,index) => index>2).map(row => row[0]);

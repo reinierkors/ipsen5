@@ -46,6 +46,7 @@ export class WEWFactorClass{
 	factorId:number;
 	code:string;
 	description:string;
+	order:number;
 	
 	public static fromJSON(obj):WEWFactorClass{
 		let cl = new WEWFactorClass();
@@ -53,6 +54,7 @@ export class WEWFactorClass{
 		cl.factorId = obj.factorId;
 		cl.code = obj.code;
 		cl.description = obj.description;
+		cl.order = obj.order;
 		return cl;
 	}
 }

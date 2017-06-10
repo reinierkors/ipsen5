@@ -101,6 +101,7 @@ public class WEWService {
 			return factors;
 		}
 		catch(RepositoryException e){
+			e.printStackTrace();
 			throw new ApiException("Could not save WEW factor information");
 		}
 	}
@@ -117,11 +118,21 @@ public class WEWService {
 	public void emptyAllTables() throws ApiException{
 		try{
 			valueRepo.emptyTable();
+		}
+		catch(RepositoryException e){
+			throw new ApiException("Could not delete all WEW values");
+		}
+		try{
 			factorClassRepo.emptyTable();
+		}
+		catch(RepositoryException e){
+			throw new ApiException("Could not delete all WEW factor classes");
+		}
+		try{
 			factorRepo.emptyTable();
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Could not empty all WEW tables");
+			throw new ApiException("Could not delete all WEW factors");
 		}
 	}
 	

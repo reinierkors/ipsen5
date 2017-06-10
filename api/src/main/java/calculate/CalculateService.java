@@ -5,13 +5,16 @@ import database.ConnectionManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Service with methods regarding calculating sample values (using the WEW list)
  *
  * @author Wander Groeneveld
- * @version 0.1, 9-6-2017
+ * @version 0.2, 9-6-2017
  */
 public class CalculateService {
 	private Connection connection;
@@ -23,6 +26,7 @@ public class CalculateService {
 		"ON `wew_value`.`species_id` = `sample_species`.`species_id` "+
 		"WHERE `sample_id` = ? "+
 		"GROUP BY `factor_class_id`, `sample_id` ";
+	private String queryGetBySample = "SELECT `factor_class_id`,`computed_value` FROM `sample_wew_factor_class` WHERE `sample_id` = ?";
 	
 	public CalculateService(){
 		this.connection = ConnectionManager.getInstance().getConnection();
@@ -40,6 +44,38 @@ public class CalculateService {
 		catch(SQLException e){
 			e.printStackTrace();
 			throw new ApiException("Problem running the calculation query");
+		}
+	}
+	
+	public List<CalculationData> getBySample(int sampleId){
+		try {
+			PreparedStatement psGetBySample = this.connection.prepareStatement(queryGetBySample);
+			psGetBySample.setInt(1,sampleId);
+			ResultSet resultSet = psGetBySample.executeQuery();
+			
+			List<CalculationData> list = new ArrayList<>();
+			if(resultSet==null)
+				return list;
+			
+			while(resultSet.next()){
+				list.add(new CalculationData(resultSet.getInt("factor_class_id"),resultSet.getDouble("computed_value")));
+			}
+			
+			return list;
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+			throw new ApiException("Could not retrieve sample calculations");
+		}
+	}
+	
+	public class CalculationData{
+		public int factorClassId;
+		public double computedValue;
+		
+		public CalculationData(int factorClassId, double computedValue) {
+			this.factorClassId = factorClassId;
+			this.computedValue = computedValue;
 		}
 	}
 }

@@ -29,6 +29,7 @@ import {NguiMapModule} from '@ngui/map';
 import { SampleUploadComponent } from './sample/sample-upload/sample-upload.component';
 import { SampleViewComponent } from './sample/sample-view/sample-view.component';
 import { SampleEditComponent } from './sample/sample-edit/sample-edit.component';
+import {SampleFactorBarGraphComponent} from './sample/sample-factor-bar-graph/sample-factor-bar-graph.component';
 import {SampleLocationTableComponent} from "./sample-location-table/sample-location-table.component";
 import { LoginComponent } from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
@@ -65,6 +66,7 @@ const routes:Routes = [
         SampleUploadComponent,
         SampleViewComponent,
         SampleEditComponent,
+		SampleFactorBarGraphComponent,
         LoginComponent,
         EditAccountComponent,
         WewUploadComponent,

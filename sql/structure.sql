@@ -238,9 +238,11 @@ CREATE TABLE `wew_factor_class` (
   `factor_id` int(3) NOT NULL,
   `code` varchar(10) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
+  `order` int(3) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
-  KEY `factor_id` (`factor_id`)
+  KEY `factor_id` (`factor_id`),
+  KEY `order` (`order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
