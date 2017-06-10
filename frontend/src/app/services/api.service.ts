@@ -22,7 +22,7 @@ export abstract class ApiService {
 	//Turns any errors that come from the server into an object
 	private transformError(res:Response,observer){
 		if(res.json)
-			observer.error(res.json().detailMessage);
+			observer.error(res.json());
 		else
 			observer.error(res);
 	}

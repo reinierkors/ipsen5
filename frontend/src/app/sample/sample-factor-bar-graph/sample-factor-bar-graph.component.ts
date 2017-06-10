@@ -65,6 +65,7 @@ export class SampleFactorBarGraphComponent implements OnInit {
 	ngOnInit(){
 		//Retrieve calculations for this sample
 		this.getCalcsPr = new Promise((resolve,reject) => this.sampleApi.getCalculationsBySample(this.sample.id).subscribe(calcs => resolve(calcs)));
+		
 		//Then show the chart
 		Promise.all([this.getFactorsPr,this.getCalcsPr]).then(([factors,calcs]) => this.showData(factors,calcs));
 	}
@@ -73,8 +74,14 @@ export class SampleFactorBarGraphComponent implements OnInit {
 	private tooltipFormatter(params){
 		//If param.data is empty, then echart is passing on data from other bar stacks, ignore it
 		params = params.filter(param => param.data);
+		
 		if(!params.length)
 			return;
+		
+		//Show params in the same order as they appear in the chart
+		params.reverse();
+		
+		//Return html to be put in the tooltip
 		return `<div class="tooltip-title">${params[0].data.factor.name}</div>
 			<p>
 				<table class="tooltip-table">
