@@ -51,6 +51,9 @@ public class Config {
 		return instance;
 	}
 	
+	/**
+	 * Container for the data in the configuration file
+	 */
 	public class Api{
 		public String host;
 		public int port;

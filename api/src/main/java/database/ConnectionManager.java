@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
+ * Singleton that opens a database connection
  * @author Dylan de Wit
  * @author Wander Groeneveld
  * @version 1.1, 17-5-2017
@@ -25,7 +26,12 @@ public class ConnectionManager {
 			System.out.println(ex);
 		}
 	}
-
+	
+	/**
+	 * Opens a database connection
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
 	private void initConnection() throws SQLException, ClassNotFoundException{
 		switch(dbConfig.driver){
 			case "mariadb":
@@ -40,15 +46,28 @@ public class ConnectionManager {
 		connection = DriverManager.getConnection(getUrl(), dbConfig.username, dbConfig.password);
 		System.out.println("Connection with database established.");
 	}
-
+	
+	/**
+	 * The URL used in DriverManager.getConnection filled with properties from the config
+	 * @return a jdbc url
+	 */
 	private String getUrl(){
 		return "jdbc:"+dbConfig.driver+"://"+dbConfig.host+":"+dbConfig.port+"/"+dbConfig.database;
 	}
 	
+	/**
+	 * Returns an open database connection
+	 * @return connection
+	 */
 	public Connection getConnection() {
 		return connection;
 	}
 	
+	/**
+	 * Starts a new database connection
+	 * @throws SQLException
+	 * @throws ClassNotFoundException
+	 */
 	public void reconnect() throws SQLException, ClassNotFoundException{
 		if(!connection.isClosed()){
 			connection.close();
@@ -56,6 +75,10 @@ public class ConnectionManager {
 		initConnection();
 	}
 	
+	/**
+	 * Get the instance of this class
+	 * @return ConnectionManager instance
+	 */
 	public static ConnectionManager getInstance() {
 		if (instance == null) {
 			try {

@@ -7,7 +7,7 @@ import static spark.Spark.get;
 import static spark.Spark.path;
 
 /**
- * Bevat de routes voor calculate-onderdelen van de api
+ * Contains routes regarding the calculations on samples and references
  *
  * @author Wander Groeneveld
  * @version 0.1, 9-6-2017
