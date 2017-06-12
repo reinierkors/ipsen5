@@ -10,7 +10,7 @@ import static spark.Spark.path;
  * Contains routes regarding the calculations on samples and references
  *
  * @author Wander Groeneveld
- * @version 0.1, 9-6-2017
+ * @version 0.2, 12-6-2017
  */
 public class CalculateRouter {
 	public CalculateRouter(){
@@ -22,7 +22,7 @@ public class CalculateRouter {
 		
 		path("/calculate", ()->{
 			get("/sample/:id",(req,res) -> gson.toJson(calculateService.getBySample(Integer.parseInt(req.params("id")))));
+			get("/reference/:id",(req,res) -> gson.toJson(calculateService.getByReference(Integer.parseInt(req.params("id")))));
 		});
-		
 	}
 }

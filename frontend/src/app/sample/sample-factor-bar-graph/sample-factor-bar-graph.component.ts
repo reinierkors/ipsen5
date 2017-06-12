@@ -22,12 +22,34 @@ export class SampleFactorBarGraphComponent implements OnInit {
 	//The reference for this sample
 	@Input() reference:null;
 	
+	//temp
+	testSettings = {h:0,s:-.1,l:.3,o:30};
+	testPresets = [
+		{name:'Dark',h:-.02,s:.15,l:-.22,o:null},
+		{name:'Light',h:.02,s:-.1,l:.3,o:null},
+		{name:'Overlap',h:null,s:null,l:null,o:-66},
+		{name:'Seperated',h:null,s:null,l:null,o:30}
+	];
+	testBtn(preset){
+		if(preset.h!==null)this.testSettings.h = preset.h;
+		if(preset.s!==null)this.testSettings.s = preset.s;
+		if(preset.l!==null)this.testSettings.l = preset.l;
+		if(preset.o!==null)this.testSettings.o = preset.o;
+		this.testUpdate();
+	}
+	testUpdate(){
+		this.refPalette = new MaterialPalette().shift().transform(this.testSettings.h,this.testSettings.s,this.testSettings.l);
+		this.samplePalette = new MaterialPalette().shift();
+		Promise.all([this.getFactorsPr,this.getSampleCalcsPr,this.getRefCalcsPr])
+			.then(([factors,sampleCalcs,refCalcs]) => this.showData(factors,sampleCalcs,refCalcs));
+	}
+	
 	//EChart instance
 	private echart;
 	
 	//The colors used in this chart
 	private samplePalette:Palette = new MaterialPalette().shift();
-	private refPalette:Palette = new MaterialPalette().shift().transform(0,-.1,.35);
+	private refPalette:Palette = new MaterialPalette().shift().transform(0,-.1,.3);
 	
 	//Promise that resolves when the wew factors are in
 	private getFactorsPr:Promise<WEWFactor[]>;
@@ -71,7 +93,7 @@ export class SampleFactorBarGraphComponent implements OnInit {
 		this.getSampleCalcsPr = new Promise((resolve,reject) => this.sampleApi.getCalculationsBySample(this.sample.id).subscribe(calcs => resolve(calcs)));
 		
 		//Retrieve calculations for the reference
-		this.getRefCalcsPr = new Promise((resolve,reject) => resolve(null));
+		this.getRefCalcsPr = new Promise((resolve,reject) => this.sampleApi.getCalculationsBySample(this.sample.id+1).subscribe(calcs => resolve(calcs)));
 		
 		//Then show the chart
 		Promise.all([this.getFactorsPr,this.getSampleCalcsPr,this.getRefCalcsPr])
@@ -103,15 +125,15 @@ export class SampleFactorBarGraphComponent implements OnInit {
 				<table class="tooltip-table">
 					<tr>
 						<th colspan="3">&nbsp;</th>
-						<th>Waarde</th>
 						<th>Referentie</th>
+						<th>Monster</th>
 					</tr>
 					${params.filter(p => !p.data.isReference).map(p => `<tr>
 						<td>${p.marker}</td>
 						<td>${p.data.factorClass.code}</td>
 						<td>${p.data.factorClass.description}</td>
-						<td>${p.data.value.toPrecision(3)}</td>
-						<td>${refMap.get(p.data.factorClass.code).value.toPrecision(3)}</td>
+						<td>${refMap.get(p.data.factorClass.code).value.toFixed(2)}</td>
+						<td>${p.data.value.toFixed(2)}</td>
 					</tr>`).join('')}
 				</table>
 			</p>`;
@@ -152,9 +174,10 @@ export class SampleFactorBarGraphComponent implements OnInit {
 	//Stores any data we need to show in this.chartOptions
 	private showData(factors:WEWFactor[],sampleCalcs:CalculationData[],refCalcs:CalculationData[]){
 		//TODO we dont have ref calcs yet, so copy sample calcs
-		refCalcs = sampleCalcs;
+		//refCalcs = sampleCalcs;
 		
 		//Add x-axis labels
+		this.chartOptions.xAxis.data = [];
 		factors.forEach(factor => this.chartOptions.xAxis.data.push(factor.name));
 		
 		//Put values in a 2D array
@@ -165,12 +188,13 @@ export class SampleFactorBarGraphComponent implements OnInit {
 		refData.forEach(row => row.filter(val => !!val).forEach(val => val.isReference = true));
 		
 		//Add data
+		this.chartOptions.series = [];
 		this.addSeries(refData,this.refPalette);
 		this.addSeries(sampleData,this.samplePalette);
 		
 		//These options should be applied to the last item in the series only
 		let lastSeries = this.chartOptions.series[this.chartOptions.series.length-1];
-		lastSeries.barGap = '10%';
+		lastSeries.barGap = this.testSettings.o+'%';
 		lastSeries.barCategoryGap = '30%';
 		
 		//Show data
@@ -180,7 +204,7 @@ export class SampleFactorBarGraphComponent implements OnInit {
 	
 	private addSeries(data:DataValue[][],palette:Palette){
 		//Set chart colors
-		data.forEach(row => {
+		data.forEach((row) => {
 			palette.reverse();
 			palette.rotate(3);
 			row.filter(val => val!==null).forEach((val,index) => {
