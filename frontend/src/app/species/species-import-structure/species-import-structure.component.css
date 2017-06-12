@@ -1,0 +1,10 @@
+.taxonList{
+	padding:0;
+}
+:host >>> ul{
+	padding:0 2em;
+}
+
+.taxonList li,:host >>> li{
+	list-style-type:none;
+}
