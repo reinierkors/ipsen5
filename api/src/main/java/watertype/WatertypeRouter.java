@@ -8,7 +8,7 @@ import static spark.Spark.path;
 import static spark.Spark.post;
 
 /**
- * Bevat de routes voor waterschap-onderdelen van de api
+ * Routes for the watertype parts of the API
  *
  * @author Dylan de Wit
  * @author Wander Groeneveld

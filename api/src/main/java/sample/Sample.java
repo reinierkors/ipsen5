@@ -1,13 +1,13 @@
 package sample;
 
 import java.sql.Date;
-import java.util.List;
+import java.util.Map;
 
 /**
  * Sample model
  *
  * @author Wander Groeneveld
- * @version 0.3, 3-6-2017
+ * @version 0.4, 8-6-2017
  */
 public class Sample{
 	private int id;
@@ -17,9 +17,9 @@ public class Sample{
 	private Double quality;
 	private Integer xCoor;
 	private Integer yCoor;
-	private List<Integer> speciesIds;
+	private Map<Integer,Integer> speciesValues;
 	
-	public Sample(int id, Date date, int locationId, Integer ownerId, Double quality, Integer xCoor, Integer yCoor, List<Integer> speciesIds) {
+	public Sample(int id, Date date, int locationId, Integer ownerId, Double quality, Integer xCoor, Integer yCoor, Map<Integer,Integer> speciesValues) {
 		this.id = id;
 		this.date = date;
 		this.locationId = locationId;
@@ -27,11 +27,11 @@ public class Sample{
 		this.quality = quality;
 		this.xCoor = xCoor;
 		this.yCoor = yCoor;
-		this.speciesIds = speciesIds;
+		this.speciesValues = speciesValues;
 	}
 	
-	public Sample(Date date, int locationId, Integer ownerId, Double quality, Integer xCoor, Integer yCoor, List<Integer> speciesIds) {
-		this(0, date, locationId, ownerId, quality, xCoor, yCoor, speciesIds);
+	public Sample(Date date, int locationId, Integer ownerId, Double quality, Integer xCoor, Integer yCoor, Map<Integer,Integer> speciesValues) {
+		this(0, date, locationId, ownerId, quality, xCoor, yCoor, speciesValues);
 	}
 	
 	public Sample(){
@@ -94,11 +94,11 @@ public class Sample{
 		this.yCoor = yCoor;
 	}
 	
-	public List<Integer> getSpeciesIds() {
-		return speciesIds;
+	public Map<Integer, Integer> getSpeciesValues() {
+		return speciesValues;
 	}
 	
-	public void setSpeciesIds(List<Integer> speciesIds) {
-		this.speciesIds = speciesIds;
+	public void setSpeciesValues(Map<Integer, Integer> speciesValues) {
+		this.speciesValues = speciesValues;
 	}
 }

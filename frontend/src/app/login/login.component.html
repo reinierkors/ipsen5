@@ -2,22 +2,24 @@
     <md-card-title>
         <span class="md-headline">Login</span>
     </md-card-title>
+
+    <form (ngSubmit)="login()">
     <md-card-content>
         <section layout="row">
             <md-input-container>
-                <input mdInput placeholder="Email Adres" [(ngModel)]="model.email" required>
+                <input mdInput placeholder="Email Adres" name="email" [(ngModel)]="model.email" required>
             </md-input-container>
         </section>
 
         <section layout="row">
             <md-input-container>
-                <input mdInput type="password" placeholder="Wachtwoord" [(ngModel)]="model.password" required>
+                <input mdInput type="password" placeholder="Wachtwoord" name="password" [(ngModel)]="model.password" required>
             </md-input-container>
         </section>
 
         <section layout="row">
-            <button md-raised-button (click)="login()">Login</button>
+            <button type="submit" md-raised-button>Login</button>
         </section>
-
     </md-card-content>
+    </form>
 </md-card>

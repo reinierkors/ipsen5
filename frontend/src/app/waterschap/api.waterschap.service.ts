@@ -11,11 +11,12 @@ export class ApiWaterschapService extends ApiService {
         super(http);
     }
 
-
+	//Retrieve a waterschap by its ID
     public getById(id): Observable<Waterschap> {
         return this.get('/waterschap/' + id).map((waterschap => Waterschap.fromJSON(waterschap)));
     }
-
+	
+	//Retrieve a list of all waterschappen
     public getAll(): Observable<Waterschap[]> {
         return this.get('/waterschap').map((waterschappen: Object[]) =>
             waterschappen.map(waterschap => Waterschap.fromJSON(waterschap)));

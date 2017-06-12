@@ -13,7 +13,9 @@ import {ApiWatertypeService} from '../../watertype/api.watertype.service';
 
 import 'papaparse';
 
+//The states an import process can be in
 type ImportState = 'anim'|'start'|'loading'|'confirmData'|'confirmSample'|'finished'|'error';
+//A row in a sample csv file
 type SampleImport = {
 	//Location code and description
 	Mp:string, Locatie:string,
@@ -47,8 +49,11 @@ type SampleImport = {
 	]
 })
 export class SampleUploadComponent implements OnInit {
+	//The state of the import process
 	state:ImportState = 'start';
+	//NextState is used to go to the correct state after an animated transition
 	private nextState:ImportState;
+	//Any errors that happen during the process
 	errors:any[] = [];
 	//All rows from all csv files
 	private csvData:SampleImport[];
@@ -321,9 +326,10 @@ export class SampleUploadComponent implements OnInit {
 				sample.locationId = this.locationMap.get(row.Mp).id;
 				sample.xCoor = row['X-coor'];
 				sample.yCoor = row['Y-coor'];
+				sample.speciesValues = new Map();
 				sampleMap.set(sampleUnique,sample);
 			}
-			sample.speciesIds.push(this.speciesMap.get(row.Taxonnaam).id);
+			sample.speciesValues.set(this.speciesMap.get(row.Taxonnaam).id,row.Waarde);
 		});
 		
 		Array.from(this.speciesMap.values()).forEach(species => this.speciesIdsMap.set(species.id,species));
@@ -332,24 +338,29 @@ export class SampleUploadComponent implements OnInit {
 		
 		//Increase template rendering by only storing what we need on the page
 		this.confirm.samplesFast = this.confirm.samples.map(sample => {
+			let speciesValuesFast = new Map<string,number>();
+			sample.speciesValues.forEach((value,speciesId) => speciesValuesFast.set(this.speciesIdsMap.get(speciesId).name,value));
 			return {
 				locationCode:this.locationIdsMap.get(sample.locationId).code,
 				locationDescription:this.locationIdsMap.get(sample.locationId).description,
 				date:sample.date,
-				speciesNames:sample.speciesIds.map(id => this.speciesIdsMap.get(id).name)
+				speciesValues:speciesValuesFast
 			};
 		});
 		
 		this.setState('confirmSample');
 	}
 	
-	//Save all samples to the server
+	//User agrees with all samples
 	confirmSamples(){
 		this.setState('loading');
 		
+		//Store all samples
 		let waitForSamples:Promise<Sample[]> = new Promise((resolve,reject) => {
 			this.sampleApi.saveMulti(this.confirm.samples).subscribe(samples => resolve(samples), err => reject(err));
 		});
+		
+		//Go to finished when all samples are saved
 		waitForSamples.then(samples => this.setState('finished'), (...params) => this.handleError(...params));
 	}
 	

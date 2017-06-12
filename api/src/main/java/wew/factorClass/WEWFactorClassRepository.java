@@ -9,7 +9,7 @@ import java.sql.*;
  * Repository for WEW factor classes
  *
  * @author Wander Groeneveld
- * @version 0.2, 31-5-2017
+ * @version 0.3, 9-6-2017
  */
 public class WEWFactorClassRepository extends RepositoryMaria<WEWFactorClass>{
 	public WEWFactorClassRepository(Connection connection) {
@@ -38,7 +38,12 @@ public class WEWFactorClassRepository extends RepositoryMaria<WEWFactorClass>{
 				new ColumnData<>("factor_id", Types.INTEGER, WEWFactorClass::getFactorId, WEWFactorClass::setFactorId),
 				new ColumnData<>("code", Types.VARCHAR, WEWFactorClass::getCode, WEWFactorClass::setCode),
 				new ColumnData<>("description", Types.VARCHAR, WEWFactorClass::getDescription, WEWFactorClass::setDescription),
+				new ColumnData<>("order", Types.INTEGER, WEWFactorClass::getOrder, WEWFactorClass::setOrder),
 		};
 	}
 	
+	@Override
+	protected String orderBy() {
+		return "`order` ASC";
+	}
 }

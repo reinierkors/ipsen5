@@ -52,4 +52,17 @@ export class AuthenticationService extends ApiService{
                 return response.ok;
             });
     }
+
+    loggedIn() {
+        if (localStorage.getItem('currentUser')) {
+            let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if(currentUser.expireDate > Date.now()){
+                // logged in and not expired so return true
+                return true;
+            }
+        }
+
+        // not logged in so redirect to login page
+        return false;
+    }
 }

@@ -16,38 +16,40 @@ import {
 	MdInputModule,
 	MdButtonModule,
 	MdSelectModule,
-	MdProgressBarModule
+	MdProgressBarModule,
+	MdProgressSpinnerModule
 } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { ResultsComponent } from './locations/google-map/results-gmap.component';
-import { CreateAccountComponent } from './user/create-account/create-account.component';
-import { SidenavComponent } from './sidenav/sidenav.component';
-import { NguiMapModule } from '@ngui/map';
+import {AppComponent} from './app.component';
+import {HomeComponent} from './home/home.component';
+import {ResultsComponent} from './locations/google-map/results-gmap.component';
+import {CreateAccountComponent} from './user/create-account/create-account.component';
+import {SidenavComponent} from './sidenav/sidenav.component';
+import {NguiMapModule} from '@ngui/map';
 import { SampleUploadComponent } from './sample/sample-upload/sample-upload.component';
 import { SampleViewComponent } from './sample/sample-view/sample-view.component';
 import { SampleEditComponent } from './sample/sample-edit/sample-edit.component';
-import {SampleLocationTableComponent } from "./sample-location-table/sample-location-table.component";
+import {SampleLocationTableComponent} from "./sample-location-table/sample-location-table.component";
 import { LoginComponent } from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
+import { WewUploadComponent } from './wew/wew-upload/wew-upload.component';
+import { WewViewComponent } from './wew/wew-view/wew-view.component';
 import { AngularEchartsModule } from 'ngx-echarts';
-import { WatersComponent } from './results/waters/waters.component';
 
 const routes:Routes = [
-  {path: '', component: HomeComponent, canActivate: [AuthGuard]},
+  {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
-  {path: 'account', component: CreateAccountComponent, canActivate: [AuthGuard]},
+  {path: 'home', component: GMapsComponent, canActivate: [AuthGuard]},
+  {path: 'account', component: EditAccountComponent, canActivate: [AuthGuard]},
   {path: 'locations', component: SampleLocationTableComponent, canActivate: [AuthGuard]},
   {path: 'results', component: ResultsComponent, canActivate: [AuthGuard]},
   {path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
   {path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
   {path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
-  {path: 'results/waters/:id', component: WatersComponent, canActivate: [AuthGuard]},
     /* Admin Routes */
   {path: 'admin/create-account', component: CreateAccountComponent, canActivate: [AuthGuard]},
+    /* Directs back to home if route is unknown */
   {path: '**', component: HomeComponent, canActivate: [AuthGuard]}
 ];
 
@@ -56,13 +58,17 @@ const routes:Routes = [
         AppComponent,
         HomeComponent,
         CreateAccountComponent,
-        ResultsComponent,
+        GMapsComponent,
         SampleLocationTableComponent,
         SidenavComponent,
         SampleUploadComponent,
         SampleViewComponent,
         SampleEditComponent,
+		SampleFactorBarGraphComponent,
         LoginComponent,
+        EditAccountComponent,
+        WewUploadComponent,
+        WewViewComponent,
         WatersComponent,
     ],
     imports: [
@@ -78,6 +84,7 @@ const routes:Routes = [
 		MdButtonModule,
 		MdSelectModule,
 		MdProgressBarModule,
+		MdProgressSpinnerModule,
         BrowserModule,
         FormsModule,
         HttpModule,

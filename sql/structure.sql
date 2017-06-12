@@ -1,4 +1,4 @@
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -17,9 +17,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `location`
 --
 
--- TODO: waterschap_id => NOT NULL
-
-CREATE TABLE IF NOT EXISTS `location` (
+CREATE TABLE `location` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `code` varchar(100) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
@@ -33,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `location` (
   KEY `waterschap_id` (`waterschap_id`),
   KEY `watertype_id` (`watertype_id`),
   KEY `watertype_krw_id` (`watertype_krw_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -41,13 +39,13 @@ CREATE TABLE IF NOT EXISTS `location` (
 -- Table structure for table `reference`
 --
 
-CREATE TABLE IF NOT EXISTS `reference` (
+CREATE TABLE `reference` (
   `id` int(3) NOT NULL AUTO_INCREMENT,
   `watertype_id` int(3) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `watertype_id` (`watertype_id`),
   KEY `watertype_id_2` (`watertype_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -55,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `reference` (
 -- Table structure for table `reference_species`
 --
 
-CREATE TABLE IF NOT EXISTS `reference_species` (
+CREATE TABLE `reference_species` (
   `reference_id` int(3) NOT NULL,
   `species_id` int(5) NOT NULL,
   PRIMARY KEY (`reference_id`,`species_id`),
@@ -68,15 +66,16 @@ CREATE TABLE IF NOT EXISTS `reference_species` (
 -- Table structure for table `reference_wew_factor_class`
 --
 
-CREATE TABLE IF NOT EXISTS `reference_wew_factor_class` (
+CREATE TABLE `reference_wew_factor_class` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `reference_id` int(3) NOT NULL,
   `factor_class_id` int(5) NOT NULL,
   `computed_value` double DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `reference_id_factor_class_id` (`reference_id`,`factor_class_id`),
   KEY `reference_id` (`reference_id`),
   KEY `factor_class` (`factor_class_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -84,9 +83,7 @@ CREATE TABLE IF NOT EXISTS `reference_wew_factor_class` (
 -- Table structure for table `sample`
 --
 
--- TODO: owner not null
-
-CREATE TABLE IF NOT EXISTS `sample` (
+CREATE TABLE `sample` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `date` date DEFAULT NULL,
   `location_id` int(8) NOT NULL,
@@ -97,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `sample` (
   PRIMARY KEY (`id`),
   KEY `location_id` (`location_id`),
   KEY `owner_id` (`owner_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -105,9 +102,10 @@ CREATE TABLE IF NOT EXISTS `sample` (
 -- Table structure for table `sample_species`
 --
 
-CREATE TABLE IF NOT EXISTS `sample_species` (
+CREATE TABLE `sample_species` (
   `sample_id` int(9) NOT NULL,
   `species_id` int(5) NOT NULL,
+  `value` int(4) NOT NULL,
   PRIMARY KEY (`sample_id`,`species_id`),
   KEY `sample_species_ibfk_2` (`species_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -118,15 +116,16 @@ CREATE TABLE IF NOT EXISTS `sample_species` (
 -- Table structure for table `sample_wew_factor_class`
 --
 
-CREATE TABLE IF NOT EXISTS `sample_wew_factor_class` (
+CREATE TABLE `sample_wew_factor_class` (
   `id` int(14) NOT NULL AUTO_INCREMENT,
   `sample_id` int(9) NOT NULL,
   `factor_class_id` int(5) NOT NULL,
   `computed_value` double DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `sample_id_factor_class_id` (`sample_id`,`factor_class_id`),
   KEY `sample_id` (`sample_id`),
   KEY `factor_class_id` (`factor_class_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -134,14 +133,14 @@ CREATE TABLE IF NOT EXISTS `sample_wew_factor_class` (
 -- Table structure for table `species`
 --
 
-CREATE TABLE IF NOT EXISTS `species` (
+CREATE TABLE `species` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `category_id` int(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   KEY `category_id` (`category_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -149,12 +148,12 @@ CREATE TABLE IF NOT EXISTS `species` (
 -- Table structure for table `species_category`
 --
 
-CREATE TABLE IF NOT EXISTS `species_category` (
+CREATE TABLE `species_category` (
   `id` int(3) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -162,10 +161,10 @@ CREATE TABLE IF NOT EXISTS `species_category` (
 -- Table structure for table `user`
 --
 
-CREATE TABLE IF NOT EXISTS `user` (
+CREATE TABLE `user` (
   `id` int(6) NOT NULL AUTO_INCREMENT,
   `email` varchar(100) NOT NULL,
-  `password` char(40) NOT NULL,
+  `password` char(60) NOT NULL,
   `name` varchar(100) NOT NULL,
   `group_id` int(3) NOT NULL,
   `session_token` char(36) DEFAULT NULL,
@@ -173,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `group_id` (`group_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -181,12 +180,12 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Table structure for table `user_group`
 --
 
-CREATE TABLE IF NOT EXISTS `user_group` (
+CREATE TABLE `user_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -194,12 +193,12 @@ CREATE TABLE IF NOT EXISTS `user_group` (
 -- Table structure for table `waterschap`
 --
 
-CREATE TABLE IF NOT EXISTS `waterschap` (
+CREATE TABLE `waterschap` (
   `id` int(3) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -207,13 +206,13 @@ CREATE TABLE IF NOT EXISTS `waterschap` (
 -- Table structure for table `watertype`
 --
 
-CREATE TABLE IF NOT EXISTS `watertype` (
+CREATE TABLE `watertype` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `code` varchar(10) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`,`code`),
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  UNIQUE KEY `name` (`name`,`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -221,12 +220,12 @@ CREATE TABLE IF NOT EXISTS `watertype` (
 -- Table structure for table `wew_factor`
 --
 
-CREATE TABLE IF NOT EXISTS `wew_factor` (
+CREATE TABLE `wew_factor` (
   `id` int(3) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -234,15 +233,17 @@ CREATE TABLE IF NOT EXISTS `wew_factor` (
 -- Table structure for table `wew_factor_class`
 --
 
-CREATE TABLE IF NOT EXISTS `wew_factor_class` (
+CREATE TABLE `wew_factor_class` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `factor_id` int(3) NOT NULL,
   `code` varchar(10) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
+  `order` int(3) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
-  KEY `factor_id` (`factor_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `factor_id` (`factor_id`),
+  KEY `order` (`order`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -250,15 +251,16 @@ CREATE TABLE IF NOT EXISTS `wew_factor_class` (
 -- Table structure for table `wew_value`
 --
 
-CREATE TABLE IF NOT EXISTS `wew_value` (
-  `id` int(5) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `wew_value` (
+  `id` int(7) NOT NULL AUTO_INCREMENT,
   `factor_class_id` int(3) NOT NULL,
   `species_id` int(5) NOT NULL,
   `value` double DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `factor_class_id_species_id` (`factor_class_id`,`species_id`),
   KEY `factor_class_id` (`factor_class_id`),
   KEY `species_id` (`species_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 --
 -- Constraints for dumped tables

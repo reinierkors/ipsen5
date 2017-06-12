@@ -13,7 +13,7 @@ import static spark.Spark.post;
 
 
 /**
- * Bevat de routes voor sample-onderdelen van de api
+ * Contains the routes for sample parts of the API
  *
  * @author Wander Groeneveld
  * @version 0.3, 4-6-2017
@@ -23,7 +23,7 @@ public class SampleRouter {
 		SampleService sampleService = SampleService.getInstance();
 		
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
+		gsonBuilder.setDateFormat("yyyy-MM-dd").create();
 		Gson gson = gsonBuilder.create();
 		
 		path("/sample", ()->{

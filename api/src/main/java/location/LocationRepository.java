@@ -14,20 +14,16 @@ import java.sql.*;
  * @version 0.3, 4-6-2017
  */
 public class LocationRepository extends RepositoryMaria<Location> {
-    private final PreparedStatement psFindByCode;
+    private final String findByCodeQuery;
     
     public LocationRepository(Connection connection) {
         super(connection);
     
-        String findByCodeQuery = "SELECT * FROM `"+getTable()+"` WHERE `code` LIKE ?";
-    
-        try {
-            psFindByCode = connection.prepareStatement(findByCodeQuery);
-        } catch (SQLException e) {
-            throw new RepositoryException(e);
-        }
+        findByCodeQuery = "SELECT * FROM `"+getTable()+"` WHERE `code` LIKE ?";
     }
-
+    
+    protected PreparedStatement psFindByCode() throws SQLException {return connection.prepareStatement(findByCodeQuery);}
+    
     @Override
     protected String getTable() {
         return "location";
@@ -57,8 +53,15 @@ public class LocationRepository extends RepositoryMaria<Location> {
         };
     }
     
+    /**
+     * Finds a location with the given code
+     * @param code a unique location code
+     * @return the location object or null if none is found
+     * @throws RepositoryException when there's a problem retrieving the location from the database
+     */
     public Location findByCode(String code) throws RepositoryException {
         try {
+            PreparedStatement psFindByCode = psFindByCode();
             psFindByCode.setString(1,code);
             ResultSet resultSet = psFindByCode.executeQuery();
             if(resultSet!=null && resultSet.next()) {

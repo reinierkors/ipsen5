@@ -6,21 +6,32 @@ import {ApiService} from '../services/api.service';
 import {Sample} from './sample.model';
 import {Species} from '../species/species.model';
 
+//Value that is calculated in a sample using the WEW list
+export type CalculationData = {factorClassId:number,computedValue:number};
+
 @Injectable()
 export class ApiSampleService extends ApiService{
 	constructor(@Inject(Http) http:Http){
 		super(http);
 	}
 	
+	//Retrieve a sample by its id
 	public getSample(id:number):Observable<Sample>{
 		return this.get('/sample/'+id).map(sample=>Sample.fromJSON(sample));
 	}
 	
+	//Save a sample to the server
 	public save(sample:Sample):Observable<Sample>{
 		return this.post('/sample',[sample]).map(samples => Sample.fromJSON(samples[0]));
 	}
 	
+	//Save a list of samples to the server
 	public saveMulti(samples:Sample[]):Observable<Sample[]>{
 		return this.post('/sample',samples).map(samples => samples.map(sample => Sample.fromJSON(sample)));
+	}
+	
+	//Get a list of calculations for the given sample id
+	public getCalculationsBySample(sampleId:number):Observable<CalculationData[]>{
+		return this.get('/calculate/sample/'+sampleId);
 	}
 }

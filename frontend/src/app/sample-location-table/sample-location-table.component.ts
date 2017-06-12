@@ -1,42 +1,50 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiLocationService } from '../locations/api.location.service';
+import {Component, OnInit} from '@angular/core';
+import {ApiLocationService} from '../locations/api.location.service';
+import {ApiWaterschapService} from '../waterschap/api.waterschap.service';
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-sample-Location-table',
-  providers: [ApiLocationService],
-  templateUrl: './sample-Location-table.component.html',
-  styleUrls: ['./sample-Location-table.component.css']
+    selector: 'app-sample-Location-table',
+    providers: [ApiLocationService, ApiWaterschapService],
+    templateUrl: './sample-Location-table.component.html',
+    styleUrls: ['./sample-Location-table.component.css']
 })
 
 export class SampleLocationTableComponent implements OnInit {
 
-  private apiLocationService: ApiLocationService;
-  location : Location;
-  router : Router;
+    private apiLocationService: ApiLocationService;
+    private apiWaterschap: ApiWaterschapService;
+    private router: Router;
 
-  rows = [];
+    locationRows = [];
+    locationColumns = [
+        {name: 'Mp', prop: 'code'},
+        {name: 'Naam', prop: 'description'}
+    ];
+    waterschapRows = [];
+    waterschapColumns = [
+        {name: 'Naam', prop: 'name'},
+        {name: 'Adres', prop: 'address'},
+        {name: 'Huisnummer', prop: 'houseNumber'},
+        {name: 'Postcode', prop: 'zipCode'},
+        {name: 'Locatie', prop: 'location'},
+        {name: 'Telefoonnummer', prop: 'phoneNumber'}
+    ];
 
-  columns = [
-    { name: 'code' },
-    { prop: 'latitude' },
-    { prop: 'longitude'},
-    { name: 'description'}
-  ];
+    constructor(apiLocationService: ApiLocationService, apiWaterschap: ApiWaterschapService, router:Router) {
+        this.apiLocationService = apiLocationService;
+        this.apiWaterschap = apiWaterschap;
+        this.router = router;
+    }
 
-  selected = [];
-
-  constructor(apiLocationService: ApiLocationService, router:Router) {
-    this.apiLocationService = apiLocationService;
-    this.router = router;
-  }
-
-  ngOnInit() {
-    this.apiLocationService.getAllLocations().subscribe(locations => {
-      console.log(locations);
-      this.rows = locations;
-    })
-  }
+    ngOnInit() {
+        this.apiLocationService.getAllLocations().subscribe(locations => {
+            this.locationRows = locations;
+        });
+        this.apiWaterschap.getAll().subscribe(waterschappen => {
+            this.waterschapRows = waterschappen;
+        });
+    }
 
     onSelect({ selected }) {
         console.log('Select Event', selected, this.selected);

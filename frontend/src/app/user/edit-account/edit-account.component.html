@@ -1,0 +1,29 @@
+<md-card>
+    <md-card-title>
+        <span class="md-headline">Account</span>
+    </md-card-title>
+    <md-card-content></md-card-content>
+</md-card>
+<md-card>
+    <md-card-title>
+        <span class="md-headline">Wachtwoord aanpassen</span>
+    </md-card-title>
+    <form (ngSubmit)="editPassword()">
+    <md-card-content>
+        <div class="editPasswordForm">
+            <md-input-container class="full-width">
+                <input mdInput type="password" placeholder="Oud Wachtwoord" name="oldPassword" [(ngModel)]="model.oldPassword" required>
+            </md-input-container>
+            <section layout="row">
+                <md-input-container class="editPasswordField">
+                    <input mdInput type="password" placeholder="Nieuw Wachtwoord" name="newPassword" [(ngModel)]="model.newPassword" required>
+                </md-input-container>
+                <md-input-container class="editPasswordField">
+                    <input mdInput type="password" placeholder="Bevestig Nieuw Wachtwoord" name="confirmPassword" [(ngModel)]="model.confirmPassword" required>
+                </md-input-container>
+            </section>
+            <button type="submit" md-raised-button>Aanpassen</button>
+        </div>
+    </md-card-content>
+    </form>
+</md-card>

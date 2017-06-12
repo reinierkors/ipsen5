@@ -6,6 +6,7 @@ import authenticate.BCrypt;
 import com.google.gson.Gson;
 import database.ConnectionManager;
 import database.RepositoryException;
+import jdk.nashorn.internal.parser.JSONParser;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -15,8 +16,7 @@ import java.time.Instant;
 import java.util.*;
 
 /**
- * Service voor user-gerelateerde business logic
- * Staat tussen de router en de repository
+ * Service for user features
  *
  * @author Reinier Kors
  * @version 0.1, 30-5-2017
@@ -36,6 +36,12 @@ public class UserService {
 		return instance;
 	}
 	
+	/**
+	 * Retrieve a user by id
+	 * @param id user id
+	 * @return user object
+	 * @throws ApiException when there's a problem retrieving the user, or the user does not exist
+	 */
 	public User get(int id) throws ApiException {
 		try {
 			User user = repo.get(id);
@@ -47,7 +53,12 @@ public class UserService {
 			throw new ApiValidationException("Cannot retrieve user");
 		}
 	}
-
+	
+	/**
+	 * Retrieves all users
+	 * @return a list of all users
+	 * @throws ApiException when there was a problem retrieving all users
+	 */
 	public Iterable<User> getAll() throws ApiException {
 		try {
 			return repo.getAll();
@@ -55,7 +66,12 @@ public class UserService {
 			throw new ApiException("Cannot retrieve users");
 		}
 	}
-
+	
+	/**
+	 * Creates a mew user
+	 * @param user object
+	 * @return a json string of the user
+	 */
 	public String create(User user) {
 	    List<String> errors = new ArrayList<>();
         validator
@@ -71,12 +87,11 @@ public class UserService {
 
         return new Gson().toJson(user);
 	}
-
+	
 	public String createSessionToken(User tempUser) throws ApiException {
         try {
-            if(repo.findByEmail(tempUser.getEmail()) == null){
-                System.out.println("Couldn't find user");
-                return null;
+            if (repo.findByEmail(tempUser.getEmail()) == null){
+                throw new ApiValidationException("Fout wachtwoord/email");
             }
             User user = repo.findByEmail(tempUser.getEmail());
             if (checkPassword(tempUser.getPassword(), user)){
@@ -84,12 +99,32 @@ public class UserService {
                 saveSession(sessionToken, user.getId());
                 return sessionToken;
             } else {
-                System.out.println("Passwords don't match");
-                return null;
+                throw new ApiValidationException("Fout wachtwoord/email");
             }
         } catch(RepositoryException e){
             throw new ApiException("Cannot retrieve user");
         }
+    }
+	
+    public boolean editPassword(String oldPassword, String newPassword, String confirmPassword, String sessionToken){
+	    if(repo.findBySession(sessionToken) == null){
+            throw new ApiValidationException("Gebruiker niet gevonden");
+        }
+        User currentUser = repo.findBySession(sessionToken);
+	    if(!checkPassword(oldPassword, currentUser)){
+            throw new ApiValidationException("Wachtwoord klopt niet");
+        }
+	    if(!newPassword.equals(confirmPassword)){
+            throw new ApiValidationException("Nieuwe wachtwoorden komen niet overeen");
+        }
+	    repo.editPassword(BCrypt.hashpw(newPassword, BCrypt.gensalt()), sessionToken);
+        return true;
+    }
+
+    public boolean check(List<String> passwords){
+
+        System.out.println(passwords);
+        return true;
     }
 
     private boolean checkPassword(String password, User user){
