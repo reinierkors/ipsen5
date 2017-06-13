@@ -145,16 +145,4 @@ public class UserRepository extends RepositoryMaria<User>{
             throw new RepositoryException(e);
         }
     }
-
-    void editUser(User user){
-	    try {
-	        PreparedStatement psEditUser = psEditUser();
-	        psEditUser.setString(1, user.getName());
-	        psEditUser.setString(2, user.getEmail());
-	        psEditUser.setInt(3, user.getId());
-            psEditUser.executeUpdate();
-        } catch (SQLException e) {
-            throw new RepositoryException(e);
-        }
-    }
 }

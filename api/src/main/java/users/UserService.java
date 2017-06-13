@@ -67,12 +67,15 @@ public class UserService {
         }
     }
 
-    User editUser(User user) throws ApiException {
+    User editUser(User editedUser) throws ApiException {
 	    try {
-	        repo.editUser(user);
-	        return user;
+	        User user = repo.get(editedUser.getId());
+	        user.setName(editedUser.getName());
+	        user.setEmail(editedUser.getEmail());
+	        repo.persist(user);
+	        return editedUser;
         } catch(RepositoryException e) {
-            throw new ApiValidationException("Cannot retrieve user");
+            throw new ApiValidationException("Cannot update user");
         }
     }
 	

@@ -46,8 +46,8 @@ export class EditAccountComponent implements OnInit {
       }, error => swal('Oops...', error, 'error'));
   }
 
-  editAccount(value: any) {
-    this.userService.editUser(User.fromJSON(value)).subscribe(data => {
+  editAccount() {
+    this.userService.editUser(User.fromJSON(this.currentUser)).subscribe(data => {
         swal('', `Gebruiker ${data.name} aangepast!`, 'success');
         this.resetForm();
     }, error => swal('Oops...', error, 'error'));
