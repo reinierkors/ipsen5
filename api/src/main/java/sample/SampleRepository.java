@@ -16,11 +16,11 @@ import java.util.stream.Collectors;
  * @version 0.4, 8-6-2017
  */
 public class SampleRepository extends RepositoryMaria<Sample>{
-	private final String queryGetSpecies;
+	private final String queryGetTaxon;
 	
 	public SampleRepository(Connection connection) {
 		super(connection);
-		queryGetSpecies = "SELECT `species_id`,`value` FROM `sample_species` WHERE `sample_id` = ?";
+		queryGetTaxon = "SELECT `taxon_id`,`value` FROM `sample_taxon` WHERE `sample_id` = ?";
 	}
 	
 	@Override
@@ -57,18 +57,18 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 			Sample sample = super.get(id);
 			if(sample==null)
 				return null;
-			//Retrieve species ids and values, and put them in the sample object
-			PreparedStatement psGetSpecies = connection.prepareStatement(queryGetSpecies);
-			psGetSpecies.setInt(1,sample.getId());
-			ResultSet resultSet = psGetSpecies.executeQuery();
+			//Retrieve taxon ids and values, and put them in the sample object
+			PreparedStatement psGetTaxon = connection.prepareStatement(queryGetTaxon);
+			psGetTaxon.setInt(1,sample.getId());
+			ResultSet resultSet = psGetTaxon.executeQuery();
 			
-			Map<Integer,Integer> speciesValues = new HashMap<>();
+			Map<Integer,Integer> taxonValues = new HashMap<>();
 			if(resultSet!=null){
 				while(resultSet.next()){
-					speciesValues.put(resultSet.getInt("species_id"),resultSet.getInt("value"));
+					taxonValues.put(resultSet.getInt("taxon_id"),resultSet.getInt("value"));
 				}
 			}
-			sample.setSpeciesValues(speciesValues);
+			sample.setTaxonValues(taxonValues);
 			return sample;
 		}
 		catch(SQLException e){
@@ -83,30 +83,30 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 			if(samples.isEmpty())
 				return samples;
 			
-			//Retrieve species ids and values, and put them in the sample object
+			//Retrieve taxon ids and values, and put them in the sample object
 			Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
 			String howManyQuestionMarks = samples.stream().map(sample -> "?").collect(commaJoiner);
 			
-			String queryGetSpeciesMulti = "SELECT `sample_id`,`species_id`,`value` FROM `sample_species` WHERE `sample_id` IN ("+howManyQuestionMarks+")";
-			PreparedStatement psGetSpeciesMulti = connection.prepareStatement(queryGetSpeciesMulti);
+			String queryGetTaxonMulti = "SELECT `sample_id`,`taxon_id`,`value` FROM `sample_taxon` WHERE `sample_id` IN ("+howManyQuestionMarks+")";
+			PreparedStatement psGetTaxonMulti = connection.prepareStatement(queryGetTaxonMulti);
 			
-			Map<Integer,Map<Integer,Integer>> sampleIdToSpeciesValuesMap = new HashMap<>();
+			Map<Integer,Map<Integer,Integer>> sampleIdToTaxonValuesMap = new HashMap<>();
 			int index = 1;
 			for(Sample sample:samples){
 				Map<Integer,Integer> map = new HashMap<>();
-				sampleIdToSpeciesValuesMap.put(sample.getId(),map);
-				sample.setSpeciesValues(map);
-				psGetSpeciesMulti.setInt(index,sample.getId());
+				sampleIdToTaxonValuesMap.put(sample.getId(),map);
+				sample.setTaxonValues(map);
+				psGetTaxonMulti.setInt(index,sample.getId());
 				++index;
 			}
 			
-			ResultSet resultSet = psGetSpeciesMulti.executeQuery();
+			ResultSet resultSet = psGetTaxonMulti.executeQuery();
 			if(resultSet!=null) {
 				while(resultSet.next()){
 					int sampleId = resultSet.getInt("sample_id");
-					int speciesId = resultSet.getInt("species_id");
+					int taxonId = resultSet.getInt("taxon_id");
 					int value = resultSet.getInt("value");
-					sampleIdToSpeciesValuesMap.get(sampleId).put(speciesId,value);
+					sampleIdToTaxonValuesMap.get(sampleId).put(taxonId,value);
 				}
 			}
 			
@@ -127,95 +127,95 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 		try {
 			super.persist(sample);
 			
-			//Save sample species and values
+			//Save sample taxon and values
 			
-			//For the following 5 maps: key is `sample_species`.`species_id`, value is `sample_species`.`value`
-			//Species in database before saving
-			Map<Integer,Integer> oldSpeciesMap;
-			//Species we want in the database
-			Map<Integer,Integer> newSpeciesMap = sample.getSpeciesValues();
-			//Species that have been removed
-			Map<Integer,Integer> removedSpeciesMap;
-			//Species that have been added
-			Map<Integer,Integer> addedSpeciesMap;
-			//Species that have its values changed (map value is the new value)
-			Map<Integer,Integer> changedSpeciesMap;
+			//For the following 5 maps: key is `sample_taxon`.`taxon_id`, value is `sample_taxon`.`value`
+			//Taxon in database before saving
+			Map<Integer,Integer> oldTaxonMap;
+			//Taxon we want in the database
+			Map<Integer,Integer> newTaxonMap = sample.getTaxonValues();
+			//Taxon that have been removed
+			Map<Integer,Integer> removedTaxonMap;
+			//Taxon that have been added
+			Map<Integer,Integer> addedTaxonMap;
+			//Taxon that have its values changed (map value is the new value)
+			Map<Integer,Integer> changedTaxonMap;
 			
 			//Read old rows from the database
-			PreparedStatement psGetSpecies = connection.prepareStatement(queryGetSpecies);
-			psGetSpecies.setInt(1,sample.getId());
-			ResultSet resultSet = psGetSpecies.executeQuery();
-			oldSpeciesMap = new HashMap<>();
+			PreparedStatement psGetTaxon = connection.prepareStatement(queryGetTaxon);
+			psGetTaxon.setInt(1,sample.getId());
+			ResultSet resultSet = psGetTaxon.executeQuery();
+			oldTaxonMap = new HashMap<>();
 			if(resultSet!=null){
 				while(resultSet.next()){
-					oldSpeciesMap.put(resultSet.getInt("species_id"),resultSet.getInt("value"));
+					oldTaxonMap.put(resultSet.getInt("taxon_id"),resultSet.getInt("value"));
 				}
 			}
 			
-			//Check which species are new
-			addedSpeciesMap = new HashMap<>(newSpeciesMap);
-			oldSpeciesMap.forEach((species,value) -> addedSpeciesMap.remove(species));
+			//Check which taxon are new
+			addedTaxonMap = new HashMap<>(newTaxonMap);
+			oldTaxonMap.forEach((taxon,value) -> addedTaxonMap.remove(taxon));
 			
-			//Check which species are removed
-			removedSpeciesMap = new HashMap<>(oldSpeciesMap);
-			newSpeciesMap.forEach((species,value) -> removedSpeciesMap.remove(species));
+			//Check which taxon are removed
+			removedTaxonMap = new HashMap<>(oldTaxonMap);
+			newTaxonMap.forEach((taxon,value) -> removedTaxonMap.remove(taxon));
 			
-			//Check which species values are changed
-			changedSpeciesMap = new HashMap<>();
-			newSpeciesMap.forEach((species,value) -> {
-				if(!oldSpeciesMap.containsKey(species))
+			//Check which taxon values are changed
+			changedTaxonMap = new HashMap<>();
+			newTaxonMap.forEach((taxon,value) -> {
+				if(!oldTaxonMap.containsKey(taxon))
 					return;
-				int oldValue = oldSpeciesMap.get(species);
+				int oldValue = oldTaxonMap.get(taxon);
 				if(!value.equals(oldValue)){
-					changedSpeciesMap.put(species,value);
+					changedTaxonMap.put(taxon,value);
 				}
 			});
 			
 			
 			//Save added items to the database
 			Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
-			if(addedSpeciesMap.size()>0){
-				Set<Integer> addedSpeciesKeys = addedSpeciesMap.keySet();
-				String valueParams = addedSpeciesKeys.stream().map(k -> "(?,?,?)").collect(commaJoiner);
-				String queryInsertSpecies = "INSERT INTO `sample_species`(`sample_id`,`species_id`,`value`) VALUES "+valueParams;
-				PreparedStatement psInsertSpecies = connection.prepareStatement(queryInsertSpecies);
+			if(addedTaxonMap.size()>0){
+				Set<Integer> addedTaxonKeys = addedTaxonMap.keySet();
+				String valueParams = addedTaxonKeys.stream().map(k -> "(?,?,?)").collect(commaJoiner);
+				String queryInsertTaxon = "INSERT INTO `sample_taxon`(`sample_id`,`taxon_id`,`value`) VALUES "+valueParams;
+				PreparedStatement psInsertTaxon = connection.prepareStatement(queryInsertTaxon);
 				int index = 1;
-				for(int addedSpecies : addedSpeciesKeys){
-					psInsertSpecies.setInt(index,sample.getId());
+				for(int addedTaxon : addedTaxonKeys){
+					psInsertTaxon.setInt(index,sample.getId());
 					++index;
-					psInsertSpecies.setInt(index,addedSpecies);
+					psInsertTaxon.setInt(index,addedTaxon);
 					++index;
-					psInsertSpecies.setInt(index,addedSpeciesMap.get(addedSpecies));
+					psInsertTaxon.setInt(index,addedTaxonMap.get(addedTaxon));
 					++index;
 				}
-				psInsertSpecies.executeUpdate();
+				psInsertTaxon.executeUpdate();
 			}
 			
 			//Delete removed items from the database
-			if(removedSpeciesMap.size()>0){
-				Set<Integer> removedSpeciesKeys = removedSpeciesMap.keySet();
-				String howManyQuestionMarks = removedSpeciesKeys.stream().map(k -> "?").collect(commaJoiner);
-				String queryDeleteSpecies = "DELETE FROM `sample_species` WHERE `sample_id` = ? AND `species_id` IN ("+howManyQuestionMarks+")";
-				PreparedStatement psDeleteSpecies = connection.prepareStatement(queryDeleteSpecies);
-				psDeleteSpecies.setInt(1,sample.getId());
+			if(removedTaxonMap.size()>0){
+				Set<Integer> removedTaxonKeys = removedTaxonMap.keySet();
+				String howManyQuestionMarks = removedTaxonKeys.stream().map(k -> "?").collect(commaJoiner);
+				String queryDeleteTaxon = "DELETE FROM `sample_taxon` WHERE `sample_id` = ? AND `taxon_id` IN ("+howManyQuestionMarks+")";
+				PreparedStatement psDeleteTaxon = connection.prepareStatement(queryDeleteTaxon);
+				psDeleteTaxon.setInt(1,sample.getId());
 				int index = 2;
-				for(int removedSpecies : removedSpeciesKeys) {
-					psDeleteSpecies.setInt(index,removedSpecies);
+				for(int removedTaxon : removedTaxonKeys) {
+					psDeleteTaxon.setInt(index,removedTaxon);
 					++index;
 				}
-				psDeleteSpecies.executeUpdate();
+				psDeleteTaxon.executeUpdate();
 			}
 			
 			//Save changed values to the database
 			//Delete removed items from the database
-			Set<Integer> changedSpeciesKeys = changedSpeciesMap.keySet();
-			String queryChangedSpecies = "UPDATE `sample_species` SET `value` = ? WHERE `sample_id` = ? AND `species_id` = ?";
-			PreparedStatement psChangedSpecies = connection.prepareStatement(queryChangedSpecies);
-			for(int changedSpecies : changedSpeciesKeys){
-				psChangedSpecies.setInt(1, changedSpeciesMap.get(changedSpecies));
-				psChangedSpecies.setInt(2, sample.getId());
-				psChangedSpecies.setInt(3, changedSpecies);
-				psChangedSpecies.executeUpdate();
+			Set<Integer> changedTaxonKeys = changedTaxonMap.keySet();
+			String queryChangedTaxon = "UPDATE `sample_taxon` SET `value` = ? WHERE `sample_id` = ? AND `taxon_id` = ?";
+			PreparedStatement psChangedTaxon = connection.prepareStatement(queryChangedTaxon);
+			for(int changedTaxon : changedTaxonKeys){
+				psChangedTaxon.setInt(1, changedTaxonMap.get(changedTaxon));
+				psChangedTaxon.setInt(2, sample.getId());
+				psChangedTaxon.setInt(3, changedTaxon);
+				psChangedTaxon.executeUpdate();
 			}
 		} catch (SQLException e) {
 			throw new RepositoryException(e);
@@ -230,10 +230,10 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 	@Override
 	public void remove(int id) throws RepositoryException {
 		try {
-			String queryDeleteSpecies = "DELETE FROM `sample_species` WHERE `sample_id` = ?";
-			PreparedStatement psDeleteSpecies = connection.prepareStatement(queryDeleteSpecies);
-			psDeleteSpecies.setInt(1,id);
-			psDeleteSpecies.executeUpdate();
+			String queryDeleteTaxon = "DELETE FROM `sample_taxon` WHERE `sample_id` = ?";
+			PreparedStatement psDeleteTaxon = connection.prepareStatement(queryDeleteTaxon);
+			psDeleteTaxon.setInt(1,id);
+			psDeleteTaxon.executeUpdate();
 			
 			super.remove(id);
 		}
@@ -247,14 +247,14 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 		try {
 			Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
 			String howManyQuestionMarks = ids.stream().map(id -> "?").collect(commaJoiner);
-			String queryDeleteSpecies = "DELETE FROM `sample_species` WHERE `sample_id` IN (" + howManyQuestionMarks + ")";
-			PreparedStatement psDeleteSpecies = connection.prepareStatement(queryDeleteSpecies);
+			String queryDeleteTaxon = "DELETE FROM `sample_taxon` WHERE `sample_id` IN (" + howManyQuestionMarks + ")";
+			PreparedStatement psDeleteTaxon = connection.prepareStatement(queryDeleteTaxon);
 			int index = 1;
 			for (int id : ids) {
-				psDeleteSpecies.setInt(index, id);
+				psDeleteTaxon.setInt(index, id);
 				++index;
 			}
-			psDeleteSpecies.executeUpdate();
+			psDeleteTaxon.executeUpdate();
 			
 			super.remove(ids);
 		}

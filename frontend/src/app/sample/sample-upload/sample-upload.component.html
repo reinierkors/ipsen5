@@ -52,13 +52,13 @@
 				</md-list>
 			</md-card-content>
 		</md-card>
-		<md-card *ngIf="confirm.species.length">
+		<md-card *ngIf="confirm.taxon.length">
 			<md-card-title>Nieuwe soorten</md-card-title>
 			<md-card-content>
 				<md-list dense>
-					<md-list-item *ngFor="let species of confirm.species">
-						{{species.name}}
-					</md-list-item>
+					<md-list-item *ngFor="let taxon of confirm.taxon">
+                        {{taxon.name}}
+                    </md-list-item>
 				</md-list>
 			</md-card-content>
 		</md-card>
@@ -79,10 +79,10 @@
 				<md-card-subtitle>{{sample.date|date:'d MMMM y'}}</md-card-subtitle>
 			</md-card-header>
 			<md-card-content>
-				{{sample.speciesValues.size}} soorten
+				{{sample.taxonValues.size}} soorten
 				<!-- TODO: Makes the page very slow
 				<md-list dense>
-					<md-list-item *ngFor="let .. of sample.speciesValues">
+					<md-list-item *ngFor="let .. of sample.taxonValues">
 						...
 					</md-list-item>
 				</md-list>

@@ -37,8 +37,9 @@ import { WewUploadComponent } from './wew/wew-upload/wew-upload.component';
 import { WewViewComponent } from './wew/wew-view/wew-view.component';
 import { AngularEchartsModule } from 'ngx-echarts';
 import { EditAccountComponent } from './user/edit-account/edit-account.component';
-import { SpeciesImportStructureComponent } from './species/species-import-structure/species-import-structure.component';
-import { SpeciesImportTreeComponent } from './species/species-import-structure/species-import-tree/species-import-tree.component';
+import { TaxonImportStructureComponent } from './taxon/taxon-import-structure/taxon-import-structure.component';
+import { TaxonImportTreeComponent } from './taxon/taxon-import-structure/taxon-import-tree/taxon-import-tree.component';
+import { TaxonTreeComponent } from './taxon/taxon-tree/taxon-tree.component';
 
 const routes:Routes = [
   {path: '', component: HomeComponent},
@@ -51,7 +52,7 @@ const routes:Routes = [
   {path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
   {path: 'wew/upload', component: WewUploadComponent, canActivate: [AuthGuard]},
   {path: 'wew/view', component: WewViewComponent, canActivate: [AuthGuard]},
-  {path: 'species/import', component: SpeciesImportStructureComponent, canActivate: [AuthGuard]},
+  {path: 'taxon/import', component: TaxonImportStructureComponent, canActivate: [AuthGuard]},
     /* Admin Routes */
   {path: 'admin/create-account', component: CreateAccountComponent, canActivate: [AuthGuard]},
     /* Directs back to home if route is unknown */
@@ -74,8 +75,9 @@ const routes:Routes = [
         EditAccountComponent,
         WewUploadComponent,
         WewViewComponent,
-        SpeciesImportStructureComponent,
-        SpeciesImportTreeComponent,
+        TaxonImportStructureComponent,
+        TaxonImportTreeComponent,
+        TaxonTreeComponent,
     ],
     imports: [
         MdInputModule,

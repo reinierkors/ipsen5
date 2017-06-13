@@ -22,17 +22,17 @@ public class CalculateService {
 	
 	private String queryCalcSample = "INSERT INTO `sample_wew_factor_class`(`sample_id`,`factor_class_id`,`computed_value`) "+
 		"SELECT `sample_id`,`factor_class_id`,AVG(`wew_value`.`value`) "+
-		"FROM `sample_species` "+
+		"FROM `sample_taxon` "+
 		"INNER JOIN `wew_value` "+
-		"ON `wew_value`.`species_id` = `sample_species`.`species_id` "+
+		"ON `wew_value`.`taxon_id` = `sample_taxon`.`taxon_id` "+
 		"WHERE `sample_id` = ? "+
 		"GROUP BY `factor_class_id`, `sample_id` ";
 	
 	private String queryCalcReference = "INSERT INTO `reference_wew_factor_class`(`reference_id`,`factor_class_id`,`computed_value`) "+
 			"SELECT `reference_id`,`factor_class_id`,AVG(`wew_value`.`value`) "+
-			"FROM `reference_species` "+
+			"FROM `reference_taxon` "+
 			"INNER JOIN `wew_value` "+
-			"ON `wew_value`.`species_id` = `reference_species`.`species_id` "+
+			"ON `wew_value`.`taxon_id` = `reference_taxon`.`taxon_id` "+
 			"WHERE `reference_id` = ? "+
 			"GROUP BY `factor_class_id`, `reference_id` ";
 	
@@ -133,7 +133,7 @@ public class CalculateService {
 	
 	/**
 	 * A pair of factor class and calculated value for samples and references
-	 * The value is the average of all species in the WEW list for a given factor class
+	 * The value is the average of all taxon in the WEW list for a given factor class
 	 */
 	public class CalculationData{
 		public int factorClassId;

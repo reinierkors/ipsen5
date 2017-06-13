@@ -17,9 +17,9 @@ public class Sample{
 	private Double quality;
 	private Integer xCoor;
 	private Integer yCoor;
-	private Map<Integer,Integer> speciesValues;
+	private Map<Integer,Integer> taxonValues;
 	
-	public Sample(int id, Date date, int locationId, Integer ownerId, Double quality, Integer xCoor, Integer yCoor, Map<Integer,Integer> speciesValues) {
+	public Sample(int id, Date date, int locationId, Integer ownerId, Double quality, Integer xCoor, Integer yCoor, Map<Integer,Integer> taxonValues) {
 		this.id = id;
 		this.date = date;
 		this.locationId = locationId;
@@ -27,11 +27,11 @@ public class Sample{
 		this.quality = quality;
 		this.xCoor = xCoor;
 		this.yCoor = yCoor;
-		this.speciesValues = speciesValues;
+		this.taxonValues = taxonValues;
 	}
 	
-	public Sample(Date date, int locationId, Integer ownerId, Double quality, Integer xCoor, Integer yCoor, Map<Integer,Integer> speciesValues) {
-		this(0, date, locationId, ownerId, quality, xCoor, yCoor, speciesValues);
+	public Sample(Date date, int locationId, Integer ownerId, Double quality, Integer xCoor, Integer yCoor, Map<Integer,Integer> taxonValues) {
+		this(0, date, locationId, ownerId, quality, xCoor, yCoor, taxonValues);
 	}
 	
 	public Sample(){
@@ -94,11 +94,11 @@ public class Sample{
 		this.yCoor = yCoor;
 	}
 	
-	public Map<Integer, Integer> getSpeciesValues() {
-		return speciesValues;
+	public Map<Integer, Integer> getTaxonValues() {
+		return taxonValues;
 	}
 	
-	public void setSpeciesValues(Map<Integer, Integer> speciesValues) {
-		this.speciesValues = speciesValues;
+	public void setTaxonValues(Map<Integer, Integer> taxonValues) {
+		this.taxonValues = taxonValues;
 	}
 }

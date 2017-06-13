@@ -1,16 +1,17 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import config.Config;
+
 import api.ApiException;
 import api.ApiExceptionTypeAdapter;
 import api.ApiGuard;
+
 import authenticate.AuthRouter;
 import calculate.CalculateRouter;
-import config.Config;
 import location.LocationRouter;
 import sample.SampleRouter;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import speciesCategory.SpeciesCategoryRouter;
-import species.SpeciesRouter;
+import taxon.TaxonRouter;
 import users.UserRouter;
 import waterschap.WaterschapRouter;
 import watertype.WatertypeRouter;
@@ -49,8 +50,7 @@ public class Main {
 			
 			new AuthRouter();
 			new SampleRouter();
-			new SpeciesRouter();
-			new SpeciesCategoryRouter();
+			new TaxonRouter();
 			new WEWRouter();
 			new LocationRouter();
 			new WatertypeRouter();

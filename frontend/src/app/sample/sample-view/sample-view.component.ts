@@ -2,31 +2,31 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ApiSampleService} from '../api.sample.service';
 import {Sample} from '../sample.model';
-import {ApiSpeciesService} from "../../species/api.species.service";
-import {Species} from "../../species/species.model";
+import {ApiTaxonService} from "../../taxon/api.taxon.service";
+import {Taxon} from "../../taxon/taxon.model";
 import {ApiLocationService} from "../../locations/api.location.service";
 import {Location} from "../../locations/location.model";
 
 @Component({
     selector: 'app-sample-view',
-    providers: [ApiSampleService, ApiSpeciesService, ApiLocationService],
+    providers: [ApiSampleService, ApiTaxonService, ApiLocationService],
     templateUrl: './sample-view.component.html',
     styleUrls: ['./sample-view.component.css']
 })
 export class SampleViewComponent implements OnInit {
     private route: ActivatedRoute;
     private apiSample: ApiSampleService;
-    private apiSpecies: ApiSpeciesService;
+    private apiTaxon: ApiTaxonService;
     private apiLocation: ApiLocationService;
     public sample: Sample;
-    public species: Species[];
+    public taxon: Taxon[];
     public location: Location;
     public showChart = false;
     public markerPos;
 
-    constructor(apiSample: ApiSampleService, apiSpecies: ApiSpeciesService, apiLocation: ApiLocationService, route: ActivatedRoute) {
+    constructor(apiSample: ApiSampleService, apiTaxon: ApiTaxonService, apiLocation: ApiLocationService, route: ActivatedRoute) {
         this.apiSample = apiSample;
-        this.apiSpecies = apiSpecies;
+        this.apiTaxon = apiTaxon;
         this.apiLocation = apiLocation;
         this.route = route;
     }
@@ -37,22 +37,22 @@ export class SampleViewComponent implements OnInit {
             .subscribe(sample => {
                 this.sample = sample
                 console.log(sample)
-                this.retrieveSpecies();
+                this.retrieveTaxon();
                 this.retrieveLocation();
             }, error => console.log(error));
     }
 
-    private retrieveSpecies() {
+    private retrieveTaxon() {
 		
         this.route.params
-            .switchMap(params => this.apiSpecies.getByIds(Array.from(this.sample.speciesValues.keys())))
-            .subscribe(species => {
+            .switchMap(params => this.apiTaxon.getByIds(Array.from(this.sample.taxonValues.keys())))
+            .subscribe(taxon => {
                 let names = [];
                 let values = [];
-                this.species = species;
-                this.species.forEach((item) => {
+                this.taxon = taxon;
+                this.taxon.forEach((item) => {
                     names.push(item.name);
-                    values.push(this.sample.speciesValues.get(item.id));
+                    values.push(this.sample.taxonValues.get(item.id));
                 });
                 this.option.yAxis.data = names;
                 this.option.series[0].data = values;

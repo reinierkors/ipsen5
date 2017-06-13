@@ -3,16 +3,16 @@ type WEWValueFormat = {i:number,c:number,s:number,v:number};
 export class WEWValue{
 	id:number;
 	factorClassId:number;
-	speciesId:number;
+	taxonId:number;
 	value:number;
 	
 	//WEWValue is transferred between server and client in a different way than other classes, for performance reasons
-	//Format: {i:id,c:factorClassId,s:speciesId,v:value}
+	//Format: {i:id,c:factorClassId,s:taxonId,v:value}
 	public toJSON():WEWValueFormat{
 		return {
 			i:this.id,
 			c:this.factorClassId,
-			s:this.speciesId,
+			s:this.taxonId,
 			v:this.value
 		};
 	}
@@ -21,7 +21,7 @@ export class WEWValue{
 		let value = new WEWValue();
 		value.id = obj.i;
 		value.factorClassId = obj.c;
-		value.speciesId = obj.s;
+		value.taxonId = obj.s;
 		value.value = obj.v;
 		return value;
 	}

@@ -1,15 +1,15 @@
 import {Component,OnInit} from '@angular/core';
 import {trigger,style,transition,animate,group,state} from '@angular/animations';
 
-import {ApiSpeciesService} from '../api.species.service';
-import {Species} from '../species.model';
+import {ApiTaxonService} from '../api.taxon.service';
+import {Taxon} from '../taxon.model';
 
 import * as XLSX from 'xlsx';
 
 //The states an import process can be in
 type ImportState = 'anim'|'start'|'loading'|'confirm'|'finished'|'error';
 //The columns of the sheet
-export type Taxon = {expanded,taxontype,taxoncode,taxonname,author,taxongroup,taxonlevel,parentname,refername,literature,localname,date,status,parentObject,children:Taxon[],nlGroup,isRefer};
+export type Taxonx = {expanded,taxontype,taxoncode,taxonname,author,taxongroup,taxonlevel,parentname,refername,literature,localname,date,status,parentObject,children:Taxon[],nlGroup,isRefer};
 
 export var NLMap:Map<string,string> = new Map();
 
@@ -40,10 +40,10 @@ export var NLMap:Map<string,string> = new Map();
 
 
 @Component({
-	selector:'app-species-import-structure',
-	providers:[ApiSpeciesService],
-	templateUrl:'./species-import-structure.component.html',
-	styleUrls:['./species-import-structure.component.css'],
+	selector:'app-taxon-import-structure',
+	providers:[ApiTaxonService],
+	templateUrl:'./taxon-import-structure.component.html',
+	styleUrls:['./taxon-import-structure.component.css'],
 	animations:[
 		trigger('mainCardAnim',[
 			state('void',style({opacity:0})),
@@ -52,7 +52,7 @@ export var NLMap:Map<string,string> = new Map();
 		])
 	]
 })
-export class SpeciesImportStructureComponent implements OnInit{
+export class TaxonImportStructureComponent implements OnInit{
 	//The state of the import process
 	state:ImportState = 'start';
 	//NextState is used to go to the correct state after an animated transition
@@ -61,10 +61,10 @@ export class SpeciesImportStructureComponent implements OnInit{
 	errors:any[] = [];
 	
 	//The taxons from the file
-	taxons:Taxon[];
+	taxons:Taxonx[];
 	
 	constructor(
-		private apiService:ApiSpeciesService
+		private apiService:ApiTaxonService
 	){}
 	
 	ngOnInit(){}
@@ -96,7 +96,7 @@ export class SpeciesImportStructureComponent implements OnInit{
 		let file = files.item(0);
 		setTimeout(()=>{
 			this.handleFile(file).then(wb => this.handleWorkBook(wb));
-		});
+		},1000);
 	}
 	
 	//Reads and parses the file and turns it into a workbook
@@ -138,10 +138,10 @@ export class SpeciesImportStructureComponent implements OnInit{
 		let rows = XLSX.utils.sheet_to_json(sheet);
 		
 		//Map taxon names to their objects
-		let taxMap:Map<string/*taxon name*/,Taxon> = new Map();
-		rows.forEach((row:Taxon) => {
+		let taxMap:Map<string/*taxon name*/,Taxonx> = new Map();
+		rows.forEach((row:Taxonx) => {
 			row.children = [];
-			row.expanded = true;
+			row.expanded = row.taxonlevel!=='Genus';
 			taxMap.set(row.taxonname,row)
 		});
 		
@@ -160,7 +160,7 @@ export class SpeciesImportStructureComponent implements OnInit{
 		});
 		
 		//Make array of only the parents
-		let taxons:Taxon[] = Array.from(taxMap.values()).filter(row => !row.parentObject);
+		let taxons:Taxonx[] = Array.from(taxMap.values()).filter(row => !row.parentObject);
 		
 		this.taxons = taxons;
 		
