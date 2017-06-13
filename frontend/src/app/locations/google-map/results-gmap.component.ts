@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ApiLocationService} from '../api.location.service';
-import {Location} from '../location.model';
+import {MarkerLocation} from '../markerLocation.model';
 import {ApiWatertypeService} from '../../watertype/api.watertype.service';
 import {ApiWaterschapService} from "../../waterschap/api.waterschap.service";
 import {Watertype} from "../../watertype/watertype.model";
@@ -14,16 +14,15 @@ import {Waterschap} from "../../waterschap/waterschap.model";
     styleUrls: ['./results-gmap.component.css']
 })
 export class GMapsComponent implements OnInit {
-    public locations: Location[];
+    public markerLocations: MarkerLocation[];
     public positions = [];
     public markers = [];
-    public filteredMarkers = [];
     public waterschappen = [];
     public watertypes = [];
     public showFilters = false;
 
     public marker = {
-        location: Location,
+        markerLocation: MarkerLocation,
         watertype: Watertype,
         watertypeKrw: Watertype,
         waterschap: Waterschap
@@ -80,7 +79,6 @@ export class GMapsComponent implements OnInit {
 
     ngOnInit() {
         this.retrieveLocations();
-        this.retrieveFilterList();
     };
 
     public showMarkerInfo({target: marker}) {
@@ -90,65 +88,47 @@ export class GMapsComponent implements OnInit {
 
     private retrieveSpecificMarker(marker) {
         this.markers.forEach((item) => {
-            if (marker.getTitle() === 'm' + <string><any>item.location.id) {
+            if (marker.getTitle() === 'm' + <string><any>item.markerLocation.id) {
                 this.marker = item;
-                console.log(this.marker)
+                console.log(this.marker);
+                return;
             }
         });
     };
 
     public refreshMarkers() {
         this.positions.splice(0);
-        this.retrieveFilterList();
-        this.retrieveLocations();
-        this.markers.forEach((item) => {
-            this.insertIntoPositions(item);
-        });
-    };
-
-    private retrieveFilterList() {
-        this.waterschappen.splice(0);
-        this.watertypes.splice(0);
         this.filters = {
             waterschapName: ' ',
             watertypeName: ' ',
             watertypeCode: ' ',
         };
-        this.retrieveWatertypes();
-        this.retrieveWaterschappen();
-    }
+        this.retrieveLocations();
+    };
 
     private insertIntoPositions(item) {
         this.positions.push({
-            title: 'm' + <string><any>item.location.id,
-            lat: item.location.latitude,
-            lng: item.location.longitude
+            title: 'm' + <string><any>item.markerLocation.id,
+            lat: item.markerLocation.latitude,
+            lng: item.markerLocation.longitude
         });
     }
 
-    private gatherMarkerInfo() {
-        this.locations.forEach((item) => {
-            let marker = [];
-            marker.push(item,);
-            console.log(item)
-            this.retrieveWatertype(marker);
-        });
-    };
+    // private gatherMarkerInfo() {
+    //     this.locations.forEach((item) => {
+    //         let marker = [];
+    //         marker.push(item,);
+    //         console.log(item);
+    //         // this.retrieveWatertype(marker);
+    //     });
+    // };
 
     private retrieveLocations() {
         this.route.params
             .switchMap(params => this.apiLocation.getAllLocations())
             .subscribe(markerLocations => {
-                this.locations = markerLocations;
-                this.gatherMarkerInfo();
-            }, error => console.log(error));
-    };
-
-    private retrieveWatertypes() {
-        this.route.params
-            .switchMap(params => this.apiWatertype.getAll())
-            .subscribe(watertypes => {
-                this.watertypes = watertypes;
+                this.markerLocations = markerLocations;
+                this.retrieveWaterschappen();
             }, error => console.log(error));
     };
 
@@ -157,50 +137,89 @@ export class GMapsComponent implements OnInit {
             .switchMap(params => this.apiWaterschap.getAll())
             .subscribe(waterschappen => {
                 this.waterschappen = waterschappen;
+                this.retrieveWatertypes()
             }, error => console.log(error));
     };
 
-    private retrieveWatertype(marker) {
+    private retrieveWatertypes() {
         this.route.params
-            .switchMap(params => this.apiWatertype.getWatertype(marker[0].watertypeId))
-            .subscribe(watertype => {
-                marker.push(watertype);
-                this.retrieveWatertypeKrw(marker);
+            .switchMap(params => this.apiWatertype.getAll())
+            .subscribe(watertypes => {
+                this.watertypes = watertypes;
+                this.createMarkers();
             }, error => console.log(error));
     };
 
-    private retrieveWatertypeKrw(marker) {
-        this.route.params
-            .switchMap(params => this.apiWatertype.getWatertype(marker[0].watertypeKrwId))
-            .subscribe(watertypeKrw => {
-                marker.push(watertypeKrw);
-                if (marker[0].waterschapId == null) {
-                    marker.push({id: 0, name: "Niet bekend"})
-                    this.addToMarkers(marker)
-                } else {
-                    this.retrieveWaterschap(marker);
+    // private retrieveWatertype(marker) {
+    //     this.route.params
+    //         .switchMap(params => this.apiWatertype.getWatertype(marker[0].watertypeId))
+    //         .subscribe(watertype => {
+    //             marker.push(watertype);
+    //             this.retrieveWatertypeKrw(marker);
+    //         }, error => console.log(error));
+    // };
+    //
+    // private retrieveWatertypeKrw(marker) {
+    //     this.route.params
+    //         .switchMap(params => this.apiWatertype.getWatertype(marker[0].watertypeKrwId))
+    //         .subscribe(watertypeKrw => {
+    //             marker.push(watertypeKrw);
+    //             if (marker[0].waterschapId == null) {
+    //                 marker.push({id: 0, name: "Niet bekend"})
+    //                 this.addToMarkers(marker)
+    //             } else {
+    //                 this.retrieveWaterschap(marker);
+    //             }
+    //         }, error => console.log(error));//TODO: ERROR WHEN NULL
+    // };
+    //
+    // private retrieveWaterschap(marker) {
+    //     this.route.params.switchMap(params => this.apiWaterschap.getById(marker[0].waterschapId))
+    //         .subscribe(waterschap => {
+    //             marker.push(waterschap);
+    //             this.addToMarkers(marker)
+    //         }, error => console.log(error))
+    // };
+
+    // private addToMarkers(marker) {
+    //     this.markers.push({
+    //         markerLocation: marker[0],
+    //         watertype: marker[1],
+    //         watertypeKrw: marker[2],
+    //         waterschap: marker[3],
+    //     });
+    //     this.insertIntoPositions(this.markers[this.markers.length - 1]);
+    //     console.log("Le markers", this.markers);
+    // };
+
+    private createMarkers() {
+        this.markerLocations.forEach((markerLocation) => {
+            let waterschap: Waterschap;
+            let watertype: Watertype;
+            let watertypeKrw: Watertype;
+            this.waterschappen.forEach((tempWaterschap) => {
+                if (tempWaterschap.id == markerLocation.waterschapId && tempWaterschap != undefined) {
+                    waterschap = tempWaterschap;
                 }
-            }, error => console.log(error));//TODO: ERROR WHEN NULL
-    };
-
-    private retrieveWaterschap(marker) {
-        this.route.params.switchMap(params => this.apiWaterschap.getById(marker[0].waterschapId))
-            .subscribe(waterschap => {
-                marker.push(waterschap);
-                this.addToMarkers(marker)
-            }, error => console.log(error))
-    };
-
-    private addToMarkers(marker) {
-        this.markers.push({
-            location: marker[0],
-            watertype: marker[1],
-            watertypeKrw: marker[2],
-            waterschap: marker[3],
+            });
+            this.watertypes.forEach((tempWatertype) => {
+                if (tempWatertype.id == markerLocation.watertypeId) {
+                    watertype = tempWatertype;
+                }
+                if (tempWatertype.id == markerLocation.watertypeKrwId) {
+                    watertypeKrw = tempWatertype;
+                }
+            });
+            this.markers.push({
+                markerLocation,
+                watertype,
+                watertypeKrw,
+                waterschap
+            },);
+            console.log(this.markers[this.markers.length - 1])
+            this.insertIntoPositions(this.markers[this.markers.length - 1]);
         });
-        this.insertIntoPositions(this.markers[this.markers.length - 1]);
-        console.log("Le markers", this.markers);
-    };
+    }
 
     public filterMarkers() {
         this.positions.splice(0);
@@ -223,7 +242,8 @@ export class GMapsComponent implements OnInit {
                 watertypeCodeCheck = true;
             }
 
-            if (item.waterschap.name == this.filters.waterschapName ||
+            if (item.waterschap != undefined &&
+                item.waterschap.name == this.filters.waterschapName ||
                 this.filters.waterschapName == (' ') ||
                 this.filters.waterschapName == undefined) {
                 waterschapCheck = true;
