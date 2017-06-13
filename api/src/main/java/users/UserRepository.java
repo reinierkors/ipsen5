@@ -53,7 +53,8 @@ public class UserRepository extends RepositoryMaria<User>{
 				new ColumnData<>("password", Types.VARCHAR, User::getPassword, User::setPassword),
 				new ColumnData<>("name", Types.VARCHAR, User::getName, User::setName),
                 new ColumnData<>("group_id", Types.INTEGER, User::getGroup_id, User::setGroup_id),
-                new ColumnData<>("session_token", Types.CHAR, User::getSessionToken, User::setSessionToken),
+				new ColumnData<>("waterschap_id", Types.INTEGER, User::getWaterschap_id, User::setWaterschap_id),
+				new ColumnData<>("session_token", Types.CHAR, User::getSessionToken, User::setSessionToken),
                 new ColumnData<>("expiration_date", Types.TIMESTAMP, User::getExpirationDate, User::setExpirationDate)
 		};
 	}

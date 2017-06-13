@@ -167,6 +167,7 @@ CREATE TABLE `user` (
   `password` char(60) NOT NULL,
   `name` varchar(100) NOT NULL,
   `group_id` int(3) NOT NULL,
+  `waterschap_id` int NULL,
   `session_token` char(36) DEFAULT NULL,
   `expiration_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -330,7 +331,8 @@ ALTER TABLE `species`
 -- Constraints for table `user`
 --
 ALTER TABLE `user`
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `user_group` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `user_group` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_ibfk_2` FOREIGN KEY (`waterschap_id`) REFERENCES `waterschap` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `wew_factor_class`

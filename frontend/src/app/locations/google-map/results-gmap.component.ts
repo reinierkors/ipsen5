@@ -90,7 +90,6 @@ export class GMapsComponent implements OnInit {
         this.markers.forEach((item) => {
             if (marker.getTitle() === 'm' + <string><any>item.markerLocation.id) {
                 this.marker = item;
-                console.log(this.marker);
                 return;
             }
         });
@@ -170,7 +169,7 @@ export class GMapsComponent implements OnInit {
     //             } else {
     //                 this.retrieveWaterschap(marker);
     //             }
-    //         }, error => console.log(error));//TODO: ERROR WHEN NULL
+    //         }, error => console.log(error));
     // };
     //
     // private retrieveWaterschap(marker) {
@@ -216,7 +215,6 @@ export class GMapsComponent implements OnInit {
                 watertypeKrw,
                 waterschap
             },);
-            console.log(this.markers[this.markers.length - 1])
             this.insertIntoPositions(this.markers[this.markers.length - 1]);
         });
     }

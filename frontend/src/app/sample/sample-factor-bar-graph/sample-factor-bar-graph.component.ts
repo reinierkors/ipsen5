@@ -189,7 +189,7 @@ export class SampleFactorBarGraphComponent implements OnInit {
 		});
 		
 		//Rotate the data array
-		let transpose = m => m[0].map((x,i) => m.map(x => x[i]))
+		let transpose = m => m[0].map((x,i) => m.map(x => x[i]));
 		data = transpose(data);
 		
 		//Put data in chart

@@ -36,7 +36,6 @@ export class SampleViewComponent implements OnInit {
             .switchMap(params => this.apiSample.getSample(params["id"]))
             .subscribe(sample => {
                 this.sample = sample;
-                console.log(sample);
                 this.retrieveSpecies();
                 this.retrieveLocation();
             }, error => console.log(error));
@@ -74,7 +73,6 @@ export class SampleViewComponent implements OnInit {
                     lat: location.latitude,
                     lng: location.longitude
                 };
-                console.log(this.location)
             }), error => console.log(error);
     }
 
@@ -121,7 +119,6 @@ export class SampleViewComponent implements OnInit {
     option = {
         title: {
             text: 'Aantal beestjes gevonden per monster',
-            subtext: 'Vergeleken met wat er verwacht wordt te zijn'
         },
         toolbox: {
             feature: {
