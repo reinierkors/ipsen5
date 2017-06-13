@@ -3,22 +3,22 @@
   <form [formGroup]="complexForm" (ngSubmit)="submitForm(complexForm.value)">
 
       <md-input-container class="full-width">
-        <input mdInput name="name" [formControl]="complexForm.controls['name']" placeholder="Gebruikersnaam" required>
+        <input mdInput name="name" [formControl]="complexForm.controls['name']" placeholder="Naam" required>
       </md-input-container>
 
-      <div *ngIf="complexForm.controls['name'].hasError('required') && complexForm.controls['name'].touched" class="alert alert-danger">Selecteer een gebruikersnaam.</div>
+      <div *ngIf="complexForm.controls['name'].hasError('required') && complexForm.controls['name'].touched" class="alert alert-danger">Vul een gebruikersnaam in.</div>
 
       <md-input-container class="full-width">
         <input mdInput name="email" placeholder="E-mail" [formControl]="complexForm.controls['email']" required>
       </md-input-container>
 
-      <div *ngIf="complexForm.controls['email'].hasError('required') && complexForm.controls['email'].touched" class="alert alert-danger">Selecteer een email.</div>
+      <div *ngIf="complexForm.controls['email'].hasError('required') && complexForm.controls['email'].touched" class="alert alert-danger">Vul een email adres in.</div>
 
       <md-input-container class="full-width">
         <input mdInput name="password" placeholder="Wachtwoord" type="password" [formControl]="complexForm.controls['password']" required>
       </md-input-container>
 
-      <div *ngIf="complexForm.controls['password'].hasError('required') && complexForm.controls['password'].touched" class="alert alert-danger">Selecteer een wachtwoord.</div>
+      <div *ngIf="complexForm.controls['password'].hasError('required') && complexForm.controls['password'].touched" class="alert alert-danger">Vul een wachtwoord in.</div>
     <p>
       <md-select name="group_id" [formControl]="complexForm.controls['group_id']" placeholder="Rol">
         <md-option *ngFor="let rol of rollen" [value]="rol.value">

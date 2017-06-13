@@ -53,6 +53,18 @@ public class UserService {
 			throw new ApiValidationException("Cannot retrieve user");
 		}
 	}
+
+	public User getCurrentUser(String sessionToken) throws ApiException {
+        try {
+            User user = repo.findBySession(sessionToken);
+            if (user == null) {
+                throw new ApiValidationException("User does not exist");
+            }
+            return user;
+        } catch(RepositoryException e) {
+            throw new ApiValidationException("Cannot retrieve user");
+        }
+    }
 	
 	/**
 	 * Retrieves all users

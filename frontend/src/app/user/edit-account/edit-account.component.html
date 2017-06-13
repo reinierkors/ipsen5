@@ -1,8 +1,27 @@
 <md-card>
     <md-card-title>
-        <span class="md-headline">Account</span>
+        <span class="md-headline">Accountgegevens</span>
     </md-card-title>
-    <md-card-content></md-card-content>
+    <md-card-content>
+        <form [formGroup]="complexForm" (ngSubmit)="editAccount(complexForm.value)">
+
+            <md-input-container class="full-width">
+                <input mdInput name="name" [formControl]="complexForm.controls['name']" placeholder="Naam" required>
+            </md-input-container>
+
+            <div *ngIf="complexForm.controls['name'].hasError('required') && complexForm.controls['name'].touched" class="alert alert-danger">Vul een gebruikersnaam in.</div>
+
+            <md-input-container class="full-width">
+                <input mdInput name="email" placeholder="E-mail" [formControl]="complexForm.controls['email']" required>
+            </md-input-container>
+
+            <div *ngIf="complexForm.controls['email'].hasError('required') && complexForm.controls['email'].touched" class="alert alert-danger">Vul een email adres in.</div>
+
+            <p>
+                <button md-raised-button type="submit" [disabled]="!complexForm.valid">Opslaan</button>
+            </p>
+        </form>
+    </md-card-content>
 </md-card>
 <md-card>
     <md-card-title>
