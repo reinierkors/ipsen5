@@ -13,7 +13,7 @@ import java.sql.*;
  * @version 0.2, 30-5-2017
  */
 public class UserRepository extends RepositoryMaria<User>{
-    private final String findByEmailQuery, findBySessionQuery, saveSessionQuery, deleteSessionQuery, editPasswordQuery;
+    private final String findByEmailQuery, findBySessionQuery, saveSessionQuery, deleteSessionQuery, editPasswordQuery, editUserQuery;
     
     public UserRepository(Connection connection) {
 		super(connection);
@@ -22,13 +22,15 @@ public class UserRepository extends RepositoryMaria<User>{
         saveSessionQuery = "UPDATE user SET session_token = ?, expiration_date = ? WHERE `id` = ?";
         deleteSessionQuery = "UPDATE user SET session_token = NULL, expiration_date = NULL WHERE `id` = ?";
         editPasswordQuery = "UPDATE user SET `password` = ? WHERE `session_token` = ?";
+        editUserQuery = "UPDATE user SET `name` = ?, `email` = ? WHERE `id` = ?";
 	}
 	
 	private PreparedStatement psFindByEmail() throws SQLException {return connection.prepareStatement(findByEmailQuery);}
 	private PreparedStatement psFindBySession() throws SQLException {return connection.prepareStatement(findBySessionQuery);}
 	private PreparedStatement psSaveSession() throws SQLException {return connection.prepareStatement(saveSessionQuery);}
 	private PreparedStatement psDeleteSession() throws SQLException {return connection.prepareStatement(deleteSessionQuery);}
-	private PreparedStatement psEditPassword() throws SQLException {return connection.prepareStatement(editPasswordQuery);}
+    private PreparedStatement psEditPassword() throws SQLException {return connection.prepareStatement(editPasswordQuery);}
+    private PreparedStatement psEditUser() throws SQLException {return connection.prepareStatement(editUserQuery);}
 	
 	@Override
 	protected String getTable() {
@@ -64,7 +66,7 @@ public class UserRepository extends RepositoryMaria<User>{
 	 * @param email the email address to look for
 	 * @return a user object or null if none was found
 	 */
-    public User findByEmail(String email){
+    User findByEmail(String email){
         try {
         	PreparedStatement psFindByEmail = psFindByEmail();
             psFindByEmail.setString(1, email);
@@ -103,7 +105,7 @@ public class UserRepository extends RepositoryMaria<User>{
 	 * @param sessionToken a session token to store
 	 * @param expirationDate date and time when the session expires
 	 */
-	public void saveSession(int id, String sessionToken, Timestamp expirationDate){
+	void saveSession(int id, String sessionToken, Timestamp expirationDate){
         try{
         	PreparedStatement psSaveSession = psSaveSession();
             psSaveSession.setString(1, sessionToken);
@@ -134,7 +136,7 @@ public class UserRepository extends RepositoryMaria<User>{
 	 * @param newPassword a password hash
 	 * @param sessionToken a session token
 	 */
-	public void editPassword(String newPassword, String sessionToken){
+	void editPassword(String newPassword, String sessionToken){
         try{
             PreparedStatement psEditPassword = psEditPassword();
         	psEditPassword.setString(1, newPassword);
