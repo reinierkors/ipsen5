@@ -31,7 +31,7 @@ CREATE TABLE `location` (
   KEY `waterschap_id` (`waterschap_id`),
   KEY `watertype_id` (`watertype_id`),
   KEY `watertype_krw_id` (`watertype_krw_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -50,14 +50,14 @@ CREATE TABLE `reference` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reference_species`
+-- Table structure for table `reference_taxon`
 --
 
-CREATE TABLE `reference_species` (
+CREATE TABLE `reference_taxon` (
   `reference_id` int(3) NOT NULL,
-  `species_id` int(5) NOT NULL,
-  PRIMARY KEY (`reference_id`,`species_id`),
-  KEY `reference_species_ibfk_2` (`species_id`)
+  `taxon_id` int(6) NOT NULL,
+  PRIMARY KEY (`reference_id`,`taxon_id`),
+  KEY `taxon_id` (`taxon_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -99,15 +99,15 @@ CREATE TABLE `sample` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sample_species`
+-- Table structure for table `sample_taxon`
 --
 
-CREATE TABLE `sample_species` (
+CREATE TABLE `sample_taxon` (
   `sample_id` int(9) NOT NULL,
-  `species_id` int(5) NOT NULL,
+  `taxon_id` int(6) NOT NULL,
   `value` int(4) NOT NULL,
-  PRIMARY KEY (`sample_id`,`species_id`),
-  KEY `sample_species_ibfk_2` (`species_id`)
+  PRIMARY KEY (`sample_id`,`taxon_id`),
+  KEY `taxon_id` (`taxon_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -130,27 +130,47 @@ CREATE TABLE `sample_wew_factor_class` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `species`
+-- Table structure for table `taxon`
 --
 
-CREATE TABLE `species` (
-  `id` int(5) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `taxon` (
+  `id` int(6) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
-  `category_id` int(3) DEFAULT NULL,
+  `group_id` int(3) DEFAULT NULL,
+  `level_id` int(3) DEFAULT NULL,
+  `parent_id` int(6) DEFAULT NULL,
+  `refer_id` int(6) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
-  KEY `category_id` (`category_id`)
+  KEY `group_id` (`group_id`),
+  KEY `level_id` (`level_id`),
+  KEY `parent_id` (`parent_id`),
+  KEY `refer_id` (`refer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `species_category`
+-- Table structure for table `taxon_group`
 --
 
-CREATE TABLE `species_category` (
+CREATE TABLE `taxon_group` (
   `id` int(3) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
+  `code` varchar(8) NOT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `taxon_level`
+--
+
+CREATE TABLE `taxon_level` (
+  `id` int(3) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
@@ -167,12 +187,13 @@ CREATE TABLE `user` (
   `password` char(60) NOT NULL,
   `name` varchar(100) NOT NULL,
   `group_id` int(3) NOT NULL,
-  `waterschap_id` int NULL,
+  `waterschap_id` int(3) DEFAULT NULL,
   `session_token` char(36) DEFAULT NULL,
   `expiration_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
-  KEY `group_id` (`group_id`)
+  KEY `group_id` (`group_id`),
+  KEY `waterschap_id` (`waterschap_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
@@ -197,11 +218,11 @@ CREATE TABLE `user_group` (
 CREATE TABLE `waterschap` (
   `id` int(3) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
-  `address` VARCHAR(255) NULL,
-  `house_number` INT(20) NULL,
-  `zip_code`  CHAR(6) NULL,
-  `location` VARCHAR(255) NULL,
-  `phone_number` VARCHAR(20) NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `house_number` int(4) DEFAULT NULL,
+  `zip_code` char(6) DEFAULT NULL,
+  `location` varchar(255) DEFAULT NULL,
+  `phone_number` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
@@ -260,12 +281,12 @@ CREATE TABLE `wew_factor_class` (
 CREATE TABLE `wew_value` (
   `id` int(7) NOT NULL AUTO_INCREMENT,
   `factor_class_id` int(3) NOT NULL,
-  `species_id` int(5) NOT NULL,
+  `taxon_id` int(6) NOT NULL,
   `value` double DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `factor_class_id_species_id` (`factor_class_id`,`species_id`),
+  UNIQUE KEY `factor_class_id_taxon_id` (`factor_class_id`,`taxon_id`),
   KEY `factor_class_id` (`factor_class_id`),
-  KEY `species_id` (`species_id`)
+  KEY `taxon_id` (`taxon_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 --
@@ -287,11 +308,11 @@ ALTER TABLE `reference`
   ADD CONSTRAINT `reference_ibfk_1` FOREIGN KEY (`watertype_id`) REFERENCES `watertype` (`id`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `reference_species`
+-- Constraints for table `reference_taxon`
 --
-ALTER TABLE `reference_species`
-  ADD CONSTRAINT `reference_species_ibfk_1` FOREIGN KEY (`reference_id`) REFERENCES `reference` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `reference_species_ibfk_2` FOREIGN KEY (`species_id`) REFERENCES `species` (`id`) ON UPDATE CASCADE;
+ALTER TABLE `reference_taxon`
+  ADD CONSTRAINT `reference_taxon_ibfk_2` FOREIGN KEY (`taxon_id`) REFERENCES `taxon` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `reference_taxon_ibfk_1` FOREIGN KEY (`reference_id`) REFERENCES `reference` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `reference_wew_factor_class`
@@ -308,11 +329,11 @@ ALTER TABLE `sample`
   ADD CONSTRAINT `sample_ibfk_2` FOREIGN KEY (`owner_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `sample_species`
+-- Constraints for table `sample_taxon`
 --
-ALTER TABLE `sample_species`
-  ADD CONSTRAINT `sample_species_ibfk_1` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `sample_species_ibfk_2` FOREIGN KEY (`species_id`) REFERENCES `species` (`id`) ON UPDATE CASCADE;
+ALTER TABLE `sample_taxon`
+  ADD CONSTRAINT `sample_taxon_ibfk_1` FOREIGN KEY (`sample_id`) REFERENCES `sample` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `sample_taxon_ibfk_2` FOREIGN KEY (`taxon_id`) REFERENCES `taxon` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `sample_wew_factor_class`
@@ -322,10 +343,13 @@ ALTER TABLE `sample_wew_factor_class`
   ADD CONSTRAINT `sample_wew_factor_class_ibfk_2` FOREIGN KEY (`factor_class_id`) REFERENCES `wew_factor_class` (`id`) ON UPDATE CASCADE;
 
 --
--- Constraints for table `species`
+-- Constraints for table `taxon`
 --
-ALTER TABLE `species`
-  ADD CONSTRAINT `species_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `species_category` (`id`) ON UPDATE CASCADE;
+ALTER TABLE `taxon`
+  ADD CONSTRAINT `taxon_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `taxon_group` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `taxon_ibfk_3` FOREIGN KEY (`parent_id`) REFERENCES `taxon` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `taxon_ibfk_2` FOREIGN KEY (`level_id`) REFERENCES `taxon_level` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `taxon_ibfk_4` FOREIGN KEY (`refer_id`) REFERENCES `taxon` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `user`
@@ -345,7 +369,7 @@ ALTER TABLE `wew_factor_class`
 --
 ALTER TABLE `wew_value`
   ADD CONSTRAINT `wew_value_ibfk_1` FOREIGN KEY (`factor_class_id`) REFERENCES `wew_factor_class` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `wew_value_ibfk_2` FOREIGN KEY (`species_id`) REFERENCES `species` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `wew_value_ibfk_2` FOREIGN KEY (`taxon_id`) REFERENCES `taxon` (`id`) ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

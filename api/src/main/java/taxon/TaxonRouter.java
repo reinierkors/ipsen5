@@ -32,7 +32,7 @@ public class TaxonRouter {
 		path("/taxon", ()->{
 			
 			//Retrieve taxa by a comma seperated list of ids
-			get("/ids/:ids",(req,res) -> {
+			post("/ids",(req,res) -> {
 				Type listType = new TypeToken<List<Integer>>(){}.getType();
 				List<Integer> ids = gson.fromJson(req.body(),listType);
 				return gson.toJson(taxonService.get(ids));

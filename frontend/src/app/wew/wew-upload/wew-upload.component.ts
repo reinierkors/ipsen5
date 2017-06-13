@@ -140,7 +140,7 @@ export class WewUploadComponent implements OnInit {
 			if(row.factor){
 				lastFactor = row.factor;
 				factor = new WEWFactor();
-				factor.name = row.factor;
+				factor.name = row.factor.trim();
 				factor.classes = [];
 				factorMap.set(factor.name,factor);
 			}
@@ -151,8 +151,8 @@ export class WewUploadComponent implements OnInit {
 			}
 			//Create a factor class for this row
 			let factorClass = new WEWFactorClass();
-			factorClass.code = row.code;
-			factorClass.description = row.klasse;
+			factorClass.code = row.code.trim();
+			factorClass.description = row.klasse.trim();
 			factorClass.order = index;
 			//Store it in the current factor
 			factor.classes.push(factorClass);
@@ -184,11 +184,11 @@ export class WewUploadComponent implements OnInit {
 				return;
 			let factorClass = factorClassColumns[index-1];
 			if(factorClass)
-				factorClass.description = desc
+				factorClass.description = desc.trim();
 		});
 		
 		//Get the taxon
-		let taxonNames = rows.filter((row,index) => index>2).map(row => row[0]);
+		let taxonNames = rows.filter((row,index) => index>2).map(row => row[0].trim());
 		let taxonPr:Promise<Taxon[]> = new Promise((resolve,reject) => {
 			this.taxonApi.findOrCreate(taxonNames).subscribe(resolve,reject);
 		});

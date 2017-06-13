@@ -16,7 +16,7 @@ public class Taxon {
 	
 	public Taxon(int id, String name, Integer groupId, Integer levelId, Integer parentId, Integer referId) {
 		this.id = id;
-		this.name = name;
+		this.name = name==null?null:name.toLowerCase();
 		this.groupId = groupId;
 		this.levelId = levelId;
 		this.parentId = parentId;
@@ -44,7 +44,7 @@ public class Taxon {
 	}
 	
 	public void setName(String name) {
-		this.name = name;
+		this.name = name==null?null:name.toLowerCase();
 	}
 	
 	public Integer getGroupId() {

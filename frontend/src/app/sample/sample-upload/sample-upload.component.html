@@ -52,11 +52,11 @@
 				</md-list>
 			</md-card-content>
 		</md-card>
-		<md-card *ngIf="confirm.taxon.length">
+		<md-card *ngIf="confirm.taxa.length">
 			<md-card-title>Nieuwe soorten</md-card-title>
 			<md-card-content>
 				<md-list dense>
-					<md-list-item *ngFor="let taxon of confirm.taxon">
+					<md-list-item *ngFor="let taxon of confirm.taxa">
                         {{taxon.name}}
                     </md-list-item>
 				</md-list>

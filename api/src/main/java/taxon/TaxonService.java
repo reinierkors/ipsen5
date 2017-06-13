@@ -9,6 +9,7 @@ import taxon.level.TaxonLevel;
 import taxon.level.TaxonLevelRepository;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +78,7 @@ public class TaxonService {
 	 */
 	public Taxon findOrCreate(String name) throws ApiException{
 		try {
+			name = name.toLowerCase();
 			Taxon taxon = taxonRepo.findByName(name);
 			if (taxon == null) {
 				taxon = new Taxon();
@@ -97,6 +99,7 @@ public class TaxonService {
 	 */
 	public Taxon find(String name) throws ApiException{
 		try {
+			name = name.toLowerCase();
 			return taxonRepo.findByName(name);
 		} catch(RepositoryException e){
 			throw new ApiException("Cannot retrieve taxon");
@@ -111,6 +114,7 @@ public class TaxonService {
 	 */
 	public Taxon save(Taxon taxon) throws ApiException{
 		try {
+			taxon.setName(taxon.getName().toLowerCase());
 			taxonRepo.persist(taxon);
 			return taxon;
 		} catch(RepositoryException e){
@@ -126,6 +130,7 @@ public class TaxonService {
 	 */
 	public List<Taxon> save(List<Taxon> taxa) throws ApiException{
 		try {
+			taxa.forEach(taxon -> taxon.setName(taxon.getName().toLowerCase()));
 			taxonRepo.persist(taxa);
 			return taxa;
 		} catch(RepositoryException e){
@@ -141,6 +146,8 @@ public class TaxonService {
 	 */
 	public List<Taxon> saveMerge(List<Taxon> taxa) throws ApiException{
 		try {
+			taxa.forEach(taxon -> taxon.setName(taxon.getName().toLowerCase()));
+			
 			List<Taxon> existing = taxonRepo.findByNames(taxa.stream().map(taxon -> taxon.getName()).collect(Collectors.toList()));
 			Map<String,Taxon> existingMap = new HashMap<>();
 			existing.forEach(t -> existingMap.put(t.getName(),t));

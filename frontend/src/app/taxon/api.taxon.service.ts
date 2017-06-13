@@ -18,7 +18,7 @@ export class ApiTaxonService extends ApiService{
 	
 	//Retrieve a list of taxa by their ids
 	public getByIds(ids:number[]):Observable<Taxon[]>{
-		return this.post('/taxon/ids/',ids).map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));
+		return this.post('/taxon/ids',ids).map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));
 	}
 	
 	//Retrieve a list of taxa by their names

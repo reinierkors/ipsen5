@@ -121,6 +121,15 @@ export class TaxonImportStructureComponent implements OnInit{
 		//Turn the worksheet in a 2D array
 		let rows = <ImportRow[]> XLSX.utils.sheet_to_json(sheet);
 		
+		//Trim spaces
+		rows.forEach(row => {
+			row.taxonname = row.taxonname.trim();
+			row.taxongroup = row.taxongroup.trim();
+			row.taxonlevel = row.taxonlevel.trim();
+			row.parentname = row.parentname.trim();
+			row.refername = row.refername.trim();
+		});
+		
 		//Take care of the taxon groups and levels
 		this.groupPr = this.groupPr.then(groups => this.handleGroups(rows,groups));
 		this.levelPr = this.levelPr.then(levels => this.handleLevels(rows,levels));

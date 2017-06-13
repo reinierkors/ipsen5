@@ -130,6 +130,13 @@ export class SampleUploadComponent implements OnInit {
 					row['X-coor'] = parseInt(row['X-coor'],10);
 					row['Y-coor'] = parseInt(row['Y-coor'],10);
 					row['Waarde'] = parseInt(row['Waarde'],10);
+					row['Mp'] = row['Mp'].trim();
+					row['Locatie'] = row['Locatie'].trim();
+					row['Code watertype'] = row['Code watertype'].trim();
+					row['Naam watertype'] = row['Naam watertype'].trim();
+					row['Krw_Code'] = row['Krw_Code'].trim();
+					row['Krw_Naam'] = row['Krw_Naam'].trim();
+					row['Taxonnaam'] = row['Taxonnaam'].trim().toLowerCase();
 				});
 				this.csvData = data;
 				this.handleRawData();
@@ -355,6 +362,7 @@ export class SampleUploadComponent implements OnInit {
 		
 		//Store all samples
 		let waitForSamples:Promise<Sample[]> = new Promise((resolve,reject) => {
+			console.log(this.confirm.samples);
 			this.sampleApi.saveMulti(this.confirm.samples).subscribe(samples => resolve(samples), err => reject(err));
 		});
 		

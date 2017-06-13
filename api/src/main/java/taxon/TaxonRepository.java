@@ -61,6 +61,7 @@ public class TaxonRepository extends RepositoryMaria<Taxon>{
 	 */
 	public Taxon findByName(String name) throws RepositoryException {
 		try {
+			name = name.toLowerCase();
 			PreparedStatement psFindByName = psFindByName();
 			psFindByName.setString(1,name);
 			ResultSet resultSet = psFindByName.executeQuery();
@@ -83,6 +84,8 @@ public class TaxonRepository extends RepositoryMaria<Taxon>{
 	 */
 	public List<Taxon> findByNames(List<String> names) throws RepositoryException {
 		try {
+			names.stream().map(String::toLowerCase);
+			
 			Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
 			String howManyQuestionMarks = names.stream().map(name -> "?").collect(commaJoiner);
 			
