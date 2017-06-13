@@ -23,7 +23,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
-import {ResultsComponent} from './locations/google-map/results-gmap.component';
+import {GMapsComponent, ResultsComponent} from './locations/google-map/results-gmap.component';
 import {CreateAccountComponent} from './user/create-account/create-account.component';
 import {SidenavComponent} from './sidenav/sidenav.component';
 import {NguiMapModule} from '@ngui/map';
@@ -36,6 +36,8 @@ import {AuthGuard} from "./auth/auth.guard";
 import { WewUploadComponent } from './wew/wew-upload/wew-upload.component';
 import { WewViewComponent } from './wew/wew-view/wew-view.component';
 import { AngularEchartsModule } from 'ngx-echarts';
+import {EditAccountComponent} from "./user/edit-account/edit-account.component";
+import {SampleFactorBarGraphComponent} from "./sample/sample-factor-bar-graph/sample-factor-bar-graph.component";
 
 const routes:Routes = [
   {path: '', component: HomeComponent},

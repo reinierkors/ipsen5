@@ -10,6 +10,9 @@
                 [footerHeight]="50"
                 [rowHeight]="'auto'"
                 [limit]="10">
+                [selected]="selected"
+                [selectionType]="'single'"
+                (select)='onSelect($event)'>
 
             <!--<ngx-datatable-column name="code">-->
             <!--<ng-template let-row="code" ngx-datatable-cell-template>-->
