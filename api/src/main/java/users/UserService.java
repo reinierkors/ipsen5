@@ -54,13 +54,23 @@ public class UserService {
 		}
 	}
 
-	public User getCurrentUser(String sessionToken) throws ApiException {
+	User getCurrentUser(String sessionToken) throws ApiException {
         try {
             User user = repo.findBySession(sessionToken);
             if (user == null) {
                 throw new ApiValidationException("User does not exist");
             }
+            user.setPassword(null);
             return user;
+        } catch(RepositoryException e) {
+            throw new ApiValidationException("Cannot retrieve user");
+        }
+    }
+
+    User editUser(User user) throws ApiException {
+	    try {
+	        repo.editUser(user);
+	        return user;
         } catch(RepositoryException e) {
             throw new ApiValidationException("Cannot retrieve user");
         }
@@ -118,7 +128,7 @@ public class UserService {
         }
     }
 	
-    public boolean editPassword(String oldPassword, String newPassword, String confirmPassword, String sessionToken){
+    boolean editPassword(String oldPassword, String newPassword, String confirmPassword, String sessionToken){
 	    if(repo.findBySession(sessionToken) == null){
             throw new ApiValidationException("Gebruiker niet gevonden");
         }
@@ -143,7 +153,7 @@ public class UserService {
         return BCrypt.checkpw(password, user.getPassword());
     }
 
-    public void saveSession(String sessionToken, int id){
+    private void saveSession(String sessionToken, int id){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.DATE, 1);

@@ -6,13 +6,13 @@
         <form [formGroup]="complexForm" (ngSubmit)="editAccount(complexForm.value)">
 
             <md-input-container class="full-width">
-                <input mdInput name="name" [formControl]="complexForm.controls['name']" placeholder="Naam" required>
+                <input mdInput name="name" [formControl]="complexForm.controls['name']" placeholder="Naam" [(ngModel)]="currentUser.name" required>
             </md-input-container>
 
             <div *ngIf="complexForm.controls['name'].hasError('required') && complexForm.controls['name'].touched" class="alert alert-danger">Vul een gebruikersnaam in.</div>
 
             <md-input-container class="full-width">
-                <input mdInput name="email" placeholder="E-mail" [formControl]="complexForm.controls['email']" required>
+                <input mdInput name="email" placeholder="E-mail" [(ngModel)]="currentUser.email" [formControl]="complexForm.controls['email']" required>
             </md-input-container>
 
             <div *ngIf="complexForm.controls['email'].hasError('required') && complexForm.controls['email'].touched" class="alert alert-danger">Vul een email adres in.</div>

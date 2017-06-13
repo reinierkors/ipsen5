@@ -24,9 +24,7 @@ export class EditAccountComponent implements OnInit {
       this.userService = userService;
       this.complexForm = fb.group({
           'name' : [null, Validators.required],
-          'email': [null, Validators.required],
-          'password' : [null, Validators.required],
-          'group_id' : [1, Validators.required],
+          'email': [null, Validators.required]
       });
       this.route = route;
   }
@@ -39,7 +37,6 @@ export class EditAccountComponent implements OnInit {
     ngOnInit() {
         this.userService.getCurrentUser().subscribe(user => {
             this.currentUser = user;
-            console.log(user);
         }, error => console.log(error) );
     }
 
@@ -50,6 +47,9 @@ export class EditAccountComponent implements OnInit {
   }
 
   editAccount(value: any) {
-
+    this.userService.editUser(User.fromJSON(value)).subscribe(data => {
+        swal('', `Gebruiker ${data.name} aangepast!`, 'success');
+        this.resetForm();
+    }, error => swal('Oops...', error, 'error'));
   }
 }
