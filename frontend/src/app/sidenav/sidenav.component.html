@@ -83,6 +83,7 @@
     </a></md-list-item>
     <md-list-item *ngIf="!authenticationService.loggedIn()"><a md-button routerLink="/login" class="nav-item">Login</a></md-list-item>
     <md-list-item *ngIf="authenticationService.loggedIn()"><a md-button routerLink="/home" class="nav-item">Home</a></md-list-item>
+    <md-list-item *ngIf="authenticationService.loggedIn()"><a md-button routerLink="/sample/upload" class="nav-item">Uploaden monster</a></md-list-item>
     <md-list-item *ngIf="authenticationService.loggedIn()"><a md-button routerLink="/locations" class="nav-item">Meetpunten</a></md-list-item>
     <md-list-item *ngIf="authenticationService.loggedIn()"><a md-button routerLink="/admin/create-account" class="nav-item">Admin Create Account</a></md-list-item>
       <md-list-item *ngIf="authenticationService.loggedIn()"><a md-button routerLink="/sample/view/1" class="nav-item">Sample1</a></md-list-item>
