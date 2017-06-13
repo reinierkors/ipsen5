@@ -5,7 +5,7 @@ import {Sample} from '../sample.model';
 import {ApiTaxonService} from "../../taxon/api.taxon.service";
 import {Taxon} from "../../taxon/taxon.model";
 import {ApiLocationService} from "../../locations/api.location.service";
-import {Location} from "../../locations/location.model";
+import {MarkerLocation} from "../../locations/markerLocation.model";
 
 @Component({
     selector: 'app-sample-view',
@@ -20,7 +20,7 @@ export class SampleViewComponent implements OnInit {
     private apiLocation: ApiLocationService;
     public sample: Sample;
     public taxon: Taxon[];
-    public location: Location;
+    public location: MarkerLocation;
     public showChart = false;
     public markerPos;
 
@@ -36,7 +36,6 @@ export class SampleViewComponent implements OnInit {
             .switchMap(params => this.apiSample.getSample(params["id"]))
             .subscribe(sample => {
                 this.sample = sample;
-                console.log(sample);
                 this.retrieveTaxon();
                 this.retrieveLocation();
             }, error => console.log(error));
@@ -73,7 +72,6 @@ export class SampleViewComponent implements OnInit {
                     lat: location.latitude,
                     lng: location.longitude
                 };
-                console.log(this.location)
             }), error => console.log(error);
     }
 
@@ -120,7 +118,6 @@ export class SampleViewComponent implements OnInit {
     option = {
         title: {
             text: 'Aantal beestjes gevonden per monster',
-            subtext: 'Vergeleken met wat er verwacht wordt te zijn'
         },
         toolbox: {
             feature: {

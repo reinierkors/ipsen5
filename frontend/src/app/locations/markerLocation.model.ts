@@ -1,4 +1,4 @@
-export class Location {
+export class MarkerLocation {
     id: number;
     code: string;
     description: string;
@@ -10,8 +10,8 @@ export class Location {
 	watertypeId: number;
 	watertypeKrwId: number;
 
-    public static fromJSON(obj): Location {
-        const location = new Location();
+    public static fromJSON(obj): MarkerLocation {
+        const location = new MarkerLocation();
         location.id = obj.id;
         location.code = obj.code;
         location.description = obj.description;
