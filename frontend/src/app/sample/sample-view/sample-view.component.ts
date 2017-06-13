@@ -35,15 +35,15 @@ export class SampleViewComponent implements OnInit {
         this.route.params
             .switchMap(params => this.apiSample.getSample(params["id"]))
             .subscribe(sample => {
-                this.sample = sample
-                console.log(sample)
+                this.sample = sample;
+                console.log(sample);
                 this.retrieveSpecies();
                 this.retrieveLocation();
             }, error => console.log(error));
     }
 
     private retrieveSpecies() {
-		
+
         this.route.params
             .switchMap(params => this.apiSpecies.getByIds(Array.from(this.sample.speciesValues.keys())))
             .subscribe(species => {
@@ -69,11 +69,11 @@ export class SampleViewComponent implements OnInit {
                 this.mapConfig.center = {
                     lat: location.latitude,
                     lng: location.longitude
-                }
+                };
                 this.markerPos = {
                     lat: location.latitude,
                     lng: location.longitude
-                }
+                };
                 console.log(this.location)
             }), error => console.log(error);
     }
