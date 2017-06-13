@@ -21,20 +21,8 @@
 		<md-card-content>
 			<input type="file" (change)="fileChange($event)"/>
 			<p>
-				Het bestand dient de volgende kolommen te hebben: taxonname, taxongroup, taxonlevel, parentname.
+				Het bestand dient de volgende kolommen te hebben: taxonname, taxongroup, taxonlevel, parentname, refername.
 			</p>
-		</md-card-content>
-	</md-card>
-	
-	<!-- View the data before saving it -->
-	<md-card *ngIf="state=='confirm'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
-		<md-card-title>Controleer de gegevens</md-card-title>
-		<md-card-content>
-			<ul class="taxonList">
-				<li *ngFor="let taxon of taxons">
-					<app-taxon-import-tree [taxon]="taxon" [depth]="0"></app-taxon-import-tree>
-				</li>
-			</ul>
 		</md-card-content>
 	</md-card>
 	
@@ -42,7 +30,8 @@
 	<md-card *ngIf="state=='finished'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
 		<md-card-title>Klaar</md-card-title>
 		<md-card-content>
-			To do...
+			Alle taxa zijn opgeslagen.
+			ToDo: knop naar view
 		</md-card-content>
 	</md-card>
 </div>

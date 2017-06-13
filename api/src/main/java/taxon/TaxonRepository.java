@@ -5,9 +5,13 @@ import database.RepositoryException;
 import database.RepositoryMaria;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
- * Repository for taxon
+ * Repository for taxa
  *
  * @author Wander Groeneveld
  * @version 0.4, 13-6-2017
@@ -20,7 +24,7 @@ public class TaxonRepository extends RepositoryMaria<Taxon>{
 		queryFindByName = "SELECT * FROM `"+getTable()+"` WHERE `name` LIKE ?";
 	}
 	
-	PreparedStatement psFindByName() throws SQLException {return connection.prepareStatement(queryFindByName);}
+	private PreparedStatement psFindByName() throws SQLException {return connection.prepareStatement(queryFindByName);}
 	
 	@Override
 	protected String getTable() {
@@ -70,4 +74,42 @@ public class TaxonRepository extends RepositoryMaria<Taxon>{
 			throw new RepositoryException(e);
 		}
 	}
+	
+	/**
+	 * Finds taxa with specified names
+	 * @param names names of taxa to look for
+	 * @return a list of taxa with the specified names
+	 * @throws RepositoryException when there was a problem retrieving the taxa
+	 */
+	public List<Taxon> findByNames(List<String> names) throws RepositoryException {
+		try {
+			Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
+			String howManyQuestionMarks = names.stream().map(name -> "?").collect(commaJoiner);
+			
+			String queryFindByNameMulti = "SELECT * FROM `"+getTable()+"` WHERE `name` IN ("+howManyQuestionMarks+")";
+			PreparedStatement psFindByNameMulti = connection.prepareStatement(queryFindByNameMulti);
+			
+			int index = 1;
+			for(String name : names){
+				psFindByNameMulti.setString(index,name);
+				++index;
+			}
+			
+			ResultSet resultSet = psFindByNameMulti.executeQuery();
+			
+			List<Taxon> taxa = new ArrayList<>();
+			
+			if(resultSet==null)
+				return taxa;
+			
+			while(resultSet.next()){
+				taxa.add(resultSetToModel(resultSet));
+			}
+			
+			return taxa;
+		} catch (SQLException e) {
+			throw new RepositoryException(e);
+		}
+	}
+	
 }

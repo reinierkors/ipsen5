@@ -17,3 +17,29 @@ export class Taxon{
 		return taxon;
 	}
 }
+
+export class TaxonGroup{
+	id:number;
+	code:string;
+	description:string;
+	
+	public static fromJSON(obj:any):TaxonGroup{
+		let group:TaxonGroup = new TaxonGroup();
+		group.id = obj.id;
+		group.code = obj.code;
+		group.description = obj.description;
+		return group;
+	}
+}
+
+export class TaxonLevel{
+	id:number;
+	name:string;
+	
+	public static fromJSON(obj:any):TaxonLevel{
+		let level:TaxonLevel = new TaxonLevel();
+		level.id = obj.id;
+		level.name = obj.name;
+		return level;
+	}
+}

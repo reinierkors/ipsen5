@@ -30,3 +30,9 @@ export function rotateParts<T>(array:T[],shift:number):T[]{
 	}
 	return shiftedValues;
 }
+
+//Remove duplicates from an array
+//[1,2,1,2,3].filter(uniqueFilter) becomes [1,2,3]
+export function uniqueFilter(value,index,self){
+	return self.indexOf(value)===index;
+}

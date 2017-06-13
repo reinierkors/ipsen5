@@ -38,8 +38,8 @@ import { WewViewComponent } from './wew/wew-view/wew-view.component';
 import { AngularEchartsModule } from 'ngx-echarts';
 import { EditAccountComponent } from './user/edit-account/edit-account.component';
 import { TaxonImportStructureComponent } from './taxon/taxon-import-structure/taxon-import-structure.component';
-import { TaxonImportTreeComponent } from './taxon/taxon-import-structure/taxon-import-tree/taxon-import-tree.component';
 import { TaxonTreeComponent } from './taxon/taxon-tree/taxon-tree.component';
+import { TaxonViewComponent } from './taxon/taxon-view/taxon-view.component';
 
 const routes:Routes = [
   {path: '', component: HomeComponent},
@@ -52,6 +52,7 @@ const routes:Routes = [
   {path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
   {path: 'wew/upload', component: WewUploadComponent, canActivate: [AuthGuard]},
   {path: 'wew/view', component: WewViewComponent, canActivate: [AuthGuard]},
+  {path: 'taxon/view/:id', component: TaxonViewComponent, canActivate: [AuthGuard]},
   {path: 'taxon/import', component: TaxonImportStructureComponent, canActivate: [AuthGuard]},
     /* Admin Routes */
   {path: 'admin/create-account', component: CreateAccountComponent, canActivate: [AuthGuard]},
@@ -76,8 +77,8 @@ const routes:Routes = [
         WewUploadComponent,
         WewViewComponent,
         TaxonImportStructureComponent,
-        TaxonImportTreeComponent,
         TaxonTreeComponent,
+        TaxonViewComponent,
     ],
     imports: [
         MdInputModule,
