@@ -265,7 +265,6 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 
 	public List<Sample> getByLocationId(int id) {
 		try {
-			Sample sample = new Sample();
 			List<Sample> samples = new ArrayList<>();
 			//Retrieve species ids and put them in the sample object
 			String getSampelsByLocation = "SELECT * FROM sample WHERE location_id = ?";
@@ -275,6 +274,14 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 
 			if(resultSet!=null){
 				while(resultSet.next()){
+					Sample sample = new Sample();
+					sample.setId(resultSet.getInt("id"));
+					sample.setDate(resultSet.getDate("date"));
+					sample.setLocationId(resultSet.getInt("location_id"));
+					sample.setOwnerId(resultSet.getInt("owner_id"));
+					sample.setQuality(resultSet.getDouble("quality"));
+					sample.setXCoor(resultSet.getInt("x_coor"));
+					sample.setYCoor(resultSet.getInt("y_coor"));
 					samples.add(sample);
 				}
 			}

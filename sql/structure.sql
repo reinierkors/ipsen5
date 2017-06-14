@@ -167,6 +167,7 @@ CREATE TABLE `user` (
   `password` char(60) NOT NULL,
   `name` varchar(100) NOT NULL,
   `group_id` int(3) NOT NULL,
+  `waterschap_id` int NULL,
   `session_token` char(36) DEFAULT NULL,
   `expiration_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -196,6 +197,11 @@ CREATE TABLE `user_group` (
 CREATE TABLE `waterschap` (
   `id` int(3) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
+  `address` VARCHAR(255) NULL,
+  `house_number` INT(20) NULL,
+  `zip_code`  CHAR(6) NULL,
+  `location` VARCHAR(255) NULL,
+  `phone_number` VARCHAR(20) NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
@@ -325,7 +331,8 @@ ALTER TABLE `species`
 -- Constraints for table `user`
 --
 ALTER TABLE `user`
-  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `user_group` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `user_group` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `user_ibfk_2` FOREIGN KEY (`waterschap_id`) REFERENCES `waterschap` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `wew_factor_class`

@@ -34,4 +34,8 @@ export class ApiSampleService extends ApiService{
 	public getCalculationsBySample(sampleId:number):Observable<CalculationData[]>{
 		return this.get('/calculate/sample/'+sampleId);
 	}
+
+	getByLocationId(locationId: number):Observable<Sample[]> {
+		return this.get('/sample/getRelevant/' + locationId).map(samples => samples.map(sample => Sample.fromJSON(sample)));
+	}
 }

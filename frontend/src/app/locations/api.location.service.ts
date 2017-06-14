@@ -3,7 +3,7 @@ import {Http, Response, Headers} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 
 import {ApiService} from '../services/api.service';
-import {Location} from './location.model';
+import {MarkerLocation} from './markerLocation.model';
 
 @Injectable()
 export class ApiLocationService extends ApiService {
@@ -12,23 +12,23 @@ export class ApiLocationService extends ApiService {
     }
 	
 	//Retrieve a list of all locations
-    public getAllLocations(): Observable<Location[]> {
+    public getAllLocations(): Observable<MarkerLocation[]> {
         return this.get('/location/all').map((markerLocations: Object[]) =>
-            markerLocations.map(markerLocation => Location.fromJSON(markerLocation)));
+            markerLocations.map(markerLocation => MarkerLocation.fromJSON(markerLocation)));
     }
 	
 	//Retrieve a location by its ID
-    public getById(id): Observable<Location> {
-        return this.get('/location/id/'+id).map(location => Location.fromJSON(location));
+    public getById(id): Observable<MarkerLocation> {
+        return this.get('/location/id/'+id).map(markerLocation => MarkerLocation.fromJSON(markerLocation));
     }
 	
 	//Retrieve a location by its code
-	public getByCode(code:string):Observable<Location>{
-		return this.get('/location/code/'+code).map(location => Location.fromJSON(location));
+	public getByCode(code:string):Observable<MarkerLocation>{
+		return this.get('/location/code/'+code).map(markerLocation => MarkerLocation.fromJSON(markerLocation));
 	}
 	
 	//Sae a location to the server
-	public save(location:Location):Observable<Location>{
-		return this.post('/location',location).map(location=>Location.fromJSON(location));
+	public save(markerLocation:MarkerLocation):Observable<MarkerLocation>{
+		return this.post('/location',markerLocation).map(markerLocation=>MarkerLocation.fromJSON(markerLocation));
 	}
 }
