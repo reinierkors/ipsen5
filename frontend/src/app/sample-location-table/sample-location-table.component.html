@@ -9,14 +9,11 @@
                 [headerHeight]="50"
                 [footerHeight]="50"
                 [rowHeight]="'auto'"
-                [limit]="10">
-
-            <!--<ngx-datatable-column name="code">-->
-            <!--<ng-template let-row="code" ngx-datatable-cell-template>-->
-            <!--My name is: <i [innerHTML]="row['name']"></i> and <i>{{ Link }}</i>-->
-            <!--</ng-template>-->
-
-            <!--</ngx-datatable-column>-->
+                [limit]="10"
+                [selected]="selected"
+                [selectionType]="'single'"
+                (activate)="onActivate($event)"
+                (select)='onSelect($event)'>
         </ngx-datatable>
     </md-card-content>
 </md-card>

@@ -1,11 +1,12 @@
 import 'hammerjs';
 
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
-import { HttpModule, JsonpModule } from '@angular/http';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {HttpModule, JsonpModule} from '@angular/http';
 import {Routes, RouterModule} from '@angular/router';
 import {
+	MaterialModule,
 	MdCardModule,
 	MdMenuModule,
 	MdSnackBarModule,
@@ -18,20 +19,19 @@ import {
 	MdProgressBarModule,
 	MdProgressSpinnerModule
 } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 import {GMapsComponent} from './locations/google-map/results-gmap.component';
 import {CreateAccountComponent} from './user/create-account/create-account.component';
 import {SidenavComponent} from './sidenav/sidenav.component';
 import {NguiMapModule} from '@ngui/map';
-import { SampleUploadComponent } from './sample/sample-upload/sample-upload.component';
-import { SampleViewComponent } from './sample/sample-view/sample-view.component';
-import { SampleEditComponent } from './sample/sample-edit/sample-edit.component';
-import {SampleFactorBarGraphComponent} from './sample/sample-factor-bar-graph/sample-factor-bar-graph.component';
+import {SampleUploadComponent} from './sample/sample-upload/sample-upload.component';
+import {SampleViewComponent} from './sample/sample-view/sample-view.component';
+import {SampleEditComponent} from './sample/sample-edit/sample-edit.component';
 import {SampleLocationTableComponent} from "./sample-location-table/sample-location-table.component";
-import { LoginComponent } from './login/login.component';
+import {LoginComponent} from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
 import { WewUploadComponent } from './wew/wew-upload/wew-upload.component';
 import { WewViewComponent } from './wew/wew-view/wew-view.component';
@@ -40,12 +40,16 @@ import { EditAccountComponent } from './user/edit-account/edit-account.component
 import { TaxonImportStructureComponent } from './taxon/taxon-import-structure/taxon-import-structure.component';
 import { TaxonTreeComponent } from './taxon/taxon-tree/taxon-tree.component';
 import { TaxonViewComponent } from './taxon/taxon-view/taxon-view.component';
+import {SampleFactorBarGraphComponent} from "./sample/sample-factor-bar-graph/sample-factor-bar-graph.component";
+import { WatersComponent } from "./results/waters/waters.component";
 
 const routes:Routes = [
   {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'home', component: GMapsComponent, canActivate: [AuthGuard]},
   {path: 'account', component: EditAccountComponent, canActivate: [AuthGuard]},
+  {path: 'locations', component: SampleLocationTableComponent, canActivate: [AuthGuard]},
+  {path: 'results/water/:id', component: WatersComponent, canActivate: [AuthGuard]},
   {path: 'data', component: SampleLocationTableComponent, canActivate: [AuthGuard]},
   {path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
   {path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
@@ -79,11 +83,11 @@ const routes:Routes = [
         TaxonImportStructureComponent,
         TaxonTreeComponent,
         TaxonViewComponent,
+        WatersComponent,
     ],
     imports: [
-        MdInputModule,
+		MaterialModule,
         AngularEchartsModule,
-        MdSidenavModule,
 		MdCardModule,
 		MdMenuModule,
 		MdSnackBarModule,

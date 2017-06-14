@@ -76,4 +76,9 @@ public class SampleService {
 			throw new ApiException("Cannot save samples");
 		}
 	}
+
+	public List<Sample> getByLocationId(int id) throws ApiException{
+		return repo.getByLocationId(id);
+
+	}
 }

@@ -262,4 +262,33 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 			throw new RepositoryException(e);
 		}
 	}
+
+	public List<Sample> getByLocationId(int id) {
+		try {
+			List<Sample> samples = new ArrayList<>();
+			//Retrieve species ids and put them in the sample object
+			String getSampelsByLocation = "SELECT * FROM sample WHERE location_id = ?";
+			PreparedStatement getLocations = connection.prepareStatement(getSampelsByLocation);
+			getLocations.setInt(1, id);
+			ResultSet resultSet = getLocations.executeQuery();
+
+			if(resultSet!=null){
+				while(resultSet.next()){
+					Sample sample = new Sample();
+					sample.setId(resultSet.getInt("id"));
+					sample.setDate(resultSet.getDate("date"));
+					sample.setLocationId(resultSet.getInt("location_id"));
+					sample.setOwnerId(resultSet.getInt("owner_id"));
+					sample.setQuality(resultSet.getDouble("quality"));
+					sample.setXCoor(resultSet.getInt("x_coor"));
+					sample.setYCoor(resultSet.getInt("y_coor"));
+					samples.add(sample);
+				}
+			}
+			return samples;
+		}
+		catch(SQLException e){
+			throw new RepositoryException(e);
+		}
+	}
 }

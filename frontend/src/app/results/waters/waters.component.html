@@ -1,0 +1,19 @@
+<md-card *ngIf="currentLocation">
+  <md-card-title>Monsters van {{currentLocation.description}}</md-card-title>
+  <md-card-content>
+    <ngx-datatable
+            class="material"
+            [rows]="sampleRows"
+            [columns]="sampleColums"
+            [columnMode]="'force'"
+            [headerHeight]="50"
+            [footerHeight]="50"
+            [rowHeight]="'auto'"
+            [limit]="10">
+            <!--[selected]="selected"-->
+            <!--[selectionType]="'single'"-->
+            <!--(activate)="onActivate($event)"-->
+            <!--(select)='onSelect($event)'>-->
+    </ngx-datatable>
+  </md-card-content>
+</md-card>
