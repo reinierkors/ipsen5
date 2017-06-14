@@ -35,4 +35,10 @@ export class ApiSpeciesService extends ApiService{
 	public save(species:Species):Observable<Species>{
 		return this.post('/species',species).map(species=>Species.fromJSON(species));
 	}
+
+	//Retrieve all species in db
+    public getAll(): Observable<Species[]> {
+		return this.get('/species/all').map((species: Object[]) =>
+			species.map(species => Species.fromJSON(species)));
+	}
 }

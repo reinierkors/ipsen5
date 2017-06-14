@@ -2,7 +2,7 @@ import {Component,OnInit} from '@angular/core';
 import {trigger,style,transition,animate,group,state} from '@angular/animations';
 
 import {Sample} from '../sample.model';
-import {Location} from '../../locations/location.model';
+import {MarkerLocation} from '../../locations/markerLocation.model';
 import {Species} from '../../species/species.model';
 import {Watertype} from '../../watertype/watertype.model';
 
@@ -60,19 +60,19 @@ export class SampleUploadComponent implements OnInit {
 	
 	//Map codes to objects
 	private watertypeMap:Map<string,Watertype> = new Map();
-	private locationMap:Map<string,Location> = new Map();
+	private locationMap:Map<string,MarkerLocation> = new Map();
 	private speciesMap:Map<string,Species> = new Map();
 	//Map ids to objects (only used when confirming samples)
-	public locationIdsMap:Map<number,Location> = new Map();
+	public locationIdsMap:Map<number,MarkerLocation> = new Map();
 	public speciesIdsMap:Map<number,Species> = new Map();
 	//Store parent relations
-	private locationWatertype:Map<Location,string/*watertype code*/> = new Map();
-	private locationWatertypeKrw:Map<Location,string/*watertype code*/> = new Map();
+	private locationWatertype:Map<MarkerLocation,string/*watertype code*/> = new Map();
+	private locationWatertypeKrw:Map<MarkerLocation,string/*watertype code*/> = new Map();
 	
 	//Data to conform on the page before saving to server
 	confirm:{
 		watertypes:Watertype[],
-		locations:Location[],
+		locations:MarkerLocation[],
 		species:Species[],
 		samples:Sample[],
 		samplesFast:any[]
@@ -200,7 +200,7 @@ export class SampleUploadComponent implements OnInit {
 		//Go through CSV data and create models for each location
 		this.csvData.forEach(row => {
 			if(!this.locationMap.has(row.Mp)){
-				let location = new Location();
+				let location = new MarkerLocation();
 				location.code = row.Mp;
 				location.description = row.Locatie;
 				location.xCoord = row['X-coor'];
@@ -211,7 +211,7 @@ export class SampleUploadComponent implements OnInit {
 				this.locationWatertypeKrw.set(location,row.Krw_Code);
 			}
 		});
-		let retrievePrs:Promise<Location>[] = [];
+		let retrievePrs:Promise<MarkerLocation>[] = [];
 		//Retrieve existing locations
 		this.locationMap.forEach((_,locationCode) => {
 			retrievePrs.push(new Promise((resolve,reject)=>{
@@ -262,11 +262,11 @@ export class SampleUploadComponent implements OnInit {
 		
 		Promise.all(waitForWatertypes).then(()=>{
 			//Save all locations (watertypes have to be saved first)
-			let waitForLocations:Promise<Location>[] = [];
+			let waitForLocations:Promise<MarkerLocation>[] = [];
 			this.confirm.locations.slice().forEach(location => waitForLocations.push(this.confirmLocation(location)));
 
 			//Data this sample depends on is all saved, move on to creating the sample
-			let allPromises:Promise<Location|Species>[] = [...waitForLocations,...waitForSpecies];
+			let allPromises:Promise<MarkerLocation|Species>[] = [...waitForLocations,...waitForSpecies];
 			Promise.all(allPromises)
 				.then(()=>{
 					this.createSamples();
@@ -285,7 +285,7 @@ export class SampleUploadComponent implements OnInit {
 	}
 	
 	//Save all locations to the server
-	private confirmLocation(location:Location):Promise<Location>{
+	private confirmLocation(location:MarkerLocation):Promise<MarkerLocation>{
 		return new Promise((resolve,reject) => {
 			let watertype = this.watertypeMap.get(this.locationWatertype.get(location));
 			let watertypeKrw = this.watertypeMap.get(this.locationWatertypeKrw.get(location));

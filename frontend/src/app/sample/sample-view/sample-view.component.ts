@@ -5,7 +5,7 @@ import {Sample} from '../sample.model';
 import {ApiSpeciesService} from "../../species/api.species.service";
 import {Species} from "../../species/species.model";
 import {ApiLocationService} from "../../locations/api.location.service";
-import {Location} from "../../locations/location.model";
+import {MarkerLocation} from "../../locations/markerLocation.model";
 
 @Component({
     selector: 'app-sample-view',
@@ -20,7 +20,7 @@ export class SampleViewComponent implements OnInit {
     private apiLocation: ApiLocationService;
     public sample: Sample;
     public species: Species[];
-    public location: Location;
+    public location: MarkerLocation;
     public showChart = false;
     public markerPos;
 
@@ -35,15 +35,14 @@ export class SampleViewComponent implements OnInit {
         this.route.params
             .switchMap(params => this.apiSample.getSample(params["id"]))
             .subscribe(sample => {
-                this.sample = sample
-                console.log(sample)
+                this.sample = sample;
                 this.retrieveSpecies();
                 this.retrieveLocation();
             }, error => console.log(error));
     }
 
     private retrieveSpecies() {
-		
+
         this.route.params
             .switchMap(params => this.apiSpecies.getByIds(Array.from(this.sample.speciesValues.keys())))
             .subscribe(species => {
@@ -69,12 +68,11 @@ export class SampleViewComponent implements OnInit {
                 this.mapConfig.center = {
                     lat: location.latitude,
                     lng: location.longitude
-                }
+                };
                 this.markerPos = {
                     lat: location.latitude,
                     lng: location.longitude
-                }
-                console.log(this.location)
+                };
             }), error => console.log(error);
     }
 
@@ -121,7 +119,6 @@ export class SampleViewComponent implements OnInit {
     option = {
         title: {
             text: 'Aantal beestjes gevonden per monster',
-            subtext: 'Vergeleken met wat er verwacht wordt te zijn'
         },
         toolbox: {
             feature: {
