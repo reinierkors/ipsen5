@@ -35,8 +35,6 @@ export class WatersComponent implements OnInit {
     }
 
     ngOnInit() {
-        //TODO: Make an api call to ApiLocation to get the relevant information about the location
-
         //TODO: Make an api call with the loction_id to the sampleAPI to get all relevant samples
         this.route.params
             .switchMap(params => this.apiSample.getSample(params["id"]))

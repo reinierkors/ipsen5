@@ -68,11 +68,12 @@ const routes:Routes = [
         SampleViewComponent,
         SampleEditComponent,
 		SampleFactorBarGraphComponent,
+        WatersComponent,
         LoginComponent,
         EditAccountComponent,
         WewUploadComponent,
         WewViewComponent,
-        WatersComponent,
+
     ],
     imports: [
 		MaterialModule,
