@@ -16,6 +16,7 @@ export class SampleLocationTableComponent implements OnInit {
     private apiWaterschap: ApiWaterschapService;
     private router: Router;
 
+
     locationRows = [];
     locationColumns = [
         {name: 'Mp', prop: 'code'},
@@ -31,10 +32,13 @@ export class SampleLocationTableComponent implements OnInit {
         {name: 'Telefoonnummer', prop: 'phoneNumber'}
     ];
 
+    selected = [];
+
     constructor(apiLocationService: ApiLocationService, apiWaterschap: ApiWaterschapService, router:Router) {
         this.apiLocationService = apiLocationService;
         this.apiWaterschap = apiWaterschap;
         this.router = router;
+
     }
 
     ngOnInit() {
@@ -48,11 +52,10 @@ export class SampleLocationTableComponent implements OnInit {
 
     onSelect({ selected }) {
         console.log('Select Event', selected, this.selected);
-        this.router.navigate(['results/waters/', selected[0].id])
+        this.router.navigate(['WatersComponent', selected[0].id])
     }
 
     onActivate(event) {
         console.log('Activate Event', event);
     }
-
 }
