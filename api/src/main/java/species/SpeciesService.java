@@ -103,5 +103,8 @@ public class SpeciesService {
 			throw new ApiException("Cannot save species");
 		}
 	}
-	
+
+    public List<Species> getAll() {
+		return repo.getAll();
+    }
 }
