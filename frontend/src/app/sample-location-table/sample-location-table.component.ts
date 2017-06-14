@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {ApiLocationService} from '../locations/api.location.service';
 import {ApiWaterschapService} from '../waterschap/api.waterschap.service';
-import {ApiSpeciesService} from "../species/api.species.service";
+import {ApiTaxonService} from "../taxon/api.taxon.service";
 
 @Component({
     selector: 'app-sample-Location-table',
-    providers: [ApiLocationService, ApiWaterschapService, ApiSpeciesService],
+    providers: [ApiLocationService, ApiWaterschapService, ApiTaxonService],
     templateUrl: './sample-Location-table.component.html',
     styleUrls: ['./sample-Location-table.component.css']
 })
@@ -14,7 +14,7 @@ export class SampleLocationTableComponent implements OnInit {
 
     private apiLocationService: ApiLocationService;
     private apiWaterschap: ApiWaterschapService;
-    private apiSpecies: ApiSpeciesService;
+    private apiTaxon: ApiTaxonService;
 
     locationRows = [];
     locationColumns = [
@@ -29,15 +29,15 @@ export class SampleLocationTableComponent implements OnInit {
         {name: 'Postcode', prop: 'zipCode'},
         {name: 'Locatie', prop: 'location'},
         {name: 'Telefoonnummer', prop: 'phoneNumber'}];
-    speciesRows = [];
-    speciesColumns = [
+    taxonRows = [];
+    taxonColumns = [
         {name: 'Naam', prop: 'name'}];
 
     constructor(apiLocationService: ApiLocationService, apiWaterschap: ApiWaterschapService,
-                apiSpecies: ApiSpeciesService) {
+                apiTaxon: ApiTaxonService) {
         this.apiLocationService = apiLocationService;
         this.apiWaterschap = apiWaterschap;
-        this.apiSpecies = apiSpecies;
+        this.apiTaxon = apiTaxon;
     }
 
     ngOnInit() {
@@ -47,8 +47,8 @@ export class SampleLocationTableComponent implements OnInit {
         this.apiWaterschap.getAll().subscribe(waterschappen => {
             this.waterschapRows = waterschappen;
         });
-        this.apiSpecies.getAll().subscribe(species => {
-            this.speciesRows = species;
+        this.apiTaxon.getAll().subscribe(taxa => {
+            this.taxonRows = taxa;
         })
     }
 
