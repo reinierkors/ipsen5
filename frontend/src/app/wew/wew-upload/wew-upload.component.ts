@@ -3,8 +3,8 @@ import {trigger,style,transition,animate,group,state} from '@angular/animations'
 
 import {WEWValue,WEWFactor,WEWFactorClass} from '../wew.model';
 import {ApiWewService} from '../api.wew.service';
-import {Species} from '../../species/species.model';
-import {ApiSpeciesService} from '../../species/api.species.service';
+import {Taxon} from '../../taxon/taxon.model';
+import {ApiTaxonService} from '../../taxon/api.taxon.service';
 
 import * as XLSX from 'xlsx';
 
@@ -13,7 +13,7 @@ type ImportState = 'anim'|'start'|'loading'|'confirm'|'finished'|'error';
 
 @Component({
 	selector: 'app-wew-upload',
-	providers:[ApiWewService,ApiSpeciesService],
+	providers:[ApiWewService,ApiTaxonService],
 	templateUrl: './wew-upload.component.html',
 	styleUrls: ['./wew-upload.component.css'],
 	animations:[
@@ -36,7 +36,7 @@ export class WewUploadComponent implements OnInit {
 	
 	constructor(
 		private wewApi:ApiWewService,
-		private speciesApi:ApiSpeciesService
+		private taxonApi:ApiTaxonService
 	){
 		//Check if the WEW tables are empty
 		wewApi.areTablesEmpty().subscribe(bool => {
@@ -140,7 +140,7 @@ export class WewUploadComponent implements OnInit {
 			if(row.factor){
 				lastFactor = row.factor;
 				factor = new WEWFactor();
-				factor.name = row.factor;
+				factor.name = row.factor.trim();
 				factor.classes = [];
 				factorMap.set(factor.name,factor);
 			}
@@ -151,8 +151,8 @@ export class WewUploadComponent implements OnInit {
 			}
 			//Create a factor class for this row
 			let factorClass = new WEWFactorClass();
-			factorClass.code = row.code;
-			factorClass.description = row.klasse;
+			factorClass.code = row.code.trim();
+			factorClass.description = row.klasse.trim();
 			factorClass.order = index;
 			//Store it in the current factor
 			factor.classes.push(factorClass);
@@ -164,7 +164,7 @@ export class WewUploadComponent implements OnInit {
 		return Array.from(factorMap.values());
 	}
 	
-	//Reads all data from the wew matrix, maps it to species, factors and factorclasses
+	//Reads all data from the wew matrix, maps it to taxon, factors and factorclasses
 	private handleMatrixSheet(matrixSheet:XLSX.WorkSheet,factors:WEWFactor[]):Promise<Map<WEWValue,WEWFactorClass>>{
 		//Map factor class codes to objects
 		let factorClassMap:Map<string,WEWFactorClass> = new Map();
@@ -184,20 +184,20 @@ export class WewUploadComponent implements OnInit {
 				return;
 			let factorClass = factorClassColumns[index-1];
 			if(factorClass)
-				factorClass.description = desc
+				factorClass.description = desc.trim();
 		});
 		
-		//Get the species
-		let speciesNames = rows.filter((row,index) => index>2).map(row => row[0]);
-		let speciesPr:Promise<Species[]> = new Promise((resolve,reject) => {
-			this.speciesApi.findOrCreate(speciesNames).subscribe(resolve,reject);
+		//Get the taxon
+		let taxonNames = rows.filter((row,index) => index>2).map(row => row[0].trim());
+		let taxonPr:Promise<Taxon[]> = new Promise((resolve,reject) => {
+			this.taxonApi.findOrCreate(taxonNames).subscribe(resolve,reject);
 		});
 		
-		//Map species names to wew values
-		let speciesValuesMap:Map<string/*species name*/,WEWValue[]> = new Map();
+		//Map taxon names to wew values
+		let taxonValuesMap:Map<string/*taxon name*/,WEWValue[]> = new Map();
 		let factorClassValuesMap:Map<WEWValue,WEWFactorClass> = new Map();
 		
-		//Get all values, every row is a species
+		//Get all values, every row is a taxon
 		rows.forEach((row,index) => {
 			//First 3 rows of the sheet are headers, ignore them
 			if(index<3)
@@ -215,21 +215,21 @@ export class WewUploadComponent implements OnInit {
 				factorClassValuesMap.set(value,factorClass);
 			});
 			
-			//Map the species name of this row to all values on the row
-			speciesValuesMap.set(row[0],rowValues);
+			//Map the taxon name of this row to all values on the row
+			taxonValuesMap.set(row[0],rowValues);
 		});
 		
-		//Species are in, store their ids in the values
-		speciesPr.then(species => {
-			species.forEach(spec => {
-				speciesValuesMap.get(spec.name).forEach(value => value.speciesId = spec.id);
+		//Taxon are in, store their ids in the values
+		taxonPr.then(taxon => {
+			taxon.forEach(spec => {
+				taxonValuesMap.get(spec.name).forEach(value => value.taxonId = spec.id);
 			});
 		});
 		
 		//Return a promise that resolves with a Map<WEWValue,WEWFactorClass>
 		//FactorClasses aren't saved yet, so without IDs, this map saves the relation
 		return new Promise((resolve,reject) => {
-			speciesPr.then(() => resolve(factorClassValuesMap),reject);
+			taxonPr.then(() => resolve(factorClassValuesMap),reject);
 		});
 	}
 	

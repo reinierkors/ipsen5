@@ -1,0 +1,37 @@
+<div class="container">
+	<h1>Importeer Soorten structuur</h1>
+	
+	<!-- ToDo: handle errors nicely -->
+	<md-card *ngIf="state=='error'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<md-card-title>Error</md-card-title>
+		<md-card-content>{{errors|json}}</md-card-content>
+	</md-card>
+	
+	<!-- Loading card -->
+	<md-card *ngIf="state=='loading'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<md-card-title>Laden...</md-card-title>
+		<md-card-content>
+			<md-spinner></md-spinner>
+		</md-card-content>
+	</md-card>
+	
+	<!-- Start -->
+	<md-card *ngIf="state=='start'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<md-card-title>Upload soorten structuur (XLS)</md-card-title>
+		<md-card-content>
+			<input type="file" (change)="fileChange($event)"/>
+			<p>
+				Het bestand dient de volgende kolommen te hebben: taxonname, taxongroup, taxonlevel, parentname, refername.
+			</p>
+		</md-card-content>
+	</md-card>
+	
+	<!-- Finished, or not? -->
+	<md-card *ngIf="state=='finished'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<md-card-title>Klaar</md-card-title>
+		<md-card-content>
+			Alle taxa zijn opgeslagen.
+			ToDo: knop naar view
+		</md-card-content>
+	</md-card>
+</div>

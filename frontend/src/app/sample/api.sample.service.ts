@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 
 import {ApiService} from '../services/api.service';
 import {Sample} from './sample.model';
-import {Species} from '../species/species.model';
+import {Taxon} from '../taxon/taxon.model';
 
 //Value that is calculated in a sample using the WEW list
 export type CalculationData = {factorClassId:number,computedValue:number};

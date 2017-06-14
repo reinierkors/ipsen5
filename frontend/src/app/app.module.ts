@@ -33,12 +33,15 @@ import {SampleEditComponent} from './sample/sample-edit/sample-edit.component';
 import {SampleLocationTableComponent} from "./sample-location-table/sample-location-table.component";
 import {LoginComponent} from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
-import {WewUploadComponent} from './wew/wew-upload/wew-upload.component';
-import {WewViewComponent} from './wew/wew-view/wew-view.component';
-import {AngularEchartsModule} from 'ngx-echarts';
-import {EditAccountComponent} from "./user/edit-account/edit-account.component";
+import { WewUploadComponent } from './wew/wew-upload/wew-upload.component';
+import { WewViewComponent } from './wew/wew-view/wew-view.component';
+import { AngularEchartsModule } from 'ngx-echarts';
+import { EditAccountComponent } from './user/edit-account/edit-account.component';
+import { TaxonImportStructureComponent } from './taxon/taxon-import-structure/taxon-import-structure.component';
+import { TaxonTreeComponent } from './taxon/taxon-tree/taxon-tree.component';
+import { TaxonViewComponent } from './taxon/taxon-view/taxon-view.component';
 import {SampleFactorBarGraphComponent} from "./sample/sample-factor-bar-graph/sample-factor-bar-graph.component";
-import {WatersComponent} from "./results/waters/waters.component";
+import { WatersComponent } from "./results/waters/waters.component";
 
 const routes:Routes = [
   {path: '', component: HomeComponent},
@@ -51,6 +54,10 @@ const routes:Routes = [
   {path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
   {path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
   {path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
+  {path: 'wew/upload', component: WewUploadComponent, canActivate: [AuthGuard]},
+  {path: 'wew/view', component: WewViewComponent, canActivate: [AuthGuard]},
+  {path: 'taxon/view/:id', component: TaxonViewComponent, canActivate: [AuthGuard]},
+  {path: 'taxon/import', component: TaxonImportStructureComponent, canActivate: [AuthGuard]},
     /* Admin Routes */
   {path: 'admin/create-account', component: CreateAccountComponent, canActivate: [AuthGuard]},
     /* Directs back to home if route is unknown */
@@ -74,7 +81,9 @@ const routes:Routes = [
         EditAccountComponent,
         WewUploadComponent,
         WewViewComponent,
-
+        TaxonImportStructureComponent,
+        TaxonTreeComponent,
+        TaxonViewComponent,
     ],
     imports: [
 		MaterialModule,

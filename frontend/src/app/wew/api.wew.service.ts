@@ -11,9 +11,9 @@ export class ApiWewService extends ApiService{
 		super(http);
 	}
 	
-	//Retrieve all WEW values from the species with these ids
-	public getBySpecies(ids:number[]):Observable<WEWValue[]>{
-		return this.get('/wew/value/species/'+ids.join(',')).map(values=>values.map(value => WEWValue.fromJSON(value)));
+	//Retrieve all WEW values from the taxon with these ids
+	public getByTaxon(ids:number[]):Observable<WEWValue[]>{
+		return this.get('/wew/value/taxon/'+ids.join(',')).map(values=>values.map(value => WEWValue.fromJSON(value)));
 	}
 	
 	//Saves a list of values

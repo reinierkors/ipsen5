@@ -42,25 +42,25 @@ public class WEWValueRepository extends RepositoryMaria<WEWValue>{
 		return new ColumnData[]{
 				new ColumnData<>("id", Types.INTEGER, WEWValue::getId, WEWValue::setId, true),
 				new ColumnData<>("factor_class_id", Types.INTEGER, WEWValue::getFactorClassId, WEWValue::setFactorClassId),
-				new ColumnData<>("species_id", Types.INTEGER, WEWValue::getSpeciesId, WEWValue::setSpeciesId),
+				new ColumnData<>("taxon_id", Types.INTEGER, WEWValue::getTaxonId, WEWValue::setTaxonId),
 				new ColumnData<>("value", Types.DOUBLE, WEWValue::getValue, WEWValue::setValue)
 		};
 	}
 	
 	/**
-	 * Retrieve all WEW values for a given species
-	 * @param speciesIds list of ids of species
-	 * @return a list of values for all the species with the given ids
+	 * Retrieve all WEW values for a given taxon
+	 * @param taxonIds list of ids of taxon
+	 * @return a list of values for all the taxon with the given ids
 	 * @throws RepositoryException when there was a problem retrieving the wew values
 	 */
-	public List<WEWValue> getBySpecies(List<Integer> speciesIds) throws RepositoryException{
+	public List<WEWValue> getByTaxon(List<Integer> taxonIds) throws RepositoryException{
 		try{
 			Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
-			String howManyQuestionMarks = speciesIds.stream().map(id -> "?").collect(commaJoiner);
+			String howManyQuestionMarks = taxonIds.stream().map(id -> "?").collect(commaJoiner);
 			
-			String queryFindBySpecies = "SELECT * FROM "+getTable()+" WHERE `species_id` IN("+howManyQuestionMarks+")";
-			PreparedStatement psFindBySpecies = connection.prepareStatement(queryFindBySpecies);
-			ResultSet resultSet = psFindBySpecies.executeQuery();
+			String queryFindByTaxon = "SELECT * FROM "+getTable()+" WHERE `taxon_id` IN("+howManyQuestionMarks+")";
+			PreparedStatement psFindByTaxon = connection.prepareStatement(queryFindByTaxon);
+			ResultSet resultSet = psFindByTaxon.executeQuery();
 			
 			List<WEWValue> values = new ArrayList<>();
 			if(resultSet==null)
