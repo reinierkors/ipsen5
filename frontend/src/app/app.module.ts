@@ -46,7 +46,7 @@ const routes:Routes = [
   {path: 'home', component: GMapsComponent, canActivate: [AuthGuard]},
   {path: 'account', component: EditAccountComponent, canActivate: [AuthGuard]},
   {path: 'locations', component: SampleLocationTableComponent, canActivate: [AuthGuard]},
-  {path: 'results/waters', component: WatersComponent, canActivate: [AuthGuard]},
+  {path: 'results/water/:id', component: WatersComponent, canActivate: [AuthGuard]},
   {path: 'data', component: SampleLocationTableComponent, canActivate: [AuthGuard]},
   {path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
   {path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},

@@ -61,7 +61,7 @@ export class SampleLocationTableComponent implements OnInit {
 
     onSelect({ selected }) {
         console.log('Select Event', selected, this.selected);
-        this.router.navigate(['WatersComponent', selected[0].id])
+        this.router.navigate(['results/water/' + selected[0].id])
     }
 
     onActivate(event) {

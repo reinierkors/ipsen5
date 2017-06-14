@@ -15,17 +15,17 @@ export class WatersComponent implements OnInit {
     private route: ActivatedRoute;
     private apiSample: ApiSampleService;
     private apiLocation: ApiLocationService;
-    public location: Location;
+    public currentLocation: {};
     public sample: Sample;
     public samples: Sample[];
 
     sampleRows = [];
     sampleColums = [
-        {name: 'Datum', prop: 'date'},
-        {name: 'Eigennaar', prop:'owner_id'},
+        {name: 'Datum', prop: 'date'}, // Moet alleen nog ff formatten naar dag / maand / jaar
+        {name: 'Eigennaar', prop:'owner_id'}, // Niet nodig voor gebruiker
         {name: 'Kwaliteit', prop: 'quality'},
-        {name: 'X_coor', prop:'x_coor'},
-        {name: 'Y_coor', prop:'y_coor'}
+        {name: 'X_coor', prop:'xCoor'}, // Niet nodig voor gebruiker
+        {name: 'Y_coor', prop:'yCoor'} // Niet nodig voor gebruiker
     ];
 
     constructor(apiSample: ApiSampleService, apiLocation: ApiLocationService, route: ActivatedRoute) {
@@ -35,15 +35,27 @@ export class WatersComponent implements OnInit {
     }
 
     ngOnInit() {
-        //TODO: Make an api call to ApiLocation to get the relevant information about the location
-
-        //TODO: Make an api call with the loction_id to the sampleAPI to get all relevant samples
-        this.route.params
-            .switchMap(params => this.apiSample.getSample(params["id"]))
-            .subscribe(samples => {
-                this.sample = samples
-                console.log(samples)
-            }, error => console.log(error));
+        this.getCurrentLocation();
     }
+
+    private getCurrentLocation() {
+        this.route.params
+            .switchMap(params => this.apiLocation.getById(params["id"]))
+            .subscribe(location => {
+                this.currentLocation = location;
+                console.log(this.currentLocation);
+                this.getSamples();
+            }, error => console.log(error));
+    };
+
+    private getSamples() {
+        this.route.params
+            .switchMap(params => this.apiSample.getByLocationId(params["id"]))
+            .subscribe(samples => {
+                this.sampleRows = samples;
+                this.samples = samples;
+                console.log(this.samples)
+            }, error => console.log(error));
+    };
 
 }

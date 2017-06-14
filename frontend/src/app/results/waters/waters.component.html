@@ -1,5 +1,5 @@
-<md-card>
-  <md-card-title>Monster van geselecteerde water</md-card-title>
+<md-card *ngIf="currentLocation">
+  <md-card-title>Monsters van {{currentLocation.description}}</md-card-title>
   <md-card-content>
     <ngx-datatable
             class="material"
