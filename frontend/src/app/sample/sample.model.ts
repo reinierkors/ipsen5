@@ -6,12 +6,12 @@ export class Sample{
 	quality:number;
 	xCoor:number;
 	yCoor:number;
-	speciesValues:Map<number/*speciesId*/,number/*value*/>;
+	taxonValues:Map<number/*taxonId*/,number/*value*/>;
 	
 	//Maps don't stringify
 	public toJSON(){
-		let speciesValuesObj = {};
-		this.speciesValues.forEach((value,key) => speciesValuesObj[key] = value);
+		let taxonValuesObj = {};
+		this.taxonValues.forEach((value,key) => taxonValuesObj[key] = value);
 		
 		return {
 			id:this.id,
@@ -21,7 +21,7 @@ export class Sample{
 			quality:this.quality,
 			xCoor:this.xCoor,
 			yCoor:this.yCoor,
-			speciesValues:speciesValuesObj
+			taxonValues:taxonValuesObj
 		};
 		
 	}
@@ -35,9 +35,9 @@ export class Sample{
 		sample.quality = obj.quality;
 		sample.xCoor = obj.xCoor;
 		sample.yCoor = obj.yCoor;
-		sample.speciesValues = new Map();
-		for(let key in obj.speciesValues){
-			sample.speciesValues.set(parseInt(key,10),obj.speciesValues[key]);
+		sample.taxonValues = new Map();
+		for(let key in obj.taxonValues){
+			sample.taxonValues.set(parseInt(key,10),obj.taxonValues[key]);
 		}
 		return sample;
 	}

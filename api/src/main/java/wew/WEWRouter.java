@@ -30,10 +30,10 @@ public class WEWRouter {
 		Gson gson = gsonBuilder.create();
 		
 		path("/wew", ()->{
-			//Retrieve all WEW values of the species with the given ids
-			get("/value/species/:ids", (req,res) -> {
+			//Retrieve all WEW values of the taxon with the given ids
+			get("/value/taxon/:ids", (req,res) -> {
 				List<Integer> ids = stream(req.params("ids").split(",")).map(Integer::parseInt).collect(Collectors.toList());
-				return gson.toJson(wewService.getBySpecies(ids));
+				return gson.toJson(wewService.getByTaxon(ids));
 			});
 			//Retrieve all WEW values
 			get("/value", (req,res) -> gson.toJson(wewService.getAllValues()));
@@ -76,7 +76,7 @@ public class WEWRouter {
 			JsonObject value = new JsonObject();
 			value.addProperty("i",wewValue.getId());
 			value.addProperty("c",wewValue.getFactorClassId());
-			value.addProperty("s",wewValue.getSpeciesId());
+			value.addProperty("s",wewValue.getTaxonId());
 			value.addProperty("v",wewValue.getValue());
 			return value;
 		}
@@ -87,7 +87,7 @@ public class WEWRouter {
 			if(obj.has("i") && !obj.get("i").isJsonNull())
 				value.setId(obj.get("i").getAsInt());
 				value.setFactorClassId(obj.get("c").getAsInt());
-				value.setSpeciesId(obj.get("s").getAsInt());
+				value.setTaxonId(obj.get("s").getAsInt());
 			if(obj.has("v") && !obj.get("v").isJsonNull())
 				value.setValue(obj.get("v").getAsDouble());
 			return value;

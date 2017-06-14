@@ -39,14 +39,14 @@ public class WEWService {
 	}
 	
 	/**
-	 * Retrieve a list of wew values for a list of species
-	 * @param speciesIds list of species ids
+	 * Retrieve a list of wew values for a list of taxon
+	 * @param taxonIds list of taxon ids
 	 * @return list of wew values
 	 * @throws ApiException when there was a problem retrieving the wew values
 	 */
-	public List<WEWValue> getBySpecies(List<Integer> speciesIds) throws ApiException{
+	public List<WEWValue> getByTaxon(List<Integer> taxonIds) throws ApiException{
 		 try{
-		 	return valueRepo.getBySpecies(speciesIds);
+		 	return valueRepo.getByTaxon(taxonIds);
 		 }
 		 catch(RepositoryException e){
 		 	throw new ApiException("Could not retrieve WEW values");

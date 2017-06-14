@@ -9,18 +9,18 @@ package wew.value;
 public class WEWValue {
 	private int id;
 	private int factorClassId;
-	private int speciesId;
+	private int taxonId;
 	private Double value;
 	
-	public WEWValue(int id, int factorClassId, int speciesId, Double value) {
+	public WEWValue(int id, int factorClassId, int taxonId, Double value) {
 		this.id = id;
 		this.factorClassId = factorClassId;
-		this.speciesId = speciesId;
+		this.taxonId = taxonId;
 		this.value = value;
 	}
 	
-	public WEWValue(int factorClassId, int speciesId, Double value) {
-		this(0,factorClassId,speciesId,value);
+	public WEWValue(int factorClassId, int taxonId, Double value) {
+		this(0,factorClassId,taxonId,value);
 	}
 	
 	public WEWValue() {
@@ -43,12 +43,12 @@ public class WEWValue {
 		this.factorClassId = factorClassId;
 	}
 	
-	public int getSpeciesId() {
-		return speciesId;
+	public int getTaxonId() {
+		return taxonId;
 	}
 	
-	public void setSpeciesId(int speciesId) {
-		this.speciesId = speciesId;
+	public void setTaxonId(int taxonId) {
+		this.taxonId = taxonId;
 	}
 	
 	public Double getValue() {
