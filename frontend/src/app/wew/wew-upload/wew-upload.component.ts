@@ -188,7 +188,7 @@ export class WewUploadComponent implements OnInit {
 		});
 		
 		//Get the taxon
-		let taxonNames = rows.filter((row,index) => index>2).map(row => row[0].trim());
+		let taxonNames = rows.filter((row,index) => index>2).map(row => row[0].trim().toLowerCase());
 		let taxonPr:Promise<Taxon[]> = new Promise((resolve,reject) => {
 			this.taxonApi.findOrCreate(taxonNames).subscribe(resolve,reject);
 		});
@@ -216,13 +216,13 @@ export class WewUploadComponent implements OnInit {
 			});
 			
 			//Map the taxon name of this row to all values on the row
-			taxonValuesMap.set(row[0],rowValues);
+			taxonValuesMap.set(row[0].trim().toLowerCase(),rowValues);
 		});
 		
 		//Taxon are in, store their ids in the values
-		taxonPr.then(taxon => {
-			taxon.forEach(spec => {
-				taxonValuesMap.get(spec.name).forEach(value => value.taxonId = spec.id);
+		taxonPr.then(taxa => {
+			taxa.forEach(taxon => {
+				taxonValuesMap.get(taxon.name.trim().toLowerCase()).forEach(value => value.taxonId = taxon.id);
 			});
 		});
 		
