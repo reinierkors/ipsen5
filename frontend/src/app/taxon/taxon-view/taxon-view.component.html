@@ -1,3 +1,33 @@
-<p>
-  taxon-view works!
-</p>
+<div class="container">
+	<h1>Boom van alle bekende taxa</h1>
+	
+	<!-- ToDo: handle errors nicely -->
+	<md-card *ngIf="state=='error'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<md-card-title>Error</md-card-title>
+		<md-card-content>{{errors|json}}</md-card-content>
+	</md-card>
+	
+	<!-- Loading card -->
+	<md-card *ngIf="state=='loading'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<md-card-title>Laden...</md-card-title>
+		<md-card-content>
+			<md-spinner></md-spinner>
+		</md-card-content>
+	</md-card>
+	
+	<!-- Start -->
+	<md-card *ngIf="state=='ready'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<md-card-title>Animalia</md-card-title>
+		<md-card-content>
+			<div class="tree" [ngStyle]="{'height.px':animalia.length*22}">
+<div class="treeRow" *ngFor="let row of animalia">{{row.depthLines}}<span class="treeRowTaxon" [ngClass]="{referrer:row.isRefer}">{{row.isRefer?'Referrer: ':''}}{{row.taxon.name}} <span class="treeRowPostfix">{{row.postfix}}</span></span></div>
+			</div>
+		</md-card-content>
+		<md-card-title>Taxa die niet onder animalia staan</md-card-title>
+		<md-card-content>
+			<div class="tree" [ngStyle]="{'height.px':otherTaxa.length*22}">
+<div class="treeRow" *ngFor="let row of otherTaxa">{{row.depthLines}}<span class="treeRowTaxon" [ngClass]="{referrer:row.isRefer}">{{row.isRefer?'Referrer: ':''}}{{row.taxon.name}} {{row.postfix}}</span></div>
+			</div>
+		</md-card-content>
+	</md-card>
+</div>
