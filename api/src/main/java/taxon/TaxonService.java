@@ -70,6 +70,14 @@ public class TaxonService {
 		}
 	}
 	
+	public List<Taxon> getAll() throws ApiException {
+		try {
+			return taxonRepo.getAll();
+		} catch(RepositoryException e){
+			throw new ApiException("Cannot retrieve taxa");
+		}
+	}
+	
 	/**
 	 * Finds a taxon by name or creates it if it doesn't exist
 	 * @param name the name of the taxon

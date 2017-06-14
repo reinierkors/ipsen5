@@ -21,6 +21,11 @@ export class ApiTaxonService extends ApiService{
 		return this.post('/taxon/ids',ids).map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));
 	}
 	
+	//Retrieve all species in db
+	public getAll():Observable<Taxon[]> {
+		return this.get('/taxon/all').map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));
+	}
+	
 	//Retrieve a list of taxa by their names
 	public getByNames(names:string[]):Observable<Taxon[]>{
 		return this.post('/taxon/find',names).map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));

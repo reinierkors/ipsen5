@@ -33,7 +33,7 @@ export class CreateAccountComponent implements OnInit {
             'email': [null, Validators.required],
             'password': [null, Validators.required],
             'group_id': [1, Validators.required],
-            'waterschap_id': [null]
+            'waterschap_id': [null, Validators.required]
         });
         this.waterschapForm = fb.group({
             'name': [null, Validators.required],

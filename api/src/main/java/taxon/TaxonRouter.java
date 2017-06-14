@@ -30,6 +30,8 @@ public class TaxonRouter {
 		Gson gson = gsonBuilder.create();
 		
 		path("/taxon", ()->{
+			//Retrieve all taxa
+			get("/all", (req, res) -> gson.toJson(taxonService.getAll()));
 			
 			//Retrieve taxa by a comma seperated list of ids
 			post("/ids",(req,res) -> {

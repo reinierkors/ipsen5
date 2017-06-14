@@ -28,8 +28,6 @@ public class WaterschapRouter {
             get("/:id", (req, res) -> gson.toJson(waterschapService.get(Integer.valueOf(req.params("id")))));
             post("/persist", ((request, response) -> {
                 Waterschap waterschap = gson.fromJson(request.body(), Waterschap.class);
-                System.out.println(waterschap.getName());
-                System.out.println(waterschap.getAddress());
                 return gson.toJson(waterschapService.save(waterschap));
             }));
         });
