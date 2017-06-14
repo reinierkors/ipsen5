@@ -247,7 +247,7 @@ export class SampleUploadComponent implements OnInit {
 		return new Promise((resolve,reject) => {
 			//Retrieve existing taxon
 			this.taxonApi.getByNames(Array.from(this.taxonMap.keys())).subscribe(taxa => {
-				taxa.forEach(sp => this.taxonMap.set(sp.name,sp));
+				taxa.forEach(taxon => this.taxonMap.set(taxon.name,taxon));
 				//Show non-existing taxa for confirmation
 				this.confirm.taxa = Array.from(this.taxonMap.values()).filter(taxon => !taxon.id);
 				resolve();
@@ -307,8 +307,9 @@ export class SampleUploadComponent implements OnInit {
 	//Save all taxa to the server
 	private confirmTaxa(taxa:Taxon[]):Promise<Taxon[]>{
 		return new Promise((resolve,reject) => {
-			this.taxonApi.save(taxa).subscribe(saved => {
-				resolve(saved);
+			this.taxonApi.save(taxa).subscribe(taxa => {
+				taxa.forEach(taxon => this.taxonMap.set(taxon.name,taxon));
+				resolve(taxa);
 			}, error => reject(error));
 		});
 	}

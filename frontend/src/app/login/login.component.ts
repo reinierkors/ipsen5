@@ -11,7 +11,7 @@ import { AuthenticationService } from '../services/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-    model: any = {};
+  model: any = {};
   constructor(private router: Router, private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
