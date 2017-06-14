@@ -76,7 +76,7 @@ public class WEWRouter {
 			JsonObject value = new JsonObject();
 			value.addProperty("i",wewValue.getId());
 			value.addProperty("c",wewValue.getFactorClassId());
-			value.addProperty("s",wewValue.getTaxonId());
+			value.addProperty("t",wewValue.getTaxonId());
 			value.addProperty("v",wewValue.getValue());
 			return value;
 		}
@@ -84,12 +84,16 @@ public class WEWRouter {
 		public WEWValue deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
 			WEWValue value = new WEWValue();
 			JsonObject obj = jsonElement.getAsJsonObject();
+			
 			if(obj.has("i") && !obj.get("i").isJsonNull())
 				value.setId(obj.get("i").getAsInt());
-				value.setFactorClassId(obj.get("c").getAsInt());
-				value.setTaxonId(obj.get("s").getAsInt());
+			
+			value.setFactorClassId(obj.get("c").getAsInt());
+			value.setTaxonId(obj.get("t").getAsInt());
+			
 			if(obj.has("v") && !obj.get("v").isJsonNull())
 				value.setValue(obj.get("v").getAsDouble());
+			
 			return value;
 		}
 	}
