@@ -85,8 +85,8 @@
     <md-list-item *ngIf="authenticationService.loggedIn()"><a md-button routerLink="/home" class="nav-item">Landkaart</a></md-list-item>
     <md-list-item *ngIf="authenticationService.loggedIn()"><a md-button routerLink="/data" class="nav-item">Algemene data</a></md-list-item>
     <md-list-item *ngIf="authenticationService.loggedIn()"><a md-button routerLink="/sample/upload" class="nav-item">Uploaden monster</a></md-list-item>
-    <md-list-item *ngIf="authenticationService.loggedIn()"><a md-button routerLink="/wew/upload" class="nav-item">Uploaden WEW-lijst</a></md-list-item>
-    <md-list-item *ngIf="authenticationService.loggedIn()"><a md-button routerLink="/account" class="nav-item">Account Aanpassen</a></md-list-item>
-    <md-list-item *ngIf="authenticationService.loggedIn()"><a md-button routerLink="/admin/create-account" class="nav-item">Admin Create Account</a></md-list-item>
+    <md-list-item *ngIf="authenticationService.loggedIn() && authenticationService.isAdmin()"><a md-button routerLink="/wew/upload" class="nav-item">Uploaden WEW-lijst</a></md-list-item>
+    <md-list-item *ngIf="authenticationService.loggedIn()"><a md-button routerLink="/account" class="nav-item">Account aanpassen</a></md-list-item>
+    <md-list-item *ngIf="authenticationService.loggedIn() && authenticationService.isAdmin()"><a md-button routerLink="/admin/create-account" class="nav-item">Accounts beheren</a></md-list-item>
   </md-list>
 
