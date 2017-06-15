@@ -128,3 +128,19 @@ a.nav-item {
 .mat-raised-button {
   min-width: initial !important;
 }
+
+/*
+PRINT
+ */
+
+@media print {
+  md-sidenav, md-toolbar {
+    display: none !important;
+  }
+  .echart {
+    width: 100% !important;
+  }
+  .mat-sidenav-content {
+    overflow: inherit;
+  }
+}
