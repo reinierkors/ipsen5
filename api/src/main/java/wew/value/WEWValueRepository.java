@@ -60,6 +60,12 @@ public class WEWValueRepository extends RepositoryMaria<WEWValue>{
 			
 			String queryFindByTaxon = "SELECT * FROM "+getTable()+" WHERE `taxon_id` IN("+howManyQuestionMarks+")";
 			PreparedStatement psFindByTaxon = connection.prepareStatement(queryFindByTaxon);
+			
+			int index = 1;
+			for(int taxonId : taxonIds){
+				psFindByTaxon.setInt(index,taxonId);
+			}
+			
 			ResultSet resultSet = psFindByTaxon.executeQuery();
 			
 			List<WEWValue> values = new ArrayList<>();

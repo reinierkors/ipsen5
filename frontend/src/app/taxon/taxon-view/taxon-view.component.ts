@@ -1,18 +1,20 @@
 import {Component,OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {trigger,style,transition,animate,group,state} from '@angular/animations';
 
 import {Taxon,TaxonGroup,TaxonLevel} from '../taxon.model';
 import {ApiTaxonService} from '../api.taxon.service';
+import {ApiWewService} from '../../wew/api.wew.service';
+import {WEWValue,WEWFactor,WEWFactorClass} from '../../wew/wew.model';
 
 import 'rxjs/add/operator/toPromise';
 
 type State = 'anim'|'error'|'loading'|'ready';
-type TreeRow = {taxon:Taxon,depth:number,isRefer:boolean,depthLines:string,postfix:string};
 
 
 @Component({
 	selector:'app-taxon-view',
-	providers:[ApiTaxonService],
+	providers:[ApiTaxonService,ApiWewService],
 	templateUrl:'./taxon-view.component.html',
 	styleUrls:['./taxon-view.component.css'],
 	animations:[
@@ -31,20 +33,45 @@ export class TaxonViewComponent implements OnInit{
 	//Any errors that happen during the process
 	errors:any[] = [];
 	
-	animalia:TreeRow[];
-	otherTaxa:TreeRow[];
+	root:Taxon;
+	taxa:Taxon[];
+	groups:TaxonGroup[];
+	levels:TaxonLevel[];
+	private wewFactorPr:Promise<WEWFactor[]>;
+	wewFactors:WEWFactor[];
+	wewValues:Map<WEWFactorClass,WEWValue> = new Map();
 	
 	constructor(
-		private taxonApi:ApiTaxonService
+		private taxonApi:ApiTaxonService,
+		private wewApi:ApiWewService,
+		private route:ActivatedRoute
 	){
-		let groupPr = taxonApi.getGroups().toPromise();
-		let levelPr = taxonApi.getLevels().toPromise();
-		let taxonPr = taxonApi.getAll().toPromise();
-		
-		Promise.all([groupPr,levelPr,taxonPr]).then(([groups,levels,taxa]) => this.createTree(groups,levels,taxa));
+		taxonApi.getGroups().subscribe(groups => this.groups = groups);
+		taxonApi.getLevels().subscribe(levels => this.levels = levels);
+		this.wewFactorPr = wewApi.getFactors().toPromise().then(factors => this.wewFactors = factors);
 	}
 	
-	ngOnInit(){}
+	ngOnInit(){
+		this.route.params.map(params => parseInt(params.id)).subscribe(id => {
+			let familyPr:Promise<Taxon[]> = this.taxonApi.getFamily(id).toPromise();
+			let wewPr:Promise<WEWValue[]> = this.wewApi.getByTaxon([id]).toPromise();
+			
+			familyPr.then(taxa => {
+				this.taxa = taxa;
+				this.root = taxa.filter(taxon => taxon.id==id)[0];
+			});
+			
+			this.wewFactorPr.then(() => {
+				wewPr.then(values => {
+					let factorClassMap:Map<number/*factor class id*/,WEWFactorClass> = new Map();
+					this.wewFactors.forEach(factor => factor.classes.forEach(fc => factorClassMap.set(fc.id,fc)));
+					values.forEach(value => this.wewValues.set(factorClassMap.get(value.factorClassId),value));
+				});
+			});
+			
+			Promise.all([familyPr,this.wewFactorPr,wewPr]).then(() => this.setState('ready'));
+		});
+	}
 	
 	//Set the state of the importing process
 	private setState(state:State){
@@ -64,67 +91,5 @@ export class TaxonViewComponent implements OnInit{
 	private handleError(...error){
 		this.setState('error');
 		this.errors.push(error);
-	}
-	
-	private createTree(groups:TaxonGroup[],levels:TaxonLevel[],taxa:Taxon[]){
-		//Create easy lookup maps
-		let groupIdMap:Map<number/*group id*/,TaxonGroup> = new Map();
-		let levelIdMap:Map<number/*level id*/,TaxonLevel> = new Map();
-		let taxonIdMap:Map<number/*taxon id*/,Taxon> = new Map();
-		
-		groups.forEach(group => groupIdMap.set(group.id,group));
-		levels.forEach(level => levelIdMap.set(level.id,level));
-		taxa.forEach(taxon => taxonIdMap.set(taxon.id,taxon));
-		
-		//Create a hierarchy
-		let taxonParentMap:Map<Taxon/*parent*/,Taxon[]/*children*/> = new Map();
-		let taxonReferMap:Map<Taxon/*being referred to*/,Taxon[]/*referring to*/> = new Map();
-		
-		//Make empty arrays
-		taxa.forEach(taxon => {
-			taxonParentMap.set(taxon,[]);
-			taxonReferMap.set(taxon,[]);
-		});
-		
-		//Fill arrays
-		taxa.filter(taxon => taxon.parentId).forEach(taxon => taxonParentMap.get(taxonIdMap.get(taxon.parentId)).push(taxon));
-		taxa.filter(taxon => taxon.referId).forEach(taxon => taxonReferMap.get(taxonIdMap.get(taxon.referId)).push(taxon));
-		
-		//Turn hierarchy into list
-		let animalia:TreeRow[] = [];
-		let otherTaxa:TreeRow[] = [];
-		let addRecursive = (list:TreeRow[],taxon:Taxon,depth:number,depthLines:string,lastChildOfParent:boolean) => {
-			let postfix = [];
-			if(taxon.groupId){
-				let group = groupIdMap.get(taxon.groupId);
-				postfix.push(group.description?group.description:group.code);
-			}
-			if(taxon.levelId)
-				postfix.push(levelIdMap.get(taxon.levelId).name);
-			
-			list.push({
-				taxon:taxon,
-				depth:depth,
-				isRefer:!!taxon.referId,
-				postfix:postfix.length?'('+postfix.join(', ')+')':'',
-				depthLines:depth?depthLines+(lastChildOfParent?' └─':' ├─'):''
-			});
-			if(depth)
-				depthLines += lastChildOfParent?'   ':' │ ';
-			taxonReferMap.get(taxon).forEach((taxon,index,array) => addRecursive(list,taxon,depth+1,depthLines,index===array.length-1));
-			taxonParentMap.get(taxon).forEach((taxon,index,array) => addRecursive(list,taxon,depth+1,depthLines,index===array.length-1));
-		};
-		
-		//Find the animalia first
-		taxa.filter(taxon => taxon.name==='animalia').forEach(taxon => addRecursive(animalia,taxon,0,'',false));
-		
-		//Then do anything that's not under it
-		taxa.filter(taxon => taxon.name!=='animalia'&&!taxon.parentId&&!taxon.referId).forEach(taxon => addRecursive(otherTaxa,taxon,0,'',false));
-		
-		//Show that stuff
-		this.animalia = animalia;
-		this.otherTaxa = otherTaxa;
-		
-		this.setState('ready');
 	}
 }

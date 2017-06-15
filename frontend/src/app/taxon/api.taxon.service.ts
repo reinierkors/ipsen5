@@ -26,6 +26,11 @@ export class ApiTaxonService extends ApiService{
 		return this.get('/taxon/all').map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));
 	}
 	
+	//Retrieve a taxon and all its ancestors and descendants
+	public getFamily(id:number):Observable<Taxon[]> {
+		return this.get('/taxon/family/'+id).map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));
+	}
+	
 	//Retrieve a list of taxa by their names
 	public getByNames(names:string[]):Observable<Taxon[]>{
 		return this.post('/taxon/find',names).map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));

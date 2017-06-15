@@ -1,5 +1,6 @@
 <div class="container">
-	<h1>Boom van alle bekende taxa</h1>
+	<h1 *ngIf="!root">Taxon bekijken</h1>
+	<h1 *ngIf="root">Taxon: {{root.name}}</h1>
 	
 	<!-- ToDo: handle errors nicely -->
 	<md-card *ngIf="state=='error'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
@@ -15,19 +16,25 @@
 		</md-card-content>
 	</md-card>
 	
-	<!-- Start -->
-	<md-card *ngIf="state=='ready'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
-		<md-card-title>Animalia</md-card-title>
-		<md-card-content>
-			<div class="tree" [ngStyle]="{'height.px':animalia.length*22}">
-<div class="treeRow" *ngFor="let row of animalia">{{row.depthLines}}<span class="treeRowTaxon" [ngClass]="{referrer:row.isRefer}">{{row.isRefer?'Referrer: ':''}}{{row.taxon.name}} <span class="treeRowPostfix">{{row.postfix}}</span></span></div>
-			</div>
-		</md-card-content>
-		<md-card-title>Taxa die niet onder animalia staan</md-card-title>
-		<md-card-content>
-			<div class="tree" [ngStyle]="{'height.px':otherTaxa.length*22}">
-<div class="treeRow" *ngFor="let row of otherTaxa">{{row.depthLines}}<span class="treeRowTaxon" [ngClass]="{referrer:row.isRefer}">{{row.isRefer?'Referrer: ':''}}{{row.taxon.name}} {{row.postfix}}</span></div>
-			</div>
-		</md-card-content>
-	</md-card>
+	<!-- Ready -->
+	<div *ngIf="state=='ready'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+		<!-- Family tree -->
+		<md-card>
+			<md-card-title>Taxon familie</md-card-title>
+			<md-card-content>
+				<app-taxon-tree [groups]="groups" [levels]="levels" [taxa]="taxa" [root]="root" [showAncestors]="true" [showDescendants]="true"></app-taxon-tree>
+			</md-card-content>
+		</md-card>
+		
+		<!-- WEW-info -->
+		<md-card>
+			<md-card-title>WEW gegevens</md-card-title>
+			<md-card-content *ngIf="wewValues.size==0">
+				Er zijn geen WEW waardes bekend voor {{root.name}}
+			</md-card-content>
+			<md-card-content *ngIf="wewValues.size>0">
+				ToDo: wew gegevens in staaf grafiek komt hier
+			</md-card-content>
+		</md-card>
+	</div>
 </div>

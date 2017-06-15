@@ -46,6 +46,9 @@ public class TaxonRouter {
 			//Retrieve a list of taxon-levels
 			get("/level", (req,res) -> gson.toJson(taxonService.getLevels()));
 			
+			//Retrieve a list containing a taxon (by id) and all its ancestors and descendants
+			get("/family/:id", (req,res) -> gson.toJson(taxonService.getFamily(Integer.parseInt(req.params("id")))));
+			
 			//Retrieve a taxon by id
 			get("/:id",(req,res) -> gson.toJson(taxonService.get(Integer.parseInt(req.params("id")))));
 			

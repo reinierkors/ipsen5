@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Repository for taxa
  *
  * @author Wander Groeneveld
- * @version 0.4, 13-6-2017
+ * @version 0.5, 14-6-2017
  */
 public class TaxonRepository extends RepositoryMaria<Taxon>{
 	private final String queryFindByName;
@@ -115,4 +115,33 @@ public class TaxonRepository extends RepositoryMaria<Taxon>{
 		}
 	}
 	
+	public List<Taxon> findChildren(List<Integer> ids)throws RepositoryException{
+		try{
+			Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
+			String howManyQuestionMarks = ids.stream().map(id -> "?").collect(commaJoiner);
+			
+			String queryFindChildren = "SELECT * FROM `"+getTable()+"` WHERE `parent_id` IN ("+howManyQuestionMarks+")";
+			PreparedStatement psFindChildren = connection.prepareStatement(queryFindChildren);
+			
+			int index = 1;
+			for(int id:ids){
+				psFindChildren.setInt(index,id);
+				++index;
+			}
+			
+			ResultSet resultSet = psFindChildren.executeQuery();
+			List<Taxon> taxa = new ArrayList<>();
+			
+			if(resultSet==null)
+				return taxa;
+			
+			while(resultSet.next())
+				taxa.add(resultSetToModel(resultSet));
+			
+			return taxa;
+		}
+		catch(SQLException e){
+			throw new RepositoryException(e);
+		}
+	}
 }
