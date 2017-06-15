@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {ApiLocationService} from '../locations/api.location.service';
 import {ApiWaterschapService} from '../waterschap/api.waterschap.service';
 import {ApiTaxonService} from "../taxon/api.taxon.service";
-import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-sample-Location-table',
@@ -16,7 +15,7 @@ export class SampleLocationTableComponent implements OnInit {
     private apiLocationService: ApiLocationService;
     private apiWaterschap: ApiWaterschapService;
     private apiTaxon: ApiTaxonService;
-    private router: Router;
+    private selected = 0;
 
     locationRows = [];
     locationColumns = [
@@ -35,14 +34,11 @@ export class SampleLocationTableComponent implements OnInit {
     taxonColumns = [
         {name: 'Naam', prop: 'name'}];
 
-    selected = [];
-
     constructor(apiLocationService: ApiLocationService, apiWaterschap: ApiWaterschapService,
-                apiTaxon: ApiTaxonService, router:Router) {
+                apiTaxon: ApiTaxonService) {
         this.apiLocationService = apiLocationService;
         this.apiWaterschap = apiWaterschap;
         this.apiTaxon = apiTaxon;
-        this.router = router;
     }
 
     ngOnInit() {
@@ -57,12 +53,8 @@ export class SampleLocationTableComponent implements OnInit {
         })
     }
 
-    onSelect({ selected }) {
-        console.log('Select Event', selected, this.selected);
-        this.router.navigate(['results/water/' + selected[0].id])
-    }
-
-    onActivate(event) {
-        console.log('Activate Event', event);
+    onSelect(selected) {
+        console.log(selected)
+        this.selected = selected.row.id;
     }
 }

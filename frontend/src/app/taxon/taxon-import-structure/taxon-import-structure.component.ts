@@ -121,13 +121,13 @@ export class TaxonImportStructureComponent implements OnInit{
 		//Turn the worksheet in a 2D array
 		let rows = <ImportRow[]> XLSX.utils.sheet_to_json(sheet);
 		
-		//Trim spaces
+		//Trim spaces and make lower case
 		rows.forEach(row => {
-			row.taxonname = row.taxonname.trim();
+			row.taxonname = row.taxonname.trim().toLowerCase();
 			row.taxongroup = row.taxongroup.trim();
 			row.taxonlevel = row.taxonlevel.trim();
-			row.parentname = row.parentname.trim();
-			row.refername = row.refername.trim();
+			row.parentname = row.parentname.trim().toLowerCase();
+			row.refername = row.refername.trim().toLowerCase();
 		});
 		
 		//Take care of the taxon groups and levels

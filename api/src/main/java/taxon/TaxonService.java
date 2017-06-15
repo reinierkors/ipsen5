@@ -207,4 +207,40 @@ public class TaxonService {
 			throw new ApiException("Cannot save taxon levels");
 		}
 	}
+	
+	/**
+	 * Retrieve a list containing a taxon (by id) and all its ancestors and descendants
+	 * @param id
+	 * @return
+	 */
+	public List<Taxon> getFamily(int id){
+		try {
+			List<Taxon> taxa = new ArrayList<>();
+			Taxon start = taxonRepo.get(id);
+			taxa.add(start);
+			
+			//Find ancestors
+			Taxon taxon = start;
+			while(taxon.getParentId()!=null){
+				taxon = taxonRepo.get(taxon.getParentId());
+				taxa.add(taxon);
+			}
+			
+			//Find children
+			List<Integer> lookForChildren = new ArrayList<>();
+			lookForChildren.add(id);
+			while(lookForChildren.size()>0){
+				List<Taxon> children = taxonRepo.findChildren(lookForChildren);
+				taxa.addAll(children);
+				lookForChildren.clear();
+				for(Taxon child : children){
+					lookForChildren.add(child.getId());
+				}
+			}
+			
+			return taxa;
+		} catch(RepositoryException e){
+			throw new ApiException("Cannot retrieve taxon family");
+		}
+	}
 }
