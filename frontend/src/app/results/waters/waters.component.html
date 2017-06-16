@@ -1,7 +1,7 @@
 <md-card *ngIf="currentLocation">
   <md-card-title>Monsters van {{currentLocation.description}}</md-card-title>
   <md-card-content>
-    <ngx-datatable
+    <ngx-datatable routerLink="../../../sample/view/{{selected}}"
             class="material"
             [rows]="sampleRows"
             [columns]="sampleColums"
@@ -9,7 +9,8 @@
             [headerHeight]="50"
             [footerHeight]="50"
             [rowHeight]="'auto'"
-            [limit]="10">
+            [limit]="10"
+            (activate)='onSelect($event)'>
             <!--[selected]="selected"-->
             <!--[selectionType]="'single'"-->
             <!--(activate)="onActivate($event)"-->

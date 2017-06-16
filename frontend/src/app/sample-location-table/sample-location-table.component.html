@@ -1,7 +1,7 @@
 <md-card>
     <md-card-title>Wateren</md-card-title>
     <md-card-content>
-        <ngx-datatable
+        <ngx-datatable routerLink="../results/water/{{selected}}"
                 class="material"
                 [rows]="locationRows"
                 [columns]="locationColumns"
@@ -10,10 +10,8 @@
                 [footerHeight]="50"
                 [rowHeight]="'auto'"
                 [limit]="10"
-                [selected]="selected"
                 [selectionType]="'single'"
-                (activate)="onActivate($event)"
-                (select)='onSelect($event)'>
+                (activate)="onSelect($event)">
         </ngx-datatable>
     </md-card-content>
 </md-card>
