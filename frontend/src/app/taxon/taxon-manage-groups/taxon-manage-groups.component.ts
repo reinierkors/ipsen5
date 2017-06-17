@@ -28,7 +28,7 @@ export class TaxonManageGroupsComponent implements OnInit{
 	){
 		taxonApi.getGroups().subscribe(groups => {
 			groups.sort((a,b) => a.code.localeCompare(b.code));
-			groups.forEach(group => this.groups = groups);
+			this.groups = groups;
 		});
 	}
 	

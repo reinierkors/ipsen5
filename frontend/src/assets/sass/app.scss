@@ -31,39 +31,12 @@ md-toolbar-row {
   margin: 2rem;
 }
 
-.nav-header .mat-list-item-content {
-  height: 100% !important;
-  padding-top: 1rem !important;
-}
-
-md-sidenav.app-sidenav {
-  background-color: #333;
-}
-
-md-list-item {
-  color: #fff;
-}
-
-.mat-sidenav-content {
-  height: 100% !important;
-}
-
-a.nav-item {
-  color: #fff;
-  text-decoration: none;
-}
-
 .app-content {
   padding: 20px;
 }
 
 .app-content md-card {
   margin: 20px;
-}
-
-.app-sidenav {
-  padding: 0;
-  min-width: 100px;
 }
 
 .app-content md-checkbox {
