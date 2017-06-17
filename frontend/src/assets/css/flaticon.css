@@ -1,0 +1,341 @@
+@font-face {
+  font-family: "Flaticon";
+  src: url("./fonts/Flaticon.eot");
+  src: url("./fonts/Flaticon.eot?#iefix") format("embedded-opentype"), url("./fonts/Flaticon.woff") format("woff"), url("./fonts/Flaticon.ttf") format("truetype"), url("./fonts/Flaticon.svg#Flaticon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./fonts/Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+.fi:before {
+  display: inline-block;
+  font-family: "Flaticon";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+}
+
+.flaticon-dragonfly-1:before {
+  content: "\f100";
+}
+
+.flaticon-dragonfly-hand-drawn-insect:before {
+  content: "\f101";
+}
+
+.flaticon-insects-1:before {
+  content: "\f102";
+}
+
+.flaticon-moth:before {
+  content: "\f103";
+}
+
+.flaticon-mosquito-4:before {
+  content: "\f104";
+}
+
+.flaticon-mosquito-3:before {
+  content: "\f105";
+}
+
+.flaticon-mosquito-2:before {
+  content: "\f106";
+}
+
+.flaticon-mosquito-1:before {
+  content: "\f107";
+}
+
+.flaticon-animals-1:before {
+  content: "\f108";
+}
+
+.flaticon-insects:before {
+  content: "\f109";
+}
+
+.flaticon-cockroach-1:before {
+  content: "\f10a";
+}
+
+.flaticon-shrimp:before {
+  content: "\f10b";
+}
+
+.flaticon-big-shrimp:before {
+  content: "\f10c";
+}
+
+.flaticon-stone:before {
+  content: "\f10d";
+}
+
+.flaticon-animals:before {
+  content: "\f10e";
+}
+
+.flaticon-swamp-monster:before {
+  content: "\f10f";
+}
+
+.flaticon-tree-of-dots-foliage:before {
+  content: "\f110";
+}
+
+.flaticon-earthworm-shape:before {
+  content: "\f111";
+}
+
+.flaticon-earth-worm:before {
+  content: "\f112";
+}
+
+.flaticon-worm-outline-inside-a-circle:before {
+  content: "\f113";
+}
+
+.flaticon-worm-facing-left:before {
+  content: "\f114";
+}
+
+.flaticon-lobster-2:before {
+  content: "\f115";
+}
+
+.flaticon-cockroach:before {
+  content: "\f116";
+}
+
+.flaticon-centipede-1:before {
+  content: "\f117";
+}
+
+.flaticon-hoverfly:before {
+  content: "\f118";
+}
+
+.flaticon-ant-1:before {
+  content: "\f119";
+}
+
+.flaticon-bee:before {
+  content: "\f11a";
+}
+
+.flaticon-bumblebee:before {
+  content: "\f11b";
+}
+
+.flaticon-wasp:before {
+  content: "\f11c";
+}
+
+.flaticon-sawfly:before {
+  content: "\f11d";
+}
+
+.flaticon-fly:before {
+  content: "\f11e";
+}
+
+.flaticon-strepsiptera:before {
+  content: "\f11f";
+}
+
+.flaticon-psocoptera:before {
+  content: "\f120";
+}
+
+.flaticon-cicada:before {
+  content: "\f121";
+}
+
+.flaticon-madagascan:before {
+  content: "\f122";
+}
+
+.flaticon-grasshopper:before {
+  content: "\f123";
+}
+
+.flaticon-lobster-1:before {
+  content: "\f124";
+}
+
+.flaticon-scorpio:before {
+  content: "\f125";
+}
+
+.flaticon-locust:before {
+  content: "\f126";
+}
+
+.flaticon-mite:before {
+  content: "\f127";
+}
+
+.flaticon-dragonfly:before {
+  content: "\f128";
+}
+
+.flaticon-butterfly-1:before {
+  content: "\f129";
+}
+
+.flaticon-butterfly:before {
+  content: "\f12a";
+}
+
+.flaticon-mosquito:before {
+  content: "\f12b";
+}
+
+.flaticon-leaf-butterfly:before {
+  content: "\f12c";
+}
+
+.flaticon-termite:before {
+  content: "\f12d";
+}
+
+.flaticon-silverfish:before {
+  content: "\f12e";
+}
+
+.flaticon-leaf-insect:before {
+  content: "\f12f";
+}
+
+.flaticon-asparagus-beetle:before {
+  content: "\f130";
+}
+
+.flaticon-mussel:before {
+  content: "\f131";
+}
+
+.flaticon-caterpillar:before {
+  content: "\f132";
+}
+
+.flaticon-stick-insect:before {
+  content: "\f133";
+}
+
+.flaticon-firefly:before {
+  content: "\f134";
+}
+
+.flaticon-opiliones:before {
+  content: "\f135";
+}
+
+.flaticon-centipede:before {
+  content: "\f136";
+}
+
+.flaticon-pond-skater:before {
+  content: "\f137";
+}
+
+.flaticon-spider-black-widow:before {
+  content: "\f138";
+}
+
+.flaticon-spider-1:before {
+  content: "\f139";
+}
+
+.flaticon-tarantula:before {
+  content: "\f13a";
+}
+
+.flaticon-lobster:before {
+  content: "\f13b";
+}
+
+.flaticon-snail-1:before {
+  content: "\f13c";
+}
+
+.flaticon-spider:before {
+  content: "\f13d";
+}
+
+.flaticon-tree-lobster:before {
+  content: "\f13e";
+}
+
+.flaticon-pyrrhocoridae:before {
+  content: "\f13f";
+}
+
+.flaticon-wharf-borer:before {
+  content: "\f140";
+}
+
+.flaticon-stag-beetle-1:before {
+  content: "\f141";
+}
+
+.flaticon-ant:before {
+  content: "\f142";
+}
+
+.flaticon-golden-ground-beetle:before {
+  content: "\f143";
+}
+
+.flaticon-louse:before {
+  content: "\f144";
+}
+
+.flaticon-stag-beetle:before {
+  content: "\f145";
+}
+
+.flaticon-chrysomela:before {
+  content: "\f146";
+}
+
+.flaticon-bedbug:before {
+  content: "\f147";
+}
+
+.flaticon-bug:before {
+  content: "\f148";
+}
+
+.flaticon-red-soldier-beetle:before {
+  content: "\f149";
+}
+
+.flaticon-pollen-beetle:before {
+  content: "\f14a";
+}
+
+.flaticon-snail:before {
+  content: "\f14b";
+}
+
+.flaticon-big-mussel:before {
+  content: "\f14c";
+}
+
+.flaticon-ladybug:before {
+  content: "\f14d";
+}

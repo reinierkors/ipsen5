@@ -13,6 +13,7 @@ import {
 	MdToolbarModule,
 	MdSidenavModule,
 	MdListModule,
+	MdGridListModule,
 	MdInputModule,
 	MdButtonModule,
 	MdSelectModule,
@@ -42,6 +43,7 @@ import { TaxonTreeComponent } from './taxon/taxon-tree/taxon-tree.component';
 import { TaxonViewComponent } from './taxon/taxon-view/taxon-view.component';
 import {SampleFactorBarGraphComponent} from "./sample/sample-factor-bar-graph/sample-factor-bar-graph.component";
 import { WatersComponent } from "./results/waters/waters.component";
+import { TaxonManageGroupsComponent,TaxonManageGroupsEditComponent } from './taxon/taxon-manage-groups/taxon-manage-groups.component';
 
 const routes:Routes = [
   {path: '', component: HomeComponent},
@@ -58,6 +60,7 @@ const routes:Routes = [
   {path: 'wew/view', component: WewViewComponent, canActivate: [AuthGuard]},
   {path: 'taxon/view/:id', component: TaxonViewComponent, canActivate: [AuthGuard]},
   {path: 'taxon/import', component: TaxonImportStructureComponent, canActivate: [AuthGuard]},
+  {path: 'taxon/group', component: TaxonManageGroupsComponent, canActivate: [AuthGuard]},
     /* Admin Routes */
   {path: 'admin/create-account', component: CreateAccountComponent, canActivate: [AuthGuard]},
     /* Directs back to home if route is unknown */
@@ -84,7 +87,12 @@ const routes:Routes = [
         TaxonTreeComponent,
         TaxonViewComponent,
         WatersComponent,
+        TaxonManageGroupsComponent,
+		TaxonManageGroupsEditComponent
     ],
+	entryComponents: [
+		TaxonManageGroupsEditComponent
+	],
     imports: [
 		MaterialModule,
         AngularEchartsModule,
@@ -94,6 +102,7 @@ const routes:Routes = [
 		MdToolbarModule,
 		MdSidenavModule,
 		MdListModule,
+		MdGridListModule,
 		MdInputModule,
 		MdButtonModule,
 		MdSelectModule,

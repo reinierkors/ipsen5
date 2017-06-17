@@ -1,0 +1,54 @@
+.group{
+	display:inline-block;
+	margin:1em;
+	width:300px;
+}
+
+.group.editing{
+	margin:0;
+	width:350px;
+}
+
+.group.editing .mat-card{
+	box-shadow:none;
+	padding:0;
+	margin:0;
+}
+
+.groupDescription{
+	text-transform:capitalize;
+}
+
+.noName{
+	font-style:italic;
+}
+
+.taxon-icon{
+	border-radius:inherit;
+	text-align:center;
+	height:28px;
+	width:28px;
+	font-size:28px;
+	padding:4px 6px 8px 6px;
+	background:#EBEBEB;
+	color:#222;
+	display:inline-block;
+}
+
+.group md-card-actions{
+	text-align:right;
+}
+
+.group md-card-content{
+	margin-top:16px;
+}
+
+.edit-label{
+	display:inline-block;
+	width:100px;
+	font-weight:bold;
+}
+
+.mat-option .mat-icon{
+	font-size:26px;
+}
