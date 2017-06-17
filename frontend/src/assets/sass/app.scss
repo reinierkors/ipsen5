@@ -5,93 +5,85 @@
 @import '../../../node_modules/@swimlane/ngx-datatable/release/assets/icons.css';
 
 body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+	margin: 0;
+	font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 body, html, app-root, md-sidenav-container {
-  height: 100%;
+	height: 100%;
 }
 
 .fill-remaining-space {
-  flex: 1 1 auto;
+	flex: 1 1 auto;
 }
 
 md-toolbar-row {
-  .mat-button-wrapper {
-    color: #000;
-  }
+	.mat-button-wrapper {
+		color: #000;
+	}
 }
 
 .full-width {
-  width: 100%;
+	width: 100%;
 }
 
-.container {
-  margin: 2rem;
+h1,h2{
+	margin: 20px;
 }
 
-.app-content {
-  padding: 20px;
-}
-
-.app-content md-card {
-  margin: 20px;
-}
-
-.app-content md-checkbox {
-  margin: 10px;
+.mat-card{
+	margin: 20px;
 }
 
 .app-toolbar-filler {
-  flex: 1 1 auto;
+	flex: 1 1 auto;
 }
 
 .app-toolbar-menu {
-  padding: 0 14px 0 14px;
-  color: white;
+	padding: 0 14px 0 14px;
+	color: white;
 }
 
 .mat-list {
-  padding-top: 0 !important;
+	padding-top: 0 !important;
 }
 
 .app-icon-button {
-  box-shadow: none;
-  user-select: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  filter: none;
-  font-weight: normal;
-  height: auto;
-  line-height: inherit;
-  margin: 0;
-  min-width: 0;
-  padding: 0;
-  outline: 0;
-  text-align: left;
-  text-decoration: none;
+	box-shadow: none;
+	user-select: none;
+	background: none;
+	border: none;
+	cursor: pointer;
+	filter: none;
+	font-weight: normal;
+	height: auto;
+	line-height: inherit;
+	margin: 0;
+	min-width: 0;
+	padding: 0;
+	outline: 0;
+	text-align: left;
+	text-decoration: none;
 }
 
 .app-action {
-  display: inline-block;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
+	display: inline-block;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
 }
 
 .alert-danger {
-  color: #a94442;
-  background-color: #f2dede;
-  border-color: #ebccd1;
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
 }
 
 .alert {
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid transparent;
-  border-radius: 4px;
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
 }
 
 .mat-button,
@@ -99,21 +91,21 @@ md-toolbar-row {
 .mat-icon-button,
 .mat-mini-fab,
 .mat-raised-button {
-  min-width: initial !important;
+	min-width: initial !important;
 }
 
 /*
 PRINT
- */
+*/
 
 @media print {
-  md-sidenav, md-toolbar {
-    display: none !important;
-  }
-  .echart {
-    width: 100% !important;
-  }
-  .mat-sidenav-content {
-    overflow: inherit;
-  }
+	md-sidenav, md-toolbar {
+		display: none !important;
+	}
+	.echart {
+		width: 100% !important;
+	}
+	.mat-sidenav-content {
+		overflow: inherit;
+	}
 }
