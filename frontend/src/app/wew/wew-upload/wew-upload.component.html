@@ -1,39 +1,37 @@
-<div class="container">
-	<h1>Importeer WEW-lijst</h1>
-	
-	<!-- ToDo: handle errors nicely -->
-	<md-card *ngIf="state=='error'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
-		<md-card-title>Error</md-card-title>
-		<md-card-content>{{errors|json}}</md-card-content>
-	</md-card>
-	
-	<!-- Loading card -->
-	<md-card *ngIf="state=='loading'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
-		<md-card-title>Laden...</md-card-title>
-		<md-card-content>
-			<md-spinner></md-spinner>
-		</md-card-content>
-	</md-card>
-	
-	<!-- Start -->
-	<md-card *ngIf="state=='start'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
-		<md-card-title>Upload WEW soortenlijst (XLS)</md-card-title>
-		<!-- Show file upload if the wew tables are empty -->
-		<md-card-content *ngIf="wewTablesEmpty">
-			<input type="file" (change)="fileChange($event)"/>
-		</md-card-content>
-		<!-- Show a button to empty the WEW tables if they're not -->
-		<md-card-content *ngIf="!wewTablesEmpty">
-			De WEW-tabellen op de server zijn niet leeg.<br/>
-			<button md-raised-button (click)="emptyWEWTables()">Leeg WEW tabellen</button>
-		</md-card-content>
-	</md-card>
-	
-	<!-- Finished, wew list is on the server -->
-	<md-card *ngIf="state=='finished'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
-		<md-card-title>Klaar</md-card-title>
-		<md-card-content>
-			WEW-Lijst is opgeslagen op de server.
-		</md-card-content>
-	</md-card>
-</div>
+<h1>Importeer WEW-lijst</h1>
+
+<!-- ToDo: handle errors nicely -->
+<md-card *ngIf="state=='error'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+	<md-card-title>Error</md-card-title>
+	<md-card-content>{{errors|json}}</md-card-content>
+</md-card>
+
+<!-- Loading card -->
+<md-card *ngIf="state=='loading'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+	<md-card-title>Laden...</md-card-title>
+	<md-card-content>
+		<md-spinner></md-spinner>
+	</md-card-content>
+</md-card>
+
+<!-- Start -->
+<md-card *ngIf="state=='start'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+	<md-card-title>Upload WEW soortenlijst (XLS)</md-card-title>
+	<!-- Show file upload if the wew tables are empty -->
+	<md-card-content *ngIf="wewTablesEmpty">
+		<input type="file" (change)="fileChange($event)"/>
+	</md-card-content>
+	<!-- Show a button to empty the WEW tables if they're not -->
+	<md-card-content *ngIf="!wewTablesEmpty">
+		De WEW-tabellen op de server zijn niet leeg.<br/>
+		<button md-raised-button (click)="emptyWEWTables()">Leeg WEW tabellen</button>
+	</md-card-content>
+</md-card>
+
+<!-- Finished, wew list is on the server -->
+<md-card *ngIf="state=='finished'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
+	<md-card-title>Klaar</md-card-title>
+	<md-card-content>
+		WEW-Lijst is opgeslagen op de server.
+	</md-card-content>
+</md-card>

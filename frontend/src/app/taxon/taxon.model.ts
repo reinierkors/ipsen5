@@ -22,12 +22,14 @@ export class TaxonGroup{
 	id:number;
 	code:string;
 	description:string;
+	icon:string;
 	
 	public static fromJSON(obj:any):TaxonGroup{
 		let group:TaxonGroup = new TaxonGroup();
 		group.id = obj.id;
 		group.code = obj.code;
 		group.description = obj.description;
+		group.icon = obj.icon;
 		return group;
 	}
 }

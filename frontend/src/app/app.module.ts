@@ -13,6 +13,7 @@ import {
 	MdToolbarModule,
 	MdSidenavModule,
 	MdListModule,
+	MdGridListModule,
 	MdInputModule,
 	MdButtonModule,
 	MdSelectModule,
@@ -34,7 +35,6 @@ import {SampleLocationTableComponent} from "./sample-location-table/sample-locat
 import {LoginComponent} from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
 import { WewUploadComponent } from './wew/wew-upload/wew-upload.component';
-import { WewViewComponent } from './wew/wew-view/wew-view.component';
 import { AngularEchartsModule } from 'ngx-echarts';
 import { EditAccountComponent } from './user/edit-account/edit-account.component';
 import { TaxonImportStructureComponent } from './taxon/taxon-import-structure/taxon-import-structure.component';
@@ -42,26 +42,27 @@ import { TaxonTreeComponent } from './taxon/taxon-tree/taxon-tree.component';
 import { TaxonViewComponent } from './taxon/taxon-view/taxon-view.component';
 import {SampleFactorBarGraphComponent} from "./sample/sample-factor-bar-graph/sample-factor-bar-graph.component";
 import { WatersComponent } from "./results/waters/waters.component";
+import { TaxonManageGroupsComponent,TaxonManageGroupsEditComponent } from './taxon/taxon-manage-groups/taxon-manage-groups.component';
 
 const routes:Routes = [
-  {path: '', component: HomeComponent},
-  {path: 'login', component: LoginComponent},
-  {path: 'home', component: GMapsComponent, canActivate: [AuthGuard]},
-  {path: 'account', component: EditAccountComponent, canActivate: [AuthGuard]},
-  {path: 'locations', component: SampleLocationTableComponent, canActivate: [AuthGuard]},
-  {path: 'results/water/:id', component: WatersComponent, canActivate: [AuthGuard]},
-  {path: 'data', component: SampleLocationTableComponent, canActivate: [AuthGuard]},
-  {path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
-  {path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
-  {path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
-  {path: 'wew/upload', component: WewUploadComponent, canActivate: [AuthGuard]},
-  {path: 'wew/view', component: WewViewComponent, canActivate: [AuthGuard]},
-  {path: 'taxon/view/:id', component: TaxonViewComponent, canActivate: [AuthGuard]},
-  {path: 'taxon/import', component: TaxonImportStructureComponent, canActivate: [AuthGuard]},
-    /* Admin Routes */
-  {path: 'admin/create-account', component: CreateAccountComponent, canActivate: [AuthGuard]},
-    /* Directs back to home if route is unknown */
-  {path: '**', component: HomeComponent, canActivate: [AuthGuard]}
+	{path: '', component: HomeComponent},
+	{path: 'login', component: LoginComponent},
+	{path: 'home', component: HomeComponent},
+	{path: 'map', component: GMapsComponent, canActivate: [AuthGuard]},
+	{path: 'account', component: EditAccountComponent, canActivate: [AuthGuard]},
+	{path: 'results/water/:id', component: WatersComponent, canActivate: [AuthGuard]},
+	{path: 'data', component: SampleLocationTableComponent, canActivate: [AuthGuard]},
+	{path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
+	{path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
+	{path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
+	{path: 'taxon/view/:id', component: TaxonViewComponent, canActivate: [AuthGuard]},
+	/* Admin Routes */
+	{path: 'taxon/import', component: TaxonImportStructureComponent, canActivate: [AuthGuard]},
+	{path: 'taxon/group', component: TaxonManageGroupsComponent, canActivate: [AuthGuard]},
+	{path: 'wew/upload', component: WewUploadComponent, canActivate: [AuthGuard]},
+	{path: 'admin/create-account', component: CreateAccountComponent, canActivate: [AuthGuard]},
+	/* Directs back to home if route is unknown */
+	{path: '**', component: HomeComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({
@@ -79,12 +80,16 @@ const routes:Routes = [
         LoginComponent,
         EditAccountComponent,
         WewUploadComponent,
-        WewViewComponent,
         TaxonImportStructureComponent,
         TaxonTreeComponent,
         TaxonViewComponent,
         WatersComponent,
+        TaxonManageGroupsComponent,
+		TaxonManageGroupsEditComponent
     ],
+	entryComponents: [
+		TaxonManageGroupsEditComponent
+	],
     imports: [
 		MaterialModule,
         AngularEchartsModule,
@@ -94,6 +99,7 @@ const routes:Routes = [
 		MdToolbarModule,
 		MdSidenavModule,
 		MdListModule,
+		MdGridListModule,
 		MdInputModule,
 		MdButtonModule,
 		MdSelectModule,
