@@ -1,37 +1,25 @@
 <div class="filters" *ngIf="showFilters">
     <p class="filter-list">
-        <md-select name="waterschapName" [(ngModel)]="filters.waterschapName"
+        <md-select name="waterschapName" [(ngModel)]="filters.waterschapId"
                    placeholder="Waterschap naam">
-            <md-option>
+            <md-option [value]="0">
                 Geen filter
             </md-option>
             <md-option *ngFor="let waterschap of waterschappen"
-                       [value]="waterschap.name">
+                       [value]="waterschap.id">
                 {{waterschap.name}}
             </md-option>
         </md-select>
     </p>
     <p class="filter-list">
-        <md-select name="watertypeName" [(ngModel)]="filters.watertypeName"
+        <md-select name="watertypeName" [(ngModel)]="filters.watertypeId"
                    placeholder="Watertype naam">
-            <md-option>
+            <md-option [value]="0">
                 Geen filter
             </md-option>
             <md-option *ngFor="let watertype of watertypes"
-                       [value]="watertype.name">
-                {{watertype.name}}
-            </md-option>
-        </md-select>
-    </p>
-    <p class="filter-list">
-        <md-select name="waterTypeCode" [(ngModel)]="filters.watertypeCode"
-                   placeholder="Watertype code">
-            <md-option>
-                Geen filter
-            </md-option>
-            <md-option *ngFor="let watertype of watertypes"
-                       [value]="watertype.code">
-                {{ watertype.code }}
+                       [value]="watertype.id">
+                ({{watertype.code}}) {{watertype.name}}
             </md-option>
         </md-select>
     </p>

@@ -3,8 +3,11 @@ package location;
 import database.ColumnData;
 import database.RepositoryException;
 import database.RepositoryMaria;
+import sample.Sample;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Location repository
