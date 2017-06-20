@@ -22,7 +22,12 @@ export class GMapsComponent implements OnInit {
     public waterschappen = [];
     public watertypes = [];
     public showFilters = false;
-    public marker: Marker;
+    public marker = {
+        markerLocation: MarkerLocation,
+        watertype: Watertype,
+        watertypeKrw: Watertype,
+        waterschap: Waterschap,
+    };
 
     public filters = {
         waterschapId: '0',
@@ -71,6 +76,7 @@ export class GMapsComponent implements OnInit {
     constructor(private apiLocation: ApiLocationService, private apiWatertype: ApiWatertypeService,
                 private apiWaterschap: ApiWaterschapService,
                 private apiMarker: ApiMarkerService, private route: ActivatedRoute) {
+
     };
 
     ngOnInit() {
