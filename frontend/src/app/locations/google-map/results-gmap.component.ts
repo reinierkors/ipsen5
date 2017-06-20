@@ -119,16 +119,16 @@ export class GMapsComponent implements OnInit {
     private retrieveWaterschappen() {
         this.route.params
             .switchMap(params => this.apiWaterschap.getAll())
-            .subscribe(waterschappen => {
-                this.waterschappen = waterschappen;
+            .subscribe(items => {
+                this.waterschappen = items;
             }, error => console.log(error));
     };
 
     private retrieveWatertypes() {
         this.route.params
             .switchMap(params => this.apiWatertype.getAll())
-            .subscribe(watertypes => {
-                this.watertypes = watertypes;
+            .subscribe(items => {
+                this.watertypes = items;
             }, error => console.log(error));
     };
 
