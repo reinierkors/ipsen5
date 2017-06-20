@@ -35,17 +35,12 @@ public class MarkerService {
 
     public List<Marker> getFilteredMarkers(MarkerFilter filter) {
         List<Marker> markers = new ArrayList<>();
-        Iterable<Location> locations = locationService.getAll();
         Integer watertypeId = filter.getWatertypeId();
         Integer waterschapId = filter.getWaterschapId();
+        Iterable<Location> locations =
+                locationService.getByFilters(watertypeId, waterschapId);
 
         for (Location next : locations) {
-            if (((next.getWatertypeId() != watertypeId && next.getWatertypeKrwId()
-                    != watertypeId) && watertypeId != 0) ||
-                    (next.getWaterschapId() != waterschapId && waterschapId != 0)) {
-                continue;
-            }
-
             markers.add(filterMarker(watertypeId, waterschapId, next));
         }
         return markers;
@@ -58,33 +53,12 @@ public class MarkerService {
         Waterschap waterschap = waterschapService.get(waterschapId);
 
         marker.setLocation(next);
-        filterWatertype(watertypeId, next, marker, watertype);
-        filterWaterschap(waterschapId, next, marker, waterschap);
+        marker.setWaterschap(waterschap);
+        if (next.getWaterschapId() != null && waterschap == null) {
+            marker.setWaterschap(waterschapService.get(next.getWaterschapId()));
+        }
+        marker.setWatertype(watertypeService.get(next.getWatertypeId()));
+        marker.setWatertypeKrw(watertypeService.get(next.getWatertypeKrwId()));
         return marker;
-    }
-
-    private void filterWatertype(Integer watertypeId, Location next,
-                                 Marker marker, Watertype watertype) {
-        if (watertypeId == 0) {
-            marker.setWatertype(watertypeService.get(next.getWatertypeId()));
-            marker.setWatertypeKrw(watertypeService.get(next.getWatertypeKrwId()));
-        } else if (next.getWatertypeId() == watertypeId) {
-            marker.setWatertype(watertype);
-            marker.setWatertypeKrw(watertypeService.get(next.getWatertypeKrwId()));
-        } else if (next.getWatertypeKrwId() == watertypeId) {
-            marker.setWatertype(watertypeService.get(next.getWatertypeId()));
-            marker.setWatertypeKrw(watertype);
-        }
-    }
-
-    private void filterWaterschap(Integer waterschapId, Location next,
-                                  Marker marker, Waterschap waterschap) {
-        if (waterschapId == 0) {
-            if (next.getWaterschapId() != null) {
-                marker.setWaterschap(waterschapService.get(next.getWaterschapId()));
-            }
-        } else if (next.getWaterschapId() == waterschapId) {
-            marker.setWaterschap(waterschap);
-        }
     }
 }
