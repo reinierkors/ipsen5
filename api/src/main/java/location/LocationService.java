@@ -54,7 +54,6 @@ public class LocationService {
     public Location getByCode(String code) throws ApiException {
         try {
             Location location = repository.findByCode(code);
-            converter.convertToLatLng(location);
             if (location == null) {
                 throw new ApiException("Location does not exist");
             }

@@ -195,9 +195,10 @@ export class SampleViewComponent implements OnInit {
 
     public mapConfig = {
         styles: this.mapStyle,
+        mapTypeId: "satellite",
         center: {},
         zoom: 18,
-        disableDefaultUI: true,
+        disableDefaultUI: false,
         clickableIcons: true,
     };
     // options

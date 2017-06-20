@@ -66,7 +66,7 @@ export class GMapsComponent implements OnInit {
 
     public mapConfig = {
         styles: this.mapStyle,
-        disableDefaultUI: true,
+        disableDefaultUI: false,
         center: {lat: 52.152832, lng: 5.439478},
         zoom: 8,
     };
