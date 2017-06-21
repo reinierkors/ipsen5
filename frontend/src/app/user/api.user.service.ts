@@ -11,33 +11,28 @@ export class ApiUserService extends ApiService{
         super(http);
     }
 	
-	//Retrieve a user by its ID
+	// Retrieve a user by its ID
     public getUser(id:number):Observable<User>{
         return this.get('/user/'+id).map(user=>User.fromJSON(user));
     }
 
-    //Retrieve the user currently logged in
+    // Retrieve the user currently logged in
     public getCurrentUser():Observable<User>{
         return this.get('/user/currentuser').map(user=>User.fromJSON(user));
     }
 	
-	//Save a user to the server
+	// Save a user to the server
     public createUser(user:User):Observable<User> {
         return this.post('/user/add', user);
     }
 	
-	//Change the current user's password
+	// Change the current user's password
     public editPassword(oldPassword: String, newPassword: String, confirmPassword: String):Observable<boolean> {
         return this.post('/user/editpassword', {oldPassword: oldPassword, newPassword: newPassword, confirmPassword: confirmPassword});
     }
 
-    //Change the data of a user
+    // Change the data of a user
     public editUser(user:User):Observable<User> {
         return this.post('/user/edit', user);
     }
-
-    // private extractData(res:Response){
-    //     let body = res.json();
-    //     return body || [];
-    // }
 }
