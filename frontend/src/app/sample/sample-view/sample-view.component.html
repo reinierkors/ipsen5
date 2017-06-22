@@ -12,10 +12,12 @@
 </md-card>
 <md-card *ngIf="sample && location && taxon && showChart">
 	<md-card-title>
-		Gevonen taxa
+		Gevonden taxa
 	</md-card-title>
 	<md-card-content>
-		<div echarts [options]="option" class="echart"></div>
+		<div *ngIf="secondGraphEnabled"><a md-raised-button (click)="this.setActiveGraph(0);">Terug naar vorige grafiek</a><br></div>
+		<div echarts *ngIf="firstGraphEnabled" (chartInit)="onChartInit($event)" [options]="option" class="echart"></div>
+		<div echarts *ngIf="secondGraphEnabled" [options]="option2" class="echart"></div>
 	</md-card-content>
 </md-card>
 <md-card *ngIf="location">
