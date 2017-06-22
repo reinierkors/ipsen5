@@ -59,6 +59,15 @@ public class ReferenceService {
 		}
 	}
 	
+	public Reference getByWatertype(int watertypeId){
+		try{
+			return repo.getByWatertype(watertypeId);
+		}
+		catch(RepositoryException e){
+			throw new ApiException("Cannot retrieve reference with watertype id "+watertypeId);
+		}
+	}
+	
 	/**
 	 * Stores the reference
 	 * @param reference the reference to be stored

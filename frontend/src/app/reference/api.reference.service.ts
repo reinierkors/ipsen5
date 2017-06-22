@@ -24,6 +24,11 @@ export class ApiReferenceService extends ApiService{
 		return this.get('/reference/'+id).map(reference=>Reference.fromJSON(reference));
 	}
 	
+	//Retrieve a reference by its watertype
+	public getByWatertype(watertypeId:number):Observable<Reference>{
+		return this.get('/reference/watertype/'+watertypeId).map(reference=>Reference.fromJSON(reference));
+	}
+	
 	//Save a reference to the server
 	public save(reference:Reference):Observable<Reference>{
 		return this.post('/admin/reference',reference).map(reference => Reference.fromJSON(reference));

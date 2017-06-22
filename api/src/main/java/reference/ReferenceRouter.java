@@ -14,7 +14,7 @@ import static spark.Spark.*;
  * Contains the routes for reference parts of the API
  *
  * @author Wander Groeneveld
- * @version 0.1, 19-6-2017
+ * @version 0.2, 22-6-2017
  */
 public class ReferenceRouter {
 	public ReferenceRouter(){
@@ -26,6 +26,7 @@ public class ReferenceRouter {
 		
 		path("/reference", ()->{
 			get("",(req,res) -> gson.toJson(referenceService.getAll()));
+			get("/watertype/:id",(req,res) -> gson.toJson(referenceService.getByWatertype(Integer.parseInt(req.params("id")))));
 			get("/:id",(req,res) -> gson.toJson(referenceService.get(Integer.parseInt(req.params("id")))));
 		});
 		

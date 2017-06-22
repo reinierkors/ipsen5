@@ -16,11 +16,12 @@ import java.util.stream.Collectors;
  * @version 0.1, 19-6-2017
  */
 public class ReferenceRepository extends RepositoryMaria<Reference>{
-	private final String queryGetTaxa;
+	private final String queryGetTaxa,queryGetByWatertype;
 	
 	public ReferenceRepository(Connection connection) {
 		super(connection);
 		queryGetTaxa = "SELECT `taxon_id` FROM `reference_taxon` WHERE `reference_id` = ?";
+		queryGetByWatertype = "SELECT * FROM `"+getTable()+"` WHERE `watertype_id` = ?";
 	}
 	
 	@Override
@@ -52,18 +53,28 @@ public class ReferenceRepository extends RepositoryMaria<Reference>{
 			Reference reference = super.get(id);
 			if(reference==null)
 				return null;
-			//Retrieve taxon ids, and put them in the reference object
-			PreparedStatement psGetTaxa = connection.prepareStatement(queryGetTaxa);
-			psGetTaxa.setInt(1,reference.getId());
-			ResultSet resultSet = psGetTaxa.executeQuery();
 			
-			List<Integer> taxa = new ArrayList<>();
-			if(resultSet!=null){
-				while(resultSet.next()){
-					taxa.add(resultSet.getInt("taxon_id"));
-				}
-			}
-			reference.setTaxonIds(taxa);
+			addReferenceTaxa(reference);
+			
+			return reference;
+		}
+		catch(SQLException e){
+			throw new RepositoryException(e);
+		}
+	}
+	
+	public Reference getByWatertype(int watertypeId) throws RepositoryException{
+		try{
+			PreparedStatement psGetByWT = connection.prepareStatement(queryGetByWatertype);
+			psGetByWT.setInt(1,watertypeId);
+			
+			ResultSet resultSet = psGetByWT.executeQuery();
+			if(resultSet==null || !resultSet.next())
+				return null;
+			
+			Reference reference = resultSetToModel(resultSet);
+			addReferenceTaxa(reference);
+			
 			return reference;
 		}
 		catch(SQLException e){
@@ -101,6 +112,21 @@ public class ReferenceRepository extends RepositoryMaria<Reference>{
 		catch(SQLException e){
 			throw new RepositoryException(e);
 		}
+	}
+	
+	private void addReferenceTaxa(Reference reference) throws SQLException{
+		//Retrieve taxon ids, and put them in the reference object
+		PreparedStatement psGetTaxa = connection.prepareStatement(queryGetTaxa);
+		psGetTaxa.setInt(1,reference.getId());
+		ResultSet resultSet = psGetTaxa.executeQuery();
+		
+		List<Integer> taxa = new ArrayList<>();
+		if(resultSet!=null){
+			while(resultSet.next()){
+				taxa.add(resultSet.getInt("taxon_id"));
+			}
+		}
+		reference.setTaxonIds(taxa);
 	}
 	
 	private void addReferenceTaxa(List<Reference> references) throws SQLException {

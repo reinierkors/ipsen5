@@ -2,12 +2,12 @@
 	<h1>Monster genomen bij {{location.description}}</h1>
 	<h2>{{sample.date|date:'d MMMM y'}}</h2>
 </div>
-<md-card *ngIf="sample">
+<md-card *ngIf="sample && reference">
 	<md-card-title>
 		Waterkwaliteit
 	</md-card-title>
 	<md-card-content>
-		<app-sample-factor-bar-graph [sample]="sample"></app-sample-factor-bar-graph>
+		<app-wew-bar-graph [samples]="[sample]" [references]="[reference]"></app-wew-bar-graph>
 	</md-card-content>
 </md-card>
 <md-card *ngIf="sample && location && taxon && showChart">
