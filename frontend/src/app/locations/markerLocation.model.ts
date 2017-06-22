@@ -6,9 +6,9 @@ export class MarkerLocation {
     yCoord: number;
     latitude: number;
     longitude: number;
-	waterschapId: number;
-	watertypeId: number;
-	watertypeKrwId: number;
+    waterschapId: number;
+    watertypeId: number;
+    watertypeKrwId: number;
 
     public static fromJSON(obj): MarkerLocation {
         const location = new MarkerLocation();
@@ -19,9 +19,9 @@ export class MarkerLocation {
         location.yCoord = obj.yCoord;
         location.latitude = obj.latitude;
         location.longitude = obj.longitude;
-		location.waterschapId = obj.waterschapId;
-		location.watertypeId = obj.watertypeId;
-		location.watertypeKrwId = obj.watertypeKrwId;
+        location.waterschapId = obj.waterschapId;
+        location.watertypeId = obj.watertypeId;
+        location.watertypeKrwId = obj.watertypeKrwId;
         return location;
     }
 }
