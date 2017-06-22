@@ -158,6 +158,7 @@ CREATE TABLE `taxon_group` (
   `id` int(3) NOT NULL AUTO_INCREMENT,
   `code` varchar(8) NOT NULL,
   `description` varchar(100) DEFAULT NULL,
+  `icon` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;

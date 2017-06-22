@@ -1,5 +1,9 @@
 <md-card>
     <md-card-title>Wateren</md-card-title>
+
+    <md-input-container class="full-width">
+        <input mdInput placeholder="Filter op data" (keyup)='updateFilter($event)'>
+    </md-input-container>
     <md-card-content>
         <ngx-datatable routerLink="../results/water/{{selected}}"
                 class="material"

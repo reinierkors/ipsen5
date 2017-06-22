@@ -1,41 +1,29 @@
 <div class="filters" *ngIf="showFilters">
     <p class="filter-list">
-        <md-select name="waterschapName" [(ngModel)]="filters.waterschapName"
+        <md-select name="waterschapName" [(ngModel)]="filters.waterschapId"
                    placeholder="Waterschap naam">
-            <md-option>
+            <md-option [value]="0">
                 Geen filter
             </md-option>
             <md-option *ngFor="let waterschap of waterschappen"
-                       [value]="waterschap.name">
+                       [value]="waterschap.id">
                 {{waterschap.name}}
             </md-option>
         </md-select>
     </p>
     <p class="filter-list">
-        <md-select name="watertypeName" [(ngModel)]="filters.watertypeName"
+        <md-select name="watertypeName" [(ngModel)]="filters.watertypeId"
                    placeholder="Watertype naam">
-            <md-option>
+            <md-option [value]="0">
                 Geen filter
             </md-option>
             <md-option *ngFor="let watertype of watertypes"
-                       [value]="watertype.name">
-                {{watertype.name}}
+                       [value]="watertype.id">
+                ({{watertype.code}}) {{watertype.name}}
             </md-option>
         </md-select>
     </p>
-    <p class="filter-list">
-        <md-select name="waterTypeCode" [(ngModel)]="filters.watertypeCode"
-                   placeholder="Watertype code">
-            <md-option>
-                Geen filter
-            </md-option>
-            <md-option *ngFor="let watertype of watertypes"
-                       [value]="watertype.code">
-                {{ watertype.code }}
-            </md-option>
-        </md-select>
-    </p>
-    <button md-raised-button class="filter-button" (click)="filterMarkers()"
+    <button md-raised-button class="filter-button" (click)="retrieveMarkers()"
             type="submit">FILTEREN
     </button>
     <button md-raised-button class="filter-button" (click)="refreshMarkers()"
@@ -72,7 +60,8 @@
                     ({{marker.watertypeKrw.code}})</p>
             </md-list-item>
         </md-list>
-        <button class="iw-button" md-raised-button routerLink="../results/water/{{marker.markerLocation.id}}">
+        <button class="iw-button" md-raised-button
+                routerLink="../results/water/{{marker.markerLocation.id}}">
             <span class="md-button-wrapper">DETAILS</span>
         </button>
     </info-window>

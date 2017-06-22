@@ -5,12 +5,13 @@ import calculate.CalculateService;
 import database.ConnectionManager;
 import database.RepositoryException;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
  * Service for samples
  *
- * @author Wander Groeneveld
+ * @author Wander Groeneveld, Dylan de Wit
  * @version 0.2, 4-6-2017
  */
 public class SampleService {
@@ -79,6 +80,9 @@ public class SampleService {
 
 	public List<Sample> getByLocationId(int id) throws ApiException{
 		return repo.getByLocationId(id);
+	}
 
+	public List<Sample> getByDate(Date date) {
+		return repo.getByDate(date);
 	}
 }

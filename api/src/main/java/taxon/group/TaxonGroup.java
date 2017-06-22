@@ -4,25 +4,27 @@ package taxon.group;
  * Taxon group model
  *
  * @author Wander Groeneveld
- * @version 0.1, 13-6-2017
+ * @version 0.2, 17-6-2017
  */
 public class TaxonGroup {
 	private int id;
 	private String code;
 	private String description;
+	private String icon;
 	
-	public TaxonGroup(int id, String code, String description) {
+	public TaxonGroup(int id, String code, String description, String icon) {
 		this.id = id;
 		this.code = code;
 		this.description = description;
+		this.icon = icon;
 	}
 	
-	public TaxonGroup(String code, String description) {
-		this(0, code,description);
+	public TaxonGroup(String code, String description, String icon) {
+		this(0, code,description,icon);
 	}
 	
 	public TaxonGroup() {
-		this(0, null, null);
+		this(0, null, null, null);
 	}
 	
 	public int getId() {
@@ -47,5 +49,13 @@ public class TaxonGroup {
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getIcon() {
+		return icon;
+	}
+	
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 }

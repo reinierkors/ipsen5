@@ -221,7 +221,7 @@ public class TaxonService {
 			
 			//Find ancestors
 			Taxon taxon = start;
-			while(taxon.getParentId()!=null){
+			while(taxon!=null && taxon.getParentId()!=null){
 				taxon = taxonRepo.get(taxon.getParentId());
 				taxa.add(taxon);
 			}

@@ -1,0 +1,16 @@
+:host >>> .mat-nav-list .mat-list-item .mat-list-item-content{
+	height: 100%;
+	padding: 1rem;
+}
+
+:host >>> .mat-nav-list .mat-list-item-content:hover{
+	background: rgba(0, 0, 0, 0.1);
+}
+
+.mat-nav-list .mat-list-item{
+	color: #fff;
+}
+
+.mat-divider{
+	border-top-color: rgba(255,255,255,.2);
+}
