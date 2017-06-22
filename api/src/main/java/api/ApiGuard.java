@@ -1,10 +1,13 @@
 package api;
 
 import database.ConnectionManager;
+import spark.Request;
 import users.User;
 import users.UserRepository;
 
 import java.sql.Timestamp;
+
+import static spark.Spark.*;
 
 /**
  * @author Marijn Kroon
@@ -30,5 +33,15 @@ public class ApiGuard {
             repo.deleteSession(currentUser.getId());
         }
         return false;
+    }
+
+    public void adminBeforeCheck(Request request) {
+            if (request.requestMethod().contains("OPTIONS")) {
+                return;
+            }
+            if (Integer.parseInt(request.headers("User-Role")) != 2){
+                System.out.println("Request halted - user not an admin");
+                halt(401, "Unauthorized");
+            }
     }
 }

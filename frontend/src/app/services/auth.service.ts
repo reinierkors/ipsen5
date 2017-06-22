@@ -20,7 +20,9 @@ export class AuthenticationService extends ApiService{
             }
             else {
                 let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+                let userRole = JSON.parse(localStorage.getItem("currentUserRole"));
                 ApiService.addToAuthHeaders("X-Authorization", currentUser.token);
+                ApiService.addToAuthHeaders("User-Role", userRole.role);
             }
         }
         this.userService = new ApiUserService(http);
@@ -41,6 +43,7 @@ export class AuthenticationService extends ApiService{
         this.userService.getCurrentUser().subscribe(user => {
             let currentUser = user;
             localStorage.setItem('currentUserRole', JSON.stringify({role: user.group_id}));
+            ApiService.addToAuthHeaders('User-Role', JSON.stringify(user.group_id));
             localStorage.setItem('currentWaterschap', JSON.stringify({waterschapid: user.waterschap_id}));
         }, error => console.log(error));
     }
