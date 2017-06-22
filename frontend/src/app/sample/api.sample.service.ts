@@ -19,7 +19,7 @@ export class ApiSampleService extends ApiService{
 	public getSample(id:number):Observable<Sample>{
 		return this.get('/sample/'+id).map(sample=>Sample.fromJSON(sample));
 	}
-	
+
 	//Save a sample to the server
 	public save(sample:Sample):Observable<Sample>{
 		return this.post('/sample',[sample]).map(samples => Sample.fromJSON(samples[0]));
@@ -35,7 +35,11 @@ export class ApiSampleService extends ApiService{
 		return this.get('/calculate/sample/'+sampleId);
 	}
 
-	getByLocationId(locationId: number):Observable<Sample[]> {
+	public getByLocationId(locationId: number):Observable<Sample[]> {
 		return this.get('/sample/getRelevant/' + locationId).map(samples => samples.map(sample => Sample.fromJSON(sample)));
+	}
+
+	public getByDate(date: string):Observable<Sample[]> {
+		return this.get('/sample/date/' + date).map(samples => samples.map(sample => Sample.fromJSON(sample)));
 	}
 }

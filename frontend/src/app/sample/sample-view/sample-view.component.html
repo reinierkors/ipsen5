@@ -1,21 +1,31 @@
-<md-card *ngIf="sample && location && taxon && showChart">
-    <md-card-title>
-        Monster genomen bij {{location.description}}
-    </md-card-title>
-    <md-card-subtitle>{{sample.date|date:'d MMMM y'}}</md-card-subtitle>
-    <md-card-content>
+<div *ngIf="sample && location">
+	<h1>Monster genomen bij {{location.description}}</h1>
+	<h2>{{sample.date|date:'d MMMM y'}}</h2>
+</div>
+<md-card *ngIf="sample">
+	<md-card-title>
+		Waterkwaliteit
+	</md-card-title>
+	<md-card-content>
 		<app-sample-factor-bar-graph [sample]="sample"></app-sample-factor-bar-graph>
-        <div echarts [options]="option" class="echart"></div>
-    </md-card-content>
+	</md-card-content>
+</md-card>
+<md-card *ngIf="sample && location && taxon && showChart">
+	<md-card-title>
+		Gevonen taxa
+	</md-card-title>
+	<md-card-content>
+		<div echarts [options]="option" class="echart"></div>
+	</md-card-content>
 </md-card>
 <md-card *ngIf="location">
-    <md-card-title>
-        {{location.description}}
-    </md-card-title>
-    <md-card-content>
-        <ngui-map [options]="mapConfig">
-            <marker *ngIf="markerPos" [position]="markerPos">
-            </marker>
-        </ngui-map>
-    </md-card-content>
+	<md-card-title>
+		{{location.description}}
+	</md-card-title>
+	<md-card-content>
+		<ngui-map [options]="mapConfig">
+			<marker *ngIf="markerPos" [position]="markerPos">
+			</marker>
+		</ngui-map>
+	</md-card-content>
 </md-card>

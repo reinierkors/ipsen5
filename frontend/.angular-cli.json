@@ -18,7 +18,9 @@
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
-      "styles": [],
+      "styles": [
+		  "assets/css/flaticon.css"
+	  ],
       "scripts": [
         "assets/scripts/script.js",
         "../node_modules/echarts/dist/echarts.min.js",

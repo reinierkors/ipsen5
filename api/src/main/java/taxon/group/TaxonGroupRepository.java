@@ -10,7 +10,7 @@ import java.sql.Types;
  * Repository for taxon groups
  *
  * @author Wander Groeneveld
- * @version 0.1, 13-6-2017
+ * @version 0.2, 17-6-2017
  */
 public class TaxonGroupRepository extends RepositoryMaria<TaxonGroup>{
 	
@@ -38,7 +38,8 @@ public class TaxonGroupRepository extends RepositoryMaria<TaxonGroup>{
 		return new ColumnData[]{
 				new ColumnData<>("id", Types.INTEGER, TaxonGroup::getId, TaxonGroup::setId,true),
 				new ColumnData<>("code",Types.VARCHAR, TaxonGroup::getCode, TaxonGroup::setCode),
-				new ColumnData<>("description",Types.VARCHAR, TaxonGroup::getDescription, TaxonGroup::setDescription)
+				new ColumnData<>("description",Types.VARCHAR, TaxonGroup::getDescription, TaxonGroup::setDescription),
+				new ColumnData<>("icon",Types.VARCHAR, TaxonGroup::getIcon, TaxonGroup::setIcon)
 		};
 	}
 }
