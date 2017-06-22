@@ -3,6 +3,7 @@ package sample;
 import database.ColumnData;
 import database.RepositoryException;
 import database.RepositoryMaria;
+import location.Location;
 
 import java.sql.*;
 import java.sql.Date;
@@ -271,7 +272,7 @@ public class SampleRepository extends RepositoryMaria<Sample> {
 
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    samples.add(handleResult(resultSet));
+                    samples.add(resultSetToModel(resultSet));
                 }
             }
             return samples;
@@ -280,35 +281,34 @@ public class SampleRepository extends RepositoryMaria<Sample> {
         }
     }
 
-    public List<Sample> getByDate(Date date) {
+    public String getHighestDateById(Location location) {
         try {
-            List<Sample> samples = new ArrayList<>();
-            //Retrieve species ids and put them in the sample object
-            String getSampelsByLocation = "SELECT * FROM sample WHERE year(date) >= ?";
-            PreparedStatement getLocations = connection.prepareStatement(getSampelsByLocation);
-            getLocations.setDate(1, date);
-            ResultSet resultSet = getLocations.executeQuery();
+            String getMaxYearStr = "SELECT MAX(year(date)) as date FROM " + getTable() + " WHERE location_id = ?";
+            PreparedStatement getMaxYear = connection.prepareStatement(getMaxYearStr);
+            getMaxYear.setInt(1, location.getId());
+            ResultSet resultSet = getMaxYear.executeQuery();
+            resultSet.next();
+            return resultSet.getString("date");
+        } catch (SQLException e) {
+            throw new RepositoryException(e);
+        }
+    }
+
+    public List<String> getDistinctYears() {
+        try {
+            List<String> years = new ArrayList<>();
+            String getYearsStr = "SELECT DISTINCT year(date) as year FROM sample ORDER BY year DESC";
+            PreparedStatement getYears = connection.prepareStatement(getYearsStr);
+            ResultSet resultSet = getYears.executeQuery();
 
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    samples.add(handleResult(resultSet));
+                    years.add(resultSet.getString("year"));
                 }
             }
-            return samples;
+            return years;
         } catch (SQLException e) {
             throw new RepositoryException(e);
         }
-    }
-
-    private Sample handleResult(ResultSet resultSet) throws SQLException {
-        Sample sample = new Sample();
-        sample.setId(resultSet.getInt("id"));
-        sample.setDate(resultSet.getDate("date"));
-        sample.setLocationId(resultSet.getInt("location_id"));
-        sample.setOwnerId(resultSet.getInt("owner_id"));
-        sample.setQuality(resultSet.getDouble("quality"));
-        sample.setXCoor(resultSet.getInt("x_coor"));
-        sample.setYCoor(resultSet.getInt("y_coor"));
-        return sample;
     }
 }

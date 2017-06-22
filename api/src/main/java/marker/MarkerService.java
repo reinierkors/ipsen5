@@ -2,6 +2,7 @@ package marker;
 
 import location.Location;
 import location.LocationService;
+import sample.SampleService;
 import waterschap.Waterschap;
 import waterschap.WaterschapService;
 import watertype.Watertype;
@@ -19,11 +20,13 @@ public class MarkerService {
     private LocationService locationService;
     private WatertypeService watertypeService;
     private WaterschapService waterschapService;
+    private SampleService sampleService;
 
     private MarkerService() {
         locationService = LocationService.getInstance();
         watertypeService = WatertypeService.getInstance();
         waterschapService = WaterschapService.getInstance();
+        sampleService = SampleService.getInstance();
     }
 
     public static MarkerService getInstance() {
@@ -37,9 +40,9 @@ public class MarkerService {
         List<Marker> markers = new ArrayList<>();
         Integer watertypeId = filter.getWatertypeId();
         Integer waterschapId = filter.getWaterschapId();
+        String date = filter.getDate();
         Iterable<Location> locations =
-                locationService.getByFilters(watertypeId, waterschapId);
-
+                locationService.getByFilters(watertypeId, waterschapId, date);
         for (Location next : locations) {
             markers.add(filterMarker(watertypeId, waterschapId, next));
         }
@@ -59,6 +62,7 @@ public class MarkerService {
         }
         marker.setWatertype(watertypeService.get(next.getWatertypeId()));
         marker.setWatertypeKrw(watertypeService.get(next.getWatertypeKrwId()));
+        marker.setLastTakenSample(sampleService.getHighestDateById(next));
         return marker;
     }
 }

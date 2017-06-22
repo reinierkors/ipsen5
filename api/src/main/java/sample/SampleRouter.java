@@ -20,23 +20,24 @@ import static spark.Spark.post;
  * @version 0.3, 4-6-2017
  */
 public class SampleRouter {
-	public SampleRouter(){
-		SampleService sampleService = SampleService.getInstance();
-		
-		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.setDateFormat("yyyy-MM-dd").create();
-		Gson gson = gsonBuilder.create();
-		
-		path("/sample", ()->{
-			get("/:id",(req,res) -> gson.toJson(sampleService.get(Integer.parseInt(req.params("id")))));
-			get("/getRelevant/:id",(req,res) -> gson.toJson(sampleService.getByLocationId(Integer.parseInt(req.params("id")))));
-			get("/date/:date", (req,res) -> gson.toJson(sampleService.getByDate(Date.valueOf(req.params("date")))));
-			post("",(req,res) -> {
-				Type listType = new TypeToken<List<Sample>>(){}.getType();
-				List<Sample> samples = gson.fromJson(req.body(),listType);
-				return gson.toJson(sampleService.save(samples));
-			});
-		});
-		
-	}
+    public SampleRouter() {
+        SampleService sampleService = SampleService.getInstance();
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setDateFormat("yyyy-MM-dd").create();
+        Gson gson = gsonBuilder.create();
+
+        path("/sample", () -> {
+            get("/getYears/", (req, res) -> gson.toJson(sampleService.getDistinctYears()));
+            get("/:id", (req, res) -> gson.toJson(sampleService.get(Integer.parseInt(req.params("id")))));
+            get("/getRelevant/:id", (req, res) -> gson.toJson(sampleService.getByLocationId(Integer.parseInt(req.params("id")))));
+            post("", (req, res) -> {
+                Type listType = new TypeToken<List<Sample>>() {
+                }.getType();
+                List<Sample> samples = gson.fromJson(req.body(), listType);
+                return gson.toJson(sampleService.save(samples));
+            });
+        });
+
+    }
 }
