@@ -48,8 +48,8 @@ export class SampleLocationTableComponent implements OnInit {
         this.apiWaterschap.getAll().subscribe(waterschappen => {
             this.waterschapRows = waterschappen;
         });
-        this.apiTaxon.getAll().subscribe(taxa => {
-            this.taxonRows = taxa;
+        this.apiTaxon.getAll().subscribe(taxonIds => {
+            this.taxonRows = taxonIds;
         })
     }
 

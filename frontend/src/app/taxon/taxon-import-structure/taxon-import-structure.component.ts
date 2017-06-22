@@ -80,7 +80,7 @@ export class TaxonImportStructureComponent implements OnInit{
 	private importFile(file:File){
 		this.handleFile(file)
 			.then(wb => this.handleWorkBook(wb))
-			.then(({taxa,parentMap,referMap}) => this.saveTaxa(taxa,parentMap,referMap));
+			.then(({taxonIds,parentMap,referMap}) => this.saveTaxa(taxonIds,parentMap,referMap));
 	}
 	
 	//Reads and parses the file and turns it into a workbook
@@ -115,7 +115,7 @@ export class TaxonImportStructureComponent implements OnInit{
 	}
 	
 	//Start work on the workbook once XLSX has parsed the file
-	private handleWorkBook(wb:XLSX.WorkBook):Promise<{taxa:Taxon[],parentMap:Map<string,string>,referMap:Map<string,string>}>{
+	private handleWorkBook(wb:XLSX.WorkBook):Promise<{taxonIds:Taxon[],parentMap:Map<string,string>,referMap:Map<string,string>}>{
 		//Get the first sheet from the workbook
 		let sheet = wb.Sheets[wb.SheetNames[0]];
 		//Turn the worksheet in a 2D array
@@ -199,7 +199,7 @@ export class TaxonImportStructureComponent implements OnInit{
 	}
 	
 	//Turn the rows into objects that can be saved to the server
-	private handleRows(rows:ImportRow[],groups:TaxonGroup[],levels:TaxonLevel[]):{taxa:Taxon[],parentMap:Map<string,string>,referMap:Map<string,string>}{
+	private handleRows(rows:ImportRow[],groups:TaxonGroup[],levels:TaxonLevel[]):{taxonIds:Taxon[],parentMap:Map<string,string>,referMap:Map<string,string>}{
 		//Map taxon names to their objects
 		let taxonRowMap:Map<string/*taxon name*/,ImportRow> = new Map();
 		rows.forEach(row => taxonRowMap.set(row.taxonname,row));
@@ -215,7 +215,7 @@ export class TaxonImportStructureComponent implements OnInit{
 		let referMap:Map<string/*referring name*/,string/*being referred to name*/> = new Map();
 		
 		//Create taxon objects
-		let taxa:Taxon[] = rows.map(row => {
+		let taxonIds:Taxon[] = rows.map(row => {
 			let taxon = new Taxon();
 			taxon.name = row.taxonname;
 			
@@ -233,18 +233,18 @@ export class TaxonImportStructureComponent implements OnInit{
 			return taxon;
 		});
 		
-		return {taxa:taxa,parentMap:parentMap,referMap:referMap};
+		return {taxonIds:taxonIds,parentMap:parentMap,referMap:referMap};
 	}
 	
-	private saveTaxa(taxa:Taxon[],parentMap:Map<string,string>,referMap:Map<string,string>):void{
-		this.taxonApi.saveMerge(taxa).subscribe((taxa:Taxon[]) => {
+	private saveTaxa(taxonIds:Taxon[],parentMap:Map<string,string>,referMap:Map<string,string>):void{
+		this.taxonApi.saveMerge(taxonIds).subscribe((taxonIds:Taxon[]) => {
 			//Create new lookup map
 			let taxonNameMap:Map<string,Taxon> = new Map();
-			taxa.forEach(taxon => taxonNameMap.set(taxon.name,taxon));
+			taxonIds.forEach(taxon => taxonNameMap.set(taxon.name,taxon));
 			
 			//Set parent and refer relations
 			let changed:Taxon[] = [];
-			taxa.forEach(taxon => {
+			taxonIds.forEach(taxon => {
 				if(parentMap.has(taxon.name)){
 					taxon.parentId = taxonNameMap.get(parentMap.get(taxon.name)).id;
 					changed.push(taxon);

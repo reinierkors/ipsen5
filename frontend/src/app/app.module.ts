@@ -43,6 +43,8 @@ import { TaxonViewComponent } from './taxon/taxon-view/taxon-view.component';
 import {SampleFactorBarGraphComponent} from "./sample/sample-factor-bar-graph/sample-factor-bar-graph.component";
 import { WatersComponent } from "./results/waters/waters.component";
 import { TaxonManageGroupsComponent,TaxonManageGroupsEditComponent } from './taxon/taxon-manage-groups/taxon-manage-groups.component';
+import {ReferenceListComponent} from './reference/reference-list/reference-list.component';
+import {ReferenceEditComponent} from './reference/reference-edit/reference-edit.component';
 
 const routes:Routes = [
 	{path: '', component: HomeComponent},
@@ -60,6 +62,8 @@ const routes:Routes = [
 	{path: 'taxon/import', component: TaxonImportStructureComponent, canActivate: [AuthGuard]},
 	{path: 'taxon/group', component: TaxonManageGroupsComponent, canActivate: [AuthGuard]},
 	{path: 'wew/upload', component: WewUploadComponent, canActivate: [AuthGuard]},
+	{path: 'reference/list', component: ReferenceListComponent, canActivate: [AuthGuard]},
+	{path: 'reference/edit/:id', component: ReferenceEditComponent, canActivate: [AuthGuard]},
 	{path: 'admin/create-account', component: CreateAccountComponent, canActivate: [AuthGuard]},
 	/* Directs back to home if route is unknown */
 	{path: '**', component: HomeComponent, canActivate: [AuthGuard]}
@@ -85,7 +89,9 @@ const routes:Routes = [
         TaxonViewComponent,
         WatersComponent,
         TaxonManageGroupsComponent,
-		TaxonManageGroupsEditComponent
+		TaxonManageGroupsEditComponent,
+		ReferenceListComponent,
+        ReferenceEditComponent,
     ],
 	entryComponents: [
 		TaxonManageGroupsEditComponent

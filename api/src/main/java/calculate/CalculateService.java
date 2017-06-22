@@ -39,6 +39,9 @@ public class CalculateService {
 	private String queryGetBySample = "SELECT `factor_class_id`,`computed_value` FROM `sample_wew_factor_class` WHERE `sample_id` = ?";
 	private String queryGetByReference = "SELECT `factor_class_id`,`computed_value` FROM `reference_wew_factor_class` WHERE `reference_id` = ?";
 	
+	private String queryDeleteBySample = "DELETE FROM `sample_wew_factor_class` WHERE `sample_id` = ?";
+	private String queryDeleteByReference = "DELETE FROM `reference_wew_factor_class` WHERE `reference_id` = ?";
+	
 	public CalculateService(){
 		this.connection = ConnectionManager.getInstance().getConnection();
 	}
@@ -128,6 +131,38 @@ public class CalculateService {
 		}
 		catch(SQLException e){
 			throw new ApiException("Could not retrieve reference calculations");
+		}
+	}
+	
+	public boolean deleteBySample(int id){
+		try {
+			PreparedStatement psDeleteBySample = this.connection.prepareStatement(queryDeleteBySample);
+			psDeleteBySample.setInt(1,id);
+			ResultSet resultSet = psDeleteBySample.executeQuery();
+			
+			if(resultSet==null)
+				return false;
+			
+			return true;
+		}
+		catch(SQLException e){
+			throw new ApiException("Could not delete sample calculations");
+		}
+	}
+	
+	public boolean deleteByReference(int id){
+		try {
+			PreparedStatement psDeleteByReference = this.connection.prepareStatement(queryDeleteByReference);
+			psDeleteByReference.setInt(1,id);
+			ResultSet resultSet = psDeleteByReference.executeQuery();
+			
+			if(resultSet==null)
+				return false;
+			
+			return true;
+		}
+		catch(SQLException e){
+			throw new ApiException("Could not delete reference calculations");
 		}
 	}
 	

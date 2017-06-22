@@ -220,8 +220,8 @@ export class WewUploadComponent implements OnInit {
 		});
 		
 		//Taxon are in, store their ids in the values
-		taxonPr.then(taxa => {
-			taxa.forEach(taxon => {
+		taxonPr.then(taxonIds => {
+			taxonIds.forEach(taxon => {
 				taxonValuesMap.get(taxon.name.trim().toLowerCase()).forEach(value => value.taxonId = taxon.id);
 			});
 		});

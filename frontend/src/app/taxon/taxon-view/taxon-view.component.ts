@@ -34,7 +34,7 @@ export class TaxonViewComponent implements OnInit{
 	errors:any[] = [];
 	
 	root:Taxon;
-	taxa:Taxon[];
+	taxonIds:Taxon[];
 	groups:TaxonGroup[];
 	levels:TaxonLevel[];
 	private wewFactorPr:Promise<WEWFactor[]>;
@@ -56,9 +56,9 @@ export class TaxonViewComponent implements OnInit{
 			let familyPr:Promise<Taxon[]> = this.taxonApi.getFamily(id).toPromise();
 			let wewPr:Promise<WEWValue[]> = this.wewApi.getByTaxon([id]).toPromise();
 			
-			familyPr.then(taxa => {
-				this.taxa = taxa;
-				this.root = taxa.filter(taxon => taxon.id==id)[0];
+			familyPr.then(taxonIds => {
+				this.taxonIds = taxonIds;
+				this.root = taxonIds.filter(taxon => taxon.id==id)[0];
 			});
 			
 			this.wewFactorPr.then(() => {
