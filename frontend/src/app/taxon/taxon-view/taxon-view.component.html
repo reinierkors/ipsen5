@@ -20,7 +20,7 @@
 	<!-- Family tree -->
 	<md-card>
 		<md-card-title>
-			<span *ngIf="rootGroup.icon">
+			<span *ngIf="rootGroup && rootGroup.icon">
 				<md-icon class="taxon-icon" fontSet="fi" [fontIcon]="'flaticon-'+rootGroup.icon"></md-icon>
 			</span>
 			Taxon familie

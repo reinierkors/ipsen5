@@ -40,7 +40,7 @@
     <md-card-title>Taxa</md-card-title>
     <md-card-content>
         <ngx-datatable
-                class="material"
+                class="material taxon-table"
                 [rows]="taxonRows"
                 [columns]="taxonColumns"
                 [columnMode]="'force'"
@@ -49,5 +49,13 @@
                 [rowHeight]="'auto'"
                 [limit]="10">
         </ngx-datatable>
+		<ng-template #taxonNameTemplate let-row="row">
+			<a class="taxon-link" [routerLink]="'/taxon/view/'+row.id">
+				<span class="taxon-icon-container">
+					<md-icon *ngIf="row.group && row.group.icon" class="taxon-icon" fontSet="fi" [fontIcon]="'flaticon-'+row.group.icon"></md-icon>
+				</span>
+				{{row.name}}
+			</a>
+		</ng-template>
     </md-card-content>
 </md-card>

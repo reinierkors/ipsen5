@@ -1,0 +1,26 @@
+.taxon-icon{
+	border-radius:50%;
+	text-align:center;
+	height:30px;
+	width:30px;
+	font-size:18px;
+	padding:3px;
+	background:#EBEBEB;
+	color:#222;
+	display:inline-block;
+}
+
+:host >>> .datatable-body-row:hover .taxon-icon{
+	background:#FFF;
+}
+
+.taxon-icon-container{
+	width:36px;
+	display:inline-block;
+}
+
+.taxon-link{
+	text-decoration:none;
+	color:rgba(0,0,0,0.87);
+	text-transform:capitalize;
+}
