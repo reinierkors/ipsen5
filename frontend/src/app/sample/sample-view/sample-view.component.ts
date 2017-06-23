@@ -10,6 +10,8 @@ import {Reference} from '../../reference/reference.model';
 import {ApiReferenceService} from '../../reference/api.reference.service';
 import {Watertype} from '../../watertype/watertype.model';
 import {ApiWatertypeService} from '../../watertype/api.watertype.service';
+import {WewChartConfig} from '../../wew/wew-bar-chart/wew-bar-chart.component';
+import {MaterialPalette} from '../../services/palette';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -25,7 +27,7 @@ export class SampleViewComponent implements OnInit {
 	public taxon: Taxon[];
 	public groups: TaxonGroup[];
 	public location: MarkerLocation;
-	public reference: Reference;
+	public wewConfig: WewChartConfig;
 	public showChart = false;
 	public markerPos;
 	public echart;
@@ -123,17 +125,23 @@ export class SampleViewComponent implements OnInit {
 	
 	ngOnInit() {
 		this.route.params.map(params => parseInt(params.id)).subscribe(id => {
+			//Retrieve sample
+			let samplePr = this.apiSample.getSample(id).toPromise().then(sample => this.sample = sample);
+			//Retrieve location
+			let locationPr = samplePr.then(sample => this.retrieveLocation());
+			//Retrieve reference
+			let referencePr = locationPr.then(location => this.apiReference.getByWatertype(location.watertypeKrwId).toPromise());
 			
-			let samplePr = this.apiSample.getSample(id).toPromise();
-			
-			samplePr.then(sample => {
-				this.sample = sample;
-				let locationPr = this.retrieveLocation();
-				let watertypePr = locationPr.then(markerLocation => this.apiWatertype.getWatertype(markerLocation.watertypeKrwId).toPromise());
-				let referencePr = watertypePr.then(watertype => this.apiReference.getByWatertype(watertype.id).toPromise());
-				referencePr.then(ref => this.reference = ref);
+			//Create config object for the WEW chart
+			referencePr.then(reference => {
+				let palette = new MaterialPalette().shift();
+				this.wewConfig = {
+					samples:[{sample:this.sample,name:'Monster',palette:palette}],
+					references:[{reference:reference,name:'Referentie',palette:palette.clone().transform(0,.1,.3)}]
+				};
 			});
 			
+			//When sample and taxon groups are in, retrieve taxa
 			Promise.all([samplePr,this.groupsPr]).then(([sample,groups]) => {
 				this.retrieveTaxon();
 			});

@@ -6,46 +6,41 @@ import {WEWFactor,WEWFactorClass} from '../wew.model';
 import {ApiWewService} from '../api.wew.service';
 import {Reference} from '../../reference/reference.model';
 import {ApiReferenceService} from '../../reference/api.reference.service';
-import {Palette,MaterialPalette} from '../../services/palette';
+import {Palette} from '../../services/palette';
 
 import 'rxjs/add/operator/toPromise';
+
+//The options given as input
+export type WewSampleConfig = {name:string,sample:Sample,palette:Palette};
+export type WewReferenceConfig = {name:string,reference:Reference,palette:Palette};
+export type WewChartConfig = {
+	samples:WewSampleConfig[],
+	references:WewReferenceConfig[],
+	factors?:WEWFactor[],
+	barGap?:string,
+	barCategoryGap?:string
+};
 
 //Value to put in the charts series.data list
 type DataValue = {factorId:number,factorClassId:number,value:number,itemStyle?:any,entityId:number,entityType:'sample'|'reference',name:string};
 
 
 @Component({
-	selector:'app-wew-bar-graph',
+	selector:'app-wew-bar-chart',
 	providers:[ApiSampleService,ApiWewService,ApiReferenceService],
-	templateUrl:'./wew-bar-graph.component.html',
-	styleUrls:['./wew-bar-graph.component.css']
+	templateUrl:'./wew-bar-chart.component.html',
+	styleUrls:['./wew-bar-chart.component.css']
 })
-export class WewBarGraphComponent implements OnInit {
+export class WewBarChartComponent implements OnInit {
 	//The samples this chart will show data of
-	@Input('samples') inputSamples:Sample[];
-	//The references to show
-	@Input('references') inputReferences:Reference[];
-	//The factors to show
-	@Input('factors') inputFactors:WEWFactor[];
+	@Input() config:WewChartConfig;
 	
-	/* SETTINGS: SIZE */
-	//Size of the graph in pixels
+	//Size of the chart in pixels
 	public width:number;
 	public height:number;
-	//Space between bars within the same category
-	private barGap:string = '10%';
-	//Space between categories
-	private barCategoryGap:string = '30%';
-	/* SETTINGS: COLOR */
-	//The colors used in this chart
-	private samplePalette:Palette = new MaterialPalette().shift();
-	private refPalette:Palette = new MaterialPalette().shift().transform(0,-.1,.3);
-	
 	
 	//EChart instance
 	private echart;
-	//Promise that resolves when the wew factors are in
-	private getFactorsPr:Promise<WEWFactor[]>;
 	//Promise that resoles when all required data is loaded
 	private allDataPr:Promise<[WEWFactor[],Map<Sample,CalculationData[]>,Map<Reference,CalculationData[]>]>;
 	
@@ -60,6 +55,8 @@ export class WewBarGraphComponent implements OnInit {
 	private factorClassIdMap:Map<number/*factor class id*/,WEWFactorClass>;
 	private referenceIdMap:Map<number/*reference id*/,Reference>;
 	private sampleIdMap:Map<number/*sample id*/,Sample>;
+	private sampleConfigMap:Map<Sample,WewSampleConfig>;
+	private referenceConfigMap:Map<Reference,WewReferenceConfig>;
 	
 	
 	//EChart options
@@ -86,21 +83,23 @@ export class WewBarGraphComponent implements OnInit {
 		private wewApi:ApiWewService,
 		private referenceApi:ApiReferenceService
 	){
-		//Retrieve all factors if none are given as input
-		if(this.inputFactors)
-			this.getFactorsPr = Promise.resolve(this.inputFactors);
-		else
-			this.getFactorsPr = this.wewApi.getFactors().toPromise();
 	}
 	
 	//@Input()s are available
 	ngOnInit(){
+		//Retrieve all factors if none are given as input
+		let factorsPr:Promise<WEWFactor[]>;
+		if(this.config.factors&&this.config.factors.length)
+			factorsPr = Promise.resolve(this.config.factors);
+		else
+			factorsPr = this.wewApi.getFactors().toPromise();
+		
 		//Load calculations
 		let sampleCalcsPr = this.loadSampleCalculations();
 		let referenceCalcsPr = this.loadReferenceCalculations();
 		
 		//Is all data we need loaded?
-		this.allDataPr = Promise.all([this.getFactorsPr,sampleCalcsPr,referenceCalcsPr]);
+		this.allDataPr = Promise.all([factorsPr,sampleCalcsPr,referenceCalcsPr]);
 		//Fill Maps
 		this.allDataPr.then(([factors,sampleCalcs,refCalcs]) => this.storeCollections(factors,sampleCalcs,refCalcs));
 		//Calculate Size
@@ -145,6 +144,14 @@ export class WewBarGraphComponent implements OnInit {
 		//Map<number/*sample id*/,Sample>
 		this.sampleIdMap = new Map();
 		this.samples.forEach(sample => this.sampleIdMap.set(sample.id,sample));
+		
+		//Map<Sample,WewSampleConfig>
+		this.sampleConfigMap = new Map();
+		this.config.samples.forEach(sampleConfig => this.sampleConfigMap.set(sampleConfig.sample,sampleConfig));
+		
+		//Map<Reference,WewReferenceConfig>
+		this.referenceConfigMap = new Map();
+		this.config.references.forEach(refConfig => this.referenceConfigMap.set(refConfig.reference,refConfig));
 	}
 	
 	//Loads the calculations for all samples
@@ -153,7 +160,7 @@ export class WewBarGraphComponent implements OnInit {
 		let samplePromises = [];
 		
 		//Retrieve calculations for each sample
-		this.inputSamples.forEach(sample => {
+		this.config.samples.map(s => s.sample).forEach(sample => {
 			samplePromises.push(this.sampleApi.getCalculationsBySample(sample.id)
 				.toPromise().then(calcs => sampleCalcs.set(sample,calcs)));
 		});
@@ -167,7 +174,7 @@ export class WewBarGraphComponent implements OnInit {
 		let referencePromises = [];
 		
 		//Retrieve calculations for each reference
-		this.inputReferences.forEach(reference => {
+		this.config.references.map(r => r.reference).forEach(reference => {
 			referencePromises.push(this.referenceApi.getCalculationsByReference(reference.id)
 				.toPromise().then(calcs => referenceCalcs.set(reference,calcs)));
 		});
@@ -222,20 +229,22 @@ export class WewBarGraphComponent implements OnInit {
 		
 		//Add reference data
 		this.referenceCalcs.forEach((calcs,reference) => {
-			let refData = this.dataAs2D(calcs,reference,'Referentie');
-			this.addSeries(refData,this.refPalette);
+			let config = this.referenceConfigMap.get(reference);
+			let refData = this.dataAs2D(calcs,reference,config.name);
+			this.addSeries(refData,config.palette);
 		});
 		
 		//Add sample data
 		this.sampleCalcs.forEach((calcs,sample) => {
-			let sampleData = this.dataAs2D(calcs,sample,'Monster');
-			this.addSeries(sampleData,this.samplePalette);
+			let config = this.sampleConfigMap.get(sample);
+			let sampleData = this.dataAs2D(calcs,sample,config.name);
+			this.addSeries(sampleData,config.palette);
 		});
 		
 		//These options should be applied to the last item in the series only
 		let lastSeries = this.chartOptions.series[this.chartOptions.series.length-1];
-		lastSeries.barGap = this.barGap;
-		lastSeries.barCategoryGap = this.barCategoryGap;
+		lastSeries.barGap = this.config.barGap;
+		lastSeries.barCategoryGap = this.config.barCategoryGap;
 		
 		//Show data
 		this.echart.setOption(this.chartOptions,true);
@@ -252,7 +261,7 @@ export class WewBarGraphComponent implements OnInit {
 			});
 		});
 		
-		//Reverse the rows, so the first objects show at the top of the graph instead of the bottom
+		//Reverse the rows, so the first objects show at the top of the chart instead of the bottom
 		data.forEach(row => row.reverse());
 		
 		//Rotate the data array

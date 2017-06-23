@@ -40,7 +40,7 @@ import { EditAccountComponent } from './user/edit-account/edit-account.component
 import { TaxonImportStructureComponent } from './taxon/taxon-import-structure/taxon-import-structure.component';
 import { TaxonTreeComponent } from './taxon/taxon-tree/taxon-tree.component';
 import { TaxonViewComponent } from './taxon/taxon-view/taxon-view.component';
-import {WewBarGraphComponent} from "./wew/wew-bar-graph/wew-bar-graph.component";
+import {WewBarChartComponent} from "./wew/wew-bar-chart/wew-bar-chart.component";
 import { WatersComponent } from "./results/waters/waters.component";
 import { TaxonManageGroupsComponent,TaxonManageGroupsEditComponent } from './taxon/taxon-manage-groups/taxon-manage-groups.component';
 import {ReferenceListComponent} from './reference/reference-list/reference-list.component';
@@ -80,7 +80,7 @@ const routes:Routes = [
         SampleUploadComponent,
         SampleViewComponent,
         SampleEditComponent,
-		WewBarGraphComponent,
+		WewBarChartComponent,
         LoginComponent,
         EditAccountComponent,
         WewUploadComponent,
