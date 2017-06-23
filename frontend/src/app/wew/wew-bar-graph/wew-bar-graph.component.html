@@ -1,12 +1,1 @@
-<p>
-	Reference design:
-	<button md-raised-button *ngFor="let preset of testPresets" (click)="testBtn(preset)">{{preset.name}}</button>
-</p>
-<p>
-	H:<input type="number" [(ngModel)]="testSettings.h" min="0" max="1" step="0.01" (change)="testUpdate()"/>
-	S:<input type="number" [(ngModel)]="testSettings.s" min="0" max="1" step="0.01" (change)="testUpdate()"/>
-	L:<input type="number" [(ngModel)]="testSettings.l" min="0" max="1" step="0.01" (change)="testUpdate()"/>
-	Overlap:<input type="number" [(ngModel)]="testSettings.o" min="-100" max="100" steps="1" (change)="testUpdate()"/>%
-</p>
-
-<div echarts [options]="chartOptions" (chartInit)="onChartInit($event)" style="width:1000px;height:300px;"></div>
+<div echarts [options]="chartOptions" (chartInit)="onChartInit($event)" [ngStyle]="{'width.px':width,'height.px':height}"></div>
