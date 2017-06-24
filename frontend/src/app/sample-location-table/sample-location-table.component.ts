@@ -3,6 +3,7 @@ import {ApiLocationService} from '../locations/api.location.service';
 import {ApiWaterschapService} from '../waterschap/api.waterschap.service';
 import {ApiTaxonService} from "../taxon/api.taxon.service";
 import {DatatableComponent} from "@swimlane/ngx-datatable";
+import swal from 'sweetalert2';
 
 @Component({
     selector: 'app-sample-Location-table',
@@ -21,9 +22,10 @@ export class SampleLocationTableComponent implements OnInit {
 
     locations = [];
     locationRows = [];
-    locationColumns = [
-        {name: 'Mp', prop: 'code'},
-        {name: 'Naam', prop: 'description'}];
+    // locationColumns = [
+    //     {name: 'Mp', prop: 'code'},
+    //     {name: 'Naam', prop: 'description'}];
+    //     {name: '', prop: 'button'}];
 
     waterschappen = [];
     waterschapRows = [];
@@ -51,6 +53,7 @@ export class SampleLocationTableComponent implements OnInit {
         this.apiLocationService.getAllLocations().subscribe(locations => {
             this.locationRows = locations;
             this.locations = locations;
+            console.log(locations);
         });
         this.apiWaterschap.getAll().subscribe(waterschappen => {
             this.waterschapRows = waterschappen;
@@ -63,7 +66,11 @@ export class SampleLocationTableComponent implements OnInit {
     }
 
     onSelect(selected) {
-        this.selected = selected.row.id;
+        // if(selected.id == null) {
+        //     swal('', 'Kon de samples niet ophalen', 'error');
+        // }
+        // this.selected = selected.row.id;
+        console.log(selected)
     }
 
     updateFilter(event) {
