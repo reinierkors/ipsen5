@@ -7,14 +7,16 @@ package marker;
 public class MarkerFilter {
     private Integer waterschapId;
     private Integer watertypeId;
+    private String date;
 
     public MarkerFilter() {
 
     }
 
-    public MarkerFilter(Integer waterschapId, Integer watertypeId) {
+    public MarkerFilter(Integer waterschapId, Integer watertypeId, String date) {
         this.waterschapId = waterschapId;
         this.watertypeId = watertypeId;
+        this.date = date;
     }
 
     public Integer getWaterschapId() {
@@ -31,5 +33,13 @@ public class MarkerFilter {
 
     public void setWatertypeId(Integer watertypeId) {
         this.watertypeId = watertypeId;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

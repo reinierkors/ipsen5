@@ -90,7 +90,7 @@ export class SampleLocationTableComponent implements OnInit {
         this.waterschapRows = waterschappenFiltered;
         this.locationRows = locationFiltered;
         this.taxonRows = taxaFiltered;
-        
+
         // Whenever the filter changes, always go back to the first page
         this.table.offset = 0;
     }

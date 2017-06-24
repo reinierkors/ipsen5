@@ -91,8 +91,8 @@ public class LocationService {
         return location;
     }
 
-    public List<Location> getByFilters(Integer watertypeId, Integer waterschapId) {
-        List<Location> locations = repository.getByFilters(watertypeId, waterschapId);
+    public List<Location> getByFilters(Integer watertypeId, Integer waterschapId, String date) {
+        List<Location> locations = repository.getByFilters(watertypeId, waterschapId, date);
         addLatLng(locations);
         return locations;
     }
