@@ -7,10 +7,11 @@ import {ApiWaterschapService} from "../../waterschap/api.waterschap.service";
 import {Watertype} from "../../watertype/watertype.model";
 import {Waterschap} from "../../waterschap/waterschap.model";
 import {ApiMarkerService} from "../api.marker.service";
+import {ApiSampleService} from "../../sample/api.sample.service";
 
 @Component({
     selector: 'app-results',
-    providers: [ApiLocationService, ApiWatertypeService, ApiWaterschapService, ApiMarkerService],
+    providers: [ApiLocationService, ApiWatertypeService, ApiWaterschapService, ApiMarkerService, ApiSampleService],
     templateUrl: './results-gmap.component.html',
     styleUrls: ['./results-gmap.component.css']
 })
@@ -25,11 +26,14 @@ export class GMapsComponent implements OnInit {
         watertype: Watertype,
         watertypeKrw: Watertype,
         waterschap: Waterschap,
+        lastTakenSample: String,
     };
+    public filterYears = [];
 
     public filters = {
         waterschapId: '0',
         watertypeId: '0',
+        date: '',
     };
 
     public mapStyle = [
@@ -73,8 +77,9 @@ export class GMapsComponent implements OnInit {
 
     constructor(private apiWatertype: ApiWatertypeService,
                 private apiWaterschap: ApiWaterschapService,
-                private apiMarker: ApiMarkerService, private route: ActivatedRoute) {
-
+                private apiMarker: ApiMarkerService,
+                private apiSample: ApiSampleService,
+                private route: ActivatedRoute) {
     };
 
     ngOnInit() {
@@ -104,6 +109,7 @@ export class GMapsComponent implements OnInit {
             });
             this.retrieveWaterschappen();
             this.retrieveWatertypes();
+            this.retrieveFilterYears();
         }, error => console.log(error));
     };
 
@@ -112,6 +118,7 @@ export class GMapsComponent implements OnInit {
         this.filters = {
             waterschapId: '0',
             watertypeId: '0',
+            date: '',
         };
         this.retrieveMarkers();
     };
@@ -131,6 +138,14 @@ export class GMapsComponent implements OnInit {
                 this.watertypes = items;
             }, error => console.log(error));
     };
+
+    private retrieveFilterYears() {
+        this.route.params
+            .switchMap(params => this.apiSample.getDistinctYears())
+            .subscribe(items => {
+                this.filterYears = items;
+            }, error => console.log(error));
+    }
 
     private insertIntoPositions(item) {
         this.positions.push({

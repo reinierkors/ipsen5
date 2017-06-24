@@ -23,6 +23,18 @@
             </md-option>
         </md-select>
     </p>
+    <p class="filter-list">
+        <md-select name="lastTakenSample" [(ngModel)]="filters.date"
+                   placeholder="Jaar laatst genomen monster">
+            <md-option [value]="0">
+                Geen filter
+            </md-option>
+            <md-option *ngFor="let year of filterYears"
+                       [value]="year">
+                {{year}} >
+            </md-option>
+        </md-select>
+    </p>
     <button md-raised-button class="filter-button" (click)="retrieveMarkers()"
             type="submit">FILTEREN
     </button>
@@ -35,7 +47,8 @@
     <marker (click)="showMarkerInfo($event)"
             *ngFor="let pos of positions"
             [position]="pos"
-            [title]="pos.title"></marker>
+            [title]="pos.title">
+    </marker>
     <info-window id="iw">
         <md-list>
             <md-list-item>
@@ -58,6 +71,11 @@
                 <p md-line>
                     {{marker.watertypeKrw.name}}
                     ({{marker.watertypeKrw.code}})</p>
+            </md-list-item>
+            <md-list-item>
+                <h3 md-line><b>Laatst genomen monster</b></h3>
+                <p md-line>
+                    {{marker.lastTakenSample}}</p>
             </md-list-item>
         </md-list>
         <button class="iw-button" md-raised-button

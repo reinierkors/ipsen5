@@ -80,19 +80,23 @@ public class LocationRepository extends RepositoryMaria<Location> {
         }
     }
 
-    public List<Location> getByFilters(Integer watertypeId, Integer waterschapId) {
+    public List<Location> getByFilters(Integer watertypeId, Integer waterschapId, String date) {
         try {
             List<Location> locations = new ArrayList<>();
-            String getLocationsStr = "SELECT * FROM location WHERE 1 = 1 ";
-
+            String getLocationsStr = "SELECT * FROM location JOIN sample ON " +
+                    "location.id = sample.location_id WHERE 1 = 1 ";
             if (waterschapId != 0) {
-                getLocationsStr += " AND waterschap_id = ?";
+                getLocationsStr += " AND location.waterschap_id = ?";
             }
 
             if (watertypeId != 0) {
-                getLocationsStr += " AND (watertype_id = ? OR watertype_krw_id = ?)";
+                getLocationsStr += " AND (location.watertype_id = ? OR location.watertype_krw_id = ?)";
             }
 
+            if (!date.equals("")) {
+                getLocationsStr += " AND year(sample.date) >= ?";
+            }
+            getLocationsStr += " GROUP BY location.description";
             PreparedStatement getLocations = connection.prepareStatement(getLocationsStr);
             int paramCounter = 1;
 
@@ -105,8 +109,13 @@ public class LocationRepository extends RepositoryMaria<Location> {
                 getLocations.setInt(paramCounter, watertypeId);
                 paramCounter++;
                 getLocations.setInt(paramCounter, watertypeId);
+                paramCounter++;
             }
 
+            if (!date.equals("")) {
+                getLocations.setString(paramCounter, date);
+                paramCounter++;
+            }
             ResultSet resultSet = getLocations.executeQuery();
 
             if (resultSet != null) {
