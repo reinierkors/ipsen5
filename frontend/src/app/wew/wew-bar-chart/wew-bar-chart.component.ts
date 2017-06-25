@@ -4,7 +4,7 @@ import {WEWFactor,WEWFactorClass,SimpleWEWValue} from '../wew.model';
 import {ApiWewService} from '../api.wew.service';
 import {Palette} from '../../services/palette';
 import {ChartEntity} from './chart-entity.model';
-import {pad2D} from '../../services/arrayUtils';
+import {pad2D,uniqueFilter} from '../../services/arrayUtils';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -57,19 +57,16 @@ export class WewBarChartComponent implements OnInit {
 	
 	//EChart options
 	public chartOptions = {
-		title:{
-			text:'Watereigenschappen',
-			subtext:'Aan de hand van de WEW-lijst'
-		},
+		title:{text:'',subtext:''},
 		tooltip:{
 			trigger:'axis',
 			axisPointer:{type:'shadow'},
 			backgroundColor:'rgba(0,0,0,0.9)',
 			formatter:(p)=>this.tooltipFormatter(p)
 		},
-		//legend:{data:[]},
-		grid:{left:'3%',right:'4%',bottom:'3%',containLabel:true},
-		xAxis:{type:'category',data:[]},
+		legend:{data:['Test','Test 2']},
+		grid:{left:'3%',right:'4%',bottom:'15%',containLabel:true},
+		xAxis:{type:'category',data:[],axisLabel:{rotate:45}},
 		yAxis:{type:'value',boundaryGap:[0, 0.01],min:0,max:10},
 		series:[]
 	};
@@ -78,6 +75,22 @@ export class WewBarChartComponent implements OnInit {
 	
 	//@Input()s are available
 	ngOnInit(){
+		//Set missing config properties to default
+		let defaultConfig:WewChartConfig = {
+			entities:[],
+			factors:[],
+			barGap:'15%',
+			barCategoryGap:'35%',
+			xAxis:'factor'
+		};
+		this.config = Object.assign(defaultConfig,this.config);
+		
+		//Keep the entity list as-is
+		this.entities = this.config.entities;
+		
+		//Show the charts title
+		this.showTitle();
+		
 		//Retrieve all factors if none are given as input
 		let factorsPr:Promise<WEWFactor[]>;
 		if(this.config.factors&&this.config.factors.length)
@@ -90,10 +103,13 @@ export class WewBarChartComponent implements OnInit {
 		
 		//Is all data we need loaded?
 		this.allDataPr = Promise.all([factorsPr,calcsPr]);
+		
 		//Fill Maps
 		this.allDataPr.then(([factors,calcs]) => this.storeCollections(factors,calcs));
+		
 		//Calculate Size
 		this.allDataPr.then(() => this.calculateSize());
+		
 		//Should we even show anything?
 		this.allDataPr.then(() => {
 			let calcCount = Array.from(this.entityCalcs.values())
@@ -103,6 +119,7 @@ export class WewBarChartComponent implements OnInit {
 			
 			this.hasData = calcCount>0;
 		});
+		
 		//Then show the chart
 		this.allDataPr.then(() => this.showData());
 	}
@@ -113,11 +130,25 @@ export class WewBarChartComponent implements OnInit {
 		echart.showLoading();
 	}
 	
+	//Sets the time based on how many factors we have
+	private showTitle(){
+		let title = 'Watereigenschappen';
+		let subtext = 'Aan de hand van de WEW-lijst';
+		
+		let factors = this.config.factors;
+		if(factors.length===1){
+			title += ' - '+factors[0].name;
+		}
+		
+		this.chartOptions.title.text = title;
+		this.chartOptions.title.subtext = subtext;
+	}
+	
 	private calculateSize(){
 		let stackCount = this.factors.length * this.entities.length;
 		
-		this.width = stackCount * 60;
-		this.height = 300;
+		this.width = stackCount * 90;
+		this.height = 350;
 		
 		this.echart.resize({width:this.width,height:this.height});
 	}
@@ -125,7 +156,6 @@ export class WewBarChartComponent implements OnInit {
 	//Put data in arrays and maps for easy access
 	private storeCollections(factors:WEWFactor[],entityCalcs:Map<ChartEntity,SimpleWEWValue[]>):void{
 		this.entityCalcs = entityCalcs;
-		this.entities = Array.from(entityCalcs.keys());
 		this.factors = factors;
 		this.factorClasses = factors.reduce((arr,f) => [...arr,...f.classes],[]);
 		
@@ -169,7 +199,7 @@ export class WewBarChartComponent implements OnInit {
 		let calcMap:Map<ChartEntity,SimpleWEWValue[]> = new Map();
 		
 		//Retrieve calculations for each entity
-		let promises = this.config.entities.map(entity =>
+		let promises = this.entities.map(entity =>
 			entity.getCalculations().then(calcs =>
 				calcMap.set(entity,calcs)));
 		
@@ -203,30 +233,18 @@ export class WewBarChartComponent implements OnInit {
 		if(!this.hasData)
 			return;
 		
-		//Add x-axis labels
-		this.chartOptions.xAxis.data = [];
-		if(this.config.xAxis==='entity')
-			this.entities.forEach(entity => {
-				this.chartOptions.xAxis.data.push(entity.name);
-			});
-		else
-			this.factors.forEach(factor => this.chartOptions.xAxis.data.push(factor.name));
-		
 		//Clear any previous data
 		this.chartOptions.series = [];
+		this.chartOptions.xAxis.data = [];
 		
-		//Add entity data
+		//Add x-axis labels and data
 		if(this.config.xAxis==='entity'){
-			this.factors.forEach(factor => {
-				let data = this.getDataWithEntityCategory(factor);
-				this.addSeries(data);
-			});
+			this.entities.forEach(entity => this.chartOptions.xAxis.data.push(entity.name));
+			this.factors.forEach(factor => this.addSeries(this.getDataWithEntityCategory(factor)));
 		}
 		else{
-			this.entities.forEach(entity => {
-				let data = this.getDataWithFactorCategory(entity);
-				this.addSeries(data);
-			});
+			this.factors.forEach(factor => this.chartOptions.xAxis.data.push(factor.name));
+			this.entities.forEach(entity => this.addSeries(this.getDataWithFactorCategory(entity)));
 		}
 		
 		//These options should be applied to the last item in the series only
@@ -266,7 +284,7 @@ export class WewBarChartComponent implements OnInit {
 		
 		//Put data in chart
 		let stack = Math.random();
-		data.forEach((row,index) => {
+		data.forEach(row => {
 			let series = {
 				type:'bar',
 				stack:stack,
@@ -286,11 +304,15 @@ export class WewBarChartComponent implements OnInit {
 		//The factor we're hovering over
 		let factor:WEWFactor = this.factorIdMap.get(params[0].data.factorId);
 		
+		//The entities in the category we're hovering over
+		let entities:ChartEntity[] = params.map(p => this.entityIdMap.get(p.data.entityId)).filter(uniqueFilter);
+		
 		//List of names
-		let names:string[] = this.entities.map(entity => entity.name);
+		let names:string[] = entities.map(entity => entity.name);
 		
 		//Show sample colors if there are any samples, otherwise use any other
 		let markers:Map<WEWFactorClass,string/*marker html*/> = new Map();
+		//TODO: decide what markers to show in a less hacky way
 		let markerParams = params.filter(p => p.data.entityId.substr(0,6)==='sample');
 		if(!markerParams.length)
 			markerParams = params;
@@ -311,7 +333,7 @@ export class WewBarChartComponent implements OnInit {
 							<td>${markers.get(fc)}</td>
 							<td>${fc.code}</td>
 							<td>${fc.description}</td>
-							${this.entities.map(entity => {
+							${entities.map(entity => {
 								let dataValue = this.dataMap.get(entity.id+fc.code);
 								let value = (dataValue!=null&&dataValue.value!=null)?dataValue.value.toFixed(2):'?';
 								return `<td>${value}</td>`

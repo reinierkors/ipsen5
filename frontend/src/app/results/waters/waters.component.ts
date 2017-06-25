@@ -89,10 +89,11 @@ export class WatersComponent implements OnInit{
 	}
 	
 	private async loadCharts(){
-		let chartReference = this.chartEntityManager.createFromReference(this.reference,'Referentie',new MaterialPalette().shift().transform(0,-.1,.3));
-		let chartSamples = this.samples.map(sample =>
-			this.chartEntityManager.createFromSample(sample,sample.date.toLocaleDateString(),new MaterialPalette().shift())
-		);
+		let chartReference = this.chartEntityManager.createFromReference(this.reference,'Referentie',new MaterialPalette().shift().transform(-.03,-.1,-.26));
+		let chartSamples = this.samples.map(sample => {
+			let name = sample.date.toLocaleString('nl-NL',{month:'short',year:'numeric'});
+			return this.chartEntityManager.createFromSample(sample,name,new MaterialPalette().shift());
+		});
 		
 		this.wewConfigs = this.factors.map(factor => {
 			let config:WewChartConfig = {

@@ -141,8 +141,8 @@ export class SampleViewComponent implements OnInit {
 				
 				this.wewConfig = {
 					entities:[
-						this.chartEntityManager.createFromReference(reference,'Referentie',palette.clone().transform(0,.1,.3)),
-						this.chartEntityManager.createFromSample(this.sample,'Monster',palette)
+						this.chartEntityManager.createFromReference(reference,'Referentie',palette.clone().transform(0,-.05,.2)),
+						this.chartEntityManager.createFromSample(this.sample,'Monster',palette.clone())
 					]
 				};
 			});
