@@ -53,7 +53,6 @@ export class SampleLocationTableComponent implements OnInit {
         this.apiLocationService.getAllLocations().subscribe(locations => {
             this.locationRows = locations;
             this.locations = locations;
-            console.log(locations);
         });
         this.apiWaterschap.getAll().subscribe(waterschappen => {
             this.waterschapRows = waterschappen;
@@ -66,10 +65,10 @@ export class SampleLocationTableComponent implements OnInit {
     }
 
     onSelect(selected) {
-        // if(selected.id == null) {
-        //     swal('', 'Kon de samples niet ophalen', 'error');
-        // }
-        // this.selected = selected.row.id;
+        if(selected.id == null) {
+            swal('', 'Kon de samples niet ophalen', 'error');
+        }
+        this.selected = selected.row.id;
         console.log(selected)
     }
 

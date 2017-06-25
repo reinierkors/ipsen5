@@ -14,19 +14,19 @@
                 [limit]="10">
 
             <ngx-datatable-column name="Mp" width="20">
-                <ng-template let-value="code" ngx-datatable-cell-template>
-                    {{MarkerLocation.code}}
+                <ng-template let-value="String" ngx-datatable-cell-template>
+                    {{locations.code}}
                 </ng-template>
             </ngx-datatable-column>
 
             <ngx-datatable-column name="Naam" width="20">
-                <ng-template let-value="description" ngx-datatable-cell-template>
-                    {{MarkerLocation.description}}
+                <ng-template let-value="String" ngx-datatable-cell-template>
+                    {{locations.description}}
                 </ng-template>
             </ngx-datatable-column>
 
             <ngx-datatable-column name="Haal Samples op" width="20">
-                <ng-template let-value="value" ngx-datatable-cell-template>
+                <ng-template ngx-datatable-cell-template>
                     <button class="button" type="submit" md-raised-button
                             (click)="onSelect(location.id)">details</button>
                 </ng-template>
