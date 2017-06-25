@@ -1,20 +1,29 @@
 <md-card *ngIf="currentLocation">
-  <md-card-title>Monsters van {{currentLocation.description}}</md-card-title>
-  <md-card-content>
-    <ngx-datatable routerLink="../../../sample/view/{{selected}}"
-            class="material"
-            [rows]="sampleRows"
-            [columns]="sampleColums"
-            [columnMode]="'force'"
-            [headerHeight]="50"
-            [footerHeight]="50"
-            [rowHeight]="'auto'"
-            [limit]="10"
-            (activate)='onSelect($event)'>
-            <!--[selected]="selected"-->
-            <!--[selectionType]="'single'"-->
-            <!--(activate)="onActivate($event)"-->
-            <!--(select)='onSelect($event)'>-->
-    </ngx-datatable>
-  </md-card-content>
+	<md-card-title>Monsters van {{currentLocation.description}}</md-card-title>
+	<md-card-content>
+		<ngx-datatable [routerLink]="'/sample/view/'+selected"
+			class="material"
+			[rows]="sampleRows"
+			[columns]="sampleColums"
+			[columnMode]="'force'"
+			[headerHeight]="50"
+			[footerHeight]="50"
+			[rowHeight]="'auto'"
+			[limit]="10"
+			(activate)='onSelect($event)'>
+			<!--[selected]="selected"-->
+			<!--[selectionType]="'single'"-->
+			<!--(activate)="onActivate($event)"-->
+			<!--(select)='onSelect($event)'>-->
+		</ngx-datatable>
+	</md-card-content>
+</md-card>
+
+<md-card *ngIf="currentLocation && wewConfigs">
+	<md-card-title>Waterkwaliteit van {{currentLocation.description}}</md-card-title>
+	<md-card-content>
+		<div *ngFor="let config of wewConfigs">
+			<app-wew-bar-chart [config]="config"></app-wew-bar-chart>
+		</div>
+	</md-card-content>
 </md-card>

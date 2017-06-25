@@ -4,9 +4,7 @@ import {Observable} from 'rxjs';
 
 import {ApiService} from '../services/api.service';
 import {Reference} from './reference.model';
-
-//Value that is calculated in a reference using the WEW list
-export type CalculationData = {factorClassId:number,computedValue:number};
+import {SimpleWEWValue} from '../wew/wew.model';
 
 @Injectable()
 export class ApiReferenceService extends ApiService{
@@ -40,7 +38,12 @@ export class ApiReferenceService extends ApiService{
 	}
 	
 	//Get a list of calculations for the given reference id
-	public getCalculationsByReference(referenceId:number):Observable<CalculationData[]>{
-		return this.get('/calculate/reference/'+referenceId);
+	public getCalculationsByReference(referenceId:number):Observable<SimpleWEWValue[]>{
+		return this.get('/calculate/reference/'+referenceId).map(objs => objs.map(obj => {
+			let value = new SimpleWEWValue();
+			value.factorClassId = obj.factorClassId;
+			value.value = obj.computedValue;
+			return value;
+		}));
 	}
 }

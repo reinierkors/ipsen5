@@ -1,36 +1,30 @@
 import {Component,OnInit,Input} from '@angular/core';
 
-import {Sample} from '../../sample/sample.model';
-import {Reference} from '../../reference/reference.model';
-import {Taxon} from '../../taxon/taxon.model';
-import {WEWFactor,WEWFactorClass} from '../wew.model';
-import {ApiSampleService,CalculationData} from '../../sample/api.sample.service';
+import {WEWFactor,WEWFactorClass,SimpleWEWValue} from '../wew.model';
 import {ApiWewService} from '../api.wew.service';
-import {ApiReferenceService} from '../../reference/api.reference.service';
 import {Palette} from '../../services/palette';
+import {ChartEntity} from './chart-entity.model';
+import {pad2D} from '../../services/arrayUtils';
 
 import 'rxjs/add/operator/toPromise';
 
 //The options given as input
-export type WewSampleConfig = {name:string,sample:Sample,palette:Palette};
-export type WewReferenceConfig = {name:string,reference:Reference,palette:Palette};
-export type WewTaxonConfig = {taxon:Taxon,palette:Palette};
+export type WewXAxisConfig = 'entity'|'factor';
 export type WewChartConfig = {
-	samples?:WewSampleConfig[],
-	references?:WewReferenceConfig[],
-	taxa?:WewTaxonConfig[],
+	entities:ChartEntity[],
 	factors?:WEWFactor[],
 	barGap?:string,
-	barCategoryGap?:string
+	barCategoryGap?:string,
+	xAxis?:WewXAxisConfig
 };
 
 //Value to put in the charts series.data list
-type DataValue = {factorId:number,factorClassId:number,value:number,itemStyle?:any,entityId:number,entityType:'sample'|'reference'|'taxon',name:string};
+type DataValue = {factorId:number,factorClassId:number,value:number,itemStyle?:any,entityId:string};
 
 
 @Component({
 	selector:'app-wew-bar-chart',
-	providers:[ApiSampleService,ApiWewService,ApiReferenceService],
+	providers:[ApiWewService],
 	templateUrl:'./wew-bar-chart.component.html',
 	styleUrls:['./wew-bar-chart.component.css']
 })
@@ -45,28 +39,21 @@ export class WewBarChartComponent implements OnInit {
 	//EChart instance
 	private echart;
 	//Promise that resoles when all required data is loaded
-	private allDataPr:Promise<[WEWFactor[],Map<Sample,CalculationData[]>,Map<Reference,CalculationData[]>,Map<Taxon,CalculationData[]>]>;
+	private allDataPr:Promise<[WEWFactor[],Map<ChartEntity,SimpleWEWValue[]>]>;
 	//Whether or not there is any data to be shown
 	private hasData:boolean = true;
 	
 	/* Maps and arrays for quick lookup and looping */
-	private sampleCalcs:Map<Sample,CalculationData[]>;
-	private referenceCalcs:Map<Reference,CalculationData[]>;
-	private taxonCalcs:Map<Taxon,CalculationData[]>;
-	private references:Reference[];
-	private samples:Sample[];
-	private taxa:Taxon[];
+	private entities:ChartEntity[];
+	private entityCalcs:Map<ChartEntity,SimpleWEWValue[]>;
+	private entityIdMap:Map<string/*ChartEntity.id*/,ChartEntity>;
+	
 	private factors:WEWFactor[];
 	private factorClasses:WEWFactorClass[];
 	private factorIdMap:Map<number/*factor id*/,WEWFactor>;
 	private factorClassIdMap:Map<number/*factor class id*/,WEWFactorClass>;
-	private referenceIdMap:Map<number/*reference id*/,Reference>;
-	private sampleIdMap:Map<number/*sample id*/,Sample>;
-	private taxonIdMap:Map<number/*taxon id*/,Taxon>;
-	private sampleConfigMap:Map<Sample,WewSampleConfig>;
-	private referenceConfigMap:Map<Reference,WewReferenceConfig>;
-	private taxonConfigMap:Map<Taxon,WewTaxonConfig>;
 	
+	private dataMap:Map<string/*ChartEntity.id+WEWFactorClass.code*/,DataValue>;
 	
 	//EChart options
 	public chartOptions = {
@@ -87,20 +74,10 @@ export class WewBarChartComponent implements OnInit {
 		series:[]
 	};
 	
-	constructor(
-		private sampleApi:ApiSampleService,
-		private wewApi:ApiWewService,
-		private referenceApi:ApiReferenceService
-	){
-	}
+	constructor(private wewApi:ApiWewService){}
 	
 	//@Input()s are available
 	ngOnInit(){
-		//Set any missing config arrays
-		if(!this.config.taxa)this.config.taxa = [];
-		if(!this.config.samples)this.config.samples = [];
-		if(!this.config.references)this.config.references = [];
-		
 		//Retrieve all factors if none are given as input
 		let factorsPr:Promise<WEWFactor[]>;
 		if(this.config.factors&&this.config.factors.length)
@@ -109,24 +86,21 @@ export class WewBarChartComponent implements OnInit {
 			factorsPr = this.wewApi.getFactors().toPromise();
 		
 		//Load calculations
-		let sampleCalcsPr = this.loadSampleCalculations();
-		let referenceCalcsPr = this.loadReferenceCalculations();
-		let taxonCalcsPr = this.loadTaxonCalculations();
+		let calcsPr = this.loadCalculations();
 		
 		//Is all data we need loaded?
-		this.allDataPr = Promise.all([factorsPr,sampleCalcsPr,referenceCalcsPr,taxonCalcsPr]);
+		this.allDataPr = Promise.all([factorsPr,calcsPr]);
 		//Fill Maps
-		this.allDataPr.then(([factors,sampleCalcs,refCalcs,taxonCalcs]) => this.storeCollections(factors,sampleCalcs,refCalcs,taxonCalcs));
+		this.allDataPr.then(([factors,calcs]) => this.storeCollections(factors,calcs));
 		//Calculate Size
 		this.allDataPr.then(() => this.calculateSize());
 		//Should we even show anything?
 		this.allDataPr.then(() => {
-			let calcCount = [this.sampleCalcs,this.referenceCalcs,this.taxonCalcs]
-				.map(map => Array.from(map.values()))
-				.reduce((a,b) => [...a,...b],[])
-				.reduce((a,b) => [...a,...b],[])
-				.filter(calc => calc && calc.computedValue)
+			let calcCount = Array.from(this.entityCalcs.values())
+				.reduce((a,b) => [...a,...b])
+				.filter((val:SimpleWEWValue) => val&&val.value)
 				.length;
+			
 			this.hasData = calcCount>0;
 		});
 		//Then show the chart
@@ -140,23 +114,18 @@ export class WewBarChartComponent implements OnInit {
 	}
 	
 	private calculateSize(){
-		this.width = 1000;
+		let stackCount = this.factors.length * this.entities.length;
+		
+		this.width = stackCount * 60;
 		this.height = 300;
+		
 		this.echart.resize({width:this.width,height:this.height});
 	}
 	
 	//Put data in arrays and maps for easy access
-	private storeCollections(factors:WEWFactor[],
-		sampleCalcs:Map<Sample,CalculationData[]>,
-		referenceCalcs:Map<Reference,CalculationData[]>,
-		taxonCalcs:Map<Taxon,CalculationData[]>
-	):void{
-		this.sampleCalcs = sampleCalcs;
-		this.referenceCalcs = referenceCalcs;
-		this.taxonCalcs = taxonCalcs;
-		this.references = Array.from(referenceCalcs.keys());
-		this.samples = Array.from(sampleCalcs.keys());
-		this.taxa = Array.from(taxonCalcs.keys());
+	private storeCollections(factors:WEWFactor[],entityCalcs:Map<ChartEntity,SimpleWEWValue[]>):void{
+		this.entityCalcs = entityCalcs;
+		this.entities = Array.from(entityCalcs.keys());
 		this.factors = factors;
 		this.factorClasses = factors.reduce((arr,f) => [...arr,...f.classes],[]);
 		
@@ -168,108 +137,62 @@ export class WewBarChartComponent implements OnInit {
 		this.factorClassIdMap = new Map();
 		this.factorClasses.forEach(fc => this.factorClassIdMap.set(fc.id,fc));
 		
-		//Map<number/*reference id*/,Reference>
-		this.referenceIdMap = new Map();
-		this.references.forEach(ref => this.referenceIdMap.set(ref.id,ref));
+		//Map<string/*ChartEntity.id*/,ChartEntity>
+		this.entityIdMap = new Map();
+		this.entities.forEach(entity => this.entityIdMap.set(entity.id,entity));
 		
-		//Map<number/*sample id*/,Sample>
-		this.sampleIdMap = new Map();
-		this.samples.forEach(sample => this.sampleIdMap.set(sample.id,sample));
-		
-		//Map<number/*taxon id*/,Taxo>
-		this.taxonIdMap = new Map();
-		this.taxa.forEach(taxon => this.taxonIdMap.set(taxon.id,taxon));
-		
-		//Map<Sample,WewSampleConfig>
-		this.sampleConfigMap = new Map();
-		this.config.samples.forEach(sampleConfig => this.sampleConfigMap.set(sampleConfig.sample,sampleConfig));
-		
-		//Map<Reference,WewReferenceConfig>
-		this.referenceConfigMap = new Map();
-		this.config.references.forEach(refConfig => this.referenceConfigMap.set(refConfig.reference,refConfig));
-		
-		//Map<Taxon,WewTaxonConfig>
-		this.taxonConfigMap = new Map();
-		this.config.taxa.forEach(taxonConfig => this.taxonConfigMap.set(taxonConfig.taxon,taxonConfig));
+		this.createDataMap();
 	}
 	
-	//Loads the calculations of all samples
-	private loadSampleCalculations():Promise<Map<Sample,CalculationData[]>>{
-		let sampleCalcs:Map<Sample,CalculationData[]> = new Map();
-		let samplePromises = [];
+	//Creates all the DataValue objects
+	private createDataMap(){
+		//Map<string/*ChartEntity.id+WEWFactorClass.code*/,DataValue>
+		this.dataMap = new Map();
 		
-		//Retrieve calculations for each sample
-		this.config.samples.map(s => s.sample).forEach(sample => {
-			samplePromises.push(this.sampleApi.getCalculationsBySample(sample.id)
-				.toPromise().then(calcs => sampleCalcs.set(sample,calcs)));
-		});
-		
-		return Promise.all(samplePromises).then(() => sampleCalcs);
-	}
-	
-	//Loads the calculations of all references
-	private loadReferenceCalculations():Promise<Map<Reference,CalculationData[]>>{
-		let referenceCalcs:Map<Reference,CalculationData[]> = new Map();
-		let referencePromises = [];
-		
-		//Retrieve calculations for each reference
-		this.config.references.map(r => r.reference).forEach(reference => {
-			referencePromises.push(this.referenceApi.getCalculationsByReference(reference.id)
-				.toPromise().then(calcs => referenceCalcs.set(reference,calcs)));
-		});
-		
-		return Promise.all(referencePromises).then(() => referenceCalcs);
-	}
-	
-	//Loads the calculations of all taxa
-	private loadTaxonCalculations():Promise<Map<Taxon,CalculationData[]>>{
-		let taxonCalcs:Map<Taxon,CalculationData[]> = new Map();
-		let taxonPromises = [];
-		
-		//Retrieve calculations for each taxon
-		this.config.taxa.map(t => t.taxon).forEach(taxon => {
-			taxonPromises.push(this.wewApi.getByTaxon([taxon.id])
-				.toPromise().then(wewValues => {
-					//This api call returns WEWValue objects, turn them into CalculationData objects
-					let calcs = wewValues.map(val => ({factorClassId:val.factorClassId,computedValue:val.value}));
-					taxonCalcs.set(taxon,calcs)
-				}));
-		});
-		
-		return Promise.all(taxonPromises).then(() => taxonCalcs);
-	}
-	
-	//Make a 2D array with all the data (every row is factor, every column a factor class)
-	private dataAs2D(calcs:CalculationData[],entity:Sample|Reference|Taxon,name:string):DataValue[][]{
-		//We can have it as a map, it's from a single sample, so no duplicate factor classes
-		let calcMap = new Map<number/*factor class id*/,number/*computed value*/>();
-		calcs.forEach(calc => calcMap.set(calc.factorClassId,calc.computedValue));
-		
-		//Fill the array
-		let data:DataValue[][] = [];
-		this.factors.forEach((factor,fIndex) => {
-			let dataRow:DataValue[] = [];
-			factor.classes.forEach((factorClass,fcIndex) => {
-				let valueObj:DataValue = {
-					factorId:factor.id,
+		this.entityCalcs.forEach((calcs,entity) => {
+			let calcMap = new Map<number/*factor class id*/,number/*computed value*/>();
+			calcs.forEach(calc => calcMap.set(calc.factorClassId,calc.value));
+			
+			this.factorClasses.forEach(factorClass => {
+				this.dataMap.set(entity.id+factorClass.code,{
+					factorId:factorClass.factorId,
 					factorClassId:factorClass.id,
 					value:calcMap.get(factorClass.id),
-					name:name,
-					entityId:entity.id,
-					entityType:entity instanceof Sample?'sample':(entity instanceof Reference?'reference':'taxon')
-				};
-				dataRow.push(valueObj);
+					entityId:entity.id
+				});
 			});
-			data.push(dataRow);
+		});
+	}
+	
+	//Loads the calculations of all entities
+	private async loadCalculations():Promise<Map<ChartEntity,SimpleWEWValue[]>>{
+		let calcMap:Map<ChartEntity,SimpleWEWValue[]> = new Map();
+		
+		//Retrieve calculations for each entity
+		let promises = this.config.entities.map(entity =>
+			entity.getCalculations().then(calcs =>
+				calcMap.set(entity,calcs)));
+		
+		return Promise.all(promises).then(() => calcMap);
+	}
+	
+	//Make a 2D array with all the data (every row is a factor, every column a factor class)
+	private getDataWithFactorCategory(entity:ChartEntity):DataValue[][]{
+		let data = this.factors.map(factor => {
+			return factor.classes.map(factorClass => {
+				return this.dataMap.get(entity.id+factorClass.code);
+			});
 		});
 		
-		//Make sure all rows have the same length (pad with null)
-		let max = data.map(row => row.length).reduce((next,max) => Math.max(next,max));
-		data = data.map(row => {
-			let len = row.length;
-			row.length = max;
-			row.fill(null,len);
-			return row;
+		return data;
+	}
+	
+	//Make a 2D array with all the data (every row is an entity, every column a factor class)
+	private getDataWithEntityCategory(factor:WEWFactor):DataValue[][]{
+		let data = this.entities.map(entity => {
+			return factor.classes.map(factorClass => {
+				return this.dataMap.get(entity.id+factorClass.code);
+			});
 		});
 		
 		return data;
@@ -282,32 +205,29 @@ export class WewBarChartComponent implements OnInit {
 		
 		//Add x-axis labels
 		this.chartOptions.xAxis.data = [];
-		this.factors.forEach(factor => this.chartOptions.xAxis.data.push(factor.name));
+		if(this.config.xAxis==='entity')
+			this.entities.forEach(entity => {
+				this.chartOptions.xAxis.data.push(entity.name);
+			});
+		else
+			this.factors.forEach(factor => this.chartOptions.xAxis.data.push(factor.name));
 		
 		//Clear any previous data
 		this.chartOptions.series = [];
 		
-		//Add reference data
-		this.referenceCalcs.forEach((calcs,reference) => {
-			let config = this.referenceConfigMap.get(reference);
-			let refData = this.dataAs2D(calcs,reference,config.name);
-			this.addSeries(refData,config.palette);
-		});
-		
-		//Add sample data
-		this.sampleCalcs.forEach((calcs,sample) => {
-			let config = this.sampleConfigMap.get(sample);
-			let sampleData = this.dataAs2D(calcs,sample,config.name);
-			this.addSeries(sampleData,config.palette);
-		});
-		
-		//Add taxon data
-		this.taxonCalcs.forEach((calcs,taxon) => {
-			let config = this.taxonConfigMap.get(taxon);
-			let taxonData = this.dataAs2D(calcs,taxon,taxon.name);
-			this.addSeries(taxonData,config.palette);
-		});
-		
+		//Add entity data
+		if(this.config.xAxis==='entity'){
+			this.factors.forEach(factor => {
+				let data = this.getDataWithEntityCategory(factor);
+				this.addSeries(data);
+			});
+		}
+		else{
+			this.entities.forEach(entity => {
+				let data = this.getDataWithFactorCategory(entity);
+				this.addSeries(data);
+			});
+		}
 		
 		//These options should be applied to the last item in the series only
 		let lastSeries = this.chartOptions.series[this.chartOptions.series.length-1];
@@ -319,18 +239,26 @@ export class WewBarChartComponent implements OnInit {
 		this.echart.hideLoading();
 	}
 	
-	private addSeries(data:DataValue[][],palette:Palette){
-		//Set chart colors
+	//Use the palettes to set the correct color in each data value
+	private setColors(data:DataValue[][]){
 		data.forEach(row => {
-			palette.reverse();
-			palette.rotate(3);
 			row.filter(val => val!==null).forEach((val,index) => {
-				val.itemStyle = {normal:{color:palette.colorAt(index).toString()}};
+				let entity = this.entityIdMap.get(val.entityId);
+				val.itemStyle = {normal:{color:entity.palette.colorAt(index).toString()}};
 			});
 		});
+	}
+	
+	//A series is a list of stacks, with one stack for each category on the x-axis
+	private addSeries(data:DataValue[][]){
+		//Make sure data is a 2D array (all rows should have the same length)
+		data = pad2D(data,null);
 		
 		//Reverse the rows, so the first objects show at the top of the chart instead of the bottom
 		data.forEach(row => row.reverse());
+		
+		//Set the correct colors
+		this.setColors(data);
 		
 		//Rotate the data array
 		let transpose = m => m[0].map((x,i) => m.map(x => x[i]));
@@ -358,27 +286,12 @@ export class WewBarChartComponent implements OnInit {
 		//The factor we're hovering over
 		let factor:WEWFactor = this.factorIdMap.get(params[0].data.factorId);
 		
-		//Find references, samples and their data
-		let dataMap:Map<Sample|Reference|Taxon, Map<WEWFactorClass,DataValue>> = new Map();
-		let nameMap:Map<Reference|Sample|Taxon,string/*name*/> = new Map();
-		
-		params.map(p => p.data).forEach((data:DataValue) => {
-			let entityMap = data.entityType==='sample'?this.sampleIdMap:(data.entityType==='reference'?this.referenceIdMap:this.taxonIdMap);
-			let entity = entityMap.get(data.entityId);
-			let map = dataMap.get(entity);
-			if(!map){
-				map = new Map();
-				dataMap.set(entity,map);
-			}
-			map.set(this.factorClassIdMap.get(data.factorClassId),data);
-			nameMap.set(entity,data.name);
-		});
-		
-		let names:string[] =  Array.from(nameMap.values());
+		//List of names
+		let names:string[] = this.entities.map(entity => entity.name);
 		
 		//Show sample colors if there are any samples, otherwise use any other
 		let markers:Map<WEWFactorClass,string/*marker html*/> = new Map();
-		let markerParams = params.filter(p => p.data.entityType==='sample');
+		let markerParams = params.filter(p => p.data.entityId.substr(0,6)==='sample');
 		if(!markerParams.length)
 			markerParams = params;
 		markerParams.forEach(p => markers.set(this.factorClassIdMap.get(p.data.factorClassId),p.marker));
@@ -387,20 +300,24 @@ export class WewBarChartComponent implements OnInit {
 		return `<div class="tooltip-title">${factor.name}</div>
 			<p>
 				<table class="tooltip-table">
-					<tr>
-						<th colspan="3">&nbsp;</th>
-						${names.map(name => `<th>${name}</th>`).join('')}
-					</tr>
-					${factor.classes.map(fc => `<tr>
-						<td>${markers.get(fc)}</td>
-						<td>${fc.code}</td>
-						<td>${fc.description}</td>
-						${[...this.references,...this.samples,...this.taxa].map(entity => {
-							let dataValue = dataMap.get(entity).get(fc);
-							let value = (dataValue!=null&&dataValue.value!=null)?dataValue.value.toFixed(2):'?';
-							return `<td>${value}</td>`
-						}).join('')}
-					</tr>`).join('')}
+					<thead>
+						<tr>
+							<th colspan="3">&nbsp;</th>
+							${names.map(name => `<th class="entity-name">${name}</th>`).join('')}
+						</tr>
+					</thead>
+					<tbody>
+						${factor.classes.map(fc => `<tr>
+							<td>${markers.get(fc)}</td>
+							<td>${fc.code}</td>
+							<td>${fc.description}</td>
+							${this.entities.map(entity => {
+								let dataValue = this.dataMap.get(entity.id+fc.code);
+								let value = (dataValue!=null&&dataValue.value!=null)?dataValue.value.toFixed(2):'?';
+								return `<td>${value}</td>`
+							}).join('')}
+						</tr>`).join('')}
+					</tbody>
 				</table>
 			</p>`;
 	}

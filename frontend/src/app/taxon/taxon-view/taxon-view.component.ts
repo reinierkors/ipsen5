@@ -5,18 +5,17 @@ import {trigger,style,transition,animate,group,state} from '@angular/animations'
 import {Taxon,TaxonGroup,TaxonLevel} from '../taxon.model';
 import {ApiTaxonService} from '../api.taxon.service';
 import {ApiWewService} from '../../wew/api.wew.service';
-import {WEWValue,WEWFactor,WEWFactorClass} from '../../wew/wew.model';
 import {WewChartConfig} from '../../wew/wew-bar-chart/wew-bar-chart.component';
 import {MaterialPalette} from '../../services/palette';
+import {ChartEntityManager} from '../../wew/wew-bar-chart/chart-entity.model';
 
 import 'rxjs/add/operator/toPromise';
 
 type State = 'anim'|'error'|'loading'|'ready';
 
-
 @Component({
 	selector:'app-taxon-view',
-	providers:[ApiTaxonService,ApiWewService],
+	providers:[ApiTaxonService,ApiWewService,ChartEntityManager],
 	templateUrl:'./taxon-view.component.html',
 	styleUrls:['./taxon-view.component.css'],
 	animations:[
@@ -53,6 +52,7 @@ export class TaxonViewComponent implements OnInit{
 	constructor(
 		private taxonApi:ApiTaxonService,
 		private wewApi:ApiWewService,
+		private chartEntityManager:ChartEntityManager,
 		private route:ActivatedRoute
 	){
 		this.groupsPr = taxonApi.getGroups().toPromise();
@@ -79,7 +79,7 @@ export class TaxonViewComponent implements OnInit{
 				
 				//The config for the wew chart
 				this.wewConfig = {
-					taxa:[{taxon:this.root,palette:new MaterialPalette().shift()}]
+					entities:[this.chartEntityManager.createFromTaxon(this.root,new MaterialPalette().shift())]
 				};
 				
 				this.setState('ready');

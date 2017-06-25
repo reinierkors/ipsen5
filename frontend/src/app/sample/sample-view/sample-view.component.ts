@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
+
 import {ApiSampleService} from "../api.sample.service";
 import {Sample} from "../sample.model";
 import {ApiTaxonService} from "../../taxon/api.taxon.service";
@@ -12,13 +13,14 @@ import {Watertype} from '../../watertype/watertype.model';
 import {ApiWatertypeService} from '../../watertype/api.watertype.service';
 import {WewChartConfig} from '../../wew/wew-bar-chart/wew-bar-chart.component';
 import {MaterialPalette} from '../../services/palette';
+import {ChartEntityManager} from '../../wew/wew-bar-chart/chart-entity.model';
 
 import 'rxjs/add/operator/toPromise';
 
 
 @Component({
 	selector: 'app-sample-view',
-	providers: [ApiSampleService, ApiTaxonService, ApiLocationService,ApiReferenceService,ApiWatertypeService],
+	providers: [ApiSampleService, ApiTaxonService, ApiLocationService,ApiReferenceService,ApiWatertypeService,ChartEntityManager],
 	templateUrl: './sample-view.component.html',
 	styleUrls: ['./sample-view.component.css']
 })
@@ -44,6 +46,7 @@ export class SampleViewComponent implements OnInit {
 		private apiLocation:ApiLocationService,
 		private apiReference:ApiReferenceService,
 		private apiWatertype:ApiWatertypeService,
+		private chartEntityManager:ChartEntityManager,
 		private route:ActivatedRoute
 	){
 		this.option = this.defaultSettings();
@@ -135,9 +138,12 @@ export class SampleViewComponent implements OnInit {
 			//Create config object for the WEW chart
 			referencePr.then(reference => {
 				let palette = new MaterialPalette().shift();
+				
 				this.wewConfig = {
-					samples:[{sample:this.sample,name:'Monster',palette:palette}],
-					references:[{reference:reference,name:'Referentie',palette:palette.clone().transform(0,.1,.3)}]
+					entities:[
+						this.chartEntityManager.createFromReference(reference,'Referentie',palette.clone().transform(0,.1,.3)),
+						this.chartEntityManager.createFromSample(this.sample,'Monster',palette)
+					]
 				};
 			});
 			
