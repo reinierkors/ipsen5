@@ -19,7 +19,7 @@
 	<md-card-title>Upload WEW soortenlijst (XLS)</md-card-title>
 	<!-- Show file upload if the wew tables are empty -->
 	<md-card-content *ngIf="wewTablesEmpty">
-		<input type="file" (change)="fileChange($event)"/>
+		<input type="file" accept=".xls, application/vnd.ms-excel" (change)="fileChange($event)"/>
 	</md-card-content>
 	<!-- Show a button to empty the WEW tables if they're not -->
 	<md-card-content *ngIf="!wewTablesEmpty">
