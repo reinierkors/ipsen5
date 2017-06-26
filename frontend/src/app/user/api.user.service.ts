@@ -23,12 +23,12 @@ export class ApiUserService extends ApiService{
 	
 	// Save a user to the server
     public createUser(user:User):Observable<User> {
-        return this.post('/user/add', user);
+        return this.post('/user/admin/add', user);
     }
 	
 	// Change the current user's password
     public editPassword(oldPassword: String, newPassword: String, confirmPassword: String):Observable<boolean> {
-        return this.post('/user/editpassword', {oldPassword: oldPassword, newPassword: newPassword, confirmPassword: confirmPassword});
+        return this.post('/user/admin/editpassword', {oldPassword: oldPassword, newPassword: newPassword, confirmPassword: confirmPassword});
     }
 
     // Change the data of a user

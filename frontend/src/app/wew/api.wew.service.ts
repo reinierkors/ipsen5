@@ -34,11 +34,11 @@ export class ApiWewService extends ApiService{
 	
 	//Checks if all WEW tables are empty
 	public areTablesEmpty():Observable<boolean>{
-		return this.get('/wew/isEmpty');
+		return this.get('/wew/admin/isEmpty');
 	}
 	
 	//Delete everything from all WEW tables
 	public emptyAllTables():Observable<boolean>{
-		return this.post('/wew/emptyAll',null);
+		return this.post('/wew/admin/emptyAll',null);
 	}
 }

@@ -45,6 +45,7 @@ import { WatersComponent } from "./results/waters/waters.component";
 import { TaxonManageGroupsComponent,TaxonManageGroupsEditComponent } from './taxon/taxon-manage-groups/taxon-manage-groups.component';
 import {ReferenceListComponent} from './reference/reference-list/reference-list.component';
 import {ReferenceEditComponent} from './reference/reference-edit/reference-edit.component';
+import {CompareComponent} from './compare/compare.component';
 
 const routes:Routes = [
 	{path: '', component: HomeComponent},
@@ -57,7 +58,8 @@ const routes:Routes = [
 	{path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
 	{path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
 	{path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
-	{path: 'taxon/view/:id', component: TaxonViewComponent, canActivate: [AuthGuard]},
+    {path: 'taxon/view/:id', component: TaxonViewComponent, canActivate: [AuthGuard]},
+    {path: 'compare', component: CompareComponent, canActivate: [AuthGuard]},
 	/* Admin Routes */
 	{path: 'taxon/import', component: TaxonImportStructureComponent, canActivate: [AuthGuard]},
 	{path: 'taxon/group', component: TaxonManageGroupsComponent, canActivate: [AuthGuard]},
@@ -92,6 +94,7 @@ const routes:Routes = [
 		TaxonManageGroupsEditComponent,
 		ReferenceListComponent,
         ReferenceEditComponent,
+		CompareComponent
     ],
 	entryComponents: [
 		TaxonManageGroupsEditComponent

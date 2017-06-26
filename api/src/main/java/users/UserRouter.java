@@ -27,8 +27,8 @@ public class UserRouter {
 			get("/",(req,res) -> gson.toJson(userService.getAll()));
             get("/currentuser",(req, res) -> gson.toJson(userService.getCurrentUser(req.headers("X-Authorization"))));
 			get("/:id",(req,res) -> gson.toJson(userService.get(Integer.parseInt(req.params("id")))));
-            post("/add", (req, res) -> userService.create(gson.fromJson(req.body(), User.class)));
-            post("/editpassword", (req, res) -> {
+            post("/admin/add", (req, res) -> userService.create(gson.fromJson(req.body(), User.class)));
+            post("/admin/editpassword", (req, res) -> {
                 PasswordModel passwords = gson.fromJson(req.body(),PasswordModel.class);
                 return userService.editPassword(passwords.oldPassword, passwords.newPassword, passwords.confirmPassword, req.headers("X-Authorization"));
             });
