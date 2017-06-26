@@ -104,6 +104,12 @@ a.backButton {
 .pie-echart {
 	height: 500px;
 }
+
+a.mat-list-item {
+	max-width: 195px !important;
+	width: 195px !important;
+}
+
 .mat-sidenav-opened + div + .mat-sidenav-content {
 	margin-left: 194px !important;
 }
