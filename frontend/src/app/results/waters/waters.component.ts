@@ -99,7 +99,9 @@ export class WatersComponent implements OnInit{
 			let config:WewChartConfig = {
 				entities:[chartReference,...chartSamples],
 				factors:[factor],
-				xAxis:'entity'
+				xAxis:'entity',
+				width:(chartSamples.length+1)*90,
+				height:350,
 			};
 			return config;
 		});

@@ -15,7 +15,9 @@ export type WewChartConfig = {
 	factors?:WEWFactor[],
 	barGap?:string,
 	barCategoryGap?:string,
-	xAxis?:WewXAxisConfig
+	xAxis?:WewXAxisConfig,
+	width?:number,
+	height?:number
 };
 
 //Value to put in the charts series.data list
@@ -64,7 +66,6 @@ export class WewBarChartComponent implements OnInit {
 			backgroundColor:'rgba(0,0,0,0.9)',
 			formatter:(p)=>this.tooltipFormatter(p)
 		},
-		legend:{data:['Test','Test 2']},
 		grid:{left:'3%',right:'4%',bottom:'15%',containLabel:true},
 		xAxis:{type:'category',data:[],axisLabel:{rotate:45}},
 		yAxis:{type:'value',boundaryGap:[0, 0.01],min:0,max:10},
@@ -81,9 +82,14 @@ export class WewBarChartComponent implements OnInit {
 			factors:[],
 			barGap:'15%',
 			barCategoryGap:'35%',
-			xAxis:'factor'
+			xAxis:'factor',
+			width:1000,
+			height:300
 		};
 		this.config = Object.assign(defaultConfig,this.config);
+		
+		this.width = this.config.width;
+		this.height = this.config.height;
 		
 		//Keep the entity list as-is
 		this.entities = this.config.entities;
@@ -107,9 +113,6 @@ export class WewBarChartComponent implements OnInit {
 		//Fill Maps
 		this.allDataPr.then(([factors,calcs]) => this.storeCollections(factors,calcs));
 		
-		//Calculate Size
-		this.allDataPr.then(() => this.calculateSize());
-		
 		//Should we even show anything?
 		this.allDataPr.then(() => {
 			let calcCount = Array.from(this.entityCalcs.values())
@@ -126,8 +129,9 @@ export class WewBarChartComponent implements OnInit {
 	
 	//EChart instance is available
 	public onChartInit(echart){
-		this.echart = echart;
+		echart.resize({width:this.width,height:this.height});
 		echart.showLoading();
+		this.echart = echart;
 	}
 	
 	//Sets the time based on how many factors we have
@@ -142,15 +146,6 @@ export class WewBarChartComponent implements OnInit {
 		
 		this.chartOptions.title.text = title;
 		this.chartOptions.title.subtext = subtext;
-	}
-	
-	private calculateSize(){
-		let stackCount = this.factors.length * this.entities.length;
-		
-		this.width = stackCount * 90;
-		this.height = 350;
-		
-		this.echart.resize({width:this.width,height:this.height});
 	}
 	
 	//Put data in arrays and maps for easy access
@@ -254,6 +249,7 @@ export class WewBarChartComponent implements OnInit {
 		
 		//Show data
 		this.echart.setOption(this.chartOptions,true);
+		this.echart.resize({width:this.width,height:this.height});
 		this.echart.hideLoading();
 	}
 	
