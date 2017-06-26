@@ -46,7 +46,7 @@ import { TaxonManageGroupsComponent,TaxonManageGroupsEditComponent } from './tax
 import {ReferenceListComponent} from './reference/reference-list/reference-list.component';
 import {ReferenceEditComponent} from './reference/reference-edit/reference-edit.component';
 import {CompareComponent} from './compare/compare.component';
-
+import {LOCALE_ID} from '@angular/core';
 const routes:Routes = [
 	{path: '', component: HomeComponent},
 	{path: 'login', component: LoginComponent},
@@ -124,7 +124,7 @@ const routes:Routes = [
         RouterModule.forRoot(routes, {useHash: false}),
         NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyA8acwCuestYr1vo1mJK-QdkZ-3AwW1blM'}),
     ],
-    providers: [AuthGuard],
+    providers: [AuthGuard,{provide: LOCALE_ID, useValue:"nl-NL"}],
     bootstrap: [AppComponent]
 })
 export class AppModule {
