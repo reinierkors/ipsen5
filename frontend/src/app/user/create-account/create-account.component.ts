@@ -53,7 +53,7 @@ export class CreateAccountComponent implements OnInit {
         this.apiUser.createUser(User.fromJSON(value)).subscribe(data => {
             swal('', `Gebruiker ${data.name} aangemaakt!`, 'success');
             this.resetForm();
-        }, error => swal('Oops...', error, 'error'));
+        }, error => swal('Oops...', error.detailMessage, 'error'));
     }
 
     resetForm() {
@@ -70,7 +70,7 @@ export class CreateAccountComponent implements OnInit {
         this.apiWaterschap.save(Waterschap.fromJSON(value)).subscribe(data => {
             swal('', `Waterschap ${data.name} aangemaakt!`, 'success');
             this.resetWaterschapForm();
-        }, error => swal('Oops...', error, 'error'));
+        }, error => swal('Oops...', error.detailMessage, 'error'));
     }
 
     retrieveWaterschappen(selectLast: boolean) {
@@ -78,7 +78,7 @@ export class CreateAccountComponent implements OnInit {
             this.waterschappen = waterschappen;
             if (selectLast)
                 this.complexForm.patchValue({'waterschap_id': this.waterschappen[this.waterschappen.length - 1].id});
-        }), error => swal('Oops...', error, 'error');
+        }), error => swal('Oops...', error.detailMessage, 'error');
     }
 
     resetWaterschapForm() {
