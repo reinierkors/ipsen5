@@ -151,7 +151,6 @@ export class SampleViewComponent implements OnInit {
 			Promise.all([samplePr,this.groupsPr]).then(([sample,groups]) => {
 				this.retrieveTaxon();
 			});
-			
 		});
 	}
 	
