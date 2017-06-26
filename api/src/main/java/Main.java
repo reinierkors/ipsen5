@@ -25,7 +25,7 @@ public class Main {
         //Set the API server up
         port(Config.getInstance().api.port);
         ipAddress(Config.getInstance().api.host);
-        enableCORS("*", null, "X-Authorization");
+        enableCORS("*", null, "X-Authorization, User-Role");
 
         //Take care if 404s, 500s and exceptions
         handleErrors();
@@ -48,13 +48,16 @@ public class Main {
                     halt(401, "Your session has expired");
                 }
             });
+            // Checks if user is an admin if the request is directed at an admin path
+            before("/*/admin/*", ((request, response) -> {
+                apiGuard.adminBeforeCheck(request);
+            }));
 
             new AuthRouter();
             new SampleRouter();
             new TaxonRouter();
             new WEWRouter();
             new LocationRouter();
-            new WatertypeRouter();
             new UserRouter();
             new WaterschapRouter();
             new WatertypeRouter();
