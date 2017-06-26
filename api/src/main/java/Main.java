@@ -11,6 +11,7 @@ import authenticate.AuthRouter;
 import calculate.CalculateRouter;
 import location.LocationRouter;
 import marker.MarkerRouter;
+import reference.ReferenceRouter;
 import sample.SampleRouter;
 import taxon.TaxonRouter;
 import users.UserRouter;
@@ -63,6 +64,7 @@ public class Main {
             new WatertypeRouter();
             new CalculateRouter();
             new MarkerRouter();
+            new ReferenceRouter();
         });
     }
 

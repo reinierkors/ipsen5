@@ -3,11 +3,34 @@ import {shuffle,rotate,rotateParts} from './arrayUtils';
 
 //A palette is a list of HSL or RGB colors
 export abstract class Palette{
-	public colors:Color[];
+	private originalColors:Color[];
+	private currentColors:Color[];
+	
+	public set colors(colors:Color[]){
+		this.originalColors = colors;
+		this.currentColors = colors;
+	}
+	public get colors():Color[]{
+		return this.currentColors;
+	}
+	
 	public loop:boolean;
 	
 	public constructor(loop?:boolean){
 		this.loop = loop==null?true:loop;
+	}
+	
+	//Reset color array to before any transformations
+	public reset():void{
+		this.currentColors = [...this.originalColors];
+	}
+	
+	//Make copy of palette
+	public clone(){
+		let cloneObj = Object.create(this);
+		cloneObj.originalColors = this.originalColors.map(color => color.asHSL());
+		cloneObj.currentColors = this.currentColors.map(color => color.asHSL());
+		return cloneObj;
 	}
 	
 	//When loop is off, index must be smaller than colors.length

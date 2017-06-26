@@ -11,7 +11,7 @@ type TreeRow = {taxon:Taxon,depth:number,isRefer:boolean,depthLines:string,postf
 })
 export class TaxonTreeComponent implements OnInit {
 	@Input() root:Taxon;
-	@Input() taxa:Taxon[];
+	@Input() taxonIds:Taxon[];
 	@Input() groups:TaxonGroup[];
 	@Input() levels:TaxonLevel[];
 	@Input() showAncestors:boolean;
@@ -33,24 +33,24 @@ export class TaxonTreeComponent implements OnInit {
 		
 		this.groups.forEach(group => groupIdMap.set(group.id,group));
 		this.levels.forEach(level => levelIdMap.set(level.id,level));
-		this.taxa.forEach(taxon => taxonIdMap.set(taxon.id,taxon));
+		this.taxonIds.forEach(taxon => taxonIdMap.set(taxon.id,taxon));
 		
 		//Create a hierarchy
 		let taxonParentMap:Map<Taxon/*parent*/,Taxon[]/*children*/> = new Map();
 		let taxonReferMap:Map<Taxon/*being referred to*/,Taxon[]/*referring to*/> = new Map();
 		
 		//Make empty arrays
-		this.taxa.forEach(taxon => {
+		this.taxonIds.forEach(taxon => {
 			taxonParentMap.set(taxon,[]);
 			taxonReferMap.set(taxon,[]);
 		});
 		
 		//Fill arrays
-		this.taxa.filter(taxon => taxon.parentId).forEach(taxon => taxonParentMap.get(taxonIdMap.get(taxon.parentId)).push(taxon));
-		this.taxa.filter(taxon => taxon.referId).forEach(taxon => taxonReferMap.get(taxonIdMap.get(taxon.referId)).push(taxon));
+		this.taxonIds.filter(taxon => taxon.parentId).forEach(taxon => taxonParentMap.get(taxonIdMap.get(taxon.parentId)).push(taxon));
+		this.taxonIds.filter(taxon => taxon.referId).forEach(taxon => taxonReferMap.get(taxonIdMap.get(taxon.referId)).push(taxon));
 		
 		
-		//Only use the taxa we actually want to show
+		//Only use the taxonIds we actually want to show
 		let activeTaxa:Taxon[] = [this.root];
 		let firstTaxon = this.root;
 		

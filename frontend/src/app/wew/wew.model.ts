@@ -27,6 +27,11 @@ export class WEWValue{
 	}
 }
 
+export class SimpleWEWValue{
+	factorClassId:number;
+	value:number;
+}
+
 export class WEWFactor{
 	id:number;
 	name:string;

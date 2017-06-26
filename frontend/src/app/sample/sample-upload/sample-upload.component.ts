@@ -31,7 +31,7 @@ type SampleImport = {
 	'Code methode':string, 'Naam methode':string, 'Eenheid methode':string,
 	//Taxon name
 	Taxonnaam:string,
-	//Amount of taxa found in sample
+	//Amount of taxonIds found in sample
 	Waarde:number,
 };
 
@@ -73,10 +73,10 @@ export class SampleUploadComponent implements OnInit {
 	confirm:{
 		watertypes:Watertype[],
 		locations:MarkerLocation[],
-		taxa:Taxon[],
+		taxonIds:Taxon[],
 		samples:Sample[],
 		samplesFast:any[]
-	} = {watertypes:[],locations:[],taxa:[],samples:[],samplesFast:[]};
+	} = {watertypes:[],locations:[],taxonIds:[],samples:[],samplesFast:[]};
 	
 	constructor(
 		private sampleApi:ApiSampleService,
@@ -162,7 +162,7 @@ export class SampleUploadComponent implements OnInit {
 			this.handleLocations(),
 			this.handleTaxa()
 		]).then(()=>{
-			if(this.confirm.locations.length+this.confirm.watertypes.length+this.confirm.taxa.length > 0)
+			if(this.confirm.locations.length+this.confirm.watertypes.length+this.confirm.taxonIds.length > 0)
 				this.setState('confirmData');
 			else
 				this.createSamples();
@@ -234,7 +234,7 @@ export class SampleUploadComponent implements OnInit {
 		},this.handleError);
 	}
 	
-	//Find all the taxa in the data and retrieve existing ones from the server
+	//Find all the taxonIds in the data and retrieve existing ones from the server
 	private handleTaxa():Promise<null>{
 		//Go through CSV data
 		this.csvData.forEach(row => {
@@ -246,10 +246,10 @@ export class SampleUploadComponent implements OnInit {
 		});
 		return new Promise((resolve,reject) => {
 			//Retrieve existing taxon
-			this.taxonApi.getByNames(Array.from(this.taxonMap.keys())).subscribe(taxa => {
-				taxa.forEach(taxon => this.taxonMap.set(taxon.name,taxon));
-				//Show non-existing taxa for confirmation
-				this.confirm.taxa = Array.from(this.taxonMap.values()).filter(taxon => !taxon.id);
+			this.taxonApi.getByNames(Array.from(this.taxonMap.keys())).subscribe(taxonIds => {
+				taxonIds.forEach(taxon => this.taxonMap.set(taxon.name,taxon));
+				//Show non-existing taxonIds for confirmation
+				this.confirm.taxonIds = Array.from(this.taxonMap.values()).filter(taxon => !taxon.id);
 				resolve();
 			},(...params) => this.handleError(...params));
 		});
@@ -263,8 +263,8 @@ export class SampleUploadComponent implements OnInit {
 		let waitForWatertypes:Promise<Watertype>[] = []
 		this.confirm.watertypes.slice().forEach(watertype => waitForWatertypes.push(this.confirmWatertype(watertype)));
 		
-		//Save all taxa
-		let waitForTaxa:Promise<Taxon[]> = this.confirmTaxa(this.confirm.taxa);
+		//Save all taxonIds
+		let waitForTaxa:Promise<Taxon[]> = this.confirmTaxa(this.confirm.taxonIds);
 		
 		Promise.all(waitForWatertypes).then(()=>{
 			//Save all locations (watertypes have to be saved first)
@@ -304,12 +304,12 @@ export class SampleUploadComponent implements OnInit {
 		});
 	}
 	
-	//Save all taxa to the server
-	private confirmTaxa(taxa:Taxon[]):Promise<Taxon[]>{
+	//Save all taxonIds to the server
+	private confirmTaxa(taxonIds:Taxon[]):Promise<Taxon[]>{
 		return new Promise((resolve,reject) => {
-			this.taxonApi.save(taxa).subscribe(taxa => {
-				taxa.forEach(taxon => this.taxonMap.set(taxon.name,taxon));
-				resolve(taxa);
+			this.taxonApi.save(taxonIds).subscribe(taxonIds => {
+				taxonIds.forEach(taxon => this.taxonMap.set(taxon.name,taxon));
+				resolve(taxonIds);
 			}, error => reject(error));
 		});
 	}

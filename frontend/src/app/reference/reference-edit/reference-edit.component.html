@@ -1,0 +1,9 @@
+<h1 *ngIf="watertype">{{watertype.code}} - {{watertype.name}}</h1>
+<md-card *ngIf="taxaList!==null">
+	<md-card-title>Taxa</md-card-title>
+	<md-card-content>
+		<textarea [rows]="getTaxaRows()" cols="60" [(ngModel)]="taxaList"></textarea>
+		<br/>
+		<button md-raised-button (click)="save()" [disabled]="saving">{{saving?'Bezig met opslaan...':'Sla op'}}</button>
+	</md-card-content>
+</md-card>

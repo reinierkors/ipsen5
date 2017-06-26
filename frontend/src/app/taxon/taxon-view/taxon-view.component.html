@@ -19,20 +19,23 @@
 <div *ngIf="state=='ready'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
 	<!-- Family tree -->
 	<md-card>
-		<md-card-title>Taxon familie</md-card-title>
+		<md-card-title>
+			<span *ngIf="rootGroup && rootGroup.icon">
+				<md-icon class="taxon-icon" fontSet="fi" [fontIcon]="'flaticon-'+rootGroup.icon"></md-icon>
+			</span>
+			Taxon familie
+		</md-card-title>
 		<md-card-content>
-			<app-taxon-tree [groups]="groups" [levels]="levels" [taxa]="taxa" [root]="root" [showAncestors]="true" [showDescendants]="true"></app-taxon-tree>
+			<app-taxon-tree [groups]="groups" [levels]="levels" [taxonIds]="taxonIds" [root]="root" [showAncestors]="true" [showDescendants]="true"></app-taxon-tree>
 		</md-card-content>
 	</md-card>
 	
 	<!-- WEW-info -->
 	<md-card>
 		<md-card-title>WEW gegevens</md-card-title>
-		<md-card-content *ngIf="wewValues.size==0">
-			Er zijn geen WEW waardes bekend voor {{root.name}}
-		</md-card-content>
-		<md-card-content *ngIf="wewValues.size>0">
-			ToDo: wew gegevens in staaf grafiek komt hier
+		<md-card-content>
+			<app-wew-bar-chart *ngIf="wewConfig" [config]="wewConfig"></app-wew-bar-chart>
+			<md-spinner *ngIf="!wewConfig"></md-spinner>
 		</md-card-content>
 	</md-card>
 </div>

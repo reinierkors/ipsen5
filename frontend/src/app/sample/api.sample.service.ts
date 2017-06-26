@@ -5,9 +5,7 @@ import {Observable} from 'rxjs';
 import {ApiService} from '../services/api.service';
 import {Sample} from './sample.model';
 import {Taxon} from '../taxon/taxon.model';
-
-//Value that is calculated in a sample using the WEW list
-export type CalculationData = { factorClassId: number, computedValue: number };
+import {SimpleWEWValue} from '../wew/wew.model';
 
 @Injectable()
 export class ApiSampleService extends ApiService {
@@ -31,8 +29,13 @@ export class ApiSampleService extends ApiService {
     }
 
     //Get a list of calculations for the given sample id
-    public getCalculationsBySample(sampleId: number): Observable<CalculationData[]> {
-        return this.get('/calculate/sample/' + sampleId);
+    public getCalculationsBySample(sampleId: number):Observable<SimpleWEWValue[]>{
+        return this.get('/calculate/sample/'+sampleId).map(objs => objs.map(obj => {
+			let value = new SimpleWEWValue();
+			value.factorClassId = obj.factorClassId;
+			value.value = obj.computedValue;
+			return value;
+		}));
     }
 
     public getByLocationId(locationId: number): Observable<Sample[]> {
