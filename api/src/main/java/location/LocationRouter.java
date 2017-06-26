@@ -21,7 +21,7 @@ public class LocationRouter {
         Gson gson = gsonBuilder.create();
 
         path("/location", () -> {
-            get("/admin/all", ((request, response) -> gson.toJson(locationService.getAll())));
+            get("/all", ((request, response) -> gson.toJson(locationService.getAll())));
             get("/id/:id", ((request, response) -> gson.toJson(locationService.getById(Integer.valueOf(request.params("id"))))));
             get("/code/:code", (req,res) -> gson.toJson(locationService.getByCode(req.params("code"))));
             post("",(req,res) -> {
