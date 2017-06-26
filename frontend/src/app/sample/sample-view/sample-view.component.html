@@ -7,21 +7,9 @@
 		Waterkwaliteit
 	</md-card-title>
 	<md-card-content>
+		<a *ngIf="sample" [routerLink]="'/sample/quality/'+sample.id">Bekijk de kwaliteit analyse</a><br/>
 		<app-wew-bar-chart *ngIf="wewConfig" [config]="wewConfig"></app-wew-bar-chart>
 		<md-spinner *ngIf="!wewConfig"></md-spinner>
-<!--		<div *ngIf="factors && sample && reference">
-			<table>
-				<tr *ngFor="let factor of factors">
-					<td>
-						
-					</td>
-					<div *ngFor="let factorClass of factor.classes">
-						{{factor.name}} - {{factorClass.description}}
-						
-					</div>
-				</tr>
-			</table>
-		</div> -->
 	</md-card-content>
 </md-card>
 <md-card *ngIf="sample && location && taxon && showChart">

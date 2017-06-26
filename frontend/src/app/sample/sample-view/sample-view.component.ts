@@ -28,9 +28,9 @@ import 'rxjs/add/operator/toPromise';
 })
 export class SampleViewComponent implements OnInit {
 	public sample: Sample;
+	public reference: Reference;
 	public taxon: Taxon[];
 	public groups: TaxonGroup[];
-	public factors: WEWFactor[];
 	public location: MarkerLocation;
 	public wewConfig: WewChartConfig;
 	public showChart = false;
@@ -57,8 +57,6 @@ export class SampleViewComponent implements OnInit {
 		this.option2 = this.defaultSettings();
 
 		this.groupsPr = this.apiTaxon.getGroups().toPromise().then(groups => this.groups = groups);
-		
-		this.apiWew.getFactors().subscribe(factors => this.factors = factors);
 	}
 
 	setActiveGraph(bool) {
@@ -143,6 +141,7 @@ export class SampleViewComponent implements OnInit {
 			
 			//Create config object for the WEW chart
 			referencePr.then(reference => {
+				this.reference = reference;
 				let palette = new MaterialPalette().shift();
 				
 				this.wewConfig = {

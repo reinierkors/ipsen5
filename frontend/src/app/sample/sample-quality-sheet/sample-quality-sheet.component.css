@@ -1,0 +1,52 @@
+.factor{
+	border:1px solid #AAA;
+	padding:1em;
+	margin:1em;
+	float:left;
+	min-height:270px;
+}
+
+.head,.factorClass,.total{
+	padding:0 2px;
+}
+
+.head span,.factorClass span,.total span{
+	display:inline-block;
+}
+
+.factorName{
+	font-size:1.5em;
+}
+
+.factorName,.head,.total{
+	font-weight:bold;
+}
+
+.total{
+	border-top:1px solid #AAA;
+	margin-top:6px;
+	padding-top:3px;
+}
+
+/* Width stuff */
+.factor{
+	--fc-code-width:50px;
+	--fc-desc-width:200px;
+	--ref-width:70px;
+	--sam-width:60px;
+	--diff-width:60px;
+	--total-width:calc(var(--fc-code-width) + var(--fc-desc-width) + var(--ref-width) + var(--sam-width) + var(--diff-width) + 1em)
+}
+
+.factor,.total,.head,.factorClass{
+	width:var(--total-width);
+}
+
+.fcCode{width:var(--fc-code-width);}
+.fcDesc{width:var(--fc-desc-width);}
+.fc{width:calc(var(--fc-code-width) + var(--fc-desc-width));}
+.ref{width:var(--ref-width);}
+.sam{width:var(--sam-width);}
+.diff{width:var(--diff-width);}
+.total .label{width:calc(var(--fc-code-width) + var(--fc-desc-width) + var(--ref-width) + var(--sam-width) + .75em);}
+.total .value{width:var(--fc-diff-width);}

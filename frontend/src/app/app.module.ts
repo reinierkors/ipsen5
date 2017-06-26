@@ -47,6 +47,7 @@ import {ReferenceListComponent} from './reference/reference-list/reference-list.
 import {ReferenceEditComponent} from './reference/reference-edit/reference-edit.component';
 import {LOCALE_ID} from '@angular/core';
 import {SampleCompareComponent} from "./sample/sample-compare/sample-compare.component";
+import {SampleQualitySheetComponent} from './sample/sample-quality-sheet/sample-quality-sheet.component';
 
 const routes:Routes = [
 	{path: '', component: HomeComponent},
@@ -58,6 +59,7 @@ const routes:Routes = [
 	{path: 'data', component: SampleLocationTableComponent, canActivate: [AuthGuard]},
 	{path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
 	{path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
+	{path: 'sample/quality/:id', component: SampleQualitySheetComponent, canActivate: [AuthGuard]},
 	{path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
     {path: 'taxon/view/:id', component: TaxonViewComponent, canActivate: [AuthGuard]},
     {path: 'sample/compare', component: SampleCompareComponent, canActivate: [AuthGuard]},
@@ -96,6 +98,7 @@ const routes:Routes = [
 		ReferenceListComponent,
         ReferenceEditComponent,
 		SampleCompareComponent,
+		SampleQualitySheetComponent
     ],
 	entryComponents: [
 		TaxonManageGroupsEditComponent
