@@ -1,8 +1,11 @@
 <md-card>
     <md-card-title>Algemene data</md-card-title>
     <md-input-container class="full-width">
-        <input mdInput placeholder="Filter op data" (keyup)='updateFilter($event)'>
+        <input mdInput placeholder="Doorzoek de data" (keyup)='updateFilter($event)'>
     </md-input-container>
+</md-card>
+<md-card>
+    <md-card-title>Locaties</md-card-title>
     <md-card-content>
         <ngx-datatable
                 class="material"
