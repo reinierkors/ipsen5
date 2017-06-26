@@ -94,11 +94,10 @@ export class SampleViewComponent implements OnInit {
 
     updateGraph(group:TaxonGroup, taxonValues:Map<Taxon,number>) {
         let names = Array.from(taxonValues.keys()).map(taxon => taxon.name);
-
         let output = [];
         taxonValues.forEach((value,taxon) => {
             output.push({name:taxon.name,value:value});
-        })
+        });
 
         this.option2.legend.data = names;
         this.option2.series[0].data = output;
@@ -136,7 +135,6 @@ export class SampleViewComponent implements OnInit {
 
         let taxonIds = Array.from(this.sample.taxonValues.keys());
         this.apiTaxon.getByIds(taxonIds).subscribe(taxon => {
-            let names = [];
             let output = [];
             this.taxon = taxon;
 
@@ -154,7 +152,7 @@ export class SampleViewComponent implements OnInit {
                 }
             });
 
-            this.option.legend.data = names;
+            this.option.legend.data = output.map(taxon => taxon.name);
             this.option.series[0].data = output;
 
             this.showChart = true;
