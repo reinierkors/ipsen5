@@ -20,13 +20,9 @@
 	<a [routerLink]="'/sample/view/'+row.id" md-raised-button>Details</a>
 </ng-template>
 
-<md-card>
+<md-card *ngIf="currentLocation">
     <md-card-title>Waterkwaliteit van {{currentLocation.description}}</md-card-title>
-    <md-tab-group *ngIf="currentLocation && wewConfigs">
-        <md-tab *ngFor="let config of wewConfigs" [label]="config.factors[0].name">
-            <div>
-                <app-wew-bar-chart [config]="config"></app-wew-bar-chart>
-            </div>
-        </md-tab>
-    </md-tab-group>
+	<div *ngFor="let config of wewConfigs">
+		<app-wew-bar-chart [config]="config"></app-wew-bar-chart>
+	</div>
 </md-card>
