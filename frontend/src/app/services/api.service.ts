@@ -27,7 +27,7 @@ export abstract class ApiService {
 			observer.error(res);
 	}
 	
-	//Add authorization header to every api call
+	//Add authorization headers to every api call
 	protected static addToAuthHeaders(headerType: string, value: string){
         ApiService.authHeaders[headerType] = value;
     }

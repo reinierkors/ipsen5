@@ -22,6 +22,6 @@ export class LoginComponent implements OnInit {
         this.authenticationService.login(this.model.email, this.model.password)
             .subscribe(() => {
                 this.router.navigate(['/home']);
-            }, err => swal('Oops...', err, 'error'));
+            }, err => swal('Oops...', err.detailMessage, 'error'));
     }
 }

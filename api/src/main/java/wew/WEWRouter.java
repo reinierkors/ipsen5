@@ -40,7 +40,7 @@ public class WEWRouter {
 			//Retrieve all WEW factors
 			get("/factor", (req,res) -> gson.toJson(wewService.getFactors()));
 			//Checks if the WEW tables is empty
-			get("/isEmpty", (req,res) -> gson.toJson(wewService.areTablesEmpty()));
+			get("/admin/isEmpty", (req,res) -> gson.toJson(wewService.areTablesEmpty()));
 			
 			//Stores new values
 			//Post data should be a list of WEWValue objects
@@ -61,7 +61,7 @@ public class WEWRouter {
 			});
 			
 			//Empty all WEW databases
-			post("/emptyAll", (req,res) -> {
+			post("/admin/emptyAll", (req,res) -> {
 				wewService.emptyAllTables();
 				return gson.toJson(true);
 			});

@@ -101,6 +101,21 @@ a.backButton {
 	margin-bottom: 1rem;
 }
 
+.pie-echart {
+	height: 500px;
+}
+
+a.mat-list-item {
+	max-width: 195px !important;
+	width: 195px !important;
+}
+
+.mat-sidenav-opened + div + .mat-sidenav-content {
+	margin-left: 194px !important;
+}
+.app-icon-button {
+	min-width: 39px;
+}
 /*
 PRINT
 */
