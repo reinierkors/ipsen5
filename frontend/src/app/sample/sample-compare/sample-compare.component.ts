@@ -10,6 +10,7 @@ import {
 } from '../../wew/wew-bar-chart/chart-entity.model';
 import {WEWFactor} from '../../wew/wew.model';
 import {ApiWewService} from '../../wew/api.wew.service';
+import {MarkerLocation} from "../../locations/markerLocation.model";
 
 @Component({
     providers: [ApiSampleService, ApiLocationService, ChartEntityManager, ApiWewService],
@@ -21,17 +22,18 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
     @ViewChild('locationsButtonTemplate') locationsButtonTemplate;
     @ViewChild('samplesButtonTemplate') samplesButtonTemplate;
     @ViewChild('sampleDateTemplate') sampleDateTemplate;
+    @ViewChild('locationsButtonTemplateAll') locationsButtonTemplateAll;
     public wewConfig: WewChartConfig;
     public locations = [];
     public locationColumns = [
         {name: 'Mp', prop: 'code', cellTemplate: null},
         {name: 'Naam', prop: 'description', cellTemplate: null},
-        {name: 'details', prop: 'button', cellTemplate: null}
+        {name: 'Monsters', prop: 'button', cellTemplate: null}
     ];
     public samples = [];
     public sampleColumns = [
         {name: 'Datum genomen', prop: 'date', cellTemplate: null},
-        {name: 'details', prop: 'button', cellTemplate: null}
+        {name: 'Details', prop: 'button', cellTemplate: null}
     ];
     public showLocationTable = true;
     public showSampleTable = false;
@@ -69,24 +71,21 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
     }
 
     private getAllLocations() {
-        this.route.params
-            .switchMap(params => this.apiLocation.getAllLocations())
+        this.apiLocation.getAllLocations()
             .subscribe(locations => {
                 this.locations = locations;
             }, error => console.log(error));
     }
 
     private getLocationById(id: number) {
-        this.route.params
-            .switchMap(params => this.apiLocation.getById(id))
+        this.apiLocation.getById(id)
             .subscribe(location => {
                 this.selectedLocation = location;
             }, error => console.log(error));
     }
 
     private getSampleById(id: number) {
-        this.route.params
-            .switchMap(params => this.apiSample.getSample(id))
+        this.apiSample.getSample(id)
             .subscribe(sample => {
                 this.samplesToCompare.push(sample);
                 this.addToChart();
@@ -94,8 +93,7 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
     }
 
     private getSamplesByLocationId(id: number) {
-        this.route.params
-            .switchMap(params => this.apiSample.getByLocationId(id))
+        this.apiSample.getByLocationId(id)
             .subscribe(samples => {
                 this.samples = samples;
             }, error => console.log(error));
@@ -104,11 +102,11 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
     public setShowLocationTable() {
         this.showSampleTable = false;
         this.showLocationTable = true;
+        this.selectedLocation = {};
     }
 
     private loadFactors() {
-        this.route.params
-            .switchMap(params => this.apiWew.getFactors())
+        this.apiWew.getFactors()
             .subscribe(factors => {
                 this.factors = factors;
             }, error => console.log(error));
@@ -125,21 +123,19 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
             });
             chartEntities.push(this.chartEntityManager.createFromSample(item, name, palette.clone()));
         });
-        // this.wewConfig = {
-        //     entities: chartEntities,
-        // };
 
         this.wewConfigs = this.factors.map(factor => {
             const config: WewChartConfig = {
                 entities: chartEntities,
                 factors: [factor],
                 xAxis: 'entity',
-                width: (chartEntities.length + 1) * 90,
+                width: (chartEntities.length + 1) * 100,
                 height: 350,
             };
             return config;
         });
-        setTimeout(() => this.reload());
+        if (this.wewChartInstance)
+            this.wewChartInstance.reload(this.wewConfigs);
     }
 
     public onWewChartInit(wewChartInstance) {
@@ -147,13 +143,17 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
             this.wewChartInstance = wewChartInstance;
     }
 
-    public reload() {
-        if (this.wewChartInstance)
-            this.wewChartInstance.reload();
+    public compareCurrentLocation(id) {
+        if (this.selectedLocation == undefined) {
+            this.getSamplesByLocationId(id);
+            this.compareCurrentLocation(id);
+        }
+        this.samplesToCompare = this.samples.concat();
+        this.addToChart();
     }
 
-    public compareCurrentLocation() {
-        this.samplesToCompare = this.samples;
-        this.addToChart();
+    public clearGraph() {
+        this.samplesToCompare.splice(0);
+        this.wewConfigs.splice(0);
     }
 }

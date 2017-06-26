@@ -16,7 +16,6 @@
 <ng-template #locationsButtonTemplate let-row="row">
     <a md-raised-button (click)="onSelect(row.id)">Bekijk monsters</a>
 </ng-template>
-
 <md-card *ngIf="showSampleTable">
     <md-card-title>
         Monsters van {{selectedLocation.description}}
@@ -43,20 +42,10 @@
 <ng-template #sampleDateTemplate let-row="row">
     {{row.date | date:'fullDate'}}
 </ng-template>
-<!--<md-card>-->
-    <!--<md-card-title>-->
-        <!--Water kwaliteit-->
-    <!--</md-card-title>-->
-    <!--<md-card-content>-->
-        <!--<app-wew-bar-chart  *ngIf="wewConfig"-->
-                            <!--[config]="wewConfig"-->
-                            <!--(init)="onWewChartInit($event)"></app-wew-bar-chart>-->
-        <!--<md-spinner *ngIf="!wewConfig"></md-spinner>-->
-    <!--</md-card-content>-->
-<!--</md-card>-->
 
 <md-card>
     <md-card-title>Water kwaliteit</md-card-title>
+    <a *ngIf="wewConfigs" md-raised-button class="backButton" (click)="clearGraph()">Grafiek leeg maken</a>
     <md-tab-group *ngIf="wewConfigs" >
         <md-tab *ngFor="let config of wewConfigs"
                 [label]="config.factors[0].name">
@@ -67,5 +56,3 @@
         </md-tab>
     </md-tab-group>
 </md-card>
-
-<button (click)="reload()">reload</button>
