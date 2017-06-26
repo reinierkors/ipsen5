@@ -15,3 +15,10 @@
 	border:1px white;
 	border-style:solid none;
 }
+
+:host >>> th.entity-name{
+	transform:rotate(-45deg);
+	transform-origin:left bottom;
+	position:relative;
+	left:1em;
+}

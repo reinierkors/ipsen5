@@ -1,0 +1,95 @@
+R08:
+
+Agraylea multipunctata
+Ancylus fluviatilis
+Anodonta anatina
+Arrenurus globator
+Baetis
+Caenis luctuosa
+Caenis robusta
+Chaetogaster diaphanus
+Chironomus acutiventris
+Cladotanytarsus
+Cricotopus bicinctus
+Cryptochironomus
+Dicrotendipes nervosus
+Dreissena polymorpha
+Ecnomus tenellus
+Ephemera lineata
+Ephemera vulgata
+Ephoron virgo
+Erpobdella vilnensis
+Forelia variegator
+Gammaridae
+Glyptotendipes pallens
+Glyptotendipes signatus
+Gomphus flavipes
+Hydraena riparia
+Hydropsyche contubernalis
+Kloosia pusilla
+Limnesia maculata
+Lipiniella araenicola
+Lipiniella moderata
+Lithoglyphus naticoides
+Metriocnemus inopinatus
+Micropsectra atrofasciata
+Oulimnius rivularis
+Paranais frici
+Paratendipes albimanus
+Piscicola respirans
+Pisidium henslowanum
+Polypedilum scalaenum
+Propappus volki
+Pseudanodonta complanata
+Psychomyia pusilla
+Robackia demeijerei
+Sigara falleni
+Simuliidae
+Sisyra
+Sphaerium rivicola
+Sphaerium solidum
+Stagnicola palustris
+Stylodrilus heringianus
+Tanypus punctipennis
+Unio crassus nanus
+Unio pictorum
+Unio tumidus
+Ablabesmyia monilis
+Acricotopus lucens
+Agraylea sexmaculata
+Anodonta cygnea cygnea
+Apocorophium lacustre
+Arrenurus bicuspidator
+Balanus improvisus
+Bathyporeia
+Chironomus muratensis
+Corbicula fluminea
+Corophium multisetosum
+Cyathura carinata
+Dicrotendipes lobiger
+Einfeldia dissidens
+Gammarus duebeni
+Haemopis sanguisuga
+Haliplus fluviatilis
+Harnischia fuscimana
+Hygrotus inaequalis
+Ischnura elegans
+Laccophilus hyalinus
+Laccophilus minutus
+Mercuria anatina
+Micronecta minutissima
+Monocorophium insidiosum
+Mystacides longicornis
+Neomysis
+Orchestia cavimana
+Palaemon longirostris
+Pisidium amnicum
+Pisidium moitessierianum
+Polypedilum bicrenatum
+Pseudorthocladius curtistylus agg.
+Sigara iactans
+Stictochironomus
+Tanytarsus brundini
+Trocheta bykowskii
+Uncinais uncinata
+Hydracarina

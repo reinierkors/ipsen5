@@ -16,40 +16,40 @@ export class ApiTaxonService extends ApiService{
 		return this.get('/taxon/'+id).map(taxon => Taxon.fromJSON(taxon));
 	}
 	
-	//Retrieve a list of taxa by their ids
+	//Retrieve a list of taxonIds by their ids
 	public getByIds(ids:number[]):Observable<Taxon[]>{
-		return this.post('/taxon/ids',ids).map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));
+		return this.post('/taxon/ids',ids).map(taxonIds => taxonIds.map(taxon => Taxon.fromJSON(taxon)));
 	}
 	
 	//Retrieve all species in db
 	public getAll():Observable<Taxon[]> {
-		return this.get('/taxon/all').map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));
+		return this.get('/taxon/all').map(taxonIds => taxonIds.map(taxon => Taxon.fromJSON(taxon)));
 	}
 	
 	//Retrieve a taxon and all its ancestors and descendants
 	public getFamily(id:number):Observable<Taxon[]> {
-		return this.get('/taxon/family/'+id).map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));
+		return this.get('/taxon/family/'+id).map(taxonIds => taxonIds.map(taxon => Taxon.fromJSON(taxon)));
 	}
 	
-	//Retrieve a list of taxa by their names
+	//Retrieve a list of taxonIds by their names
 	public getByNames(names:string[]):Observable<Taxon[]>{
-		return this.post('/taxon/find',names).map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));
+		return this.post('/taxon/find',names).map(taxonIds => taxonIds.map(taxon => Taxon.fromJSON(taxon)));
 	}
 	
-	//Retrieve a list of taxa by their name, if the taxon doesn't exist yet it will be created
+	//Retrieve a list of taxonIds by their name, if the taxon doesn't exist yet it will be created
 	public findOrCreate(names:string[]):Observable<Taxon[]>{
-		return this.post('/taxon/findOrCreate',names).map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));
+		return this.post('/taxon/findOrCreate',names).map(taxonIds => taxonIds.map(taxon => Taxon.fromJSON(taxon)));
 	}
 	
-	//Save list of taxa to the server
-	public save(taxa:Taxon[]):Observable<Taxon[]>{
-		return this.post('/taxon',taxa).map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));
+	//Save list of taxonIds to the server
+	public save(taxonIds:Taxon[]):Observable<Taxon[]>{
+		return this.post('/taxon',taxonIds).map(taxonIds => taxonIds.map(taxon => Taxon.fromJSON(taxon)));
 	}
 	
-	//Save list of taxa to the server
+	//Save list of taxonIds to the server
 	//When no ID is set, find existing ones by name first and merge with those
-	public saveMerge(taxa:Taxon[]):Observable<Taxon[]>{
-		return this.post('/taxon/merge',taxa).map(taxa => taxa.map(taxon => Taxon.fromJSON(taxon)));
+	public saveMerge(taxonIds:Taxon[]):Observable<Taxon[]>{
+		return this.post('/taxon/merge',taxonIds).map(taxonIds => taxonIds.map(taxon => Taxon.fromJSON(taxon)));
 	}
 	
 	//Retrieve list of all taxon groups

@@ -1,0 +1,15 @@
+.buttons{
+	display:inline-block;
+	width:65px;
+	text-align:right;
+}
+
+.buttons .mat-icon{
+	margin:0 6px 0 0;
+	cursor:pointer;
+}
+
+.description{
+	display:inline-block;
+	width:400px;
+}

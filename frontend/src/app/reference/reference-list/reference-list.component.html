@@ -1,0 +1,17 @@
+<h1>Referenties</h1>
+<md-card>
+	<md-list>
+		<md-list-item *ngFor="let item of listItems">
+			<div *ngIf="item.reference" class="buttons">
+				<md-icon (click)="edit(item)">edit</md-icon>
+				<md-icon (click)="delete(item)">delete</md-icon>
+			</div>
+			<div *ngIf="!item.reference" class="buttons">
+				<md-icon (click)="create(item)">add_circle</md-icon>
+			</div>
+			<div class="description">
+				{{item.watertype.code}} {{item.watertype.name}}
+			</div>
+		</md-list-item>
+	</md-list>
+</md-card>

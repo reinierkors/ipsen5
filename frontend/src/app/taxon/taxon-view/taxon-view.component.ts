@@ -5,16 +5,17 @@ import {trigger,style,transition,animate,group,state} from '@angular/animations'
 import {Taxon,TaxonGroup,TaxonLevel} from '../taxon.model';
 import {ApiTaxonService} from '../api.taxon.service';
 import {ApiWewService} from '../../wew/api.wew.service';
-import {WEWValue,WEWFactor,WEWFactorClass} from '../../wew/wew.model';
+import {WewChartConfig} from '../../wew/wew-bar-chart/wew-bar-chart.component';
+import {MaterialPalette} from '../../services/palette';
+import {ChartEntityManager} from '../../wew/wew-bar-chart/chart-entity.model';
 
 import 'rxjs/add/operator/toPromise';
 
 type State = 'anim'|'error'|'loading'|'ready';
 
-
 @Component({
 	selector:'app-taxon-view',
-	providers:[ApiTaxonService,ApiWewService],
+	providers:[ApiTaxonService,ApiWewService,ChartEntityManager],
 	templateUrl:'./taxon-view.component.html',
 	styleUrls:['./taxon-view.component.css'],
 	animations:[
@@ -33,43 +34,56 @@ export class TaxonViewComponent implements OnInit{
 	//Any errors that happen during the process
 	errors:any[] = [];
 	
+	//The taxon being viewed
 	root:Taxon;
-	taxa:Taxon[];
+	//The group of the root taxon
+	rootGroup:TaxonGroup;
+	//List of taxa on the page
+	taxonIds:Taxon[];
+	//List of all taxon groups
 	groups:TaxonGroup[];
+	//List of all taxon levels
 	levels:TaxonLevel[];
-	private wewFactorPr:Promise<WEWFactor[]>;
-	wewFactors:WEWFactor[];
-	wewValues:Map<WEWFactorClass,WEWValue> = new Map();
+	//Config for the chart
+	wewConfig:WewChartConfig;
+	//Promise that resolves with a list of all groups
+	private groupsPr:Promise<TaxonGroup[]>;
 	
 	constructor(
 		private taxonApi:ApiTaxonService,
 		private wewApi:ApiWewService,
+		private chartEntityManager:ChartEntityManager,
 		private route:ActivatedRoute
 	){
-		taxonApi.getGroups().subscribe(groups => this.groups = groups);
+		this.groupsPr = taxonApi.getGroups().toPromise();
+		this.groupsPr.then(groups => this.groups = groups);
 		taxonApi.getLevels().subscribe(levels => this.levels = levels);
-		this.wewFactorPr = wewApi.getFactors().toPromise().then(factors => this.wewFactors = factors);
 	}
 	
 	ngOnInit(){
 		this.route.params.map(params => parseInt(params.id)).subscribe(id => {
 			let familyPr:Promise<Taxon[]> = this.taxonApi.getFamily(id).toPromise();
-			let wewPr:Promise<WEWValue[]> = this.wewApi.getByTaxon([id]).toPromise();
 			
-			familyPr.then(taxa => {
-				this.taxa = taxa;
-				this.root = taxa.filter(taxon => taxon.id==id)[0];
-			});
-			
-			this.wewFactorPr.then(() => {
-				wewPr.then(values => {
-					let factorClassMap:Map<number/*factor class id*/,WEWFactorClass> = new Map();
-					this.wewFactors.forEach(factor => factor.classes.forEach(fc => factorClassMap.set(fc.id,fc)));
-					values.forEach(value => this.wewValues.set(factorClassMap.get(value.factorClassId),value));
+			familyPr.then(taxonIds => {
+				this.taxonIds = taxonIds;
+				//The taxon this page is about
+				this.root = taxonIds.filter(taxon => taxon.id==id)[0];
+				
+				//Find what group the root taxon is in
+				this.groupsPr.then(groups => {
+					groups.forEach(group => {
+						if(group.id===this.root.groupId)
+							this.rootGroup = group;
+					});
 				});
+				
+				//The config for the wew chart
+				this.wewConfig = {
+					entities:[this.chartEntityManager.createFromTaxon(this.root,new MaterialPalette().shift())]
+				};
+				
+				this.setState('ready');
 			});
-			
-			Promise.all([familyPr,this.wewFactorPr,wewPr]).then(() => this.setState('ready'));
 		});
 	}
 	
