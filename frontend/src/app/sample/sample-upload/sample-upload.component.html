@@ -18,7 +18,7 @@
 <md-card *ngIf="state=='start'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
 	<md-card-title>Upload CSV bestanden</md-card-title>
 	<md-card-content>
-		<input type="file" (change)="fileChange($event)" multiple/>
+		<input type="file" accept=".csv, text/csv" (change)="fileChange($event)" multiple/>
 	</md-card-content>
 </md-card>
 
