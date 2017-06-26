@@ -40,8 +40,8 @@ import { EditAccountComponent } from './user/edit-account/edit-account.component
 import { TaxonImportStructureComponent } from './taxon/taxon-import-structure/taxon-import-structure.component';
 import { TaxonTreeComponent } from './taxon/taxon-tree/taxon-tree.component';
 import { TaxonViewComponent } from './taxon/taxon-view/taxon-view.component';
-import {WewBarChartComponent} from "./wew/wew-bar-chart/wew-bar-chart.component";
-import { WatersComponent } from "./results/waters/waters.component";
+import {WewBarChartComponent} from './wew/wew-bar-chart/wew-bar-chart.component';
+import {WaterComponent} from './results/water/water.component';
 import { TaxonManageGroupsComponent,TaxonManageGroupsEditComponent } from './taxon/taxon-manage-groups/taxon-manage-groups.component';
 import {ReferenceListComponent} from './reference/reference-list/reference-list.component';
 import {ReferenceEditComponent} from './reference/reference-edit/reference-edit.component';
@@ -53,7 +53,7 @@ const routes:Routes = [
 	{path: 'home', component: HomeComponent},
 	{path: 'map', component: GMapsComponent, canActivate: [AuthGuard]},
 	{path: 'account', component: EditAccountComponent, canActivate: [AuthGuard]},
-	{path: 'results/water/:id', component: WatersComponent, canActivate: [AuthGuard]},
+	{path: 'results/water/:id', component: WaterComponent, canActivate: [AuthGuard]},
 	{path: 'data', component: SampleLocationTableComponent, canActivate: [AuthGuard]},
 	{path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
 	{path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
@@ -89,7 +89,7 @@ const routes:Routes = [
         TaxonImportStructureComponent,
         TaxonTreeComponent,
         TaxonViewComponent,
-        WatersComponent,
+        WaterComponent,
         TaxonManageGroupsComponent,
 		TaxonManageGroupsEditComponent,
 		ReferenceListComponent,

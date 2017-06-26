@@ -1,11 +1,10 @@
 <md-card>
-    <md-card-title>Wateren</md-card-title>
-
+    <md-card-title>Algemene data</md-card-title>
     <md-input-container class="full-width">
         <input mdInput placeholder="Filter op data" (keyup)='updateFilter($event)'>
     </md-input-container>
     <md-card-content>
-        <ngx-datatable routerLink="../results/water/{{selected}}"
+        <ngx-datatable
                 class="material"
                 [rows]="locationRows"
                 [columns]="locationColumns"
@@ -13,13 +12,19 @@
                 [headerHeight]="50"
                 [footerHeight]="50"
                 [rowHeight]="'auto'"
-                [limit]="10"
-                [selectionType]="'single'"
-                (activate)="onSelect($event)">
+                [limit]="10">
         </ngx-datatable>
+            <ng-template #waterCodeTemplate let-row="row">
+                {{row.code}}
+            </ng-template>
+            <ng-template #waterDescriptionTemplate let-row="row">
+                {{row.description}}
+            </ng-template>
+            <ng-template #waterDetailsTemplate let-row="row">
+                <a [routerLink]="'../results/water/'+row.id" md-raised-button>Details</a>
+            </ng-template>
     </md-card-content>
 </md-card>
-
 <md-card>
     <md-card-title>Waterschappen</md-card-title>
     <md-card-content>
@@ -35,7 +40,6 @@
         </ngx-datatable>
     </md-card-content>
 </md-card>
-
 <md-card>
     <md-card-title>Taxa</md-card-title>
     <md-card-content>

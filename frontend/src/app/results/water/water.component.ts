@@ -1,5 +1,7 @@
-import {Component,OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+
+import {DatatableComponent} from "@swimlane/ngx-datatable";
 
 import {MarkerLocation} from '../../locations/markerLocation.model';
 import {ApiLocationService} from '../../locations/api.location.service';
@@ -16,26 +18,26 @@ import {ChartEntityManager} from '../../wew/wew-bar-chart/chart-entity.model';
 import 'rxjs/add/operator/toPromise';
 
 @Component({
-	selector:'app-waters',
+	selector:'app-water',
 	providers:[ApiSampleService,ApiLocationService,ApiWewService,ApiReferenceService,ChartEntityManager],
-	templateUrl:'./waters.component.html',
-	styleUrls:['./waters.component.css']
+	templateUrl:'./water.component.html',
+	styleUrls:['./water.component.css']
 })
-export class WatersComponent implements OnInit{
+export class WaterComponent implements OnInit{
 	public currentLocation:MarkerLocation;
 	private samples:Sample[];
 	private factors:WEWFactor[];
 	private reference:Reference;
 	
-	public selected:number;
-	public sampleRows:Sample[];
-	public sampleColums = [
-		{name:'Datum', prop:'date'}, // Moet alleen nog ff formatten naar dag / maand / jaar
-		{name:'Eigennaar', prop:'owner_id'}, // Niet nodig voor gebruiker
-		{name:'Kwaliteit', prop:'quality'},
-		{name:'X_coor', prop:'xCoor'}, // Niet nodig voor gebruiker
-		{name:'Y_coor', prop:'yCoor'} // Niet nodig voor gebruiker
-	];
+	@ViewChild(DatatableComponent) table: DatatableComponent;
+	@ViewChild('sampleDetailsTemplate') sampleDetailsTemplate;
+	
+    sampleRows = [];
+    sampleColumns = [
+        {name: 'Datum', prop: 'date', cellTemplate:null}, // Moet alleen nog ff formatten naar dag / maand / jaar
+        {name: 'Kwaliteit', prop: 'quality', cellTemplate:null},
+        {name: 'details', prop: 'button', cellTemplate:null}
+    ];
 	
 	public wewConfigs:WewChartConfig[];
 	
@@ -62,6 +64,10 @@ export class WatersComponent implements OnInit{
 		let referencePr = locationPr.then(() => this.loadReference());
 		
 		Promise.all([samplesPr,factorsPr,referencePr]).then(() => this.loadCharts());
+	}
+	
+	ngAfterViewInit(){
+		this.sampleColumns[2].cellTemplate = this.sampleDetailsTemplate;
 	}
 	
 	private async getLocationId():Promise<number>{
@@ -105,9 +111,5 @@ export class WatersComponent implements OnInit{
 			};
 			return config;
 		});
-	}
-	
-	onSelect(selected) {
-		this.selected = selected.row.id;
 	}
 }

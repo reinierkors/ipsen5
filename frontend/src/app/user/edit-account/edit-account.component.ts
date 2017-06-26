@@ -59,7 +59,7 @@ export class EditAccountComponent implements OnInit {
     editPassword(value: any) {
         this.userService.editPassword(this.model.oldPassword, this.model.newPassword, this.model.confirmPassword).subscribe(data => {
             swal('', `Wachtwoord aangepast!`, 'success');
-        }, error => swal('Oops...', error, 'error'));
+        }, error => swal('Oops...', error.detailMessage, 'error'));
     }
 
     editAccount() {
@@ -67,18 +67,18 @@ export class EditAccountComponent implements OnInit {
             swal('', `Gebruiker ${data.name} aangepast!`, 'success');
             // this.resetForm();
             // Ik zou geen resetform doen aangezien hij hem dan terug zet naar lege waardes in plaats van nieuwe waardes
-        }, error => swal('Oops...', error, 'error'));
+        }, error => swal('Oops...', error.detailMessage, 'error'));
     }
 
     submitWaterschapForm() {
         this.apiWaterschap.save(Waterschap.fromJSON(this.waterschap)).subscribe(data => {
             swal('', `Waterschap ${data.name} gewijzigd!`, 'success');
-        }, error => swal('Oops...', error, 'error'));
+        }, error => swal('Oops...', error.detailMessage, 'error'));
     }
 
     retrieveWaterschap(id) {
         this.apiWaterschap.getById(id).subscribe(waterschap => {
             this.waterschap = waterschap;
-        }), error => swal('Oops...', error, 'error');
+        }), error => swal('Oops...', error.detailMessage, 'error');
     }
 }

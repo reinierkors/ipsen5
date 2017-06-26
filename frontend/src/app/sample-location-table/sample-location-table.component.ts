@@ -15,28 +15,34 @@ type TaxonRow = {id:number,name:string,group?:TaxonGroup};
 })
 
 export class SampleLocationTableComponent implements OnInit {
-    private apiLocationService: ApiLocationService;
-    private apiWaterschap: ApiWaterschapService;
-    private apiTaxon: ApiTaxonService;
-    private selected = 0;
+	private apiLocationService: ApiLocationService;
+	private apiWaterschap: ApiWaterschapService;
+	private apiTaxon: ApiTaxonService;
 
-    @ViewChild(DatatableComponent) table: DatatableComponent;
+	@ViewChild(DatatableComponent) table: DatatableComponent;
 
-    locations = [];
-    locationRows = [];
-    locationColumns = [
-        {name: 'Mp', prop: 'code'},
-        {name: 'Naam', prop: 'description'}];
+	private locations = [];
+	public locationRows = [];
+	public locationColumns = [
+		{name: 'Mp', prop: 'code', cellTemplate:null},
+		{name: 'Naam', prop: 'description', cellTemplate:null},
+		{name: 'details', prop: 'button', cellTemplate:null}
+	];
 
-    waterschappen = [];
-    waterschapRows = [];
-    waterschapColumns = [
-        {name: 'Naam', prop: 'name'},
-        {name: 'Adres', prop: 'address'},
-        {name: 'Huisnummer', prop: 'houseNumber'},
-        {name: 'Postcode', prop: 'zipCode'},
-        {name: 'Locatie', prop: 'location'},
-        {name: 'Telefoonnummer', prop: 'phoneNumber'}];
+	@ViewChild('waterCodeTemplate') waterCodeTemplate;
+	@ViewChild('waterDescriptionTemplate') waterDescriptionTemplate;
+	@ViewChild('waterDetailsTemplate') waterDetailsTemplate;
+
+	waterschappen = [];
+	waterschapRows = [];
+	waterschapColumns = [
+		{name: 'Naam', prop: 'name'},
+		{name: 'Adres', prop: 'address'},
+		{name: 'Huisnummer', prop: 'houseNumber'},
+		{name: 'Postcode', prop: 'zipCode'},
+		{name: 'Locatie', prop: 'location'},
+		{name: 'Telefoonnummer', prop: 'phoneNumber'}
+	];
 
 	private taxa:Taxon[] = [];
 	public taxonRows:TaxonRow[] = [];
@@ -44,7 +50,7 @@ export class SampleLocationTableComponent implements OnInit {
 		{name:'Naam', prop:'name', cellTemplate:null}
 	];
 	private groupMap:Map<number/*group id*/,TaxonGroup>;
-	
+
 	@ViewChild('taxonNameTemplate') taxonNameTemplate;
 	
 	
@@ -77,11 +83,10 @@ export class SampleLocationTableComponent implements OnInit {
 	//TemplateRefs are available
 	ngAfterViewInit(){
 		this.taxonColumns[0].cellTemplate = this.taxonNameTemplate;
+		this.locationColumns[0].cellTemplate = this.waterCodeTemplate;
+		this.locationColumns[1].cellTemplate = this.waterDescriptionTemplate;
+		this.locationColumns[2].cellTemplate = this.waterDetailsTemplate;
 	}
-
-    onSelect(selected) {
-        this.selected = selected.row.id;
-    }
 
     updateFilter(event) {
         const val = event.target.value.toLowerCase();
