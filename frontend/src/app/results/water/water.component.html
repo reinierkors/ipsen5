@@ -22,7 +22,9 @@
 
 <md-card *ngIf="currentLocation">
     <md-card-title>Waterkwaliteit van {{currentLocation.description}}</md-card-title>
-	<div *ngFor="let config of wewConfigs">
-		<app-wew-bar-chart [config]="config"></app-wew-bar-chart>
-	</div>
+	<md-tab-group *ngIf="currentLocation && wewConfigs">
+		<md-tab *ngFor="let config of wewConfigs" [label]="config.factors[0].name">
+			<app-wew-bar-chart [config]="config"></app-wew-bar-chart>
+		</md-tab>
+	</md-tab-group>
 </md-card>
