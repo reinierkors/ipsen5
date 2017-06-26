@@ -104,7 +104,12 @@ a.backButton {
 .pie-echart {
 	height: 500px;
 }
-
+.mat-sidenav-opened + div + .mat-sidenav-content {
+	margin-left: 194px !important;
+}
+.app-icon-button {
+	min-width: 39px;
+}
 /*
 PRINT
 */
