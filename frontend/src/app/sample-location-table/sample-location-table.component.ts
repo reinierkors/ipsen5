@@ -3,7 +3,6 @@ import {ApiLocationService} from '../locations/api.location.service';
 import {ApiWaterschapService} from '../waterschap/api.waterschap.service';
 import {ApiTaxonService} from "../taxon/api.taxon.service";
 import {DatatableComponent} from "@swimlane/ngx-datatable";
-import swal from 'sweetalert2';
 
 @Component({
     selector: 'app-sample-Location-table',
@@ -16,16 +15,19 @@ export class SampleLocationTableComponent implements OnInit {
     private apiLocationService: ApiLocationService;
     private apiWaterschap: ApiWaterschapService;
     private apiTaxon: ApiTaxonService;
-    private selected = 0;
 
     @ViewChild(DatatableComponent) table: DatatableComponent;
 
-    locations = [];
-    locationRows = [];
-    // locationColumns = [
-    //     {name: 'Mp', prop: 'code'},
-    //     {name: 'Naam', prop: 'description'}];
-    //     {name: '', prop: 'button'}];
+    private locations = [];
+    public locationRows = [];
+    public locationColumns = [
+            {name: 'Mp', prop: 'code', cellTemplate:null},
+            {name: 'Naam', prop: 'description', cellTemplate:null},
+            {name: 'details', prop: 'button', cellTemplate:null}];
+
+    @ViewChild('waterCodeTemplate') waterCodeTemplate;
+    @ViewChild('waterDescriptionTemplate') waterDescriptionTemplate;
+    @ViewChild('waterDetailsTemplate') waterDetailsTemplate;
 
     waterschappen = [];
     waterschapRows = [];
@@ -64,12 +66,10 @@ export class SampleLocationTableComponent implements OnInit {
         })
     }
 
-    onSelect(selected) {
-        if(selected.id == null) {
-            swal('', 'Kon de samples niet ophalen', 'error');
-        }
-        this.selected = selected.row.id;
-        console.log(selected)
+    ngAfterViewInit(){
+        this.locationColumns[0].cellTemplate = this.waterCodeTemplate;
+        this.locationColumns[1].cellTemplate = this.waterDescriptionTemplate;
+        this.locationColumns[2].cellTemplate = this.waterDetailsTemplate;
     }
 
     updateFilter(event) {

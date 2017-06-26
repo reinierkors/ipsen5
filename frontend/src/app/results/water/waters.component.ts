@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ApiSampleService} from '../../sample/api.sample.service';
 import {ApiLocationService} from '../../locations/api.location.service';
 import {Sample} from '../../sample/sample.model';
+import {DatatableComponent} from "@swimlane/ngx-datatable";
 
 @Component({
     selector: 'app-waters',
@@ -15,18 +16,18 @@ export class WatersComponent implements OnInit {
     private apiSample: ApiSampleService;
     private apiLocation: ApiLocationService;
     public currentLocation: {};
-    public sample: Sample;
     public samples: Sample[];
-    public selected = 0;
+
+    @ViewChild('sampleDetailsTemplate') sampleDetailsTemplate;
+    @ViewChild(DatatableComponent) table: DatatableComponent;
 
     sampleRows = [];
-    sampleColums = [
-        {name: 'Datum', prop: 'date'}, // Moet alleen nog ff formatten naar dag / maand / jaar
-        {name: 'Eigennaar', prop: 'owner_id'}, // Niet nodig voor gebruiker
-        {name: 'Kwaliteit', prop: 'quality'},
-        {name: 'X_coor', prop: 'xCoor'}, // Niet nodig voor gebruiker
-        {name: 'Y_coor', prop: 'yCoor'} // Niet nodig voor gebruiker
+    sampleColumns = [
+        {name: 'Datum', prop: 'date', cellTemplate:null}, // Moet alleen nog ff formatten naar dag / maand / jaar
+        {name: 'Kwaliteit', prop: 'quality', cellTemplate:null},
+        {name: 'details', prop: 'button', cellTemplate:null}
     ];
+
 
     constructor(apiSample: ApiSampleService, apiLocation: ApiLocationService, route: ActivatedRoute) {
         this.apiLocation = apiLocation;
@@ -36,6 +37,10 @@ export class WatersComponent implements OnInit {
 
     ngOnInit() {
         this.getCurrentLocation();
+    }
+
+    ngAfterViewInit() {
+        this.sampleColumns[2].cellTemplate = this.sampleDetailsTemplate;
     }
 
     private getCurrentLocation() {
@@ -57,9 +62,4 @@ export class WatersComponent implements OnInit {
                 console.log(this.samples);
             }, error => console.log(error));
     };
-
-    onSelect(selected) {
-        console.log(selected);
-        this.selected = selected.row.id;
-    }
 }

@@ -1,0 +1,18 @@
+<md-card *ngIf="currentLocation">
+  <md-card-title>Monsters van {{currentLocation.description}}</md-card-title>
+    <md-card-content>
+    <ngx-datatable
+      class="material"
+      [rows]="sampleRows"
+      [columns]="sampleColumns"
+      [columnMode]="'force'"
+      [headerHeight]="50"
+      [footerHeight]="50"
+      [rowHeight]="'auto'"
+      [limit]="10">
+    </ngx-datatable>
+  </md-card-content>
+</md-card>
+<ng-template #sampleDetailsTemplate let-row="row">
+  <a [routerLink]="'/sample/view/'+row.id" md-raised-button>Details</a>
+</ng-template>

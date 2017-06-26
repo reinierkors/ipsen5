@@ -7,31 +7,22 @@
         <ngx-datatable
                 class="material"
                 [rows]="locationRows"
+                [columns]="locationColumns"
                 [columnMode]="'force'"
                 [headerHeight]="50"
                 [footerHeight]="50"
                 [rowHeight]="'auto'"
                 [limit]="10">
-
-            <ngx-datatable-column name="Mp" width="20">
-                <ng-template let-value="String" ngx-datatable-cell-template>
-                    {{locations.code}}
-                </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column name="Naam" width="20">
-                <ng-template let-value="String" ngx-datatable-cell-template>
-                    {{locations.description}}
-                </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column name="Haal Samples op" width="20">
-                <ng-template ngx-datatable-cell-template>
-                    <button class="button" type="submit" md-raised-button
-                            (click)="onSelect(location.id)">details</button>
-                </ng-template>
-            </ngx-datatable-column>
         </ngx-datatable>
+            <ng-template #waterCodeTemplate let-row="row">
+                {{row.code}}
+            </ng-template>
+            <ng-template #waterDescriptionTemplate let-row="row">
+                {{row.description}}
+            </ng-template>
+            <ng-template #waterDetailsTemplate let-row="row">
+                <a [routerLink]="'../results/water/'+row.id" md-raised-button>Details</a>
+            </ng-template>
     </md-card-content>
 </md-card>
 <md-card>

@@ -41,7 +41,7 @@ import { TaxonImportStructureComponent } from './taxon/taxon-import-structure/ta
 import { TaxonTreeComponent } from './taxon/taxon-tree/taxon-tree.component';
 import { TaxonViewComponent } from './taxon/taxon-view/taxon-view.component';
 import {SampleFactorBarGraphComponent} from "./sample/sample-factor-bar-graph/sample-factor-bar-graph.component";
-import { WatersComponent } from "./results/waters/waters.component";
+import { WatersComponent } from "./results/water/waters.component";
 import { TaxonManageGroupsComponent,TaxonManageGroupsEditComponent } from './taxon/taxon-manage-groups/taxon-manage-groups.component';
 
 const routes:Routes = [
