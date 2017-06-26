@@ -11,6 +11,8 @@ import {Reference} from '../../reference/reference.model';
 import {ApiReferenceService} from '../../reference/api.reference.service';
 import {Watertype} from '../../watertype/watertype.model';
 import {ApiWatertypeService} from '../../watertype/api.watertype.service';
+import {ApiWewService} from '../../wew/api.wew.service';
+import {WEWFactor} from '../../wew/wew.model';
 import {WewChartConfig} from '../../wew/wew-bar-chart/wew-bar-chart.component';
 import {MaterialPalette} from '../../services/palette';
 import {ChartEntityManager} from '../../wew/wew-bar-chart/chart-entity.model';
@@ -20,7 +22,7 @@ import 'rxjs/add/operator/toPromise';
 
 @Component({
 	selector: 'app-sample-view',
-	providers: [ApiSampleService, ApiTaxonService, ApiLocationService,ApiReferenceService,ApiWatertypeService,ChartEntityManager],
+	providers: [ApiSampleService, ApiTaxonService, ApiLocationService,ApiReferenceService,ApiWatertypeService,ApiWewService,ChartEntityManager],
 	templateUrl: './sample-view.component.html',
 	styleUrls: ['./sample-view.component.css']
 })
@@ -28,6 +30,7 @@ export class SampleViewComponent implements OnInit {
 	public sample: Sample;
 	public taxon: Taxon[];
 	public groups: TaxonGroup[];
+	public factors: WEWFactor[];
 	public location: MarkerLocation;
 	public wewConfig: WewChartConfig;
 	public showChart = false;
@@ -46,6 +49,7 @@ export class SampleViewComponent implements OnInit {
 		private apiLocation:ApiLocationService,
 		private apiReference:ApiReferenceService,
 		private apiWatertype:ApiWatertypeService,
+		private apiWew:ApiWewService,
 		private chartEntityManager:ChartEntityManager,
 		private route:ActivatedRoute
 	){
@@ -53,6 +57,8 @@ export class SampleViewComponent implements OnInit {
 		this.option2 = this.defaultSettings();
 
 		this.groupsPr = this.apiTaxon.getGroups().toPromise().then(groups => this.groups = groups);
+		
+		this.apiWew.getFactors().subscribe(factors => this.factors = factors);
 	}
 
 	setActiveGraph(bool) {

@@ -1,4 +1,4 @@
-import {Component,OnInit,Input} from '@angular/core';
+import {Component,OnInit,Input,Output,EventEmitter} from '@angular/core';
 
 import {WEWFactor,WEWFactorClass,SimpleWEWValue} from '../wew.model';
 import {ApiWewService} from '../api.wew.service';
@@ -7,6 +7,12 @@ import {ChartEntity} from './chart-entity.model';
 import {pad2D,uniqueFilter} from '../../services/arrayUtils';
 
 import 'rxjs/add/operator/toPromise';
+
+//Send out with <app-wew-bar-chart (init)="func(WewChartPublicInstance)"></app-wew-bar-chart>
+export type WewChartPublicInstance = {
+	reload(),
+	resize(width:number,height:number)
+};
 
 //The options given as input
 export type WewXAxisConfig = 'entity'|'factor';
@@ -33,6 +39,7 @@ type DataValue = {factorId:number,factorClassId:number,value:number,itemStyle?:a
 export class WewBarChartComponent implements OnInit {
 	//The samples this chart will show data of
 	@Input() config:WewChartConfig;
+	@Output() init = new EventEmitter();
 	
 	//Size of the chart in pixels
 	public width:number;
@@ -125,6 +132,17 @@ export class WewBarChartComponent implements OnInit {
 		
 		//Then show the chart
 		this.allDataPr.then(() => this.showData());
+		
+		//Let the parent know we're done
+		this.allDataPr.then(() => this.init.emit(this.getPublicInstance()));
+	}
+	
+	//Object that is outputted to the parent
+	private getPublicInstance():WewChartPublicInstance{
+		return {
+			reload:()=>this.ngOnInit(),
+			resize:(width,height)=>{this.width = width; this.height = height; this.echart.resize({width:this.width,height:this.height});}
+		};
 	}
 	
 	//EChart instance is available
