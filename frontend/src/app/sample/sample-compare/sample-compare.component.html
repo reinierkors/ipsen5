@@ -1,0 +1,71 @@
+<md-card *ngIf="showLocationTable">
+    <md-card-title>Locaties</md-card-title>
+    <md-card-content>
+        <ngx-datatable
+                class="material taxon-table"
+                [rows]="locations"
+                [columns]="locationColumns"
+                [columnMode]="'force'"
+                [headerHeight]="50"
+                [footerHeight]="50"
+                [rowHeight]="'auto'"
+                [limit]="10">
+        </ngx-datatable>
+    </md-card-content>
+</md-card>
+<ng-template #locationsButtonTemplate let-row="row">
+    <a md-raised-button (click)="onSelect(row.id)">Bekijk monsters</a>
+</ng-template>
+
+<md-card *ngIf="showSampleTable">
+    <md-card-title>
+        Monsters van {{selectedLocation.description}}
+    </md-card-title>
+    <md-card-content>
+        <a md-raised-button class="backButton" (click)="setShowLocationTable()">Terug
+            naar overzicht</a>
+        <a md-raised-button class="backButton" (click)="compareCurrentLocation()">Vergelijk alle monsters van deze locatie</a>
+        <ngx-datatable
+                class="material taxon-table"
+                [rows]="samples"
+                [columns]="sampleColumns"
+                [columnMode]="'force'"
+                [headerHeight]="50"
+                [footerHeight]="50"
+                [rowHeight]="'auto'"
+                [limit]="10">
+        </ngx-datatable>
+    </md-card-content>
+</md-card>
+<ng-template #samplesButtonTemplate let-row="row">
+    <a md-raised-button (click)="onSelect(row.id)">Toevoegen</a>
+</ng-template>
+<ng-template #sampleDateTemplate let-row="row">
+    {{row.date | date:'fullDate'}}
+</ng-template>
+<!--<md-card>-->
+    <!--<md-card-title>-->
+        <!--Water kwaliteit-->
+    <!--</md-card-title>-->
+    <!--<md-card-content>-->
+        <!--<app-wew-bar-chart  *ngIf="wewConfig"-->
+                            <!--[config]="wewConfig"-->
+                            <!--(init)="onWewChartInit($event)"></app-wew-bar-chart>-->
+        <!--<md-spinner *ngIf="!wewConfig"></md-spinner>-->
+    <!--</md-card-content>-->
+<!--</md-card>-->
+
+<md-card>
+    <md-card-title>Water kwaliteit</md-card-title>
+    <md-tab-group *ngIf="wewConfigs" >
+        <md-tab *ngFor="let config of wewConfigs"
+                [label]="config.factors[0].name">
+            <div class="factor-group">
+                <app-wew-bar-chart [config]="config"
+                                   (init)="onWewChartInit($event)"></app-wew-bar-chart>
+            </div>
+        </md-tab>
+    </md-tab-group>
+</md-card>
+
+<button (click)="reload()">reload</button>
