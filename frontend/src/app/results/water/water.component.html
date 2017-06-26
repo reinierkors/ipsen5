@@ -13,15 +13,20 @@
 		</ngx-datatable>
 	</md-card-content>
 </md-card>
+<ng-template #sampleDateTemplate let-row="row">
+	{{row.date | date:'fullDate'}}
+</ng-template>
 <ng-template #sampleDetailsTemplate let-row="row">
 	<a [routerLink]="'/sample/view/'+row.id" md-raised-button>Details</a>
 </ng-template>
 
-<md-card *ngIf="currentLocation && wewConfigs">
-	<md-card-title>Waterkwaliteit van {{currentLocation.description}}</md-card-title>
-	<md-card-content>
-		<div *ngFor="let config of wewConfigs">
-			<app-wew-bar-chart [config]="config"></app-wew-bar-chart>
-		</div>
-	</md-card-content>
+<md-card>
+    <md-card-title>Waterkwaliteit van {{currentLocation.description}}</md-card-title>
+    <md-tab-group *ngIf="currentLocation && wewConfigs">
+        <md-tab *ngFor="let config of wewConfigs" [label]="config.factors[0].name">
+            <div>
+                <app-wew-bar-chart [config]="config"></app-wew-bar-chart>
+            </div>
+        </md-tab>
+    </md-tab-group>
 </md-card>

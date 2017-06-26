@@ -45,6 +45,7 @@ import {WaterComponent} from './results/water/water.component';
 import { TaxonManageGroupsComponent,TaxonManageGroupsEditComponent } from './taxon/taxon-manage-groups/taxon-manage-groups.component';
 import {ReferenceListComponent} from './reference/reference-list/reference-list.component';
 import {ReferenceEditComponent} from './reference/reference-edit/reference-edit.component';
+import {LOCALE_ID} from '@angular/core';
 import {SampleCompareComponent} from "./sample/sample-compare/sample-compare.component";
 
 const routes:Routes = [
@@ -124,7 +125,7 @@ const routes:Routes = [
         RouterModule.forRoot(routes, {useHash: false}),
         NguiMapModule.forRoot({apiUrl: 'https://maps.google.com/maps/api/js?key=AIzaSyA8acwCuestYr1vo1mJK-QdkZ-3AwW1blM'}),
     ],
-    providers: [AuthGuard],
+    providers: [AuthGuard,{provide: LOCALE_ID, useValue:"nl-NL"}],
     bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -28,8 +28,9 @@ export class WaterComponent implements OnInit{
 	private samples:Sample[];
 	private factors:WEWFactor[];
 	private reference:Reference;
-	
+
 	@ViewChild(DatatableComponent) table: DatatableComponent;
+	@ViewChild('sampleDateTemplate') sampleDateTemplate;
 	@ViewChild('sampleDetailsTemplate') sampleDetailsTemplate;
 	
     sampleRows = [];
@@ -67,6 +68,7 @@ export class WaterComponent implements OnInit{
 	}
 	
 	ngAfterViewInit(){
+		this.sampleColumns[0].cellTemplate = this.sampleDateTemplate;
 		this.sampleColumns[2].cellTemplate = this.sampleDetailsTemplate;
 	}
 	
