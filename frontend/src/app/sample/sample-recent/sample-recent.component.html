@@ -19,3 +19,6 @@
 <ng-template #sampleDateAddedTemplate let-row="row">
 	{{row.dateAdded | date:'short'}}
 </ng-template>
+<ng-template #sampleButtonTemplate let-row="row">
+	<a [routerLink]="'/sample/view/'+row.id" md-raised-button>Details</a>
+</ng-template>

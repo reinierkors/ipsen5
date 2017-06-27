@@ -24,11 +24,13 @@ export class SampleRecentComponent implements OnInit{
 	
 	@ViewChild('sampleDateTemplate') sampleDateTemplate;
 	@ViewChild('sampleDateAddedTemplate') sampleDateAddedTemplate;
+	@ViewChild('sampleButtonTemplate') sampleButtonTemplate;
 	
 	public sampleColumns = [
 		{name:'Locatie',prop:'location',cellTemplate:null},
 		{name:'Monster datum',prop:'date',cellTemplate:null},
-		{name:'Datum toegevoegd',prop:'dateAdded',cellTemplate:null}
+		{name:'Datum toegevoegd',prop:'dateAdded',cellTemplate:null},
+		{name:'Details',prop:'button',cellTemplate:null}
 	];
 	
 	constructor(
@@ -43,6 +45,7 @@ export class SampleRecentComponent implements OnInit{
 	ngAfterViewInit(){
 		this.sampleColumns[1].cellTemplate = this.sampleDateTemplate;
 		this.sampleColumns[2].cellTemplate = this.sampleDateAddedTemplate;
+		this.sampleColumns[3].cellTemplate = this.sampleButtonTemplate;
 	}
 	
 	private async loadResources():Promise<[Sample[],MarkerLocation[]]>{
