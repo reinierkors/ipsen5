@@ -48,14 +48,27 @@
 <md-card>
     <md-card-title>Factor waardes per monster</md-card-title>
     <md-card-subtitle>Kies in de bovenstaande tabel monsters om te vergelijken</md-card-subtitle>
-    <a *ngIf="wewConfigs" md-raised-button class="backButton" (click)="clearGraph()">Grafiek leeg maken</a>
-    <md-tab-group *ngIf="wewConfigs" >
-        <md-tab *ngFor="let config of wewConfigs"
-                [label]="config.factors[0].name">
-            <div class="factor-group">
-                <app-wew-bar-chart [config]="config"
-                                   (init)="onWewChartInit($event)"></app-wew-bar-chart>
-            </div>
-        </md-tab>
-    </md-tab-group>
+    <md-card-content *ngIf="showGraph">
+        <a *ngIf="wewConfigs" md-raised-button class="backButton" (click)="clearGraph()">Grafiek leeg maken</a>
+        <md-tab-group>
+            <md-tab *ngFor="let config of wewConfigs"
+                    [label]="config.factors[0].name">
+                <div class="factor-group">
+                    <app-wew-bar-chart [config]="config"
+                                       (init)="onWewChartInit($event)"></app-wew-bar-chart>
+                </div>
+            </md-tab>
+        </md-tab-group>
+
+        <ngx-datatable class="comparedSampleTable"
+                class="material taxon-table"
+                [rows]="comparedSampleRows"
+                [columns]="comparedSampleColumns"
+                [columnMode]="'force'"
+                [headerHeight]="50"
+                [footerHeight]="50"
+                [rowHeight]="'auto'"
+                [limit]="5">
+        </ngx-datatable>
+    </md-card-content>
 </md-card>

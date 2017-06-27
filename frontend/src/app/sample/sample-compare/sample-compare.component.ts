@@ -12,6 +12,11 @@ import {SimpleWEWValue, WEWFactor, WEWFactorClass} from '../../wew/wew.model';
 import {ApiWewService} from '../../wew/api.wew.service';
 import {MarkerLocation} from "../../locations/markerLocation.model";
 
+type FactorClassCalculation = {
+    factorClass: WEWFactorClass,
+    sampleValue: number,
+};
+
 @Component({
     providers: [ApiSampleService, ApiLocationService, ChartEntityManager, ApiWewService],
     selector: 'app-sample-compare',
@@ -36,14 +41,23 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
         {name: 'Datum genomen', prop: 'date', cellTemplate: null},
         {name: 'Details', prop: 'button', cellTemplate: null}
     ];
+    public comparedSampleColumns = [
+        {name: 'Staaf nummer', prop: 'id'},
+        {name: 'Datum genomen', prop: 'date'},
+        {name: 'Locatie', prop: 'locationName'}
+    ];
+    public comparedSampleRows = [];
     public showLocationTable = true;
     public showSampleTable = false;
+    public showGraph = false;
     public selectedLocation = {};
     public samplesToCompare = [];
     private factors: WEWFactor[];
     public wewConfigs: WewChartConfig[];
     private wewChartInstance;
     public entityCalc = [];
+    private factorClassIdMap: Map<number/*factor class id*/, WEWFactorClass>;
+    private calcMap: Map<WEWFactorClass, SimpleWEWValue>;
 
     constructor(private apiSample: ApiSampleService, private apiLocation: ApiLocationService,
                 private route: ActivatedRoute, private chartEntityManager: ChartEntityManager,
@@ -95,7 +109,12 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
     private getSampleById(id: number) {
         this.apiSample.getSample(id)
             .subscribe(sample => {
-                this.samplesToCompare.push(sample);
+                var name = this.selectedLocation['description'];
+                this.samplesToCompare.push({
+                    sample: sample,
+                    locationName: name
+                });
+                console.log(this.samplesToCompare)
                 this.addToChart();
             }, error => console.log(error));
     }
@@ -121,21 +140,26 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
     }
 
     public addToChart() {
+        this.comparedSampleRows.splice(0);
         const palette = new MaterialPalette().shift();
         const chartEntities = [];
+        var entityCounter = 1;
+
         this.samplesToCompare.forEach((item) => {
-            const name = item.date.toLocaleString('nl-NL', {
+            const name = item.sample.date.toLocaleString('nl-NL', {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric'
             });
-            chartEntities.push(this.chartEntityManager.createFromSample(item, name, palette.clone()));
+            chartEntities.push(this.chartEntityManager
+                .createFromSample(item.sample, entityCounter.toString(), palette.clone()));
+            this.comparedSampleRows.push({
+                id: entityCounter,
+                date: name,
+                locationName: item.locationName
+            })
+            entityCounter++;
         });
-        chartEntities.forEach((item) => {
-            item.getCalculations().then(results => {
-                this.entityCalc.push(results);
-            });
-        })
 
         this.wewConfigs = this.factors.map(factor => {
             const config: WewChartConfig = {
@@ -147,6 +171,7 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
             };
             return config;
         });
+        this.showGraph = true;
         if (this.wewChartInstance) {
             this.wewChartInstance.reload(this.wewConfigs);
         }
@@ -170,6 +195,9 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
     public clearGraph() {
         this.samplesToCompare.splice(0);
         this.wewConfigs.splice(0);
+        this.comparedSampleRows.splice(0)
+        this.getSamplesByLocationId(this.selectedLocation['id']);
+        this.showGraph = false;
     }
 
     public resetLocation() {
@@ -177,7 +205,9 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
             this.samplesToCompare.splice(0);
         if (this.wewConfigs)
             this.wewConfigs.splice(0);
+        if (this.comparedSampleRows)
+            this.comparedSampleRows.splice(0)
         this.getSamplesByLocationId(this.selectedLocation['id']);
+        this.showGraph = false;
     }
-
 }
