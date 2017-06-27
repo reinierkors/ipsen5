@@ -37,7 +37,13 @@ public class LocationService {
         addLatLng(locations);
         return locations;
     }
-
+    
+    public List<Location> getByIds(List<Integer> ids) {
+        List<Location> locations = repository.get(ids);
+        addLatLng(locations);
+        return locations;
+    }
+    
     private void addLatLng(Iterable<Location> locations) {
         for (Location location : locations) {
             converter.convertToLatLng(location);

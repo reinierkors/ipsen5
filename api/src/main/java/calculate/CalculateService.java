@@ -2,13 +2,20 @@ package calculate;
 
 import api.ApiException;
 import database.ConnectionManager;
+import location.Location;
+import location.LocationService;
+import reference.Reference;
+import reference.ReferenceService;
+import sample.Sample;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Service with methods regarding calculating sample values (using the WEW list)
@@ -61,7 +68,6 @@ public class CalculateService {
 			psCalcSample.executeUpdate();
 		}
 		catch(SQLException e){
-			e.printStackTrace();
 			throw new ApiException("Problem running the sample calculation query");
 		}
 	}
@@ -77,7 +83,6 @@ public class CalculateService {
 			psCalcReference.executeUpdate();
 		}
 		catch(SQLException e){
-			e.printStackTrace();
 			throw new ApiException("Problem running the reference calculation query");
 		}
 	}
@@ -164,6 +169,29 @@ public class CalculateService {
 		catch(SQLException e){
 			throw new ApiException("Could not delete reference calculations");
 		}
+	}
+	
+	public void calculateSampleQuality(Sample sample){
+		List<CalculationData> sampleCalcs = this.getBySample(sample.getId());
+		
+		Location location = LocationService.getInstance().getById(sample.getLocationId());
+		int watertype = location.getWatertypeKrwId();
+		Reference reference = ReferenceService.getInstance().getByWatertype(watertype);
+		
+		List<CalculationData> refCalcs = this.getByReference(reference.getId());
+		
+		Map<Integer,CalculationData> factorClassRefCalcMap = new HashMap<>();
+		refCalcs.forEach(refCalcData -> factorClassRefCalcMap.put(refCalcData.factorClassId,refCalcData));
+		
+		double total = 0;
+		for(CalculationData sampleCalcData : sampleCalcs){
+			CalculationData refCalcData = factorClassRefCalcMap.get(sampleCalcData.factorClassId);
+			if(refCalcData==null)
+				return;
+			total += Math.abs(refCalcData.computedValue - sampleCalcData.computedValue);
+		}
+		
+		sample.setQuality(total);
 	}
 	
 	/**

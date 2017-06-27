@@ -47,6 +47,14 @@ export class ApiSampleService extends ApiService {
     }
 
     public getDistinctYears(): Observable<String[]> {
-        return this.get('/sample/getYears/').map(years => years.map(year => year));
+        return this.get('/sample/getYears/');
     }
+	
+	public getRecent(count:number):Observable<Sample[]>{
+		return this.get('/sample/recent/'+count).map(samples => samples.map(sample => Sample.fromJSON(sample)));
+	}
+	
+	public delete(id:number):Observable<boolean>{
+		return this.post('/admin/sample/delete',id);
+	}
 }

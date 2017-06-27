@@ -91,9 +91,11 @@ CREATE TABLE `sample` (
   `quality` double DEFAULT NULL,
   `x_coor` int(6) DEFAULT NULL,
   `y_coor` int(6) DEFAULT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `location_id` (`location_id`),
-  KEY `owner_id` (`owner_id`)
+  KEY `owner_id` (`owner_id`),
+  KEY `date_added` (`date_added`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------

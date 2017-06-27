@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * Repository for samples
  *
  * @author Wander Groeneveld, Dylan de Wit
- * @version 0.4, 8-6-2017
+ * @version 0.5, 27-6-2017
  */
 public class SampleRepository extends RepositoryMaria<Sample> {
     private final String queryGetTaxon;
@@ -49,7 +49,8 @@ public class SampleRepository extends RepositoryMaria<Sample> {
                 new ColumnData<>("owner_id", Types.INTEGER, Sample::getOwnerId, Sample::setOwnerId),
                 new ColumnData<>("quality", Types.DOUBLE, Sample::getQuality, Sample::setQuality),
                 new ColumnData<>("x_coor", Types.INTEGER, Sample::getXCoor, Sample::setXCoor),
-                new ColumnData<>("y_coor", Types.INTEGER, Sample::getYCoor, Sample::setYCoor)
+                new ColumnData<>("y_coor", Types.INTEGER, Sample::getYCoor, Sample::setYCoor),
+		        new ColumnData<>("date_added", Types.TIMESTAMP, Sample::getDateAdded, Sample::setDateAdded)
         };
     }
 
@@ -308,6 +309,29 @@ public class SampleRepository extends RepositoryMaria<Sample> {
             }
             return years;
         } catch (SQLException e) {
+            throw new RepositoryException(e);
+        }
+    }
+    
+    
+    public List<Sample> getRecent(int count){
+        try{
+            String getRecentQuery = "SELECT * FROM `"+getTable()+"` ORDER BY `date_added` DESC LIMIT 0,"+count;
+            PreparedStatement psGetRecent = connection.prepareStatement(getRecentQuery);
+            
+            ResultSet resultSet = psGetRecent.executeQuery();
+            
+            List<Sample> list = new ArrayList<>();
+            if(resultSet==null)
+                return list;
+            
+            while(resultSet.next()){
+                list.add(resultSetToModel(resultSet));
+            }
+            
+            return list;
+        }
+        catch (SQLException e) {
             throw new RepositoryException(e);
         }
     }

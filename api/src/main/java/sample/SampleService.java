@@ -13,7 +13,7 @@ import java.util.List;
  * Service for samples
  *
  * @author Wander Groeneveld, Dylan de Wit
- * @version 0.2, 4-6-2017
+ * @version 0.3, 27-6-2017
  */
 public class SampleService {
     private static final SampleService instance = new SampleService();
@@ -57,8 +57,12 @@ public class SampleService {
      */
     public Sample save(Sample sample) throws ApiException {
         try {
+        	if(sample.getId()!=0)
+        		calcService.deleteBySample(sample.getId());
             repo.persist(sample);
             calcService.calculateSampleValues(sample.getId());
+            calcService.calculateSampleQuality(sample);
+            repo.persist(sample);
             return sample;
         } catch (RepositoryException e) {
             throw new ApiException("Cannot save sample");
@@ -75,7 +79,11 @@ public class SampleService {
     public List<Sample> save(List<Sample> samples) throws ApiException {
         try {
             repo.persist(samples);
-            samples.forEach(sample -> calcService.calculateSampleValues(sample.getId()));
+            samples.forEach(sample -> {
+            	calcService.calculateSampleValues(sample.getId());
+	            calcService.calculateSampleQuality(sample);
+            });
+            repo.persist(samples);
             return samples;
         } catch (RepositoryException e) {
             throw new ApiException("Cannot save samples");
@@ -92,5 +100,15 @@ public class SampleService {
 
     public List<String> getDistinctYears() {
         return repo.getDistinctYears();
+    }
+    
+    public boolean delete(int id){
+	    calcService.deleteBySample(id);
+    	repo.remove(id);
+    	return true;
+    }
+    
+    public List<Sample> getRecent(int count){
+    	return repo.getRecent(count);
     }
 }

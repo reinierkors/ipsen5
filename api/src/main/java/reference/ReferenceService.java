@@ -76,7 +76,8 @@ public class ReferenceService {
 	 */
 	public Reference save(Reference reference) throws ApiException{
 		try {
-			calcService.deleteByReference(reference.getId());
+			if(reference.getId()!=0)
+				calcService.deleteByReference(reference.getId());
 			repo.persist(reference);
 			calcService.calculateReferenceValues(reference.getId());
 			return reference;
