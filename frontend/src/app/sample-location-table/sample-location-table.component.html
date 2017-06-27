@@ -57,12 +57,13 @@
                 [limit]="10">
         </ngx-datatable>
 		<ng-template #taxonNameTemplate let-row="row">
-			<a class="taxon-link" [routerLink]="'/taxon/view/'+row.id">
 				<span class="taxon-icon-container">
 					<md-icon *ngIf="row.group && row.group.icon" class="taxon-icon" fontSet="fi" [fontIcon]="'flaticon-'+row.group.icon"></md-icon>
 				</span>
-				{{row.name}}
-			</a>
+            {{row.name}}
+        </ng-template>
+        <ng-template #taxonButtonTemplate let-row="row">
+                <a [routerLink]="'/taxon/view/'+row.id" md-raised-button>Details</a>
 		</ng-template>
     </md-card-content>
 </md-card>
