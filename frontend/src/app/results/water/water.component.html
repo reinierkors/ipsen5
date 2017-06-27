@@ -1,3 +1,8 @@
+<md-card>
+	<md-card-content>
+		<a [routerLink]="'/data'" md-raised-button>Terug</a>
+	</md-card-content>
+</md-card>
 <md-card *ngIf="currentLocation">
 	<md-card-title>Monsters van {{currentLocation.description}}</md-card-title>
 	<md-card-content>
@@ -19,7 +24,6 @@
 <ng-template #sampleDetailsTemplate let-row="row">
 	<a [routerLink]="'/sample/view/'+row.id" md-raised-button>Details</a>
 </ng-template>
-
 <md-card *ngIf="currentLocation">
     <md-card-title>Waterkwaliteit van {{currentLocation.description}}</md-card-title>
 	<md-tab-group *ngIf="currentLocation && wewConfigs">
@@ -28,3 +32,4 @@
 		</md-tab>
 	</md-tab-group>
 </md-card>
+

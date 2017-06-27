@@ -47,12 +47,13 @@ export class SampleLocationTableComponent implements OnInit {
 	private taxa:Taxon[] = [];
 	public taxonRows:TaxonRow[] = [];
 	public taxonColumns = [
-		{name:'Naam', prop:'name', cellTemplate:null}
+		{name:'Naam', prop:'name', cellTemplate:null},
+		{name:'Details', prop:'button', cellTemplate:null}
 	];
 	private groupMap:Map<number/*group id*/,TaxonGroup>;
 
 	@ViewChild('taxonNameTemplate') taxonNameTemplate;
-	
+	@ViewChild('taxonButtonTemplate') taxonButtonTemplate;
 	
     constructor(apiLocationService: ApiLocationService, apiWaterschap: ApiWaterschapService,
                 apiTaxon: ApiTaxonService) {
@@ -83,6 +84,7 @@ export class SampleLocationTableComponent implements OnInit {
 	//TemplateRefs are available
 	ngAfterViewInit(){
 		this.taxonColumns[0].cellTemplate = this.taxonNameTemplate;
+		this.taxonColumns[1].cellTemplate = this.taxonButtonTemplate;
 		this.locationColumns[0].cellTemplate = this.waterCodeTemplate;
 		this.locationColumns[1].cellTemplate = this.waterDescriptionTemplate;
 		this.locationColumns[2].cellTemplate = this.waterDetailsTemplate;

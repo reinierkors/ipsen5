@@ -8,7 +8,7 @@ import {
     ChartEntity,
     ChartEntityManager
 } from '../../wew/wew-bar-chart/chart-entity.model';
-import {WEWFactor} from '../../wew/wew.model';
+import {SimpleWEWValue, WEWFactor, WEWFactorClass} from '../../wew/wew.model';
 import {ApiWewService} from '../../wew/api.wew.service';
 import {MarkerLocation} from "../../locations/markerLocation.model";
 
@@ -18,6 +18,7 @@ import {MarkerLocation} from "../../locations/markerLocation.model";
     templateUrl: './sample-compare.component.html',
     styleUrls: ['./sample-compare.component.css']
 })
+
 export class SampleCompareComponent implements OnInit, AfterViewInit {
     @ViewChild('locationsButtonTemplate') locationsButtonTemplate;
     @ViewChild('samplesButtonTemplate') samplesButtonTemplate;
@@ -42,6 +43,7 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
     private factors: WEWFactor[];
     public wewConfigs: WewChartConfig[];
     private wewChartInstance;
+    public entityCalc = [];
 
     constructor(private apiSample: ApiSampleService, private apiLocation: ApiLocationService,
                 private route: ActivatedRoute, private chartEntityManager: ChartEntityManager,
@@ -68,6 +70,12 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
             return;
         }
         this.getSampleById(id);
+        this.samples.forEach((sample) => {
+            if (sample.id == id) {
+                var index = this.samples.indexOf(sample, 0);
+                this.samples.splice(index, 1);
+            }
+        })
     }
 
     private getAllLocations() {
@@ -123,6 +131,11 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
             });
             chartEntities.push(this.chartEntityManager.createFromSample(item, name, palette.clone()));
         });
+        chartEntities.forEach((item) => {
+            item.getCalculations().then(results => {
+                this.entityCalc.push(results);
+            });
+        })
 
         this.wewConfigs = this.factors.map(factor => {
             const config: WewChartConfig = {
@@ -134,8 +147,9 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
             };
             return config;
         });
-        if (this.wewChartInstance)
+        if (this.wewChartInstance) {
             this.wewChartInstance.reload(this.wewConfigs);
+        }
     }
 
     public onWewChartInit(wewChartInstance) {
@@ -149,6 +163,7 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
             this.compareCurrentLocation(id);
         }
         this.samplesToCompare = this.samples.concat();
+        this.samples.splice(0);
         this.addToChart();
     }
 
@@ -156,4 +171,13 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
         this.samplesToCompare.splice(0);
         this.wewConfigs.splice(0);
     }
+
+    public resetLocation() {
+        if (this.samplesToCompare)
+            this.samplesToCompare.splice(0);
+        if (this.wewConfigs)
+            this.wewConfigs.splice(0);
+        this.getSamplesByLocationId(this.selectedLocation['id']);
+    }
+
 }

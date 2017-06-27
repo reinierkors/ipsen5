@@ -59,7 +59,7 @@ export class WewBarChartComponent implements OnInit {
 	private entities:ChartEntity[];
 	private entityCalcs:Map<ChartEntity,SimpleWEWValue[]>;
 	private entityIdMap:Map<string/*ChartEntity.id*/,ChartEntity>;
-	
+
 	private factors:WEWFactor[];
 	private factorClasses:WEWFactorClass[];
 	private factorIdMap:Map<number/*factor id*/,WEWFactor>;
@@ -246,7 +246,7 @@ export class WewBarChartComponent implements OnInit {
 				return this.dataMap.get(entity.id+factorClass.code);
 			});
 		});
-		
+
 		return data;
 	}
 	
@@ -257,7 +257,7 @@ export class WewBarChartComponent implements OnInit {
 				return this.dataMap.get(entity.id+factorClass.code);
 			});
 		});
-		
+
 		return data;
 	}
 	
