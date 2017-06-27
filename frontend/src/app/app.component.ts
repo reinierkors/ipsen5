@@ -1,4 +1,5 @@
 import {ViewChild,Component,HostListener,OnInit} from "@angular/core";
+import { Location } from "@angular/common";
 import {Router} from "@angular/router";
 import { MdSidenav } from "@angular/material";
 import {AuthenticationService} from "./services/auth.service";
@@ -14,7 +15,7 @@ export class AppComponent implements OnInit {
     title = 'Waterscan';
     loggedIn;
 
-    constructor(public router: Router, private authenticationService: AuthenticationService) {
+    constructor(public router: Router, private location: Location, private authenticationService: AuthenticationService) {
         this.router.events.subscribe(() => {
             this.loggedIn = !(localStorage.getItem('currentUser') === null);
         });
@@ -46,6 +47,10 @@ export class AppComponent implements OnInit {
         } else {
             this.sidenav.open();
         }
+    }
+
+    goBack() {
+        this.location.back()
     }
 }
 

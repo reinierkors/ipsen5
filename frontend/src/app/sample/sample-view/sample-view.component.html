@@ -2,11 +2,6 @@
 	<h1>Monster genomen bij {{location.description}}</h1>
 	<h2>{{sample.date|date:'d MMMM y'}}</h2>
 </div>
-<md-card *ngIf="sample">
-	<md-card-content>
-		<a [routerLink]="'/results/water/'+sample.locationId" md-raised-button>Terug</a>
-	</md-card-content>
-</md-card>
 <md-card>
 	<md-card-title>
 		Waterkwaliteit
