@@ -81,7 +81,15 @@ export class WewBarChartComponent implements OnInit {
 		grid:{left:'3%',right:'4%',bottom:'15%',containLabel:true},
 		xAxis:{type:'category',data:[],axisLabel:{rotate:45}},
 		yAxis:{type:'value',boundaryGap:[0, 0.01],min:0,max:10},
-		series:[]
+		series:[],
+		toolbox: {
+			right: 50,
+			feature: {
+				saveAsImage: {
+					title: "Download grafiek",
+				}
+			}
+		}
 	};
 	
 	constructor(private wewApi:ApiWewService){}

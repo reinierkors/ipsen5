@@ -76,6 +76,14 @@ export class SampleViewComponent implements OnInit {
 				subtext: 'per monster',
 				x: 'center'
 			},
+			toolbox: {
+                right: 150,
+				feature: {
+					saveAsImage: {
+						title: "Download grafiek",
+					}
+				}
+			},
 			tooltip: {
 				trigger: 'item',
 				formatter: "{a} <br/>{b} : {c} ({d}%)",
