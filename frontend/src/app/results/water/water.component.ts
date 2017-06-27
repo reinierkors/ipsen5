@@ -39,7 +39,8 @@ export class WaterComponent implements OnInit{
         {name: 'Kwaliteit', prop: 'quality', cellTemplate:null},
         {name: 'details', prop: 'button', cellTemplate:null}
     ];
-	
+	public markerPos;
+
 	public wewConfigs:WewChartConfig[];
 	
 	constructor(
@@ -79,7 +80,7 @@ export class WaterComponent implements OnInit{
 	}
 	
 	private async loadLocation(id:number){
-		this.currentLocation = await this.apiLocation.getById(id).toPromise();
+		this.currentLocation = await this.apiLocation.getById(id).toPromise();;
 	}
 	
 	private async loadSamples(locationId:number){
@@ -97,6 +98,14 @@ export class WaterComponent implements OnInit{
 	}
 	
 	private async loadCharts(){
+		this.mapConfig.center = {
+			lat: this.currentLocation.latitude,
+			lng: this.currentLocation.longitude
+		};
+		this.markerPos = {
+			lat: this.currentLocation.latitude,
+			lng: this.currentLocation.longitude
+		}
 		let chartReference = this.chartEntityManager.createFromReference(this.reference,'Referentie',new MaterialPalette().shift().transform(-.03,-.1,-.26));
 		let chartSamples = this.samples.map(sample => {
 			let name = sample.date.toLocaleString('nl-NL',{month:'short',year:'numeric'});
@@ -114,4 +123,45 @@ export class WaterComponent implements OnInit{
 			return config;
 		});
 	}
+
+	public mapStyle = [
+		{elementType: 'labels', stylers: [{visibility: 'off'}]},
+		{featureType: 'administrative.country', stylers: [{visibility: 'on'}]},
+		{
+			featureType: 'administrative.country',
+			elementType: 'labels.text.fill',
+			stylers: [{color: '#606060'}]
+		},
+		{
+			featureType: 'administrative.locality', elementType: 'labels',
+			stylers: [{visibility: 'simplified'}]
+		},
+		{
+			featureType: 'administrative.locality',
+			elementType: 'labels.text.fill',
+			stylers: [{color: '#606060'}]
+		},
+		{featureType: 'road', stylers: [{visibility: 'off'}]},
+		{featureType: 'water', stylers: [{visibility: 'on'}]},
+		{
+			featureType: 'water', elementType: 'geometry.fill',
+			stylers: [{color: '#0d9ac7'}, {visibility: 'on'}]
+		},
+		{
+			featureType: 'water', elementType: 'labels',
+			stylers: [{visibility: 'on'}]
+		},
+		{
+			featureType: 'water', elementType: 'labels.text.fill',
+			stylers: [{color: '#000000'}, {visibility: 'on'}]
+		}];
+
+	public mapConfig = {
+		styles: this.mapStyle,
+		mapTypeId: "satellite",
+		center: {},
+		zoom: 18,
+		disableDefaultUI: false,
+		clickableIcons: true,
+	};
 }

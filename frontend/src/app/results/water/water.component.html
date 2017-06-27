@@ -33,3 +33,11 @@
 	</md-tab-group>
 </md-card>
 
+<md-card *ngIf="currentLocation">
+	<md-card-content>
+		<ngui-map [options]="mapConfig">
+			<marker *ngIf="markerPos" [position]="markerPos">
+			</marker>
+		</ngui-map>
+	</md-card-content>
+</md-card>
