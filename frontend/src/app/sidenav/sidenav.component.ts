@@ -9,7 +9,7 @@ import { AuthenticationService } from '../services/auth.service';
 })
 export class SidenavComponent implements OnInit {
 
-  constructor(private authenticationService: AuthenticationService) { }
+  constructor(public authenticationService: AuthenticationService) { }
 
   ngOnInit() {
   }

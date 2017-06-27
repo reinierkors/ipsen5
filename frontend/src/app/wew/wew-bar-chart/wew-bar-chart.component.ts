@@ -53,7 +53,7 @@ export class WewBarChartComponent implements OnInit {
 	//Promise that resoles when all required data is loaded
 	private allDataPr:Promise<[WEWFactor[],Map<ChartEntity,SimpleWEWValue[]>]>;
 	//Whether or not there is any data to be shown
-	private hasData:boolean = true;
+	public hasData:boolean = true;
 	
 	/* Maps and arrays for quick lookup and looping */
 	private entities:ChartEntity[];

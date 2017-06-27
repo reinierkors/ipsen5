@@ -34,7 +34,7 @@
 
           <p>
               <md-select name="waterschap_id" [formControl]="complexForm.controls['waterschap_id']" placeholder="Waterschap">
-                  <md-option [value]="NULL">
+                  <md-option [value]="isNull">
                       Nieuw
                   </md-option>
                   <md-option *ngFor="let waterschap of waterschappen" [value]="waterschap.id">

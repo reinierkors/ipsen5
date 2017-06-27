@@ -50,12 +50,12 @@
             [title]="pos.title">
     </marker>
     <info-window id="iw">
-        <md-list>
-            <md-list-item>
+        <md-list *ngIf="marker">
+            <md-list-item *ngIf="marker.markerLocation">
                 <h3 md-line><b>Locatie</b></h3>
                 <p md-line>{{marker.markerLocation.description}}</p>
             </md-list-item>
-            <md-list-item>
+            <md-list-item *ngIf="marker.markerLocation">
                 <h3 md-line><b>Mp</b></h3>
                 <p md-line>{{marker.markerLocation.code}}</p>
             </md-list-item>
@@ -65,10 +65,10 @@
             </md-list-item>
             <md-list-item>
                 <h3 md-line><b>Watertype</b></h3>
-                <p md-line>
+                <p md-line *ngIf="marker.watertype">
                     {{marker.watertype.name}}
                     ({{marker.watertype.code}})</p>
-                <p md-line>
+                <p md-line *ngIf="marker.watertypeKrw">
                     {{marker.watertypeKrw.name}}
                     ({{marker.watertypeKrw.code}})</p>
             </md-list-item>
@@ -78,8 +78,8 @@
                     {{marker.lastTakenSample}}</p>
             </md-list-item>
         </md-list>
-        <button class="iw-button" md-raised-button
-                routerLink="../results/water/{{marker.markerLocation.id}}">
+        <button *ngIf="marker.markerLocation" class="iw-button" md-raised-button
+                [routerLink]="'/results/water/'+marker.markerLocation.id">
             <span class="md-button-wrapper">DETAILS</span>
         </button>
     </info-window>

@@ -28,9 +28,8 @@ import {GMapsComponent} from './locations/google-map/results-gmap.component';
 import {CreateAccountComponent} from './user/create-account/create-account.component';
 import {SidenavComponent} from './sidenav/sidenav.component';
 import {NguiMapModule} from '@ngui/map';
-import {SampleUploadComponent} from './sample/sample-upload/sample-upload.component';
 import {SampleViewComponent} from './sample/sample-view/sample-view.component';
-import {SampleEditComponent} from './sample/sample-edit/sample-edit.component';
+import {SampleUploadComponent} from './sample/sample-upload/sample-upload.component';
 import {SampleLocationTableComponent} from "./sample-location-table/sample-location-table.component";
 import {LoginComponent} from './login/login.component';
 import {AuthGuard} from "./auth/auth.guard";
@@ -61,7 +60,6 @@ const routes:Routes = [
 	{path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
 	{path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
 	{path: 'sample/quality/:id', component: SampleQualitySheetComponent, canActivate: [AuthGuard]},
-	{path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
     {path: 'taxon/view/:id', component: TaxonViewComponent, canActivate: [AuthGuard]},
     {path: 'sample/compare', component: SampleCompareComponent, canActivate: [AuthGuard]},
 	{path: 'sample/recent', component: SampleRecentComponent, canActivate: [AuthGuard]},
@@ -84,9 +82,8 @@ const routes:Routes = [
         GMapsComponent,
         SampleLocationTableComponent,
         SidenavComponent,
+		SampleViewComponent,
         SampleUploadComponent,
-        SampleViewComponent,
-        SampleEditComponent,
 		WewBarChartComponent,
         LoginComponent,
         EditAccountComponent,

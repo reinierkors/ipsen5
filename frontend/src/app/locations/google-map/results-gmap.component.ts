@@ -93,7 +93,7 @@ export class GMapsComponent implements OnInit {
 
     private retrieveSpecificMarker(marker) {
         this.markers.forEach((item) => {
-            if (marker.getTitle() === 'm' + <string><any>item.markerLocation.id) {
+            if (marker.getTitle() === 'm' + item.markerLocation.id) {
                 this.marker = item;
                 return;
             }

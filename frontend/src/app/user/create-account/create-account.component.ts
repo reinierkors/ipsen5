@@ -22,6 +22,7 @@ export class CreateAccountComponent implements OnInit {
     public complexForm: FormGroup;
     public waterschapForm: FormGroup;
     public waterschappen: Waterschap[];
+    public isNull = null;
 
     constructor(apiUser: ApiUserService, route: ActivatedRoute, apiWaterschap: ApiWaterschapService,
                 fb: FormBuilder) {
@@ -37,11 +38,11 @@ export class CreateAccountComponent implements OnInit {
         });
         this.waterschapForm = fb.group({
             'name': [null, Validators.required],
-            'address': [null],
-            'houseNumber': [null],
-            'zipCode': [null],
-            'location': [null],
-            'phoneNumber': [null],
+            'address': [],
+            'houseNumber': [],
+            'zipCode': [],
+            'location': [],
+            'phoneNumber': [],
         });
     }
 

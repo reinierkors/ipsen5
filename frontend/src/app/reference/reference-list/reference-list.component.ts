@@ -17,7 +17,7 @@ type ReferenceListItem = {watertype:Watertype,reference?:Reference};
 	styleUrls:['./reference-list.component.css']
 })
 export class ReferenceListComponent implements OnInit{
-	private listItems:ReferenceListItem[];
+	public listItems:ReferenceListItem[];
 	
 	constructor(
 		private referenceApi:ApiReferenceService,

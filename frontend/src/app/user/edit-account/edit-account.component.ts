@@ -56,8 +56,8 @@ export class EditAccountComponent implements OnInit {
         }, error => console.log(error));
     }
 
-    editPassword(value: any) {
-        this.userService.editPassword(this.model.oldPassword, this.model.newPassword, this.model.confirmPassword).subscribe(data => {
+    editPassword() {
+        this.userService.editPassword(this.model.oldPassword, this.model.newPassword, this.model.confirmPassword).subscribe(() => {
             swal('', `Wachtwoord aangepast!`, 'success');
         }, error => swal('Oops...', error.detailMessage, 'error'));
     }
