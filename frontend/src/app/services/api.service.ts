@@ -7,11 +7,16 @@ import {Observable} from 'rxjs/Observable';
 export abstract class ApiService {
 	private http:Http;
 	private static authHeaders = {};
-	//TODO read from config
-	public apiUri = 'http://127.0.0.1:8080/api';
+	public apiUri;
 	
-	constructor(http:Http){
+	constructor(http:Http) {
 		this.http = http;
+		this.apiUri = this._window().apiUri;
+	}
+
+	_window() : any {
+		// return the global native browser window object
+		return window;
 	}
 	
 	//Turns the json string that came from the API into an object

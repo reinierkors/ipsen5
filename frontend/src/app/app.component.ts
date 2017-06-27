@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
     constructor(public router: Router, private authenticationService: AuthenticationService) {
         this.router.events.subscribe(() => {
             this.loggedIn = !(localStorage.getItem('currentUser') === null);
-        })
+        });
     }
 
     toLogin() {
