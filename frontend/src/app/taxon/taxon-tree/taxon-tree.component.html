@@ -1,0 +1,10 @@
+<div class="tree" [ngStyle]="{'height.px':treeRows.length*22}">
+	<div class="treeRow" *ngFor="let row of treeRows" [ngClass]="{root:row.taxon===root}">
+		<span class="depthLines">{{row.depthLines}}</span>
+		<span class="treeRowTaxon" [ngClass]="{referrer:row.isRefer}">
+			{{row.isRefer?'Referrer: ':''}}
+			<a class="taxonLink" [routerLink]="'/taxon/view/'+row.taxon.id">{{row.taxon.name}}</a>
+			<span class="postfix">{{row.postfix}}</span>
+		</span>
+	</div>
+</div>

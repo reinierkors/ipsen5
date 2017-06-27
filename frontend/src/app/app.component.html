@@ -1,15 +1,18 @@
 <md-sidenav-container>
-    <md-sidenav #sidenav mode="side" opened="true" class="app-sidenav"><app-navigatie></app-navigatie></md-sidenav>
+    <md-sidenav #sidenav mode="side" class="app-sidenav"><app-navigatie></app-navigatie></md-sidenav>
 
     <md-toolbar color="primary">
         <button class="app-icon-button" (click)="sidenav.toggle()">
             <i class="material-icons app-toolbar-menu">menu</i>
         </button>
+        <button class="app-icon-button" (click)="goBack()">
+            <i class="material-icons app-toolbar-menu">keyboard_arrow_left</i>
+        </button>
 
         <span>Waterscan</span>
 
         <!-- This fills the remaining space of the current row -->
-        <span class="example-fill-remaining-space"></span>
+        <span class="fill-remaining-space"></span>
         <div *ngIf="loggedIn; then logout else login"></div>
         <ng-template #login>
             <a md-raised-button (click)="toLogin()">Login</a>

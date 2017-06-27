@@ -32,26 +32,29 @@ public class User {
 	@NotNull(message="Group ID is verplicht")
 	@Digits(integer=1, fraction=0, message="Group ID moet een getal bevatten")
 	private int group_id;
+
+	private Integer waterschap_id;
     private String sessionToken;
     private Timestamp expirationDate;
 
 	public User(int id, String email, String password, String name, int group_id,
-        String sessionToken, Timestamp expirationDate) {
+				Integer waterschap_id, String sessionToken, Timestamp expirationDate) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
 		this.name = name;
 		this.group_id = group_id;
+		this.waterschap_id = waterschap_id;
         this.sessionToken = sessionToken;
         this.expirationDate = expirationDate;
     }
 
-	public User(String email, String password, String name, int group_id, String sessionToken, Timestamp expirationDate) {
-		this(0, email, password, name, group_id, sessionToken, expirationDate);
+	public User(String email, String password, String name, int group_id, Integer waterschap_id, String sessionToken, Timestamp expirationDate) {
+		this(0, email, password, name, group_id, waterschap_id, sessionToken, expirationDate);
 	}
-	
+
 	public User(){
-		this(0, null, null, null, 1, null, null);
+		this(0, null, null, null, 1, null,null, null);
 	}
 
 	public int getId() {
@@ -94,7 +97,15 @@ public class User {
 		this.group_id = group_id;
 	}
 
-    public String getSessionToken() {
+	public Integer getWaterschap_id() {
+		return waterschap_id;
+	}
+
+	public void setWaterschap_id(Integer waterschap_id) {
+		this.waterschap_id = waterschap_id;
+	}
+
+	public String getSessionToken() {
         return sessionToken;
     }
 

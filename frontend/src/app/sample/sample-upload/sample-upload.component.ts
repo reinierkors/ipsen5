@@ -2,18 +2,20 @@ import {Component,OnInit} from '@angular/core';
 import {trigger,style,transition,animate,group,state} from '@angular/animations';
 
 import {Sample} from '../sample.model';
-import {Location} from '../../results/location.model';
-import {Species} from '../../species/species.model';
+import {MarkerLocation} from '../../locations/markerLocation.model';
+import {Taxon} from '../../taxon/taxon.model';
 import {Watertype} from '../../watertype/watertype.model';
 
 import {ApiSampleService} from '../api.sample.service';
-import {ApiSpeciesService} from '../../species/api.species.service';
-import {ApiLocationService} from '../../results/api.location.service';
+import {ApiTaxonService} from '../../taxon/api.taxon.service';
+import {ApiLocationService} from '../../locations/api.location.service';
 import {ApiWatertypeService} from '../../watertype/api.watertype.service';
 
-import * as Papa from 'papaparse';
+import 'papaparse';
 
+//The states an import process can be in
 type ImportState = 'anim'|'start'|'loading'|'confirmData'|'confirmSample'|'finished'|'error';
+//A row in a sample csv file
 type SampleImport = {
 	//Location code and description
 	Mp:string, Locatie:string,
@@ -27,15 +29,15 @@ type SampleImport = {
 	Datum:string, Tijd:string,
 	//Method used to obtain sample
 	'Code methode':string, 'Naam methode':string, 'Eenheid methode':string,
-	//Species name
+	//Taxon name
 	Taxonnaam:string,
-	//Amount of species found in sample
+	//Amount of taxonIds found in sample
 	Waarde:number,
 };
 
 @Component({
 	selector: 'app-sample-upload',
-	providers: [ApiSampleService,ApiSpeciesService,ApiLocationService,ApiWatertypeService],
+	providers: [ApiSampleService,ApiTaxonService,ApiLocationService,ApiWatertypeService],
 	templateUrl: './sample-upload.component.html',
 	styleUrls: ['./sample-upload.component.css'],
 	animations:[
@@ -47,36 +49,38 @@ type SampleImport = {
 	]
 })
 export class SampleUploadComponent implements OnInit {
+	//The state of the import process
 	state:ImportState = 'start';
+	//NextState is used to go to the correct state after an animated transition
 	private nextState:ImportState;
+	//Any errors that happen during the process
 	errors:any[] = [];
-	
 	//All rows from all csv files
 	private csvData:SampleImport[];
 	
 	//Map codes to objects
 	private watertypeMap:Map<string,Watertype> = new Map();
-	private locationMap:Map<string,Location> = new Map();
-	private speciesMap:Map<string,Species> = new Map();
+	private locationMap:Map<string,MarkerLocation> = new Map();
+	private taxonMap:Map<string,Taxon> = new Map();
 	//Map ids to objects (only used when confirming samples)
-	public locationIdsMap:Map<number,Location> = new Map();
-	public speciesIdsMap:Map<number,Species> = new Map();
+	public locationIdsMap:Map<number,MarkerLocation> = new Map();
+	public taxonIdsMap:Map<number,Taxon> = new Map();
 	//Store parent relations
-	private locationWatertype:Map<Location,string/*watertype code*/> = new Map();
-	private locationWatertypeKrw:Map<Location,string/*watertype code*/> = new Map();
+	private locationWatertype:Map<MarkerLocation,string/*watertype code*/> = new Map();
+	private locationWatertypeKrw:Map<MarkerLocation,string/*watertype code*/> = new Map();
 	
 	//Data to conform on the page before saving to server
 	confirm:{
 		watertypes:Watertype[],
-		locations:Location[],
-		species:Species[],
+		locations:MarkerLocation[],
+		taxonIds:Taxon[],
 		samples:Sample[],
 		samplesFast:any[]
-	} = {watertypes:[],locations:[],species:[],samples:[],samplesFast:[]};
+	} = {watertypes:[],locations:[],taxonIds:[],samples:[],samplesFast:[]};
 	
 	constructor(
 		private sampleApi:ApiSampleService,
-		private speciesApi:ApiSpeciesService,
+		private taxonApi:ApiTaxonService,
 		private locationApi:ApiLocationService,
 		private watertypeApi:ApiWatertypeService
 
@@ -126,6 +130,13 @@ export class SampleUploadComponent implements OnInit {
 					row['X-coor'] = parseInt(row['X-coor'],10);
 					row['Y-coor'] = parseInt(row['Y-coor'],10);
 					row['Waarde'] = parseInt(row['Waarde'],10);
+					row['Mp'] = row['Mp'].trim();
+					row['Locatie'] = row['Locatie'].trim();
+					row['Code watertype'] = row['Code watertype'].trim();
+					row['Naam watertype'] = row['Naam watertype'].trim();
+					row['Krw_Code'] = row['Krw_Code'].trim();
+					row['Krw_Naam'] = row['Krw_Naam'].trim();
+					row['Taxonnaam'] = row['Taxonnaam'].trim().toLowerCase();
 				});
 				this.csvData = data;
 				this.handleRawData();
@@ -133,7 +144,7 @@ export class SampleUploadComponent implements OnInit {
 	}
 	
 	//Calls PapaParse to turn the csv files into objects
-	private parseCSV(file:File):Promise<{result:Papa.ParseResultWithHeader<any>,file:File}>{
+	private parseCSV(file:File):Promise<{result:PapaParse.ParseResult,file:File}>{
 		return new Promise((resolve,reject)=>{
 			Papa.parse(file,{
 				header:true,
@@ -144,14 +155,14 @@ export class SampleUploadComponent implements OnInit {
 		});
 	}
 	
-	//Start with the sample subresources: watertypes, locations and species
+	//Start with the sample subresources: watertypes, locations and taxon
 	private handleRawData(){
 		Promise.all([
 			this.handleWatertypes(),
 			this.handleLocations(),
-			this.handleSpecies()
+			this.handleTaxa()
 		]).then(()=>{
-			if(this.confirm.locations.length+this.confirm.watertypes.length+this.confirm.species.length > 0)
+			if(this.confirm.locations.length+this.confirm.watertypes.length+this.confirm.taxonIds.length > 0)
 				this.setState('confirmData');
 			else
 				this.createSamples();
@@ -196,7 +207,7 @@ export class SampleUploadComponent implements OnInit {
 		//Go through CSV data and create models for each location
 		this.csvData.forEach(row => {
 			if(!this.locationMap.has(row.Mp)){
-				let location = new Location();
+				let location = new MarkerLocation();
 				location.code = row.Mp;
 				location.description = row.Locatie;
 				location.xCoord = row['X-coor'];
@@ -207,7 +218,7 @@ export class SampleUploadComponent implements OnInit {
 				this.locationWatertypeKrw.set(location,row.Krw_Code);
 			}
 		});
-		let retrievePrs:Promise<Location>[] = [];
+		let retrievePrs:Promise<MarkerLocation>[] = [];
 		//Retrieve existing locations
 		this.locationMap.forEach((_,locationCode) => {
 			retrievePrs.push(new Promise((resolve,reject)=>{
@@ -223,22 +234,22 @@ export class SampleUploadComponent implements OnInit {
 		},this.handleError);
 	}
 	
-	//Find all the species in the data and retrieve existing ones from the server
-	private handleSpecies():Promise<null>{
+	//Find all the taxonIds in the data and retrieve existing ones from the server
+	private handleTaxa():Promise<null>{
 		//Go through CSV data
 		this.csvData.forEach(row => {
-			if(!this.speciesMap.has(row.Taxonnaam)){
-				let species = new Species();
-				species.name = row.Taxonnaam;
-				this.speciesMap.set(row.Taxonnaam,species);
+			if(!this.taxonMap.has(row.Taxonnaam)){
+				let taxon = new Taxon();
+				taxon.name = row.Taxonnaam;
+				this.taxonMap.set(row.Taxonnaam,taxon);
 			}
 		});
 		return new Promise((resolve,reject) => {
-			//Retrieve existing species
-			this.speciesApi.getByNames(Array.from(this.speciesMap.keys())).subscribe(species => {
-				species.forEach(sp => this.speciesMap.set(sp.name,sp));
-				//Show non-existing species for confirmation
-				this.confirm.species = Array.from(this.speciesMap.values()).filter(species => !species.id);
+			//Retrieve existing taxon
+			this.taxonApi.getByNames(Array.from(this.taxonMap.keys())).subscribe(taxonIds => {
+				taxonIds.forEach(taxon => this.taxonMap.set(taxon.name,taxon));
+				//Show non-existing taxonIds for confirmation
+				this.confirm.taxonIds = Array.from(this.taxonMap.values()).filter(taxon => !taxon.id);
 				resolve();
 			},(...params) => this.handleError(...params));
 		});
@@ -252,17 +263,16 @@ export class SampleUploadComponent implements OnInit {
 		let waitForWatertypes:Promise<Watertype>[] = []
 		this.confirm.watertypes.slice().forEach(watertype => waitForWatertypes.push(this.confirmWatertype(watertype)));
 		
-		//Save all species
-		let waitForSpecies:Promise<Species>[] = [];
-		this.confirm.species.slice().forEach(species => waitForSpecies.push(this.confirmSpecies(species)));
+		//Save all taxonIds
+		let waitForTaxa:Promise<Taxon[]> = this.confirmTaxa(this.confirm.taxonIds);
 		
 		Promise.all(waitForWatertypes).then(()=>{
 			//Save all locations (watertypes have to be saved first)
-			let waitForLocations:Promise<Location>[] = [];
+			let waitForLocations:Promise<MarkerLocation>[] = [];
 			this.confirm.locations.slice().forEach(location => waitForLocations.push(this.confirmLocation(location)));
 
 			//Data this sample depends on is all saved, move on to creating the sample
-			let allPromises:Promise<Location|Species>[] = [...waitForLocations,...waitForSpecies];
+			let allPromises:Promise<any>[] = [...waitForLocations,waitForTaxa];
 			Promise.all(allPromises)
 				.then(()=>{
 					this.createSamples();
@@ -281,7 +291,7 @@ export class SampleUploadComponent implements OnInit {
 	}
 	
 	//Save all locations to the server
-	private confirmLocation(location:Location):Promise<Location>{
+	private confirmLocation(location:MarkerLocation):Promise<MarkerLocation>{
 		return new Promise((resolve,reject) => {
 			let watertype = this.watertypeMap.get(this.locationWatertype.get(location));
 			let watertypeKrw = this.watertypeMap.get(this.locationWatertypeKrw.get(location));
@@ -294,12 +304,12 @@ export class SampleUploadComponent implements OnInit {
 		});
 	}
 	
-	//Save all species to the server
-	private confirmSpecies(species:Species):Promise<Species>{
+	//Save all taxonIds to the server
+	private confirmTaxa(taxonIds:Taxon[]):Promise<Taxon[]>{
 		return new Promise((resolve,reject) => {
-			this.speciesApi.save(species).subscribe(saved => {
-				species.id = saved.id;
-				resolve(species);
+			this.taxonApi.save(taxonIds).subscribe(taxonIds => {
+				taxonIds.forEach(taxon => this.taxonMap.set(taxon.name,taxon));
+				resolve(taxonIds);
 			}, error => reject(error));
 		});
 	}
@@ -322,35 +332,42 @@ export class SampleUploadComponent implements OnInit {
 				sample.locationId = this.locationMap.get(row.Mp).id;
 				sample.xCoor = row['X-coor'];
 				sample.yCoor = row['Y-coor'];
+				sample.taxonValues = new Map();
 				sampleMap.set(sampleUnique,sample);
 			}
-			sample.speciesIds.push(this.speciesMap.get(row.Taxonnaam).id);
+			sample.taxonValues.set(this.taxonMap.get(row.Taxonnaam).id,row.Waarde);
 		});
 		
-		Array.from(this.speciesMap.values()).forEach(species => this.speciesIdsMap.set(species.id,species));
+		Array.from(this.taxonMap.values()).forEach(taxon => this.taxonIdsMap.set(taxon.id,taxon));
 		Array.from(this.locationMap.values()).forEach(location => this.locationIdsMap.set(location.id,location));
 		this.confirm.samples = Array.from(sampleMap.values());
 		
 		//Increase template rendering by only storing what we need on the page
 		this.confirm.samplesFast = this.confirm.samples.map(sample => {
+			let taxonValuesFast = new Map<string,number>();
+			sample.taxonValues.forEach((value,taxonId) => taxonValuesFast.set(this.taxonIdsMap.get(taxonId).name,value));
 			return {
 				locationCode:this.locationIdsMap.get(sample.locationId).code,
 				locationDescription:this.locationIdsMap.get(sample.locationId).description,
 				date:sample.date,
-				speciesNames:sample.speciesIds.map(id => this.speciesIdsMap.get(id).name)
+				taxonValues:taxonValuesFast
 			};
 		});
 		
 		this.setState('confirmSample');
 	}
 	
-	//Save all samples to the server
+	//User agrees with all samples
 	confirmSamples(){
 		this.setState('loading');
 		
+		//Store all samples
 		let waitForSamples:Promise<Sample[]> = new Promise((resolve,reject) => {
+			console.log(this.confirm.samples);
 			this.sampleApi.saveMulti(this.confirm.samples).subscribe(samples => resolve(samples), err => reject(err));
 		});
+		
+		//Go to finished when all samples are saved
 		waitForSamples.then(samples => this.setState('finished'), (...params) => this.handleError(...params));
 	}
 	

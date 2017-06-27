@@ -5,8 +5,7 @@ import database.ConnectionManager;
 import database.RepositoryException;
 
 /**
- * Service voor watertype-gerelateerde business logic
- * Staat tussen de router en de repository
+ * Watertype service
  *
  * @author Dylan de Wit
  * @author Wander Groeneveld
@@ -21,11 +20,21 @@ public class WatertypeService {
 	}
 	
 	public static WatertypeService getInstance() {return instance;}
-
-  public Watertype get(int id) {
+	
+	/**
+	 * Retrieve a watertype by id
+	 * @param id the id of the watertype to retrieve
+	 * @return a watertype object
+	 */
+	public Watertype get(int id) {
       return repo.get(id);
   }
-
+	
+	/**
+	 * Retrieves all watertypes
+	 * @return a list of all watertypes
+	 * @throws ApiException when there was a problem retrieving the watertypes
+	 */
 	public Iterable<Watertype> getAll() throws ApiException {
 		try {
 			return repo.getAll();
@@ -34,6 +43,12 @@ public class WatertypeService {
 		}
 	}
 	
+	/**
+	 * Store a watertype
+	 * @param watertype the watertype object to store
+	 * @return the watertype object after it's been stored
+	 * @throws ApiException when there was a problem storing the watertype
+	 */
 	public Watertype save(Watertype watertype) throws ApiException{
 		try {
 			repo.persist(watertype);

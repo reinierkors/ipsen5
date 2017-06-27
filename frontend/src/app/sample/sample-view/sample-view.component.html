@@ -1,4 +1,37 @@
-<div *ngIf="sample">
-	Sample id: {{sample.id}}<br/>
-	Sample datetime: {{sample.datetime}}
+<div *ngIf="sample && location">
+	<h1>Monster genomen bij {{location.description}}</h1>
+	<h2>{{sample.date|date:'d MMMM y'}}</h2>
 </div>
+<md-card>
+	<md-card-title>
+		Waterkwaliteit
+	</md-card-title>
+	<md-card-content>
+		<div class="detailsButton">
+		<a *ngIf="sample" [routerLink]="'/sample/quality/'+sample.id" md-raised-button>Bekijk de kwaliteit analyse</a><br/>
+		</div>
+		<app-wew-bar-chart *ngIf="wewConfig" [config]="wewConfig"></app-wew-bar-chart>
+		<md-spinner *ngIf="!wewConfig"></md-spinner>
+	</md-card-content>
+</md-card>
+<md-card *ngIf="sample && location && taxon && showChart">
+	<md-card-title>
+		Gevonden taxa
+	</md-card-title>
+	<md-card-content>
+		<div *ngIf="secondGraphEnabled"><a md-raised-button class="backButton" (click)="this.setActiveGraph(0);">Terug naar overzicht</a></div>
+		<div echarts *ngIf="firstGraphEnabled" (chartInit)="onChartInit($event)" [options]="option" class="pie-echart"></div>
+		<div echarts *ngIf="secondGraphEnabled" [options]="option2" class="pie-echart"></div>
+	</md-card-content>
+</md-card>
+<md-card *ngIf="location">
+	<md-card-title>
+		{{location.description}}
+	</md-card-title>
+	<md-card-content>
+		<ngui-map [options]="mapConfig">
+			<marker *ngIf="markerPos" [position]="markerPos">
+			</marker>
+		</ngui-map>
+	</md-card-content>
+</md-card>

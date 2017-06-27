@@ -8,6 +8,7 @@ import users.UserService;
 import static spark.Spark.*;
 
 /**
+ * A router for authentication features such as logging in and out
  * @author Marijn Kroon
  */
 public class AuthRouter {
@@ -18,8 +19,8 @@ public class AuthRouter {
         gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
         Gson gson = gsonBuilder.create();
 
-        post("/authenticate",(request,response) -> gson.toJson(userService.createSessionToken(gson.fromJson(request.body(), User.class))));
+        post("/authenticate/login",(request,response) -> gson.toJson(userService.createSessionToken(gson.fromJson(request.body(), User.class))));
 
-        post("/authenticate/logout", (request, response) -> userService.logout(request.headers("Authorization")));
+        post("/authenticate/logout", (request, response) -> userService.logout(request.headers("X-Authorization")));
     }
 }

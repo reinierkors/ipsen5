@@ -1,0 +1,39 @@
+<md-card>
+    <md-card-title>
+        Monster kwaliteit
+    </md-card-title>
+</md-card>
+<md-card>
+	<div *ngIf="sample && location">
+		<md-card-title>Monster genomen bij {{location.description}}</md-card-title>
+		<md-card-subtitle>{{sample.date|date:'d MMMM y'}}</md-card-subtitle>
+	</div>
+	<md-card-content>
+		<div *ngIf="totalDiff">
+			Totale verschil met de referentie: {{totalDiff.toFixed(2)}} punten
+		</div>
+		<div>
+			<div class="factor" *ngFor="let factorCalc of factorCalcs">
+				<div class="factorName">{{factorCalc.factor.name}}</div>
+				<div class="head">
+					<span class="fc">Factor Klasse</span>
+					<span class="ref">Referentie</span>
+					<span class="sam">Monster</span>
+					<span class="diff">Verschil</span>
+				</div>
+				<div class="factorClass" *ngFor="let classCalc of factorCalc.calculations">
+					<span class="fcCode">{{classCalc.factorClass.code}}</span>
+					<span class="fcDesc">{{classCalc.factorClass.description}}</span>
+					<span class="ref">{{classCalc.referenceValue.toFixed(2)}}</span>
+					<span class="sam">{{classCalc.sampleValue.toFixed(2)}}</span>
+					<span class="diff">{{classCalc.difference.toFixed(2)}}</span>
+				</div>
+				<div class="total">
+					<span class="label">Totaal</span>
+					<span class="value">{{factorCalc.total.toFixed(2)}}</span>
+				</div>
+			</div>
+			<div style="clear:both"></div>
+		</div>
+	</md-card-content>
+</md-card>

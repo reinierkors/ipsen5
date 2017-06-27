@@ -1,121 +1,162 @@
 @import "../../../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
-@import "../../../node_modules/@swimlane/ngx-datatable/release/index.css";
-@import "../../../node_modules/@swimlane/ngx-datatable/release/themes/material.css";
 @import "../../../node_modules/sweetalert2/dist/sweetalert2.css";
+@import '../../../node_modules/@swimlane/ngx-datatable/release/index.css';
+@import '../../../node_modules/@swimlane/ngx-datatable/release/themes/material.css';
+@import '../../../node_modules/@swimlane/ngx-datatable/release/assets/icons.css';
 
 body {
-  margin: 0;
-  font-family: Roboto,"Helvetica Neue",sans-serif;
+	margin: 0;
+	font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 body, html, app-root, md-sidenav-container {
-  height: 100%;
+	height: 100%;
 }
 
-.example-fill-remaining-space {
-  flex: 1 1 auto;
+.fill-remaining-space {
+	flex: 1 1 auto;
 }
 
 md-toolbar-row {
-  .mat-button-wrapper{
-    color: #000;
-  }
+	.mat-button-wrapper {
+		color: #000;
+	}
 }
 
 .full-width {
-  width: 100%;
+	width: 100%;
 }
 
-.container {
-  margin: 2rem;
+h1,h2{
+	margin: 20px;
 }
 
-.nav-header .mat-list-item-content {
-  height: 100% !important;
-  padding-top: 1rem !important;
-}
-
-md-sidenav.app-sidenav {
-  background-color: #333;
-}
-
-md-list-item {
-  color: #fff;
-}
-
-.mat-sidenav-content {
-  height: 100% !important;
-}
-
-a.nav-item {
-  color: #fff;
-  text-decoration: none;
-}
-
-.app-content {
-  padding: 20px;
-}
-
-.app-content md-card {
-  margin: 20px;
-}
-
-.app-sidenav {
-  padding: 0;
-  min-width: 100px;
-}
-
-.app-content md-checkbox {
-  margin: 10px;
+.mat-card{
+	margin: 20px;
 }
 
 .app-toolbar-filler {
-  flex: 1 1 auto;
+	flex: 1 1 auto;
 }
 
 .app-toolbar-menu {
-  padding: 0 14px 0 14px;
-  color: white;
+	padding: 0 14px 0 14px;
+	color: white;
 }
 
 .mat-list {
-  padding-top: 0 !important;
+	padding-top: 0 !important;
 }
 
 .app-icon-button {
-  box-shadow: none;
-  user-select: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  filter: none;
-  font-weight: normal;
-  height: auto;
-  line-height: inherit;
-  margin: 0;
-  min-width: 0;
-  padding: 0;
-  outline: 0;
-  text-align: left;
-  text-decoration: none;
+	box-shadow: none;
+	user-select: none;
+	background: none;
+	border: none;
+	cursor: pointer;
+	filter: none;
+	font-weight: normal;
+	height: auto;
+	line-height: inherit;
+	margin: 0;
+	min-width: 0;
+	padding: 0;
+	outline: 0;
+	text-align: left;
+	text-decoration: none;
 }
 
 .app-action {
-  display: inline-block;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
+	display: inline-block;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
 }
 
 .alert-danger {
-  color: #a94442;
-  background-color: #f2dede;
-  border-color: #ebccd1;
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
 }
 
 .alert {
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid transparent;
-  border-radius: 4px;
+	padding: 15px;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+
+.mat-button,
+.mat-fab,
+.mat-icon-button,
+.mat-mini-fab,
+.mat-raised-button {
+	min-width: initial !important;
+}
+.pie-echart {
+	height: 500px;
+}
+
+a.backButton {
+	margin-bottom: 1rem;
+}
+
+.pie-echart {
+	height: 500px;
+}
+
+
+echarts div {
+	max-width: 100%;
+}
+
+a.mat-list-item {
+	max-width: 195px !important;
+	width: 195px !important;
+}
+
+.mat-sidenav-opened + div + .mat-sidenav-content {
+	margin-left: 194px !important;
+}
+.app-icon-button {
+	min-width: 39px;
+}
+
+/* Style the contents of the custom tooltip */
+.wewChartTooltip .tooltip-title{
+	margin:5px 0;
+	font-weight:bold;
+	font-size:120%;
+}
+
+.wewChartTooltip .tooltip-table{
+	border-collapse:collapse;
+}
+
+.wewChartTooltip .tooltip-table td{
+	padding:3px 5px;
+	border:1px white;
+	border-style:solid none;
+}
+
+.wewChartTooltip th.entity-name{
+	transform:rotate(-45deg);
+	transform-origin:left bottom;
+	position:relative;
+	left:1em;
+}
+
+/*
+PRINT
+*/
+@media print {
+	md-sidenav, md-toolbar {
+		display: none !important;
+	}
+	.echart {
+		width: 100% !important;
+	}
+	.mat-sidenav-content {
+		overflow: inherit;
+	}
 }

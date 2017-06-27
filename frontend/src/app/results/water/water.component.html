@@ -1,0 +1,56 @@
+<md-card>
+	<md-card-content>
+		<a [routerLink]="'/data'" md-raised-button>Terug</a>
+	</md-card-content>
+</md-card>
+
+<md-card *ngIf="currentLocation">
+	<md-card-title>Monsters van {{currentLocation.description}}</md-card-title>
+	<md-card-content>
+		<ngx-datatable
+			class="material"
+			[rows]="sampleRows"
+			[columns]="sampleColumns"
+			[columnMode]="'force'"
+			[headerHeight]="50"
+			[footerHeight]="50"
+			[rowHeight]="'auto'"
+			[limit]="10">
+		</ngx-datatable>
+	</md-card-content>
+</md-card>
+<ng-template #sampleDateTemplate let-row="row">
+	{{row.date | date:'fullDate'}}
+</ng-template>
+<ng-template #sampleQualityTemplate let-row="row">
+	{{row.quality.toFixed(2)}}
+</ng-template>
+<ng-template #sampleDetailsTemplate let-row="row">
+	<a [routerLink]="'/sample/view/'+row.id" md-raised-button>Details</a>
+</ng-template>
+
+<md-card>
+	<md-card-title>Afwijking van referentie</md-card-title>
+	<md-card-content>
+		<div *ngIf="qualityChartOptions" echarts (chartInit)="onQualityChartInit($event)" [options]="qualityChartOptions" style="width:1000px;height:350px;"></div>
+		<md-spinner *ngIf="!qualityChartOptions"></md-spinner>
+	</md-card-content>
+</md-card>
+
+<md-card *ngIf="currentLocation">
+    <md-card-title>Waterkwaliteit van {{currentLocation.description}}</md-card-title>
+	<md-tab-group *ngIf="currentLocation && wewConfigs">
+		<md-tab *ngFor="let config of wewConfigs" [label]="config.factors[0].name">
+			<app-wew-bar-chart [config]="config"></app-wew-bar-chart>
+		</md-tab>
+	</md-tab-group>
+</md-card>
+
+<md-card *ngIf="markerPos">
+	<md-card-content>
+		<ngui-map [options]="mapConfig">
+			<marker [position]="markerPos">
+			</marker>
+		</ngui-map>
+	</md-card-content>
+</md-card>

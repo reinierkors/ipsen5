@@ -1,6 +1,7 @@
 package location;
 
 /**
+ * Class to convert between coordinate systems
  * @author Dylan de Wit
  * @version 1.0, 24-5-2017
  */
@@ -14,16 +15,16 @@ public class CoordinateConverter {
      * Converts Rijksdriekhoek coordinates to usable Latitude and Longitude
      * coordinates
      *
-     * @param x
-     * @param y
+     * @param x the x-coordinate
+     * @param y the y-coordinate
      * @return Array consisting of [0] latitude, [1] longitude
      */
-    public Double[] convertToLatLng(int x, int y) {
+    public void convertToLatLng(Location location) {
         // The city "Amersfoort" is used as reference "Rijksdriehoek" coordinate.
         int xReference = 155000;
         int yReference = 463000;
-        double dX = (double) (x - xReference) * Math.pow(10, -5);
-        double dY = (double) (y - yReference) * Math.pow(10, -5);
+        double dX = (double) (location.getxCoord() - xReference) * Math.pow(10, -5);
+        double dY = (double) (location.getyCoord() - yReference) * Math.pow(10, -5);
         double sumN =
                 (3235.65389 * dY) +
                         (-32.58297 * Math.pow(dX, 2)) +
@@ -54,6 +55,8 @@ public class CoordinateConverter {
         double referenceWgs84Y = 5.387206;
         double latitude = referenceWgs84X + (sumN / 3600);
         double longitude = referenceWgs84Y + (sumE / 3600);
-        return new Double[]{latitude, longitude};
+
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
     }
 }

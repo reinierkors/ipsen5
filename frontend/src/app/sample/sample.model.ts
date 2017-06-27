@@ -6,10 +6,30 @@ export class Sample{
 	quality:number;
 	xCoor:number;
 	yCoor:number;
-	speciesIds:number[] = [];
+	dateAdded:Date;
+	taxonValues:Map<number/*taxonId*/,number/*value*/>;
+	
+	//Maps don't stringify
+	public toJSON(){
+		let taxonValuesObj = {};
+		this.taxonValues.forEach((value,key) => taxonValuesObj[key] = value);
+		
+		return {
+			id:this.id,
+			date:this.date,
+			locationId:this.locationId,
+			ownerId:this.ownerId,
+			quality:this.quality,
+			xCoor:this.xCoor,
+			yCoor:this.yCoor,
+			dateAdded:this.dateAdded,
+			taxonValues:taxonValuesObj
+		};
+		
+	}
 	
 	public static fromJSON(obj):Sample{
-		var sample = new Sample();
+		let sample = new Sample();
 		sample.id = obj.id;
 		sample.date = new Date(obj.date);
 		sample.locationId = obj.locationId;
@@ -17,7 +37,11 @@ export class Sample{
 		sample.quality = obj.quality;
 		sample.xCoor = obj.xCoor;
 		sample.yCoor = obj.yCoor;
-		sample.speciesIds = obj.speciesIds;
+		sample.dateAdded = obj.dateAdded;
+		sample.taxonValues = new Map();
+		for(let key in obj.taxonValues){
+			sample.taxonValues.set(parseInt(key,10),obj.taxonValues[key]);
+		}
 		return sample;
 	}
 }

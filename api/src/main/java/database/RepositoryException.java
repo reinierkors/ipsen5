@@ -1,6 +1,8 @@
 package database;
 
 /**
+ * An exception for when something goes wrong in a repository.
+ * Hides exceptions of specific repository implementations.
  * @author Wander Groeneveld
  * @version 0.1, 20-5-2017
  */

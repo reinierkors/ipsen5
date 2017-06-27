@@ -6,47 +6,90 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import {ApiService} from '../services/api.service';
 import 'rxjs/add/operator/map';
+import {ApiUserService} from "../user/api.user.service";
 
 @Injectable()
 export class AuthenticationService extends ApiService{
-    public token: string;
+    private userService: ApiUserService;
 
     constructor(http: Http) {
         super(http);
-        // // set token if saved in local storage
-        // let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        // this.token = currentUser.token;
+        if(localStorage.getItem("currentUser") != null) {
+            if(this.loggedIn() === false) {
+                this.logout()
+            }
+            else {
+                let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+                let userRole = JSON.parse(localStorage.getItem("currentUserRole"));
+                ApiService.addToAuthHeaders("X-Authorization", currentUser.token);
+                ApiService.addToAuthHeaders("User-Role", userRole.role);
+            }
+        }
+        this.userService = new ApiUserService(http);
     }
 
-    addToStorage(email: string, token: string): void {
+    addToStorage(token: string): void {
+        // Sets an expiration date for the logged in user 24 hours from now
         let expireDate = Date.now() + (24*60*60*1000);
-        localStorage.setItem('currentUser', JSON.stringify({ email: email, token: token, expireDate: expireDate}));
-        this.addToAuthHeaders('Authorization', token);
+
+        // Puts the token and expiration date in local storage
+        localStorage.setItem('currentUser', JSON.stringify({token: token, expireDate: expireDate}));
+
+        // Creates an auth header for API calls with the token
+        ApiService.addToAuthHeaders('X-Authorization', token);
+    }
+
+    saveUserRole(){
+        this.userService.getCurrentUser().subscribe(user => {
+            let currentUser = user;
+            localStorage.setItem('currentUserRole', JSON.stringify({role: user.group_id}));
+            ApiService.addToAuthHeaders('User-Role', JSON.stringify(user.group_id));
+            localStorage.setItem('currentWaterschap', JSON.stringify({waterschapid: user.waterschap_id}));
+        }, error => console.log(error));
     }
 
     login(email: string, password: string): Observable<boolean> {
-        return this.post('/authenticate', { email: email, password: password })
+        return this.post('/authenticate/login', { email: email, password: password })
             .map((response: Response) => {
-                // login successful if there's a token in the response
                 let token = response.toString();
-                console.log(token);
                 if (token) {
-                    // store username and token in local storage to keep user logged in between page refreshes
-                    this.addToStorage(email, token);
-
-                    // return true to indicate successful login
+                    this.addToStorage(token);
+                    this.saveUserRole();
                     return true;
-                } else {
-                    // return false to indicate failed login
-                    return false;
                 }
+                return false;
             });
     }
 
-    logout(): Observable<null>{
-        // clear token remove user from local storage to log user out
-        this.token = null;
+    logout(): Observable<boolean>{
         localStorage.removeItem('currentUser');
-        return this.post('/authenticate/logout',{});
+        localStorage.removeItem('currentUserRole');
+        localStorage.removeItem('currentWaterschap');
+        return this.post('/authenticate/logout',{})
+            .map((response: Response) => {
+                return response.ok;
+            });
+    }
+
+    loggedIn() {
+        if (localStorage.getItem('currentUser')) {
+            let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if(currentUser.expireDate > Date.now()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    isAdmin() {
+        if (localStorage.getItem('currentUserRole')){
+            let currentUserRole = JSON.parse(localStorage.getItem('currentUserRole'));
+            if(currentUserRole.role === 2){
+                // user is admin
+                return true;
+            }
+            // user is not an admin
+            return false;
+        }
     }
 }

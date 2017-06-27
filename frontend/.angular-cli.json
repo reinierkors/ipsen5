@@ -18,9 +18,12 @@
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
-      "styles": [],
+      "styles": [
+		  "assets/css/flaticon.css"
+	  ],
       "scripts": [
         "assets/scripts/script.js",
+        "../node_modules/echarts/dist/echarts.min.js",
 		"../node_modules/papaparse/papaparse.js"
       ],
       "environmentSource": "environments/environment.ts",
@@ -53,6 +56,8 @@
   },
   "defaults": {
     "styleExt": "css",
-    "component": {}
+    "component": {
+		"spec": false
+	}
   }
 }

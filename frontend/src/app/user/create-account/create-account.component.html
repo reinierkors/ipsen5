@@ -1,36 +1,86 @@
-<div class="container">
-  <h1>Maak een nieuwe gebruiker aan</h1>
-  <form [formGroup]="complexForm" (ngSubmit)="submitForm(complexForm.value)">
+<md-card>
+    <md-card-title>
+        Maak een nieuwe gebruiker aan
+    </md-card-title>
+    <md-card-content>
+      <form [formGroup]="complexForm" (ngSubmit)="submitForm(complexForm.value)">
 
-      <md-input-container class="full-width">
-        <input mdInput name="name" [formControl]="complexForm.controls['name']" placeholder="Gebruikersnaam" required>
-      </md-input-container>
+          <md-input-container class="full-width">
+            <input mdInput name="name" [formControl]="complexForm.controls['name']" placeholder="Naam" required>
+          </md-input-container>
 
-      <div *ngIf="complexForm.controls['name'].hasError('required') && complexForm.controls['name'].touched" class="alert alert-danger">Selecteer een gebruikersnaam.</div>
+          <div *ngIf="complexForm.controls['name'].hasError('required') && complexForm.controls['name'].touched" class="alert alert-danger">Vul een naam in.</div>
 
-      <md-input-container class="full-width">
-        <input mdInput name="email" placeholder="E-mail" [formControl]="complexForm.controls['email']" required>
-      </md-input-container>
+          <md-input-container class="full-width">
+            <input mdInput name="email" placeholder="E-mail" [formControl]="complexForm.controls['email']" required>
+          </md-input-container>
 
-      <div *ngIf="complexForm.controls['email'].hasError('required') && complexForm.controls['email'].touched" class="alert alert-danger">Selecteer een email.</div>
+          <div *ngIf="complexForm.controls['email'].hasError('required') && complexForm.controls['email'].touched" class="alert alert-danger">Vul een email adres in.</div>
 
-      <md-input-container class="full-width">
-        <input mdInput name="password" placeholder="Wachtwoord" type="password" [formControl]="complexForm.controls['password']" required>
-      </md-input-container>
+          <md-input-container class="full-width">
+            <input mdInput name="password" placeholder="Wachtwoord" type="password" [formControl]="complexForm.controls['password']" required>
+          </md-input-container>
 
-      <div *ngIf="complexForm.controls['password'].hasError('required') && complexForm.controls['password'].touched" class="alert alert-danger">Selecteer een wachtwoord.</div>
-    <p>
-      <md-select name="group_id" [formControl]="complexForm.controls['group_id']" placeholder="Rol">
-        <md-option *ngFor="let rol of rollen" [value]="rol.value">
-          {{ rol.viewValue }}
-        </md-option>
-      </md-select>
-    </p>
+          <div *ngIf="complexForm.controls['password'].hasError('required') && complexForm.controls['password'].touched" class="alert alert-danger">Vul een wachtwoord in.</div>
+        <p>
+          <md-select name="group_id" [formControl]="complexForm.controls['group_id']" placeholder="Rol">
+            <md-option *ngFor="let rol of rollen" [value]="rol.value">
+              {{ rol.viewValue }}
+            </md-option>
+          </md-select>
+        </p>
 
-    <div *ngIf="complexForm.controls['group_id'].hasError('required') && complexForm.controls['group_id'].touched" class="alert alert-danger">Selecteer een rol.</div>
+        <div *ngIf="complexForm.controls['group_id'].hasError('required') && complexForm.controls['group_id'].touched" class="alert alert-danger">Selecteer een rol.</div>
 
-    <p>
-      <button md-raised-button type="submit" [disabled]="!complexForm.valid">Opslaan</button>
-    </p>
-  </form>
-</div>
+          <p>
+              <md-select name="waterschap_id" [formControl]="complexForm.controls['waterschap_id']" placeholder="Waterschap">
+                  <md-option [value]="isNull">
+                      Nieuw
+                  </md-option>
+                  <md-option *ngFor="let waterschap of waterschappen" [value]="waterschap.id">
+                      {{ waterschap.name }}
+                  </md-option>
+              </md-select>
+          </p>
+          <p>
+          <button md-raised-button type="submit" [disabled]="!complexForm.valid">Opslaan</button>
+        </p>
+      </form>
+    </md-card-content>
+</md-card>
+
+<md-card *ngIf="complexForm.value.waterschap_id == undefined && complexForm.controls['waterschap_id'].touched">
+    <md-card-title>
+        Maak een nieuwe waterschap aan
+    </md-card-title>
+    <md-card-content>
+        <form [formGroup]="waterschapForm" (ngSubmit)="submitWaterschapForm(waterschapForm.value)">
+            <md-input-container class="full-width">
+                <input mdInput name="name" [formControl]="waterschapForm.controls['name']" placeholder="Waterschap naam">
+            </md-input-container>
+
+            <md-input-container class="full-width">
+                <input mdInput name="address" [formControl]="waterschapForm.controls['address']" placeholder="Waterschap adres">
+            </md-input-container>
+
+            <md-input-container class="full-width">
+                <input mdInput name="houseNumber" [formControl]="waterschapForm.controls['houseNumber']" placeholder="Waterschap huisnummer">
+            </md-input-container>
+
+            <md-input-container class="full-width">
+                <input mdInput name="zipCode" [formControl]="waterschapForm.controls['zipCode']" placeholder="Waterschap postcode">
+            </md-input-container>
+
+            <md-input-container class="full-width">
+                <input mdInput name="location" [formControl]="waterschapForm.controls['location']" placeholder="Waterschap locatie">
+            </md-input-container>
+
+            <md-input-container class="full-width">
+                <input mdInput name="phoneNumber" [formControl]="waterschapForm.controls['phoneNumber']" placeholder="Waterschap telefoonnummer">
+            </md-input-container>
+            <p>
+                <button md-raised-button type="submit" [disabled]="!waterschapForm.valid">Opslaan</button>
+            </p>
+        </form>
+    </md-card-content>
+</md-card>

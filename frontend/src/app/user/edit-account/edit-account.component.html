@@ -1,0 +1,83 @@
+<md-card *ngIf="currentUser">
+    <md-card-title>
+        <span class="md-headline">Accountgegevens</span>
+    </md-card-title>
+    <md-card-content>
+        <form [formGroup]="complexForm" (ngSubmit)="editAccount(complexForm.value)">
+
+            <md-input-container class="full-width">
+                <input mdInput name="name" [formControl]="complexForm.controls['name']" placeholder="Naam" [(ngModel)]="currentUser.name" required>
+            </md-input-container>
+
+            <div *ngIf="complexForm.controls['name'].hasError('required') && complexForm.controls['name'].touched" class="alert alert-danger">Vul een gebruikersnaam in.</div>
+
+            <md-input-container class="full-width">
+                <input mdInput name="email" placeholder="E-mail" [(ngModel)]="currentUser.email" [formControl]="complexForm.controls['email']" required>
+            </md-input-container>
+
+            <div *ngIf="complexForm.controls['email'].hasError('required') && complexForm.controls['email'].touched" class="alert alert-danger">Vul een email adres in.</div>
+
+            <p>
+                <button md-raised-button type="submit" [disabled]="!complexForm.valid">Aanpassen</button>
+            </p>
+        </form>
+    </md-card-content>
+</md-card>
+<md-card>
+    <md-card-title>
+        <span class="md-headline">Wachtwoord aanpassen</span>
+    </md-card-title>
+    <form (ngSubmit)="editPassword()">
+    <md-card-content>
+        <div class="editPasswordForm">
+            <md-input-container class="full-width">
+                <input mdInput type="password" placeholder="Oud Wachtwoord" name="oldPassword" [(ngModel)]="model.oldPassword" required>
+            </md-input-container>
+            <section layout="row">
+                <md-input-container class="editPasswordField">
+                    <input mdInput type="password" placeholder="Nieuw Wachtwoord" name="newPassword" [(ngModel)]="model.newPassword" required>
+                </md-input-container>
+                <md-input-container class="editPasswordField">
+                    <input mdInput type="password" placeholder="Bevestig Nieuw Wachtwoord" name="confirmPassword" [(ngModel)]="model.confirmPassword" required>
+                </md-input-container>
+            </section>
+            <button type="submit" md-raised-button>Aanpassen</button>
+        </div>
+    </md-card-content>
+    </form>
+</md-card>
+<md-card *ngIf="waterschap">
+    <md-card-title>
+        Waterschap gegevens
+    </md-card-title>
+    <md-card-content>
+        <form [formGroup]="waterschapForm" (ngSubmit)="submitWaterschapForm(waterschapForm.value)">
+            <md-input-container class="full-width">
+                <input mdInput name="name" [(ngModel)]="waterschap.name" [formControl]="waterschapForm.controls['name']" placeholder="Waterschap naam">
+            </md-input-container>
+
+            <md-input-container class="full-width">
+                <input mdInput name="address" [(ngModel)]="waterschap.address" [formControl]="waterschapForm.controls['address']" placeholder="Waterschap adres">
+            </md-input-container>
+
+            <md-input-container class="full-width">
+                <input mdInput name="houseNumber" [(ngModel)]="waterschap.houseNumber" [formControl]="waterschapForm.controls['houseNumber']" placeholder="Waterschap huisnummer">
+            </md-input-container>
+
+            <md-input-container class="full-width">
+                <input mdInput name="zipCode" [(ngModel)]="waterschap.zipCode" [formControl]="waterschapForm.controls['zipCode']" placeholder="Waterschap postcode">
+            </md-input-container>
+
+            <md-input-container class="full-width">
+                <input mdInput name="location" [(ngModel)]="waterschap.location" [formControl]="waterschapForm.controls['location']" placeholder="Waterschap locatie">
+            </md-input-container>
+
+            <md-input-container class="full-width">
+                <input mdInput name="phoneNumber" [(ngModel)]="waterschap.phoneNumber" [formControl]="waterschapForm.controls['phoneNumber']" placeholder="Waterschap telefoonnummer">
+            </md-input-container>
+            <p>
+                <button md-raised-button type="submit" [disabled]="!waterschapForm.valid">Aanpassen</button>
+            </p>
+        </form>
+    </md-card-content>
+</md-card>

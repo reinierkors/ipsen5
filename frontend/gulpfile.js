@@ -24,6 +24,11 @@ gulp.task('js', function() {
         .pipe(gulp.dest('./src/assets/scripts/'))
 });
 
+gulp.task('copy', function() {
+    gulp.src('./src/assets/sass/fonts/*.{ttf,woff,eof,eot,svg}')
+        .pipe(gulp.dest('./src/assets/css/fonts'))
+});
+
 gulp.task('sass', function () {
     return gulp
         // Find all `.scss` files from the `stylesheets/` folder
@@ -53,7 +58,7 @@ gulp.task('watch', function() {
     gulp.watch(input, ['sass']);
 });
 
-gulp.task('default', ['sass', 'watch', 'js' /*, possible other tasks... */]);
+gulp.task('default', ['sass', 'watch', 'js', 'copy' /*, possible other tasks... */]);
 
 gulp.task('prod', function () {
     return gulp

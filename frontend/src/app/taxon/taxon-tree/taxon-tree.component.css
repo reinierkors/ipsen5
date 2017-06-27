@@ -1,0 +1,46 @@
+.depthLines{
+	font-family:monospace;
+	white-space:pre;
+}
+
+.treeRow{
+	box-sizing:border-box;
+	height:22px;
+	font-size:22px;
+}
+
+.root .treeRowTaxon{
+	color:#800;
+	text-decoration:underline;
+}
+
+.treeRowTaxon{
+	font-family:sans-serif;
+	color:#333;
+	font-size:14px;
+	font-weight:bold;
+	position:relative;
+	top:-3px;
+	left:2px;
+}
+
+.referrer{
+	font-style:italic;
+	font-weight:normal;
+}
+
+.postfix{
+	color:#7B7F85;
+	font-size:12px;
+	font-style:italic;
+	font-weight:normal;
+}
+
+.root .postfix{
+	text-decoration:underline;
+}
+
+.taxonLink:link,.taxonLink:visited{
+	color:#333;
+	text-decoration:none;
+}
