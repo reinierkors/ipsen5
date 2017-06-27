@@ -1,5 +1,6 @@
 <md-card *ngIf="showLocationTable">
     <md-card-title>Locaties</md-card-title>
+    <md-card-subtitle>Kies hier de monster die u wilt vergelijken</md-card-subtitle>
     <md-card-content>
         <ngx-datatable
                 class="material taxon-table"
@@ -24,6 +25,7 @@
         <a md-raised-button class="backButton" (click)="setShowLocationTable()">Terug
             naar overzicht</a>
         <a md-raised-button class="backButton" (click)="compareCurrentLocation()">Vergelijk alle monsters van deze locatie</a>
+        <a md-raised-button class="backButton" (click)="resetLocation()">Reset</a>
         <ngx-datatable
                 class="material taxon-table"
                 [rows]="samples"
@@ -44,7 +46,8 @@
 </ng-template>
 
 <md-card>
-    <md-card-title>Water kwaliteit</md-card-title>
+    <md-card-title>Factor waardes per monster</md-card-title>
+    <md-card-subtitle>Kies in de bovenstaande tabel monsters om te vergelijken</md-card-subtitle>
     <a *ngIf="wewConfigs" md-raised-button class="backButton" (click)="clearGraph()">Grafiek leeg maken</a>
     <md-tab-group *ngIf="wewConfigs" >
         <md-tab *ngFor="let config of wewConfigs"
