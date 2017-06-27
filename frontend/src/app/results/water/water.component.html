@@ -3,6 +3,7 @@
 		<a [routerLink]="'/data'" md-raised-button>Terug</a>
 	</md-card-content>
 </md-card>
+
 <md-card *ngIf="currentLocation">
 	<md-card-title>Monsters van {{currentLocation.description}}</md-card-title>
 	<md-card-content>
@@ -21,9 +22,21 @@
 <ng-template #sampleDateTemplate let-row="row">
 	{{row.date | date:'fullDate'}}
 </ng-template>
+<ng-template #sampleQualityTemplate let-row="row">
+	{{row.quality.toFixed(2)}}
+</ng-template>
 <ng-template #sampleDetailsTemplate let-row="row">
 	<a [routerLink]="'/sample/view/'+row.id" md-raised-button>Details</a>
 </ng-template>
+
+<md-card>
+	<md-card-title>Afwijking van referentie</md-card-title>
+	<md-card-content>
+		<div *ngIf="qualityChartOptions" echarts (chartInit)="onQualityChartInit($event)" [options]="qualityChartOptions" style="width:1000px;height:350px;"></div>
+		<md-spinner *ngIf="!qualityChartOptions"></md-spinner>
+	</md-card-content>
+</md-card>
+
 <md-card *ngIf="currentLocation">
     <md-card-title>Waterkwaliteit van {{currentLocation.description}}</md-card-title>
 	<md-tab-group *ngIf="currentLocation && wewConfigs">
@@ -33,10 +46,10 @@
 	</md-tab-group>
 </md-card>
 
-<md-card *ngIf="currentLocation">
+<md-card *ngIf="markerPos">
 	<md-card-content>
 		<ngui-map [options]="mapConfig">
-			<marker *ngIf="markerPos" [position]="markerPos">
+			<marker [position]="markerPos">
 			</marker>
 		</ngui-map>
 	</md-card-content>

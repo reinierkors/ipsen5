@@ -32,6 +32,7 @@ export class WaterComponent implements OnInit{
 	@ViewChild(DatatableComponent) table: DatatableComponent;
 	@ViewChild('sampleDateTemplate') sampleDateTemplate;
 	@ViewChild('sampleDetailsTemplate') sampleDetailsTemplate;
+	@ViewChild('sampleQualityTemplate') sampleQualityTemplate;
 	
     sampleRows = [];
     sampleColumns = [
@@ -40,8 +41,24 @@ export class WaterComponent implements OnInit{
         {name: 'details', prop: 'button', cellTemplate:null}
     ];
 	public markerPos;
-
+	
 	public wewConfigs:WewChartConfig[];
+	
+	private qualityEchart;
+	public qualityChartOptions = {
+		title:{text:'Verschil tussen monsters en referentie',subtext:'Lager is beter'},
+		tooltip:{
+			trigger:'axis',
+			axisPointer:{type:'shadow'},
+			backgroundColor:'rgba(0,0,0,0.9)',
+			formatter:params=>params[0].data[0].toLocaleString('nl-NL',{day:'numeric',month:'short',year:'numeric'})+': '+params[0].data[1].toFixed(2)
+		},
+		grid:{left:'3%',right:'4%',bottom:'4%',containLabel:true},
+		xAxis:{type:'time',data:[],axisLabel:{formatter:val=>new Date(val).toLocaleString('nl-NL',{day:'numeric',month:'short',year:'numeric'})}},
+		yAxis:{type:'value',boundaryGap:[0, 0.01],min:0},
+		series:{},
+		toolbox:{right:50,feature:{saveAsImage:{title:'Download grafiek'}}}
+	};
 	
 	constructor(
 		private apiSample:ApiSampleService,
@@ -56,6 +73,16 @@ export class WaterComponent implements OnInit{
 		this.loadResources();
 	}
 	
+	ngAfterViewInit(){
+		this.sampleColumns[0].cellTemplate = this.sampleDateTemplate;
+		this.sampleColumns[1].cellTemplate = this.sampleQualityTemplate;
+		this.sampleColumns[2].cellTemplate = this.sampleDetailsTemplate;
+	}
+	
+	onQualityChartInit(echart){
+		this.qualityEchart = echart;
+	}
+	
 	private async loadResources(){
 		let locationId = await this.getLocationId();
 		
@@ -65,12 +92,11 @@ export class WaterComponent implements OnInit{
 		
 		let referencePr = locationPr.then(() => this.loadReference());
 		
-		Promise.all([samplesPr,factorsPr,referencePr]).then(() => this.loadCharts());
-	}
-	
-	ngAfterViewInit(){
-		this.sampleColumns[0].cellTemplate = this.sampleDateTemplate;
-		this.sampleColumns[2].cellTemplate = this.sampleDetailsTemplate;
+		Promise.all([samplesPr,factorsPr,referencePr]).then(() => {
+			this.loadMap();
+			this.loadQualityChart();
+			this.loadWewCharts();
+		});
 	}
 	
 	private async getLocationId():Promise<number>{
@@ -85,6 +111,7 @@ export class WaterComponent implements OnInit{
 	
 	private async loadSamples(locationId:number){
 		this.samples = await this.apiSample.getByLocationId(locationId).toPromise();
+		this.samples.sort((a,b) => a.date.valueOf()-b.date.valueOf());
 		this.sampleRows = this.samples;
 	}
 	
@@ -97,15 +124,16 @@ export class WaterComponent implements OnInit{
 		this.reference = await this.apiReference.getByWatertype(watertype).toPromise();
 	}
 	
-	private async loadCharts(){
-		this.mapConfig.center = {
-			lat: this.currentLocation.latitude,
-			lng: this.currentLocation.longitude
+	private loadQualityChart(){
+		this.qualityChartOptions.series = {
+			type:'line',
+			data:this.samples.map((sample,index) => [sample.date,sample.quality])
 		};
-		this.markerPos = {
-			lat: this.currentLocation.latitude,
-			lng: this.currentLocation.longitude
-		}
+		this.qualityChartOptions.xAxis.data = this.samples.map(sample => sample.date);
+		this.qualityEchart.setOption(this.qualityChartOptions,true);
+	}
+	
+	private loadWewCharts(){
 		let chartReference = this.chartEntityManager.createFromReference(this.reference,'Referentie',new MaterialPalette().shift().transform(-.03,-.1,-.26));
 		let chartSamples = this.samples.map(sample => {
 			let name = sample.date.toLocaleString('nl-NL',{month:'short',year:'numeric'});
@@ -122,6 +150,17 @@ export class WaterComponent implements OnInit{
 			};
 			return config;
 		});
+	}
+	
+	private loadMap(){
+		this.mapConfig.center = {
+			lat: this.currentLocation.latitude,
+			lng: this.currentLocation.longitude
+		};
+		this.markerPos = {
+			lat: this.currentLocation.latitude,
+			lng: this.currentLocation.longitude
+		}
 	}
 
 	public mapStyle = [
