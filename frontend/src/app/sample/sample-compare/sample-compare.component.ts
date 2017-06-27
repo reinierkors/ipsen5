@@ -39,6 +39,7 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
     public samples = [];
     public sampleColumns = [
         {name: 'Datum genomen', prop: 'date', cellTemplate: null},
+        {name: 'Kwaliteit', prop: 'quality', cellTemplate:null},
         {name: 'Details', prop: 'button', cellTemplate: null}
     ];
     public comparedSampleColumns = [
@@ -72,7 +73,7 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
     ngAfterViewInit() {
         this.locationColumns[2].cellTemplate = this.locationsButtonTemplate;
         this.sampleColumns[0].cellTemplate = this.sampleDateTemplate;
-        this.sampleColumns[1].cellTemplate = this.samplesButtonTemplate;
+        this.sampleColumns[2].cellTemplate = this.samplesButtonTemplate;
     }
 
     public onSelect(id) {
