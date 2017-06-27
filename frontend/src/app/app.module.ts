@@ -18,7 +18,7 @@ import {
 	MdButtonModule,
 	MdSelectModule,
 	MdProgressBarModule,
-	MdProgressSpinnerModule
+	MdProgressSpinnerModule,
 } from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
@@ -45,8 +45,10 @@ import {WaterComponent} from './results/water/water.component';
 import { TaxonManageGroupsComponent,TaxonManageGroupsEditComponent } from './taxon/taxon-manage-groups/taxon-manage-groups.component';
 import {ReferenceListComponent} from './reference/reference-list/reference-list.component';
 import {ReferenceEditComponent} from './reference/reference-edit/reference-edit.component';
-import {CompareComponent} from './compare/compare.component';
 import {LOCALE_ID} from '@angular/core';
+import {SampleCompareComponent} from "./sample/sample-compare/sample-compare.component";
+import {SampleQualitySheetComponent} from './sample/sample-quality-sheet/sample-quality-sheet.component';
+
 const routes:Routes = [
 	{path: '', component: HomeComponent},
 	{path: 'login', component: LoginComponent},
@@ -57,9 +59,10 @@ const routes:Routes = [
 	{path: 'data', component: SampleLocationTableComponent, canActivate: [AuthGuard]},
 	{path: 'sample/upload', component: SampleUploadComponent, canActivate: [AuthGuard]},
 	{path: 'sample/view/:id', component: SampleViewComponent, canActivate: [AuthGuard]},
+	{path: 'sample/quality/:id', component: SampleQualitySheetComponent, canActivate: [AuthGuard]},
 	{path: 'sample/edit/:id', component: SampleEditComponent, canActivate: [AuthGuard]},
     {path: 'taxon/view/:id', component: TaxonViewComponent, canActivate: [AuthGuard]},
-    {path: 'compare', component: CompareComponent, canActivate: [AuthGuard]},
+    {path: 'sample/compare', component: SampleCompareComponent, canActivate: [AuthGuard]},
 	/* Admin Routes */
 	{path: 'taxon/import', component: TaxonImportStructureComponent, canActivate: [AuthGuard]},
 	{path: 'taxon/group', component: TaxonManageGroupsComponent, canActivate: [AuthGuard]},
@@ -94,7 +97,8 @@ const routes:Routes = [
 		TaxonManageGroupsEditComponent,
 		ReferenceListComponent,
         ReferenceEditComponent,
-		CompareComponent
+		SampleCompareComponent,
+		SampleQualitySheetComponent
     ],
 	entryComponents: [
 		TaxonManageGroupsEditComponent

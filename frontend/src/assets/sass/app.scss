@@ -121,10 +121,34 @@ a.mat-list-item {
 .app-icon-button {
 	min-width: 39px;
 }
+
+/* Style the contents of the custom tooltip */
+.wewChartTooltip .tooltip-title{
+	margin:5px 0;
+	font-weight:bold;
+	font-size:120%;
+}
+
+.wewChartTooltip .tooltip-table{
+	border-collapse:collapse;
+}
+
+.wewChartTooltip .tooltip-table td{
+	padding:3px 5px;
+	border:1px white;
+	border-style:solid none;
+}
+
+.wewChartTooltip th.entity-name{
+	transform:rotate(-45deg);
+	transform-origin:left bottom;
+	position:relative;
+	left:1em;
+}
+
 /*
 PRINT
 */
-
 @media print {
 	md-sidenav, md-toolbar {
 		display: none !important;

@@ -7,6 +7,7 @@
 		Waterkwaliteit
 	</md-card-title>
 	<md-card-content>
+		<a *ngIf="sample" [routerLink]="'/sample/quality/'+sample.id">Bekijk de kwaliteit analyse</a><br/>
 		<app-wew-bar-chart *ngIf="wewConfig" [config]="wewConfig"></app-wew-bar-chart>
 		<md-spinner *ngIf="!wewConfig"></md-spinner>
 	</md-card-content>

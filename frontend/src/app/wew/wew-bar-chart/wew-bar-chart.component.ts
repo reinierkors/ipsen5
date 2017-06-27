@@ -10,7 +10,7 @@ import 'rxjs/add/operator/toPromise';
 
 //Send out with <app-wew-bar-chart (init)="func(WewChartPublicInstance)"></app-wew-bar-chart>
 export type WewChartPublicInstance = {
-	reload(),
+	reload(config?:WewChartConfig),
 	resize(width:number,height:number)
 };
 
@@ -47,6 +47,9 @@ export class WewBarChartComponent implements OnInit {
 	
 	//EChart instance
 	private echart;
+	//DOM of the echart, used to position the tooltip
+	private echartDom = null;
+	
 	//Promise that resoles when all required data is loaded
 	private allDataPr:Promise<[WEWFactor[],Map<ChartEntity,SimpleWEWValue[]>]>;
 	//Whether or not there is any data to be shown
@@ -71,7 +74,9 @@ export class WewBarChartComponent implements OnInit {
 			trigger:'axis',
 			axisPointer:{type:'shadow'},
 			backgroundColor:'rgba(0,0,0,0.9)',
-			formatter:(p)=>this.tooltipFormatter(p)
+			formatter:(p)=>this.tooltipFormatter(p),
+			position:(point,params,dom,rect,size)=>this.tooltipPosition(point,params,dom,rect,size)
+
 		},
 		grid:{left:'3%',right:'4%',bottom:'15%',containLabel:true},
 		xAxis:{type:'category',data:[],axisLabel:{rotate:45}},
@@ -148,8 +153,15 @@ export class WewBarChartComponent implements OnInit {
 	//Object that is outputted to the parent
 	private getPublicInstance():WewChartPublicInstance{
 		return {
-			reload:()=>this.ngOnInit(),
-			resize:(width,height)=>{this.width = width; this.height = height; this.echart.resize({width:this.width,height:this.height});}
+			reload:(config?:WewChartConfig)=>{
+				if(config)this.config = config;
+				this.ngOnInit();
+			},
+			resize:(width,height)=>{
+				this.width = width;
+				this.height = height;
+				this.echart.resize({width:this.width,height:this.height});
+			}
 		};
 	}
 	
@@ -341,7 +353,7 @@ export class WewBarChartComponent implements OnInit {
 		markerParams.forEach(p => markers.set(this.factorClassIdMap.get(p.data.factorClassId),p.marker));
 		
 		//Return html to be put in the tooltip
-		return `<div class="tooltip-title">${factor.name}</div>
+		return `<div class="wewChartTooltip"><div class="tooltip-title">${factor.name}</div>
 			<p>
 				<table class="tooltip-table">
 					<thead>
@@ -363,6 +375,37 @@ export class WewBarChartComponent implements OnInit {
 						</tr>`).join('')}
 					</tbody>
 				</table>
-			</p>`;
+			</p></div>`;
+	}
+	
+	//Tooltip won't show when inside some container
+	private tooltipPosition([mouseX,mouseY],params,dom,rect,{viewSize:[chartWidth,chartHeight],contentSize:[tooltipWidth,tooltipHeight]}){
+		//Get chart position
+		let echartDom;
+		if(this.echartDom===null)
+			this.echartDom = echartDom = dom.parentNode;
+		else
+			echartDom = this.echartDom;
+		let chartRect = echartDom.getBoundingClientRect();
+		let chartX = chartRect.left;
+		let chartY = chartRect.top;
+		
+		//Mouse X and Y are relative to the chart, so add those together
+		let left = mouseX+chartX;
+		let top = mouseY+chartY;
+		
+		//Put the middle of the tooltip above the mouse
+		left -= tooltipWidth/2;
+		//Put the tooltip above the mouse
+		top -= tooltipHeight + 20;
+		
+		//Throw it in the body
+		document.body.appendChild(dom);
+		
+		//Checks
+		if(left<0)left = 0;
+		if(top<0)top = 0;
+		
+		return {left,top};
 	}
 }
