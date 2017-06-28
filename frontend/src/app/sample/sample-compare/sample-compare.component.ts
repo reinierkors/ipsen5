@@ -147,6 +147,7 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
         var entityCounter = 1;
 
         this.samplesToCompare.forEach((item) => {
+            console.log(item)
             const name = item.sample.date.toLocaleString('nl-NL', {
                 day: 'numeric',
                 month: 'short',
@@ -183,12 +184,10 @@ export class SampleCompareComponent implements OnInit, AfterViewInit {
             this.wewChartInstance = wewChartInstance;
     }
 
-    public compareCurrentLocation(id) {
-        if (this.selectedLocation == undefined) {
-            this.getSamplesByLocationId(id);
-            this.compareCurrentLocation(id);
-        }
-        this.samplesToCompare = this.samples.concat();
+    public compareCurrentLocation() {
+        this.samples.forEach((item) => {
+            this.samplesToCompare.push({sample: item, locationName: this.selectedLocation['description']});
+        });
         this.samples.splice(0);
         this.addToChart();
     }
