@@ -77,7 +77,7 @@ export class SampleViewComponent implements OnInit {
 				x: 'center'
 			},
 			toolbox: {
-                right: 150,
+				right: 150,
 				feature: {
 					saveAsImage: {
 						title: "Download grafiek",

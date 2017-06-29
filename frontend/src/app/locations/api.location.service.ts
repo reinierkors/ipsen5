@@ -7,20 +7,20 @@ import {MarkerLocation} from './markerLocation.model';
 
 @Injectable()
 export class ApiLocationService extends ApiService {
-    constructor(@Inject(Http) http: Http) {
-        super(http);
-    }
+	constructor(@Inject(Http) http: Http) {
+		super(http);
+	}
 	
 	//Retrieve a list of all locations
-    public getAllLocations(): Observable<MarkerLocation[]> {
-        return this.get('/location/all').map((markerLocations: Object[]) =>
-            markerLocations.map(markerLocation => MarkerLocation.fromJSON(markerLocation)));
-    }
+	public getAllLocations(): Observable<MarkerLocation[]> {
+		return this.get('/location/all').map((markerLocations: Object[]) =>
+			markerLocations.map(markerLocation => MarkerLocation.fromJSON(markerLocation)));
+	}
 	
 	//Retrieve a location by its ID
-    public getById(id): Observable<MarkerLocation> {
-        return this.get('/location/id/'+id).map(markerLocation => MarkerLocation.fromJSON(markerLocation));
-    }
+	public getById(id): Observable<MarkerLocation> {
+		return this.get('/location/id/'+id).map(markerLocation => MarkerLocation.fromJSON(markerLocation));
+	}
 	
 	public getByIds(ids:number[]):Observable<MarkerLocation[]>{
 		return this.post('/location/ids',ids).map(markerLocations => markerLocations.map(markerLocation => MarkerLocation.fromJSON(markerLocation)));

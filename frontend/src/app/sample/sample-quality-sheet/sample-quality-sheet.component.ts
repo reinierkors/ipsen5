@@ -110,6 +110,6 @@ export class SampleQualitySheetComponent implements OnInit{
 			};
 		});
 		
-		this.totalDiff  = this.factorCalcs.reduce((result,{total}) => result+total,0);
+		this.totalDiff = this.factorCalcs.reduce((result,{total}) => result+total,0);
 	}
 }

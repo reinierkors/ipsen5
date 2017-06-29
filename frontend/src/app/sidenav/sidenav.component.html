@@ -4,12 +4,12 @@
 		<a md-list-item routerLink="/" class="logo"><img src="/assets/logo.svg"></a>
 	</div>
 	<md-divider></md-divider>
-	
+
 	<!-- Menu items for guests only -->
 	<div *ngIf="!authenticationService.loggedIn()">
 		<a md-list-item routerLink="/login">Login</a>
 	</div>
-	
+
 	<!-- Menu items for users only -->
 	<div *ngIf="authenticationService.loggedIn()">
 		<a md-list-item routerLink="/map">Landkaart</a>
@@ -20,7 +20,7 @@
 		<md-divider></md-divider>
 		<a md-list-item routerLink="/account">Account aanpassen</a>
 	</div>
-	
+
 	<!-- Menu items for admins only -->
 	<div *ngIf="authenticationService.isAdmin()">
 		<md-divider></md-divider>

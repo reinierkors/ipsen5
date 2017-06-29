@@ -1,69 +1,70 @@
 <md-card>
-    <md-card-title>Algemene data</md-card-title>
-    <md-input-container class="full-width">
-        <input mdInput placeholder="Doorzoek de data" (keyup)='updateFilter($event)'>
-    </md-input-container>
+	<md-card-title>Algemene data</md-card-title>
+	<md-input-container class="full-width">
+		<input mdInput placeholder="Doorzoek de data" (keyup)='updateFilter($event)'>
+	</md-input-container>
 </md-card>
 <md-card>
-    <md-card-title>Locaties</md-card-title>
-    <md-card-content>
-        <ngx-datatable
-                class="material"
-                [rows]="locationRows"
-                [columns]="locationColumns"
-                [columnMode]="'force'"
-                [headerHeight]="50"
-                [footerHeight]="50"
-                [rowHeight]="'auto'"
-                [limit]="10">
-        </ngx-datatable>
-            <ng-template #waterCodeTemplate let-row="row">
-                {{row.code}}
-            </ng-template>
-            <ng-template #waterDescriptionTemplate let-row="row">
-                {{row.description}}
-            </ng-template>
-            <ng-template #waterDetailsTemplate let-row="row">
-                <a [routerLink]="'../results/water/'+row.id" md-raised-button>Details</a>
-            </ng-template>
-    </md-card-content>
+	<md-card-title>Locaties</md-card-title>
+	<md-card-content>
+		<ngx-datatable
+				class="material"
+				[rows]="locationRows"
+				[columns]="locationColumns"
+				[columnMode]="'force'"
+				[headerHeight]="50"
+				[footerHeight]="50"
+				[rowHeight]="'auto'"
+				[limit]="10">
+		</ngx-datatable>
+		<ng-template #waterCodeTemplate let-row="row">
+			{{row.code}}
+		</ng-template>
+		<ng-template #waterDescriptionTemplate let-row="row">
+			{{row.description}}
+		</ng-template>
+		<ng-template #waterDetailsTemplate let-row="row">
+			<a [routerLink]="'../results/water/'+row.id" md-raised-button>Details</a>
+		</ng-template>
+	</md-card-content>
 </md-card>
 <md-card>
-    <md-card-title>Waterschappen</md-card-title>
-    <md-card-content>
-        <ngx-datatable
-                class="material"
-                [rows]="waterschapRows"
-                [columns]="waterschapColumns"
-                [columnMode]="'force'"
-                [headerHeight]="50"
-                [footerHeight]="50"
-                [rowHeight]="'auto'"
-                [limit]="10">
-        </ngx-datatable>
-    </md-card-content>
+	<md-card-title>Waterschappen</md-card-title>
+	<md-card-content>
+		<ngx-datatable
+				class="material"
+				[rows]="waterschapRows"
+				[columns]="waterschapColumns"
+				[columnMode]="'force'"
+				[headerHeight]="50"
+				[footerHeight]="50"
+				[rowHeight]="'auto'"
+				[limit]="10">
+		</ngx-datatable>
+	</md-card-content>
 </md-card>
 <md-card>
-    <md-card-title>Taxa</md-card-title>
-    <md-card-content>
-        <ngx-datatable
-                class="material taxon-table"
-                [rows]="taxonRows"
-                [columns]="taxonColumns"
-                [columnMode]="'force'"
-                [headerHeight]="50"
-                [footerHeight]="50"
-                [rowHeight]="'auto'"
-                [limit]="10">
-        </ngx-datatable>
+	<md-card-title>Taxa</md-card-title>
+	<md-card-content>
+		<ngx-datatable
+				class="material taxon-table"
+				[rows]="taxonRows"
+				[columns]="taxonColumns"
+				[columnMode]="'force'"
+				[headerHeight]="50"
+				[footerHeight]="50"
+				[rowHeight]="'auto'"
+				[limit]="10">
+		</ngx-datatable>
 		<ng-template #taxonNameTemplate let-row="row">
 				<span class="taxon-icon-container">
-					<md-icon *ngIf="row.group && row.group.icon" class="taxon-icon" fontSet="fi" [fontIcon]="'flaticon-'+row.group.icon"></md-icon>
+					<md-icon *ngIf="row.group && row.group.icon" class="taxon-icon" fontSet="fi"
+							[fontIcon]="'flaticon-'+row.group.icon"></md-icon>
 				</span>
-            {{row.name}}
-        </ng-template>
-        <ng-template #taxonButtonTemplate let-row="row">
-                <a [routerLink]="'/taxon/view/'+row.id" md-raised-button>Details</a>
+			{{row.name}}
 		</ng-template>
-    </md-card-content>
+		<ng-template #taxonButtonTemplate let-row="row">
+			<a [routerLink]="'/taxon/view/'+row.id" md-raised-button>Details</a>
+		</ng-template>
+	</md-card-content>
 </md-card>

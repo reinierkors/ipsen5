@@ -34,15 +34,15 @@ export abstract class ApiService {
 	
 	//Add authorization headers to every api call
 	protected static addToAuthHeaders(headerType: string, value: string){
-        ApiService.authHeaders[headerType] = value;
-    }
+		ApiService.authHeaders[headerType] = value;
+	}
 	
 	//Returns a Header object to be used in an http request
 	private getHeaderObject():Headers{
 		let headers = new Headers();
 		for(let key in ApiService.authHeaders){
-		    headers.append(key,ApiService.authHeaders[key]);
-        }
+			headers.append(key,ApiService.authHeaders[key]);
+		}
 		return headers;
 	}
 	

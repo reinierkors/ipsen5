@@ -1,91 +1,86 @@
 <div class="filters" *ngIf="showFilters">
-    <p class="filter-list">
-        <md-select name="waterschapName" [(ngModel)]="filters.waterschapId"
-                   placeholder="Waterschap naam">
-            <md-option [value]="0">
-                Geen filter
-            </md-option>
-            <md-option *ngFor="let waterschap of waterschappen"
-                       [value]="waterschap.id">
-                {{waterschap.name}}
-            </md-option>
-        </md-select>
-    </p>
-    <p class="filter-list">
-        <md-select name="watertypeName" [(ngModel)]="filters.watertypeId"
-                   placeholder="Watertype naam">
-            <md-option [value]="0">
-                Geen filter
-            </md-option>
-            <md-option *ngFor="let watertype of watertypes"
-                       [value]="watertype.id">
-                ({{watertype.code}}) {{watertype.name}}
-            </md-option>
-        </md-select>
-    </p>
-    <p class="filter-list">
-        <md-select name="lastTakenSample" [(ngModel)]="filters.date"
-                   placeholder="Jaar laatst genomen monster">
-            <md-option [value]="0">
-                Geen filter
-            </md-option>
-            <md-option *ngFor="let year of filterYears"
-                       [value]="year">
-                Vanaf {{year}}
-            </md-option>
-        </md-select>
-    </p>
-    <button md-raised-button class="filter-button" (click)="retrieveMarkers()"
-            type="submit">FILTEREN
-    </button>
-    <button md-raised-button class="filter-button" (click)="refreshMarkers()"
-            type="submit">RESET
-    </button>
+	<p class="filter-list">
+		<md-select name="waterschapName" [(ngModel)]="filters.waterschapId" placeholder="Waterschap naam">
+			<md-option [value]="0">
+				Geen filter
+			</md-option>
+			<md-option *ngFor="let waterschap of waterschappen"
+					[value]="waterschap.id">
+				{{waterschap.name}}
+			</md-option>
+		</md-select>
+	</p>
+	<p class="filter-list">
+		<md-select name="watertypeName" [(ngModel)]="filters.watertypeId" placeholder="Watertype naam">
+			<md-option [value]="0">
+				Geen filter
+			</md-option>
+			<md-option *ngFor="let watertype of watertypes" [value]="watertype.id">
+				({{watertype.code}}) {{watertype.name}}
+			</md-option>
+		</md-select>
+	</p>
+	<p class="filter-list">
+		<md-select name="lastTakenSample" [(ngModel)]="filters.date" placeholder="Jaar laatst genomen monster">
+			<md-option [value]="0">
+				Geen filter
+			</md-option>
+			<md-option *ngFor="let year of filterYears" [value]="year">
+				Vanaf {{year}}
+			</md-option>
+		</md-select>
+	</p>
+	<button md-raised-button class="filter-button" (click)="retrieveMarkers()"
+			type="submit">FILTEREN
+	</button>
+	<button md-raised-button class="filter-button" (click)="refreshMarkers()"
+			type="submit">RESET
+	</button>
 </div>
 
 <ngui-map [options]="mapConfig">
-    <marker (click)="showMarkerInfo($event)"
-            *ngFor="let pos of positions"
-            [position]="pos"
-            [title]="pos.title">
-    </marker>
-    <info-window id="iw">
-        <md-list *ngIf="marker">
-            <md-list-item *ngIf="marker.markerLocation">
-                <h3 md-line><b>Locatie</b></h3>
-                <p md-line>{{marker.markerLocation.description}}</p>
-            </md-list-item>
-            <md-list-item *ngIf="marker.markerLocation">
-                <h3 md-line><b>Mp</b></h3>
-                <p md-line>{{marker.markerLocation.code}}</p>
-            </md-list-item>
-            <md-list-item *ngIf="marker.waterschap != undefined">
-                <h3 md-line><b>Waterschap</b></h3>
-                <p md-line>{{marker.waterschap.name}}</p>
-            </md-list-item>
-            <md-list-item>
-                <h3 md-line><b>Watertype</b></h3>
-                <p md-line *ngIf="marker.watertype">
-                    {{marker.watertype.name}}
-                    ({{marker.watertype.code}})</p>
-                <p md-line *ngIf="marker.watertypeKrw">
-                    {{marker.watertypeKrw.name}}
-                    ({{marker.watertypeKrw.code}})</p>
-            </md-list-item>
-            <md-list-item>
-                <h3 md-line><b>Laatst genomen monster</b></h3>
-                <p md-line>
-                    {{marker.lastTakenSample}}</p>
-            </md-list-item>
-        </md-list>
-        <button *ngIf="marker.markerLocation" class="iw-button" md-raised-button
-                [routerLink]="'/results/water/'+marker.markerLocation.id">
-            <span class="md-button-wrapper">DETAILS</span>
-        </button>
-    </info-window>
+	<marker (click)="showMarkerInfo($event)"
+			*ngFor="let pos of positions"
+			[position]="pos"
+			[title]="pos.title">
+	</marker>
+	<info-window id="iw">
+		<md-list *ngIf="marker">
+			<md-list-item *ngIf="marker.markerLocation">
+				<h3 md-line><b>Locatie</b></h3>
+				<p md-line>{{marker.markerLocation.description}}</p>
+			</md-list-item>
+			<md-list-item *ngIf="marker.markerLocation">
+				<h3 md-line><b>Mp</b></h3>
+				<p md-line>{{marker.markerLocation.code}}</p>
+			</md-list-item>
+			<md-list-item *ngIf="marker.waterschap != undefined">
+				<h3 md-line><b>Waterschap</b></h3>
+				<p md-line>{{marker.waterschap.name}}</p>
+			</md-list-item>
+			<md-list-item>
+				<h3 md-line><b>Watertype</b></h3>
+				<p md-line *ngIf="marker.watertype">
+					{{marker.watertype.name}}
+					({{marker.watertype.code}})</p>
+				<p md-line *ngIf="marker.watertypeKrw">
+					{{marker.watertypeKrw.name}}
+					({{marker.watertypeKrw.code}})</p>
+			</md-list-item>
+			<md-list-item>
+				<h3 md-line><b>Laatst genomen monster</b></h3>
+				<p md-line>
+					{{marker.lastTakenSample}}</p>
+			</md-list-item>
+		</md-list>
+		<button *ngIf="marker.markerLocation" class="iw-button" md-raised-button
+				[routerLink]="'/results/water/'+marker.markerLocation.id">
+			<span class="md-button-wrapper">DETAILS</span>
+		</button>
+	</info-window>
 </ngui-map>
 
 <span class="app-action">
-  <button md-button class="search-button" (click)="toggleFilters()"><span>FILTER RESULTATEN</span>
+	<button md-button class="search-button" (click)="toggleFilters()"><span>FILTER RESULTATEN</span>
 </button>
 </span>

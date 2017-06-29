@@ -1,74 +1,75 @@
 <md-card *ngIf="showLocationTable">
-    <md-card-title>Locaties</md-card-title>
-    <md-card-subtitle>Kies hier de monster die u wilt vergelijken</md-card-subtitle>
-    <md-card-content>
-        <ngx-datatable
-                class="material taxon-table"
-                [rows]="locations"
-                [columns]="locationColumns"
-                [columnMode]="'force'"
-                [headerHeight]="50"
-                [footerHeight]="50"
-                [rowHeight]="'auto'"
-                [limit]="10">
-        </ngx-datatable>
-    </md-card-content>
+	<md-card-title>Locaties</md-card-title>
+	<md-card-subtitle>Kies hier de monster die u wilt vergelijken</md-card-subtitle>
+	<md-card-content>
+		<ngx-datatable
+				class="material taxon-table"
+				[rows]="locations"
+				[columns]="locationColumns"
+				[columnMode]="'force'"
+				[headerHeight]="50"
+				[footerHeight]="50"
+				[rowHeight]="'auto'"
+				[limit]="10">
+		</ngx-datatable>
+	</md-card-content>
 </md-card>
 <ng-template #locationsButtonTemplate let-row="row">
-    <a md-raised-button (click)="onSelect(row.id)">Bekijk monsters</a>
+	<a md-raised-button (click)="onSelect(row.id)">Bekijk monsters</a>
 </ng-template>
 <md-card *ngIf="showSampleTable">
-    <md-card-title>
-        Monsters van {{selectedLocation.description}}
-    </md-card-title>
-    <md-card-content>
-        <a md-raised-button class="backButton" (click)="setShowLocationTable()">Terug
-            naar overzicht</a>
-        <a md-raised-button class="backButton" (click)="compareCurrentLocation()">Vergelijk alle monsters van deze locatie</a>
-        <a md-raised-button class="backButton" (click)="resetLocation()">Reset</a>
-        <ngx-datatable
-                class="material taxon-table"
-                [rows]="samples"
-                [columns]="sampleColumns"
-                [columnMode]="'force'"
-                [headerHeight]="50"
-                [footerHeight]="50"
-                [rowHeight]="'auto'"
-                [limit]="10">
-        </ngx-datatable>
-    </md-card-content>
+	<md-card-title>
+		Monsters van {{selectedLocation.description}}
+	</md-card-title>
+	<md-card-content>
+		<a md-raised-button class="backButton" (click)="setShowLocationTable()">Terug
+			naar overzicht</a>
+		<a md-raised-button class="backButton" (click)="compareCurrentLocation()">Vergelijk alle monsters van deze
+			locatie</a>
+		<a md-raised-button class="backButton" (click)="resetLocation()">Reset</a>
+		<ngx-datatable
+				class="material taxon-table"
+				[rows]="samples"
+				[columns]="sampleColumns"
+				[columnMode]="'force'"
+				[headerHeight]="50"
+				[footerHeight]="50"
+				[rowHeight]="'auto'"
+				[limit]="10">
+		</ngx-datatable>
+	</md-card-content>
 </md-card>
 <ng-template #samplesButtonTemplate let-row="row">
-    <a md-raised-button (click)="onSelect(row.id)">Toevoegen</a>
+	<a md-raised-button (click)="onSelect(row.id)">Toevoegen</a>
 </ng-template>
 <ng-template #sampleDateTemplate let-row="row">
-    {{row.date | date:'fullDate'}}
+	{{row.date | date:'fullDate'}}
 </ng-template>
 
 <md-card>
-    <md-card-title>Factor waardes per monster</md-card-title>
-    <md-card-subtitle>Kies in de bovenstaande tabel monsters om te vergelijken</md-card-subtitle>
-    <md-card-content *ngIf="showGraph">
-        <a *ngIf="wewConfigs" md-raised-button class="backButton" (click)="clearGraph()">Grafiek leeg maken</a>
-        <md-tab-group>
-            <md-tab *ngFor="let config of wewConfigs"
-                    [label]="config.factors[0].name">
-                <div class="factor-group">
-                    <app-wew-bar-chart [config]="config"
-                                       (init)="onWewChartInit($event)"></app-wew-bar-chart>
-                </div>
-            </md-tab>
-        </md-tab-group>
-
-        <ngx-datatable class="comparedSampleTable"
-                class="material taxon-table"
-                [rows]="comparedSampleRows"
-                [columns]="comparedSampleColumns"
-                [columnMode]="'force'"
-                [headerHeight]="50"
-                [footerHeight]="50"
-                [rowHeight]="'auto'"
-                [limit]="5">
-        </ngx-datatable>
-    </md-card-content>
+	<md-card-title>Factor waardes per monster</md-card-title>
+	<md-card-subtitle>Kies in de bovenstaande tabel monsters om te vergelijken</md-card-subtitle>
+	<md-card-content *ngIf="showGraph">
+		<a *ngIf="wewConfigs" md-raised-button class="backButton" (click)="clearGraph()">Grafiek leeg maken</a>
+		<md-tab-group>
+			<md-tab *ngFor="let config of wewConfigs"
+					[label]="config.factors[0].name">
+				<div class="factor-group">
+					<app-wew-bar-chart [config]="config"
+							(init)="onWewChartInit($event)"></app-wew-bar-chart>
+				</div>
+			</md-tab>
+		</md-tab-group>
+		
+		<ngx-datatable class="comparedSampleTable"
+				class="material taxon-table"
+				[rows]="comparedSampleRows"
+				[columns]="comparedSampleColumns"
+				[columnMode]="'force'"
+				[headerHeight]="50"
+				[footerHeight]="50"
+				[rowHeight]="'auto'"
+				[limit]="5">
+		</ngx-datatable>
+	</md-card-content>
 </md-card>

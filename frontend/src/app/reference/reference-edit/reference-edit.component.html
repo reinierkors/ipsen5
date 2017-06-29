@@ -2,7 +2,8 @@
 	<md-card-title>
 		Referenties
 	</md-card-title>
-	<md-card-subtitle>Op deze pagina kunt u referentie gegevens toevoegen aan de verschillende types locaties</md-card-subtitle>
+	<md-card-subtitle>Op deze pagina kunt u referentie gegevens toevoegen aan de verschillende types locaties
+	</md-card-subtitle>
 </md-card>
 <md-card *ngIf="taxaList!==null">
 	<md-card-title *ngIf="watertype">{{watertype.code}} - {{watertype.name}}</md-card-title>
@@ -10,6 +11,7 @@
 	<md-card-content>
 		<textarea [rows]="getTaxaRows()" cols="60" [(ngModel)]="taxaList"></textarea>
 		<br/>
-		<button md-raised-button (click)="save()" [disabled]="saving">{{saving?'Bezig met opslaan...':'Sla op'}}</button>
+		<button md-raised-button (click)="save()" [disabled]="saving">{{saving?'Bezig met opslaan...':'Sla op'}}
+		</button>
 	</md-card-content>
 </md-card>

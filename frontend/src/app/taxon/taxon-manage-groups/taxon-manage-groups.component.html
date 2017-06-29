@@ -3,7 +3,8 @@
 	<md-card>
 		<md-card-header>
 			<div md-card-avatar>
-				<md-icon *ngIf="group.icon" class="taxon-icon" fontSet="fi" [fontIcon]="'flaticon-'+group.icon"></md-icon>
+				<md-icon *ngIf="group.icon" class="taxon-icon" fontSet="fi"
+						[fontIcon]="'flaticon-'+group.icon"></md-icon>
 				<span *ngIf="!group.icon" class="taxon-icon">?</span>
 			</div>
 			<md-card-title>{{group.code}}</md-card-title>
@@ -14,7 +15,9 @@
 			</p>
 		</md-card-content>
 		<md-card-actions>
-			<button md-button (click)="edit(group)"><md-icon>edit</md-icon></button>
+			<button md-button (click)="edit(group)">
+				<md-icon>edit</md-icon>
+			</button>
 		</md-card-actions>
 	</md-card>
 </div>

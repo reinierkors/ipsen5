@@ -34,12 +34,12 @@ export class WaterComponent implements OnInit{
 	@ViewChild('sampleDetailsTemplate') sampleDetailsTemplate;
 	@ViewChild('sampleQualityTemplate') sampleQualityTemplate;
 	
-    sampleRows = [];
-    sampleColumns = [
-        {name: 'Datum', prop: 'date', cellTemplate:null}, // Moet alleen nog ff formatten naar dag / maand / jaar
-        {name: 'Kwaliteit', prop: 'quality', cellTemplate:null},
-        {name: 'details', prop: 'button', cellTemplate:null}
-    ];
+	sampleRows = [];
+	sampleColumns = [
+		{name: 'Datum', prop: 'date', cellTemplate:null}, // Moet alleen nog ff formatten naar dag / maand / jaar
+		{name: 'Kwaliteit', prop: 'quality', cellTemplate:null},
+		{name: 'details', prop: 'button', cellTemplate:null}
+	];
 	public markerPos;
 	
 	public wewConfigs:WewChartConfig[];
@@ -116,7 +116,7 @@ export class WaterComponent implements OnInit{
 	}
 	
 	private async loadFactors(){
-		this.factors =  await this.apiWew.getFactors().toPromise();
+		this.factors = await this.apiWew.getFactors().toPromise();
 	}
 	
 	private async loadReference(){

@@ -1,5 +1,5 @@
 <md-card>
-    <md-card-title>Importeer monsters</md-card-title>
+	<md-card-title>Importeer monsters</md-card-title>
 </md-card>
 <!-- ToDo: handle errors nicely -->
 <md-card *ngIf="state=='error'" [@mainCardAnim] (@mainCardAnim.done)="mainCardAnimDone($event)">
@@ -28,7 +28,8 @@
 	<md-card>
 		<md-card-title>Bevestiging vereist</md-card-title>
 		<md-card-content>
-			<p>De volgende watertypes, locaties of soorten zijn nog niet in het systeem bekend, controleer of deze correct zijn.</p>
+			<p>De volgende watertypes, locaties of soorten zijn nog niet in het systeem bekend, controleer of deze
+				correct zijn.</p>
 			<button md-raised-button (click)="confirmAll()">Bevestig alles</button>
 		</md-card-content>
 	</md-card>
@@ -57,8 +58,8 @@
 		<md-card-content>
 			<md-list dense>
 				<md-list-item *ngFor="let taxon of confirm.taxonIds">
-                    {{taxon.name}}
-                </md-list-item>
+					{{taxon.name}}
+				</md-list-item>
 			</md-list>
 		</md-card-content>
 	</md-card>

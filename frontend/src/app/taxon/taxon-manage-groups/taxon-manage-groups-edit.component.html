@@ -2,7 +2,8 @@
 	<md-card>
 		<md-card-header>
 			<div md-card-avatar>
-				<md-icon *ngIf="group.icon" class="taxon-icon" fontSet="fi" [fontIcon]="'flaticon-'+group.icon"></md-icon>
+				<md-icon *ngIf="group.icon" class="taxon-icon" fontSet="fi"
+						[fontIcon]="'flaticon-'+group.icon"></md-icon>
 				<span *ngIf="!group.icon" class="taxon-icon">?</span>
 			</div>
 			<md-card-title>{{group.code}}</md-card-title>
@@ -26,8 +27,12 @@
 			</div>
 		</md-card-content>
 		<md-card-actions>
-			<button md-button md-dialog-close><md-icon>close</md-icon></button>
-			<button md-button md-dialog-close (click)="save()"><md-icon>check</md-icon></button>
+			<button md-button md-dialog-close>
+				<md-icon>close</md-icon>
+			</button>
+			<button md-button md-dialog-close (click)="save()">
+				<md-icon>check</md-icon>
+			</button>
 		</md-card-actions>
 	</md-card>
 </div>

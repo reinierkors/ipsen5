@@ -1,2 +1,3 @@
 <div *ngIf="!hasData">Geen gegevens beschikbaar</div>
-<div *ngIf="hasData" echarts [options]="chartOptions" (chartInit)="onChartInit($event)" [ngStyle]="{'width.px':width,'height.px':height}"></div>
+<div *ngIf="hasData" echarts [options]="chartOptions" (chartInit)="onChartInit($event)"
+		[ngStyle]="{'width.px':width,'height.px':height}"></div>

@@ -8,10 +8,10 @@ import {DatatableComponent} from "@swimlane/ngx-datatable";
 type TaxonRow = {id:number,name:string,group?:TaxonGroup};
 
 @Component({
-    selector: 'app-sample-Location-table',
-    providers: [ApiLocationService, ApiWaterschapService, ApiTaxonService],
-    templateUrl: './sample-Location-table.component.html',
-    styleUrls: ['./sample-Location-table.component.css']
+	selector: 'app-sample-Location-table',
+	providers: [ApiLocationService, ApiWaterschapService, ApiTaxonService],
+	templateUrl: './sample-Location-table.component.html',
+	styleUrls: ['./sample-Location-table.component.css']
 })
 
 export class SampleLocationTableComponent implements OnInit {
@@ -55,31 +55,31 @@ export class SampleLocationTableComponent implements OnInit {
 	@ViewChild('taxonNameTemplate') taxonNameTemplate;
 	@ViewChild('taxonButtonTemplate') taxonButtonTemplate;
 	
-    constructor(apiLocationService: ApiLocationService, apiWaterschap: ApiWaterschapService,
-                apiTaxon: ApiTaxonService) {
-        this.apiLocationService = apiLocationService;
-        this.apiWaterschap = apiWaterschap;
-        this.apiTaxon = apiTaxon;
-    }
+	constructor(apiLocationService: ApiLocationService, apiWaterschap: ApiWaterschapService,
+				apiTaxon: ApiTaxonService) {
+		this.apiLocationService = apiLocationService;
+		this.apiWaterschap = apiWaterschap;
+		this.apiTaxon = apiTaxon;
+	}
 
-    ngOnInit() {
-        this.apiLocationService.getAllLocations().subscribe(locations => {
-            this.locationRows = locations;
-            this.locations = locations;
-        });
-        this.apiWaterschap.getAll().subscribe(waterschappen => {
-            this.waterschapRows = waterschappen;
-            this.waterschappen = waterschappen;
-        });
-        this.apiTaxon.getAll().subscribe(taxa => {
-            this.taxa = taxa;
+	ngOnInit() {
+		this.apiLocationService.getAllLocations().subscribe(locations => {
+			this.locationRows = locations;
+			this.locations = locations;
+		});
+		this.apiWaterschap.getAll().subscribe(waterschappen => {
+			this.waterschapRows = waterschappen;
+			this.waterschappen = waterschappen;
+		});
+		this.apiTaxon.getAll().subscribe(taxa => {
+			this.taxa = taxa;
 			this.taxonRows = taxa.map(taxon => this.toTaxonRow(taxon));
-        });
+		});
 		this.apiTaxon.getGroups().subscribe(groups => {
 			this.groupMap = new Map();
 			groups.forEach(group => this.groupMap.set(group.id,group));
 		});
-    }
+	}
 	
 	//TemplateRefs are available
 	ngAfterViewInit(){
@@ -90,27 +90,27 @@ export class SampleLocationTableComponent implements OnInit {
 		this.locationColumns[2].cellTemplate = this.waterDetailsTemplate;
 	}
 
-    updateFilter(event) {
-        const val = event.target.value.toLowerCase();
-        const waterschappenFiltered = this.waterschappen.filter(function(d) {
-            return d.name.toLowerCase().indexOf(val) !== -1 || !val;
-        });
+	updateFilter(event) {
+		const val = event.target.value.toLowerCase();
+		const waterschappenFiltered = this.waterschappen.filter(function(d) {
+			return d.name.toLowerCase().indexOf(val) !== -1 || !val;
+		});
 
-        const locationFiltered = this.locations.filter(function(d) {
-            return d.description.toLowerCase().indexOf(val) !== -1 || d.code.toLowerCase().indexOf(val) !== -1 || !val;
-        });
+		const locationFiltered = this.locations.filter(function(d) {
+			return d.description.toLowerCase().indexOf(val) !== -1 || d.code.toLowerCase().indexOf(val) !== -1 || !val;
+		});
 
-        const taxaFiltered = this.taxa.filter(function(d) {
-            return d.name.toLowerCase().indexOf(val) !== -1 || !val;
-        });
+		const taxaFiltered = this.taxa.filter(function(d) {
+			return d.name.toLowerCase().indexOf(val) !== -1 || !val;
+		});
 
-        this.waterschapRows = waterschappenFiltered;
-        this.locationRows = locationFiltered;
-        this.taxonRows = taxaFiltered.map(taxon => this.toTaxonRow(taxon));
+		this.waterschapRows = waterschappenFiltered;
+		this.locationRows = locationFiltered;
+		this.taxonRows = taxaFiltered.map(taxon => this.toTaxonRow(taxon));
 
-        // Whenever the filter changes, always go back to the first page
-        this.table.offset = 0;
-    }
+		// Whenever the filter changes, always go back to the first page
+		this.table.offset = 0;
+	}
 	
 	private toTaxonRow(taxon:Taxon):TaxonRow{
 		let row:TaxonRow = {id:taxon.id,name:taxon.name};
