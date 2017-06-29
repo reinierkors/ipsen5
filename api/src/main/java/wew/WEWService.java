@@ -22,39 +22,41 @@ import java.util.stream.Collectors;
  * @author Wander Groeneveld
  * @version 0.2, 6-6-2017
  */
-public class WEWService {
+public class WEWService{
 	private static final WEWService instance = new WEWService();
 	private final WEWFactorRepository factorRepo;
 	private final WEWFactorClassRepository factorClassRepo;
 	private final WEWValueRepository valueRepo;
 	
-	private WEWService() {
+	private WEWService(){
 		factorRepo = new WEWFactorRepository(ConnectionManager.getInstance().getConnection());
 		factorClassRepo = new WEWFactorClassRepository(ConnectionManager.getInstance().getConnection());
 		valueRepo = new WEWValueRepository(ConnectionManager.getInstance().getConnection());
 	}
 	
-	public static WEWService getInstance() {
+	public static WEWService getInstance(){
 		return instance;
 	}
 	
 	/**
 	 * Retrieve a list of wew values for a list of taxon
+	 *
 	 * @param taxonIds list of taxon ids
 	 * @return list of wew values
 	 * @throws ApiException when there was a problem retrieving the wew values
 	 */
 	public List<WEWValue> getByTaxon(List<Integer> taxonIds) throws ApiException{
-		 try{
-		 	return valueRepo.getByTaxon(taxonIds);
-		 }
-		 catch(RepositoryException e){
-		 	throw new ApiException("Could not retrieve WEW values");
-		 }
+		try{
+			return valueRepo.getByTaxon(taxonIds);
+		}
+		catch(RepositoryException e){
+			throw new ApiException("Could not retrieve WEW values");
+		}
 	}
 	
 	/**
 	 * Retrieves all WEW values
+	 *
 	 * @return list of all wew values
 	 * @throws ApiException when there was a problem retrieving the WEW values
 	 */
@@ -69,6 +71,7 @@ public class WEWService {
 	
 	/**
 	 * Retrieve all factors and factor classes
+	 *
 	 * @return a list of factors with their classes in each of them
 	 * @throws ApiException when there was a problem retrieving the factors or factor classes
 	 */
@@ -78,9 +81,9 @@ public class WEWService {
 			List<WEWFactorClass> classes = factorClassRepo.getAll();
 			List<WEWFactorWeb> webFactors = new ArrayList<>();
 			
-			factors.forEach( factor -> {
+			factors.forEach(factor -> {
 				WEWFactorWeb webFactor = new WEWFactorWeb(factor);
-				List<WEWFactorClass> factorClasses = classes.stream().filter(cl->cl.getFactorId()==factor.getId()).collect(Collectors.toList());
+				List<WEWFactorClass> factorClasses = classes.stream().filter(cl -> cl.getFactorId() == factor.getId()).collect(Collectors.toList());
 				webFactor.setClasses(factorClasses);
 				webFactors.add(webFactor);
 			});
@@ -93,6 +96,7 @@ public class WEWService {
 	
 	/**
 	 * Save the WEW values
+	 *
 	 * @param values list of WEW values
 	 * @return a list of the WEW values after they've been stored
 	 * @throws ApiException when there was a problem saving the WEW values
@@ -109,6 +113,7 @@ public class WEWService {
 	
 	/**
 	 * Save WEW factors and their factor classes
+	 *
 	 * @param factors list of factors with factor classes in them
 	 * @return the same list after everything has been saved
 	 * @throws ApiException when there was a problem saving the factors or factor classes
@@ -135,6 +140,7 @@ public class WEWService {
 	
 	/**
 	 * Check if all WEW tables are empty
+	 *
 	 * @return true if `wew_value`, `wew_factor` and `wew_factor_class` are all empty
 	 * @throws ApiException when there was a problem checking the state of the tables
 	 */
@@ -149,6 +155,7 @@ public class WEWService {
 	
 	/**
 	 * Remove all data from all WEW tables
+	 *
 	 * @throws ApiException when there was a problem emptying one or more tables
 	 */
 	public void emptyAllTables() throws ApiException{
@@ -180,14 +187,14 @@ public class WEWService {
 		List<WEWFactorClass> classes;
 		
 		public WEWFactorWeb(WEWFactor factor){
-			super(factor.getId(),factor.getName());
+			super(factor.getId(), factor.getName());
 		}
 		
-		public List<WEWFactorClass> getClasses() {
+		public List<WEWFactorClass> getClasses(){
 			return classes;
 		}
 		
-		public void setClasses(List<WEWFactorClass> classes) {
+		public void setClasses(List<WEWFactorClass> classes){
 			this.classes = classes;
 		}
 	}

@@ -19,9 +19,9 @@ public class Sample{
 	private Integer xCoor;
 	private Integer yCoor;
 	private Timestamp dateAdded;
-	private Map<Integer,Integer> taxonValues;
+	private Map<Integer, Integer> taxonValues;
 	
-	public Sample(int id, Date date, int locationId, Integer ownerId, Double quality, Integer xCoor, Integer yCoor, Timestamp dateAdded, Map<Integer,Integer> taxonValues) {
+	public Sample(int id, Date date, int locationId, Integer ownerId, Double quality, Integer xCoor, Integer yCoor, Timestamp dateAdded, Map<Integer, Integer> taxonValues){
 		this.id = id;
 		this.date = date;
 		this.locationId = locationId;
@@ -33,83 +33,83 @@ public class Sample{
 		this.taxonValues = taxonValues;
 	}
 	
-	public Sample(Date date, int locationId, Integer ownerId, Double quality, Integer xCoor, Integer yCoor, Timestamp dateAdded, Map<Integer,Integer> taxonValues) {
+	public Sample(Date date, int locationId, Integer ownerId, Double quality, Integer xCoor, Integer yCoor, Timestamp dateAdded, Map<Integer, Integer> taxonValues){
 		this(0, date, locationId, ownerId, quality, xCoor, yCoor, dateAdded, taxonValues);
 	}
 	
 	public Sample(){
-		this(0, null, 0, null, null, null, null, null,null);
+		this(0, null, 0, null, null, null, null, null, null);
 	}
 	
-	public int getId() {
+	public int getId(){
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(int id){
 		this.id = id;
 	}
 	
-	public Date getDate() {
+	public Date getDate(){
 		return date;
 	}
 	
-	public void setDate(Date date) {
+	public void setDate(Date date){
 		this.date = date;
 	}
 	
-	public int getLocationId() {
+	public int getLocationId(){
 		return locationId;
 	}
 	
-	public void setLocationId(int locationId) {
+	public void setLocationId(int locationId){
 		this.locationId = locationId;
 	}
 	
-	public Integer getOwnerId() {
+	public Integer getOwnerId(){
 		return ownerId;
 	}
 	
-	public void setOwnerId(Integer ownerId) {
+	public void setOwnerId(Integer ownerId){
 		this.ownerId = ownerId;
 	}
 	
-	public Double getQuality() {
+	public Double getQuality(){
 		return quality;
 	}
 	
-	public void setQuality(Double quality) {
+	public void setQuality(Double quality){
 		this.quality = quality;
 	}
 	
-	public Integer getXCoor() {
+	public Integer getXCoor(){
 		return xCoor;
 	}
 	
-	public void setXCoor(Integer xCoor) {
+	public void setXCoor(Integer xCoor){
 		this.xCoor = xCoor;
 	}
 	
-	public Integer getYCoor() {
+	public Integer getYCoor(){
 		return yCoor;
 	}
 	
-	public void setYCoor(Integer yCoor) {
+	public void setYCoor(Integer yCoor){
 		this.yCoor = yCoor;
 	}
 	
-	public Timestamp getDateAdded() {
+	public Timestamp getDateAdded(){
 		return dateAdded;
 	}
 	
-	public void setDateAdded(Timestamp dateAdded) {
+	public void setDateAdded(Timestamp dateAdded){
 		this.dateAdded = dateAdded;
 	}
 	
-	public Map<Integer, Integer> getTaxonValues() {
+	public Map<Integer, Integer> getTaxonValues(){
 		return taxonValues;
 	}
 	
-	public void setTaxonValues(Map<Integer, Integer> taxonValues) {
+	public void setTaxonValues(Map<Integer, Integer> taxonValues){
 		this.taxonValues = taxonValues;
 	}
 }

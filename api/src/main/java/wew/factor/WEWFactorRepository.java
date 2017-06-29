@@ -3,7 +3,8 @@ package wew.factor;
 import database.ColumnData;
 import database.RepositoryMaria;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Types;
 
 /**
  * Repository for WEW factors
@@ -12,30 +13,27 @@ import java.sql.*;
  * @version 0.2, 31-5-2017
  */
 public class WEWFactorRepository extends RepositoryMaria<WEWFactor>{
-	public WEWFactorRepository(Connection connection) {
+	public WEWFactorRepository(Connection connection){
 		super(connection);
 	}
 	
 	@Override
-	protected String getTable() {
+	protected String getTable(){
 		return "wew_factor";
 	}
 	
 	@Override
-	protected boolean isNew(WEWFactor entity) {
-		return entity.getId()==0;
+	protected boolean isNew(WEWFactor entity){
+		return entity.getId() == 0;
 	}
 	
 	@Override
-	protected WEWFactor createModel() {
+	protected WEWFactor createModel(){
 		return new WEWFactor();
 	}
 	
 	@Override
-	protected ColumnData[] getColumns() {
-		return new ColumnData[]{
-				new ColumnData<>("id", Types.INTEGER, WEWFactor::getId, WEWFactor::setId, true),
-				new ColumnData<>("name", Types.VARCHAR, WEWFactor::getName, WEWFactor::setName)
-		};
+	protected ColumnData[] getColumns(){
+		return new ColumnData[]{new ColumnData<>("id", Types.INTEGER, WEWFactor::getId, WEWFactor::setId, true), new ColumnData<>("name", Types.VARCHAR, WEWFactor::getName, WEWFactor::setName)};
 	}
 }

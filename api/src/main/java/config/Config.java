@@ -1,37 +1,38 @@
 package config;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.InstanceCreator;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * Holds and reads the configuration for this application
  * Reads defaultConfig.json and devConfig.json
  * Any properties in devConfig.json will take priority over the ones in defaultConfig.json
+ *
  * @author Wander Groeneveld
  * @version 0.1, 18-5-2017
  */
-public class Config {
-	private static Config instance;
-	
-	public Api api;
+public class Config{
 	//TODO default config should be included in the .jar
 	private static final String DEFAULT_FILENAME = "defaultConfig.json";
 	//TODO dev config should be looked for in the folder where the .jar is
 	private static final String DEV_FILENAME = "devConfig.json";
+	private static Config instance;
+	public Api api;
 	
 	public Config(){
 	}
 	
 	public static Config getInstance(){
-		if(instance==null){
-			try {
+		if(instance == null){
+			try{
 				//Load the default config
 				String defaultJson = new String(Files.readAllBytes(Paths.get(DEFAULT_FILENAME)));
 				Gson defaultGson = new Gson();
-				Config defaultConfig = defaultGson.fromJson(defaultJson,Config.class);
+				Config defaultConfig = defaultGson.fromJson(defaultJson, Config.class);
 				instance = defaultConfig;
 				
 				//Load the dev config and override properties in the instance
@@ -59,7 +60,7 @@ public class Config {
 		public int port;
 		public Database database;
 		
-		public class Database {
+		public class Database{
 			public String username;
 			public String password;
 			public String host;

@@ -14,30 +14,27 @@ import java.sql.Types;
  */
 public class TaxonLevelRepository extends RepositoryMaria<TaxonLevel>{
 	
-	public TaxonLevelRepository(Connection connection) {
+	public TaxonLevelRepository(Connection connection){
 		super(connection);
 	}
 	
 	@Override
-	protected String getTable() {
+	protected String getTable(){
 		return "taxon_level";
 	}
 	
 	@Override
-	protected boolean isNew(TaxonLevel entity) {
-		return entity.getId()==0;
+	protected boolean isNew(TaxonLevel entity){
+		return entity.getId() == 0;
 	}
 	
 	@Override
-	protected TaxonLevel createModel() {
+	protected TaxonLevel createModel(){
 		return new TaxonLevel();
 	}
 	
 	@Override
-	protected ColumnData[] getColumns() {
-		return new ColumnData[]{
-				new ColumnData<>("id", Types.INTEGER, TaxonLevel::getId, TaxonLevel::setId,true),
-				new ColumnData<>("name",Types.VARCHAR, TaxonLevel::getName, TaxonLevel::setName)
-		};
+	protected ColumnData[] getColumns(){
+		return new ColumnData[]{new ColumnData<>("id", Types.INTEGER, TaxonLevel::getId, TaxonLevel::setId, true), new ColumnData<>("name", Types.VARCHAR, TaxonLevel::getName, TaxonLevel::setName)};
 	}
 }

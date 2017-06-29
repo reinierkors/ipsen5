@@ -3,7 +3,6 @@ package wew.value;
 import database.ColumnData;
 import database.RepositoryException;
 import database.RepositoryMaria;
-import wew.value.WEWValue;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,37 +17,33 @@ import java.util.stream.Collectors;
  * @version 0.3, 5-6-2017
  */
 public class WEWValueRepository extends RepositoryMaria<WEWValue>{
-	public WEWValueRepository(Connection connection) {
+	public WEWValueRepository(Connection connection){
 		super(connection);
 	}
 	
 	@Override
-	protected String getTable() {
+	protected String getTable(){
 		return "wew_value";
 	}
 	
 	@Override
-	protected boolean isNew(WEWValue entity) {
-		return entity.getId()==0;
+	protected boolean isNew(WEWValue entity){
+		return entity.getId() == 0;
 	}
 	
 	@Override
-	protected WEWValue createModel() {
+	protected WEWValue createModel(){
 		return new WEWValue();
 	}
 	
 	@Override
-	protected ColumnData[] getColumns() {
-		return new ColumnData[]{
-				new ColumnData<>("id", Types.INTEGER, WEWValue::getId, WEWValue::setId, true),
-				new ColumnData<>("factor_class_id", Types.INTEGER, WEWValue::getFactorClassId, WEWValue::setFactorClassId),
-				new ColumnData<>("taxon_id", Types.INTEGER, WEWValue::getTaxonId, WEWValue::setTaxonId),
-				new ColumnData<>("value", Types.DOUBLE, WEWValue::getValue, WEWValue::setValue)
-		};
+	protected ColumnData[] getColumns(){
+		return new ColumnData[]{new ColumnData<>("id", Types.INTEGER, WEWValue::getId, WEWValue::setId, true), new ColumnData<>("factor_class_id", Types.INTEGER, WEWValue::getFactorClassId, WEWValue::setFactorClassId), new ColumnData<>("taxon_id", Types.INTEGER, WEWValue::getTaxonId, WEWValue::setTaxonId), new ColumnData<>("value", Types.DOUBLE, WEWValue::getValue, WEWValue::setValue)};
 	}
 	
 	/**
 	 * Retrieve all WEW values for a given taxon
+	 *
 	 * @param taxonIds list of ids of taxon
 	 * @return a list of values for all the taxon with the given ids
 	 * @throws RepositoryException when there was a problem retrieving the wew values
@@ -58,18 +53,18 @@ public class WEWValueRepository extends RepositoryMaria<WEWValue>{
 			Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
 			String howManyQuestionMarks = taxonIds.stream().map(id -> "?").collect(commaJoiner);
 			
-			String queryFindByTaxon = "SELECT * FROM "+getTable()+" WHERE `taxon_id` IN("+howManyQuestionMarks+")";
+			String queryFindByTaxon = "SELECT * FROM " + getTable() + " WHERE `taxon_id` IN(" + howManyQuestionMarks + ")";
 			PreparedStatement psFindByTaxon = connection.prepareStatement(queryFindByTaxon);
 			
 			int index = 1;
 			for(int taxonId : taxonIds){
-				psFindByTaxon.setInt(index,taxonId);
+				psFindByTaxon.setInt(index, taxonId);
 			}
 			
 			ResultSet resultSet = psFindByTaxon.executeQuery();
 			
 			List<WEWValue> values = new ArrayList<>();
-			if(resultSet==null)
+			if(resultSet == null)
 				return values;
 			
 			while(resultSet.next()){

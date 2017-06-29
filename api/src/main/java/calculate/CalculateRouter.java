@@ -12,7 +12,7 @@ import static spark.Spark.path;
  * @author Wander Groeneveld
  * @version 0.2, 12-6-2017
  */
-public class CalculateRouter {
+public class CalculateRouter{
 	public CalculateRouter(){
 		CalculateService calculateService = CalculateService.getInstance();
 		
@@ -20,9 +20,9 @@ public class CalculateRouter {
 		gsonBuilder.setDateFormat("yyyy-MM-dd").create();
 		Gson gson = gsonBuilder.create();
 		
-		path("/calculate", ()->{
-			get("/sample/:id",(req,res) -> gson.toJson(calculateService.getBySample(Integer.parseInt(req.params("id")))));
-			get("/reference/:id",(req,res) -> gson.toJson(calculateService.getByReference(Integer.parseInt(req.params("id")))));
+		path("/calculate", () -> {
+			get("/sample/:id", (req, res) -> gson.toJson(calculateService.getBySample(Integer.parseInt(req.params("id")))));
+			get("/reference/:id", (req, res) -> gson.toJson(calculateService.getByReference(Integer.parseInt(req.params("id")))));
 		});
 	}
 }

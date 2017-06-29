@@ -13,41 +13,41 @@ public class Reference{
 	private int watertypeId;
 	private List<Integer> taxonIds;
 	
-	public Reference(int id, int watertypeId, List<Integer> taxonIds) {
+	public Reference(int id, int watertypeId, List<Integer> taxonIds){
 		this.id = id;
 		this.watertypeId = watertypeId;
 		this.taxonIds = taxonIds;
 	}
 	
-	public Reference(int watertypeId, List<Integer> taxonIds) {
+	public Reference(int watertypeId, List<Integer> taxonIds){
 		this(0, watertypeId, taxonIds);
 	}
 	
-	public Reference() {
+	public Reference(){
 		this(0, 0, null);
 	}
 	
-	public int getId() {
+	public int getId(){
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(int id){
 		this.id = id;
 	}
 	
-	public int getWatertypeId() {
+	public int getWatertypeId(){
 		return watertypeId;
 	}
 	
-	public void setWatertypeId(int watertypeId) {
+	public void setWatertypeId(int watertypeId){
 		this.watertypeId = watertypeId;
 	}
 	
-	public List<Integer> getTaxonIds() {
+	public List<Integer> getTaxonIds(){
 		return taxonIds;
 	}
 	
-	public void setTaxonIds(List<Integer> taxonIds) {
+	public void setTaxonIds(List<Integer> taxonIds){
 		this.taxonIds = taxonIds;
 	}
 }

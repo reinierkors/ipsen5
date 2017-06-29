@@ -14,32 +14,27 @@ import java.sql.Types;
  */
 public class TaxonGroupRepository extends RepositoryMaria<TaxonGroup>{
 	
-	public TaxonGroupRepository(Connection connection) {
+	public TaxonGroupRepository(Connection connection){
 		super(connection);
 	}
 	
 	@Override
-	protected String getTable() {
+	protected String getTable(){
 		return "taxon_group";
 	}
 	
 	@Override
-	protected boolean isNew(TaxonGroup entity) {
-		return entity.getId()==0;
+	protected boolean isNew(TaxonGroup entity){
+		return entity.getId() == 0;
 	}
 	
 	@Override
-	protected TaxonGroup createModel() {
+	protected TaxonGroup createModel(){
 		return new TaxonGroup();
 	}
 	
 	@Override
-	protected ColumnData[] getColumns() {
-		return new ColumnData[]{
-				new ColumnData<>("id", Types.INTEGER, TaxonGroup::getId, TaxonGroup::setId,true),
-				new ColumnData<>("code",Types.VARCHAR, TaxonGroup::getCode, TaxonGroup::setCode),
-				new ColumnData<>("description",Types.VARCHAR, TaxonGroup::getDescription, TaxonGroup::setDescription),
-				new ColumnData<>("icon",Types.VARCHAR, TaxonGroup::getIcon, TaxonGroup::setIcon)
-		};
+	protected ColumnData[] getColumns(){
+		return new ColumnData[]{new ColumnData<>("id", Types.INTEGER, TaxonGroup::getId, TaxonGroup::setId, true), new ColumnData<>("code", Types.VARCHAR, TaxonGroup::getCode, TaxonGroup::setCode), new ColumnData<>("description", Types.VARCHAR, TaxonGroup::getDescription, TaxonGroup::setDescription), new ColumnData<>("icon", Types.VARCHAR, TaxonGroup::getIcon, TaxonGroup::setIcon)};
 	}
 }
