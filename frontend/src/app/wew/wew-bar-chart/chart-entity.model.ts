@@ -23,14 +23,20 @@ export class ChartEntityManager{
 	}
 	
 	public createFromReference(reference:Reference,name:string,palette:Palette):ReferenceChartEntity{
+		if(reference==null)
+			return null;
 		return new ReferenceChartEntity(this.referenceApi,reference,name,palette);
 	}
 	
 	public createFromSample(sample:Sample,name:string,palette:Palette):SampleChartEntity{
+		if(sample==null)
+			return null;
 		return new SampleChartEntity(this.sampleApi,sample,name,palette);
 	}
 	
 	public createFromTaxon(taxon:Taxon,palette:Palette):TaxonChartEntity{
+		if(taxon==null)
+			return null;
 		return new TaxonChartEntity(this.wewApi,taxon,palette);
 	}
 }

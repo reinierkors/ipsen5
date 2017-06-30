@@ -17,10 +17,10 @@ import java.util.List;
  */
 public class MarkerService{
 	private static MarkerService instance;
-	private LocationService locationService;
-	private WatertypeService watertypeService;
-	private WaterschapService waterschapService;
-	private SampleService sampleService;
+	private final LocationService locationService;
+	private final WatertypeService watertypeService;
+	private final WaterschapService waterschapService;
+	private final SampleService sampleService;
 
 	private MarkerService(){
 		locationService = LocationService.getInstance();

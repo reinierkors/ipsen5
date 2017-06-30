@@ -47,9 +47,7 @@ public class Main{
 				}
 			});
 			// Checks if user is an admin if the request is directed at an admin path
-			before("/*/admin/*", ((request, response) -> {
-				apiGuard.adminBeforeCheck(request);
-			}));
+			before("/*/admin/*", ((request, response) -> apiGuard.adminBeforeCheck(request)));
 			
 			new AuthRouter();
 			new SampleRouter();

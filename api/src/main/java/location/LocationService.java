@@ -14,9 +14,9 @@ import java.util.List;
  * @version 0.2, 31-5-2017
  */
 public class LocationService{
-	private static final LocationService instance = new LocationService();
+	private static LocationService instance;
 	private final LocationRepository repository;
-	private CoordinateConverter converter;
+	private final CoordinateConverter converter;
 
 	private LocationService(){
 		repository = new LocationRepository(ConnectionManager.getInstance().getConnection());
@@ -24,6 +24,8 @@ public class LocationService{
 	}
 
 	public static LocationService getInstance(){
+		if(instance == null)
+			instance = new LocationService();
 		return instance;
 	}
 
@@ -59,14 +61,10 @@ public class LocationService{
 	 */
 	public Location getByCode(String code) throws ApiException{
 		try{
-			Location location = repository.findByCode(code);
-			if(location == null){
-				throw new ApiException("Location does not exist");
-			}
-			return location;
+			return repository.findByCode(code);
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve location");
+			throw new ApiException("Could not retrieve location");
 		}
 	}
 
@@ -83,7 +81,7 @@ public class LocationService{
 			return location;
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot save location");
+			throw new ApiException("Could not save location");
 		}
 	}
 

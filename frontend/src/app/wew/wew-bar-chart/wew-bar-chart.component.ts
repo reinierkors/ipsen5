@@ -45,8 +45,9 @@ export class WewBarChartComponent implements OnInit {
 	public width:number;
 	public height:number;
 	
-	//EChart instance
-	private echart;
+	//Promise that resolves with EChart instance
+	private echartPr:Promise<any>;
+	private echartResolve;
 	//DOM of the echart, used to position the tooltip
 	private echartDom = null;
 	
@@ -111,8 +112,11 @@ export class WewBarChartComponent implements OnInit {
 		this.width = this.config.width;
 		this.height = this.config.height;
 		
-		//Keep the entity list as-is
-		this.entities = this.config.entities;
+		//Make sure we got echart when we need it
+		this.echartPr = new Promise((resolve,reject) => this.echartResolve = resolve);
+		
+		//Remove nulls from entity list
+		this.entities = this.config.entities.filter(entity => entity != null);
 		
 		//Show the charts title
 		this.showTitle();
@@ -136,7 +140,7 @@ export class WewBarChartComponent implements OnInit {
 		//Should we even show anything?
 		this.allDataPr.then(() => {
 			let calcCount = Array.from(this.entityCalcs.values())
-				.reduce((a,b) => [...a,...b])
+				.reduce((a,b) => [...a,...b],[])
 				.filter((val:SimpleWEWValue) => val&&val.value)
 				.length;
 			
@@ -160,7 +164,7 @@ export class WewBarChartComponent implements OnInit {
 			resize:(width,height)=>{
 				this.width = width;
 				this.height = height;
-				this.echart.resize({width:this.width,height:this.height});
+				this.echartPr.then(echart => echart.resize({width:this.width,height:this.height}));
 			}
 		};
 	}
@@ -169,7 +173,7 @@ export class WewBarChartComponent implements OnInit {
 	public onChartInit(echart){
 		echart.resize({width:this.width,height:this.height});
 		echart.showLoading();
-		this.echart = echart;
+		this.echartResolve(echart);
 	}
 	
 	//Sets the time based on how many factors we have
@@ -286,9 +290,13 @@ export class WewBarChartComponent implements OnInit {
 		lastSeries.barCategoryGap = this.config.barCategoryGap;
 		
 		//Show data
-		this.echart.setOption(this.chartOptions,true);
-		this.echart.resize({width:this.width,height:this.height});
-		this.echart.hideLoading();
+		this.echartPr.then(echart => {
+			setTimeout(()=>{
+				echart.resize({width:this.width,height:this.height});
+				echart.setOption(this.chartOptions,true);
+				echart.hideLoading();
+			});
+		});
 	}
 	
 	//Use the palettes to set the correct color in each data value

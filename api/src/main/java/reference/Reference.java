@@ -1,5 +1,6 @@
 package reference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class Reference{
 	}
 	
 	public Reference(){
-		this(0, 0, null);
+		this(0, 0, new ArrayList<>());
 	}
 	
 	public int getId(){

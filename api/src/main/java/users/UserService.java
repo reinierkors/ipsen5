@@ -20,7 +20,7 @@ import java.util.*;
  * @version 0.1, 30-5-2017
  */
 public class UserService{
-	private static final UserService instance = new UserService();
+	private static UserService instance;
 	private static Validator validator;
 	private final UserRepository repo;
 	
@@ -31,6 +31,8 @@ public class UserService{
 	}
 	
 	public static UserService getInstance(){
+		if(instance == null)
+			instance = new UserService();
 		return instance;
 	}
 	
@@ -43,28 +45,21 @@ public class UserService{
 	 */
 	public User get(int id) throws ApiException{
 		try{
-			User user = repo.get(id);
-			if(user == null){
-				throw new ApiValidationException("User does not exist");
-			}
-			return user;
+			return repo.get(id);
 		}
 		catch(RepositoryException e){
-			throw new ApiValidationException("Cannot retrieve user");
+			throw new ApiValidationException("Could not retrieve user");
 		}
 	}
 	
 	User getCurrentUser(String sessionToken) throws ApiException{
 		try{
 			User user = repo.findBySession(sessionToken);
-			if(user == null){
-				throw new ApiValidationException("User does not exist");
-			}
 			user.setPassword(null);
 			return user;
 		}
 		catch(RepositoryException e){
-			throw new ApiValidationException("Cannot retrieve user");
+			throw new ApiValidationException("Could not retrieve user");
 		}
 	}
 	
@@ -77,7 +72,7 @@ public class UserService{
 			return editedUser;
 		}
 		catch(RepositoryException e){
-			throw new ApiValidationException("Cannot update user");
+			throw new ApiValidationException("Could not update user");
 		}
 	}
 	
@@ -92,7 +87,7 @@ public class UserService{
 			return repo.getAll();
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve users");
+			throw new ApiException("Could not retrieve users");
 		}
 	}
 	
@@ -104,7 +99,7 @@ public class UserService{
 	 */
 	public String create(User user){
 		List<String> errors = new ArrayList<>();
-		validator.validate(user).stream().forEach(violation -> errors.add(violation.getMessage()));
+		validator.validate(user).forEach(violation -> errors.add(violation.getMessage()));
 		
 		if(errors.size() > 0){
 			throw new ApiValidationException(errors);
@@ -132,7 +127,7 @@ public class UserService{
 			}
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve user");
+			throw new ApiException("Could not retrieve user");
 		}
 	}
 	
@@ -151,12 +146,6 @@ public class UserService{
 		return true;
 	}
 	
-	public boolean check(List<String> passwords){
-		
-		System.out.println(passwords);
-		return true;
-	}
-	
 	private boolean checkPassword(String password, User user){
 		return BCrypt.checkpw(password, user.getPassword());
 	}
@@ -170,7 +159,6 @@ public class UserService{
 	}
 	
 	public boolean logout(String token){
-		System.out.println("removing token");
 		User user = repo.findBySession(token);
 		repo.deleteSession(user.getId());
 		return true;

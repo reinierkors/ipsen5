@@ -46,7 +46,7 @@ public class Config{
 				instance = devConfig;
 			}
 			catch(java.io.IOException ex){
-				System.out.println(ex);
+				ex.printStackTrace();
 			}
 		}
 		return instance;

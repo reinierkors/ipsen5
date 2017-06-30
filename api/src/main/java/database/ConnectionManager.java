@@ -16,7 +16,7 @@ import java.sql.SQLException;
 public class ConnectionManager{
 	private static ConnectionManager instance;
 	private Connection connection;
-	private Config.Api.Database dbConfig;
+	private final Config.Api.Database dbConfig;
 	
 	private ConnectionManager() throws SQLException{
 		dbConfig = Config.getInstance().api.database;
@@ -25,7 +25,7 @@ public class ConnectionManager{
 			initConnection();
 		}
 		catch(ClassNotFoundException ex){
-			System.out.println(ex);
+			ex.printStackTrace();
 		}
 	}
 	

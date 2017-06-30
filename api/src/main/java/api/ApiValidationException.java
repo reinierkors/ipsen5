@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class ApiValidationException extends ApiException{
 	public ApiValidationException(){
-
+	
 	}
 	
 	public ApiValidationException(String error){

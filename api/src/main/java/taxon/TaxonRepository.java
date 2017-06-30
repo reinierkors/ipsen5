@@ -82,7 +82,7 @@ public class TaxonRepository extends RepositoryMaria<Taxon>{
 	 */
 	public List<Taxon> findByNames(List<String> names) throws RepositoryException{
 		try{
-			names.stream().map(String::toLowerCase);
+			names = names.stream().map(String::toLowerCase).collect(Collectors.toList());
 			
 			Collector<CharSequence, ?, String> commaJoiner = Collectors.joining(",");
 			String howManyQuestionMarks = names.stream().map(name -> "?").collect(commaJoiner);

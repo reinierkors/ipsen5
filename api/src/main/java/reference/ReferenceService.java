@@ -4,6 +4,10 @@ import api.ApiException;
 import calculate.CalculateService;
 import database.ConnectionManager;
 import database.RepositoryException;
+import location.Location;
+import location.LocationRepository;
+import sample.Sample;
+import sample.SampleRepository;
 
 import java.util.List;
 
@@ -14,16 +18,22 @@ import java.util.List;
  * @version 0.1, 19-6-2017
  */
 public class ReferenceService{
-	private static final ReferenceService instance = new ReferenceService();
+	private static ReferenceService instance;
 	private final ReferenceRepository repo;
 	private final CalculateService calcService;
+	private final LocationRepository locationRepo;
+	private final SampleRepository sampleRepo;
 	
 	private ReferenceService(){
 		repo = new ReferenceRepository(ConnectionManager.getInstance().getConnection());
 		calcService = CalculateService.getInstance();
+		locationRepo = new LocationRepository(ConnectionManager.getInstance().getConnection());
+		sampleRepo = new SampleRepository(ConnectionManager.getInstance().getConnection());
 	}
 	
 	public static ReferenceService getInstance(){
+		if(instance == null)
+			instance = new ReferenceService();
 		return instance;
 	}
 	
@@ -36,14 +46,10 @@ public class ReferenceService{
 	 */
 	public Reference get(int id) throws ApiException{
 		try{
-			Reference reference = repo.get(id);
-			if(reference == null){
-				throw new ApiException("Reference does not exist");
-			}
-			return reference;
+			return repo.get(id);
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve reference");
+			throw new ApiException("Could not retrieve reference");
 		}
 	}
 	
@@ -58,7 +64,7 @@ public class ReferenceService{
 			return repo.getAll();
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve references");
+			throw new ApiException("Could not retrieve references");
 		}
 	}
 	
@@ -67,7 +73,7 @@ public class ReferenceService{
 			return repo.getByWatertype(watertypeId);
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve reference with watertype id " + watertypeId);
+			throw new ApiException("Could not retrieve reference with watertype id " + watertypeId);
 		}
 	}
 	
@@ -80,14 +86,35 @@ public class ReferenceService{
 	 */
 	public Reference save(Reference reference) throws ApiException{
 		try{
-			if(reference.getId() != 0)
+			if(reference.getId() != 0){
 				calcService.deleteByReference(reference.getId());
+			}
+			
 			repo.persist(reference);
-			calcService.calculateReferenceValues(reference.getId());
+			
+			if(reference.getTaxonIds().size()>0){
+				calcService.calculateReferenceValues(reference.getId());
+				
+				int watertypeId = reference.getWatertypeId();
+				List<Location> locations = locationRepo.getByFilters(watertypeId, 0, "");
+				
+				locations.forEach(location -> {
+					List<Sample> samples = sampleRepo.getByLocationId(location.getId());
+					
+					samples.forEach(sample -> {
+						calcService.deleteBySample(sample.getId());
+						calcService.calculateSampleValues(sample.getId());
+						double quality = calcService.calculateSampleQuality(sample.getId(), reference.getId());
+						sample.setQuality(quality);
+						sampleRepo.persist(sample);
+					});
+				});
+			}
+			
 			return reference;
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot save reference");
+			throw new ApiException("Could not save reference");
 		}
 	}
 	
@@ -98,7 +125,7 @@ public class ReferenceService{
 			return true;
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot delete reference");
+			throw new ApiException("Could not delete reference");
 		}
 	}
 }

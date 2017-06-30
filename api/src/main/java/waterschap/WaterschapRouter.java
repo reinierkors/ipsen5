@@ -15,11 +15,11 @@ import static spark.Spark.*;
 public class WaterschapRouter{
 	public WaterschapRouter(){
 		WaterschapService waterschapService = WaterschapService.getInstance();
-
+		
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
 		Gson gson = gsonBuilder.create();
-
+		
 		path("/waterschap", () -> {
 			get("", (req, res) -> gson.toJson(waterschapService.getAll()));
 			get("/", (req, res) -> gson.toJson(waterschapService.getAll()));
@@ -29,6 +29,6 @@ public class WaterschapRouter{
 				return gson.toJson(waterschapService.save(waterschap));
 			}));
 		});
-
+		
 	}
 }

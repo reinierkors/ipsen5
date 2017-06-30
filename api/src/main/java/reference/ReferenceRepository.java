@@ -70,7 +70,7 @@ public class ReferenceRepository extends RepositoryMaria<Reference>{
 			
 			ResultSet resultSet = psGetByWT.executeQuery();
 			if(resultSet == null || !resultSet.next())
-				return null;
+				throw new RepositoryException("No reference with this watertype exists");
 			
 			Reference reference = resultSetToModel(resultSet);
 			addReferenceTaxa(reference);

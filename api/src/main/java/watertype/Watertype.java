@@ -18,7 +18,7 @@ public class Watertype{
 		this.code = code;
 	}
 	
-	public Watertype(String name, String code, Integer parentId){
+	public Watertype(String name, String code){
 		this(0, name, code);
 	}
 	

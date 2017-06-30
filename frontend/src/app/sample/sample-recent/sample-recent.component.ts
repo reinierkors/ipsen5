@@ -54,7 +54,11 @@ export class SampleRecentComponent implements OnInit{
 		
 		//We'll want to show their locations too
 		let locationIds = samples.map(sample => sample.locationId).filter(uniqueFilter);
-		let locations = await this.locationApi.getByIds(locationIds).toPromise();
+		let locations;
+		if(locationIds.length==0)
+			locations = [];
+		else
+			locations = await this.locationApi.getByIds(locationIds).toPromise();
 		
 		return [samples,locations];
 	}

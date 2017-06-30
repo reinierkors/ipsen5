@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * @version 0.3, 13-6-2017
  */
 public class TaxonService{
-	private static final TaxonService instance = new TaxonService();
+	private static TaxonService instance;
 	private final TaxonRepository taxonRepo;
 	private final TaxonGroupRepository groupRepo;
 	private final TaxonLevelRepository levelRepo;
@@ -35,6 +35,8 @@ public class TaxonService{
 	}
 	
 	public static TaxonService getInstance(){
+		if(instance == null)
+			instance = new TaxonService();
 		return instance;
 	}
 	
@@ -47,14 +49,10 @@ public class TaxonService{
 	 */
 	public Taxon get(int id) throws ApiException{
 		try{
-			Taxon taxon = taxonRepo.get(id);
-			if(taxon == null){
-				throw new ApiException("Taxon does not exist");
-			}
-			return taxon;
+			return taxonRepo.get(id);
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve taxon");
+			throw new ApiException("Could not retrieve taxon");
 		}
 	}
 	
@@ -70,7 +68,7 @@ public class TaxonService{
 			return taxonRepo.get(ids);
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve taxa");
+			throw new ApiException("Could not retrieve taxa");
 		}
 	}
 	
@@ -79,7 +77,7 @@ public class TaxonService{
 			return taxonRepo.getAll();
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve taxa");
+			throw new ApiException("Could not retrieve taxa");
 		}
 	}
 	
@@ -102,7 +100,7 @@ public class TaxonService{
 			return taxon;
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve taxon");
+			throw new ApiException("Could not retrieve taxon");
 		}
 	}
 	
@@ -119,7 +117,7 @@ public class TaxonService{
 			return taxonRepo.findByName(name);
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve taxon");
+			throw new ApiException("Could not retrieve taxon");
 		}
 	}
 	
@@ -137,7 +135,7 @@ public class TaxonService{
 			return taxon;
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot save taxon");
+			throw new ApiException("Could not save taxon");
 		}
 	}
 	
@@ -155,7 +153,7 @@ public class TaxonService{
 			return taxa;
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot save taxa");
+			throw new ApiException("Could not save taxa");
 		}
 	}
 	
@@ -185,7 +183,7 @@ public class TaxonService{
 			return taxa;
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot save taxa");
+			throw new ApiException("Could not save taxa");
 		}
 	}
 	
@@ -194,7 +192,7 @@ public class TaxonService{
 			return groupRepo.getAll();
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve taxon groups");
+			throw new ApiException("Could not retrieve taxon groups");
 		}
 	}
 	
@@ -203,7 +201,7 @@ public class TaxonService{
 			return levelRepo.getAll();
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve taxon levels");
+			throw new ApiException("Could not retrieve taxon levels");
 		}
 	}
 	
@@ -213,7 +211,7 @@ public class TaxonService{
 			return groups;
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot save taxon groups");
+			throw new ApiException("Could not save taxon groups");
 		}
 	}
 	
@@ -223,7 +221,7 @@ public class TaxonService{
 			return levels;
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot save taxon levels");
+			throw new ApiException("Could not save taxon levels");
 		}
 	}
 	
@@ -261,7 +259,7 @@ public class TaxonService{
 			return taxa;
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve taxon family");
+			throw new ApiException("Could not retrieve taxon family");
 		}
 	}
 }

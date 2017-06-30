@@ -2,6 +2,7 @@ package sample;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -38,7 +39,7 @@ public class Sample{
 	}
 	
 	public Sample(){
-		this(0, null, 0, null, null, null, null, null, null);
+		this(0, null, 0, null, null, null, null, null, new HashMap<>());
 	}
 	
 	public int getId(){

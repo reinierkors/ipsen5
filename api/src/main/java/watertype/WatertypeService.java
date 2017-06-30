@@ -12,7 +12,7 @@ import database.RepositoryException;
  * @version 0.3, 1-6-2017
  */
 public class WatertypeService{
-	private static final WatertypeService instance = new WatertypeService();
+	private static WatertypeService instance;
 	private final WatertypeRepository repo;
 	
 	private WatertypeService(){
@@ -20,6 +20,8 @@ public class WatertypeService{
 	}
 	
 	public static WatertypeService getInstance(){
+		if(instance == null)
+			instance = new WatertypeService();
 		return instance;
 	}
 	
@@ -44,7 +46,7 @@ public class WatertypeService{
 			return repo.getAll();
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve watertypes");
+			throw new ApiException("Could not retrieve watertypes");
 		}
 	}
 	
@@ -61,7 +63,7 @@ public class WatertypeService{
 			return watertype;
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot save watertypes");
+			throw new ApiException("Could not save watertypes");
 		}
 	}
 }

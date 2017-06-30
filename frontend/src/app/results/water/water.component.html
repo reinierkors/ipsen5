@@ -23,7 +23,7 @@
 	{{row.date | date:'fullDate'}}
 </ng-template>
 <ng-template #sampleQualityTemplate let-row="row">
-	{{row.quality.toFixed(2)}}
+	{{row.quality==null?'?':row.quality.toFixed(2)}}
 </ng-template>
 <ng-template #sampleDetailsTemplate let-row="row">
 	<a [routerLink]="'/sample/view/'+row.id" md-raised-button>Details</a>

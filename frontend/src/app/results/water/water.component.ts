@@ -51,7 +51,13 @@ export class WaterComponent implements OnInit{
 			trigger:'axis',
 			axisPointer:{type:'shadow'},
 			backgroundColor:'rgba(0,0,0,0.9)',
-			formatter:params=>params[0].data[0].toLocaleString('nl-NL',{day:'numeric',month:'short',year:'numeric'})+': '+params[0].data[1].toFixed(2)
+			formatter:params=>{
+				if(!params[0] || !params[0].data || !params[0].data[0] || !params[0].data[1])
+					return;
+				let date = params[0].data[0].toLocaleString('nl-NL',{day:'numeric',month:'short',year:'numeric'});
+				let value = params[0].data[1].toFixed(2);
+				return date+': '+value;
+			}
 		},
 		grid:{left:'3%',right:'4%',bottom:'4%',containLabel:true},
 		xAxis:{type:'time',data:[],axisLabel:{formatter:val=>new Date(val).toLocaleString('nl-NL',{day:'numeric',month:'short',year:'numeric'})}},
@@ -121,19 +127,27 @@ export class WaterComponent implements OnInit{
 	
 	private async loadReference(){
 		let watertype = this.currentLocation.watertypeKrwId;
-		this.reference = await this.apiReference.getByWatertype(watertype).toPromise();
+		try{
+			this.reference = await this.apiReference.getByWatertype(watertype).toPromise();
+		}
+		catch(err){
+			this.reference = null;
+		}
 	}
 	
 	private loadQualityChart(){
+		let samples = this.samples.filter(sample => sample.quality !== null);
 		this.qualityChartOptions.series = {
 			type:'line',
-			data:this.samples.map((sample,index) => [sample.date,sample.quality])
+			data:samples.map(sample => [sample.date,sample.quality])
 		};
-		this.qualityChartOptions.xAxis.data = this.samples.map(sample => sample.date);
+		this.qualityChartOptions.xAxis.data = samples.map(sample => sample.date);
 		this.qualityEchart.setOption(this.qualityChartOptions,true);
 	}
 	
 	private loadWewCharts(){
+		if(!this.reference)
+			return;
 		let chartReference = this.chartEntityManager.createFromReference(this.reference,'Referentie',new MaterialPalette().shift().transform(-.03,-.1,-.26));
 		let chartSamples = this.samples.map(sample => {
 			let name = sample.date.toLocaleString('nl-NL',{month:'short',year:'numeric'});

@@ -41,7 +41,16 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 	
 	@Override
 	protected ColumnData[] getColumns(){
-		return new ColumnData[]{new ColumnData<>("id", Types.INTEGER, Sample::getId, Sample::setId, true), new ColumnData<>("date", Types.DATE, Sample::getDate, Sample::setDate), new ColumnData<>("location_id", Types.INTEGER, Sample::getLocationId, Sample::setLocationId), new ColumnData<>("owner_id", Types.INTEGER, Sample::getOwnerId, Sample::setOwnerId), new ColumnData<>("quality", Types.DOUBLE, Sample::getQuality, Sample::setQuality), new ColumnData<>("x_coor", Types.INTEGER, Sample::getXCoor, Sample::setXCoor), new ColumnData<>("y_coor", Types.INTEGER, Sample::getYCoor, Sample::setYCoor), new ColumnData<>("date_added", Types.TIMESTAMP, Sample::getDateAdded, Sample::setDateAdded)};
+		return new ColumnData[]{
+				new ColumnData<>("id", Types.INTEGER, Sample::getId, Sample::setId, true),
+				new ColumnData<>("date", Types.DATE, Sample::getDate, Sample::setDate),
+				new ColumnData<>("location_id", Types.INTEGER, Sample::getLocationId, Sample::setLocationId),
+				new ColumnData<>("owner_id", Types.INTEGER, Sample::getOwnerId, Sample::setOwnerId),
+				new ColumnData<>("quality", Types.DOUBLE, Sample::getQuality, Sample::setQuality),
+				new ColumnData<>("x_coor", Types.INTEGER, Sample::getXCoor, Sample::setXCoor),
+				new ColumnData<>("y_coor", Types.INTEGER, Sample::getYCoor, Sample::setYCoor),
+				new ColumnData<>("date_added", Types.TIMESTAMP, Sample::getDateAdded, Sample::setDateAdded)
+		};
 	}
 	
 	@Override
@@ -146,7 +155,10 @@ public class SampleRepository extends RepositoryMaria<Sample>{
 			}
 			
 			//Check which taxon are new
-			addedTaxonMap = new HashMap<>(newTaxonMap);
+			if(newTaxonMap != null)
+				addedTaxonMap = new HashMap<>(newTaxonMap);
+			else
+				addedTaxonMap = new HashMap<>();
 			oldTaxonMap.forEach((taxon, value) -> addedTaxonMap.remove(taxon));
 			
 			//Check which taxon are removed

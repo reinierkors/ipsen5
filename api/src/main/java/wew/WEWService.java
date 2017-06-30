@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * @version 0.2, 6-6-2017
  */
 public class WEWService{
-	private static final WEWService instance = new WEWService();
+	private static WEWService instance;
 	private final WEWFactorRepository factorRepo;
 	private final WEWFactorClassRepository factorClassRepo;
 	private final WEWValueRepository valueRepo;
@@ -35,6 +35,8 @@ public class WEWService{
 	}
 	
 	public static WEWService getInstance(){
+		if(instance == null)
+			instance = new WEWService();
 		return instance;
 	}
 	

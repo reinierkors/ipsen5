@@ -5,6 +5,10 @@ import calculate.CalculateService;
 import database.ConnectionManager;
 import database.RepositoryException;
 import location.Location;
+import location.LocationRepository;
+import reference.Reference;
+import reference.ReferenceRepository;
+import watertype.WatertypeRepository;
 
 import java.util.List;
 
@@ -15,16 +19,22 @@ import java.util.List;
  * @version 0.3, 27-6-2017
  */
 public class SampleService{
-	private static final SampleService instance = new SampleService();
+	private static SampleService instance;
 	private final SampleRepository repo;
 	private final CalculateService calcService;
+	private final LocationRepository locationRepo;
+	private final ReferenceRepository refRepo;
 	
 	private SampleService(){
 		repo = new SampleRepository(ConnectionManager.getInstance().getConnection());
 		calcService = CalculateService.getInstance();
+		locationRepo = new LocationRepository(ConnectionManager.getInstance().getConnection());
+		refRepo = new ReferenceRepository(ConnectionManager.getInstance().getConnection());
 	}
 	
 	public static SampleService getInstance(){
+		if(instance == null)
+			instance = new SampleService();
 		return instance;
 	}
 	
@@ -37,14 +47,10 @@ public class SampleService{
 	 */
 	public Sample get(int id) throws ApiException{
 		try{
-			Sample sample = repo.get(id);
-			if(sample == null){
-				throw new ApiException("Sample does not exist");
-			}
-			return sample;
+			return repo.get(id);
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot retrieve sample");
+			throw new ApiException("Could not retrieve sample");
 		}
 	}
 	
@@ -57,16 +63,28 @@ public class SampleService{
 	 */
 	public Sample save(Sample sample) throws ApiException{
 		try{
-			if(sample.getId() != 0)
+			if(sample.getId() != 0){
 				calcService.deleteBySample(sample.getId());
+			}
+			
 			repo.persist(sample);
+			
 			calcService.calculateSampleValues(sample.getId());
-			calcService.calculateSampleQuality(sample);
+			
+			int watertypeId = locationRepo.get(sample.getLocationId()).getWatertypeKrwId();
+			Reference reference = refRepo.getByWatertype(watertypeId);
+			
+			if(reference == null)
+				return sample;
+			
+			double quality = calcService.calculateSampleQuality(sample.getId(),reference.getId());
+			sample.setQuality(quality);
+			
 			repo.persist(sample);
 			return sample;
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot save sample");
+			throw new ApiException("Could not save sample");
 		}
 	}
 	
@@ -79,16 +97,30 @@ public class SampleService{
 	 */
 	public List<Sample> save(List<Sample> samples) throws ApiException{
 		try{
+			samples.forEach(sample -> {
+				if(sample.getId() != 0)
+					calcService.deleteBySample(sample.getId());
+			});
+			
 			repo.persist(samples);
+			
 			samples.forEach(sample -> {
 				calcService.calculateSampleValues(sample.getId());
-				calcService.calculateSampleQuality(sample);
+				try{
+					int watertypeId = locationRepo.get(sample.getLocationId()).getWatertypeKrwId();
+					Reference reference = refRepo.getByWatertype(watertypeId);
+					if(reference == null)
+						return;
+					
+					double quality = calcService.calculateSampleQuality(sample.getId(),reference.getId());
+					sample.setQuality(quality);
+				}
+				catch(RepositoryException e){}
 			});
-			repo.persist(samples);
 			return samples;
 		}
 		catch(RepositoryException e){
-			throw new ApiException("Cannot save samples");
+			throw new ApiException("Could not save samples");
 		}
 	}
 	

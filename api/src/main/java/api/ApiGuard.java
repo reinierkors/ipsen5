@@ -13,7 +13,7 @@ import static spark.Spark.halt;
  * @author Marijn Kroon
  */
 public class ApiGuard{
-	private UserRepository repo;
+	private final UserRepository repo;
 	
 	public ApiGuard(){
 		repo = new UserRepository(ConnectionManager.getInstance().getConnection());

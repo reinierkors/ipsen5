@@ -152,12 +152,17 @@ export class SampleViewComponent implements OnInit {
 				this.reference = reference;
 				let palette = new MaterialPalette().shift();
 				
+				let entArr = [];
+				if(reference)
+					entArr.push(this.chartEntityManager.createFromReference(reference,'Referentie',palette.clone().transform(0,-.05,.2)));
+				entArr.push(this.chartEntityManager.createFromSample(this.sample,'Monster',palette.clone()));
+				
 				this.wewConfig = {
-					entities:[
-						this.chartEntityManager.createFromReference(reference,'Referentie',palette.clone().transform(0,-.05,.2)),
-						this.chartEntityManager.createFromSample(this.sample,'Monster',palette.clone())
-					]
+					entities:entArr
 				};
+			},err => {
+				this.reference = null;
+				this.wewConfig = {entities:[]};
 			});
 			
 			//When sample and taxon groups are in, retrieve taxa
